@@ -331,7 +331,6 @@
               </div>
             </div>
 
-            <!-- Additional Content -->
             <!-- Career Section -->
             <div class="section-heading">
               <h2 class="heading-text">Career</h2>
@@ -340,178 +339,36 @@
 
             <div class="body-text">
               <p>
-                Raised Catholic, Lorde attended parochial schools before moving on to <a href="#">Hunter College High School</a>, a secondary school for intellectually gifted students. Poet <a href="#">Diane di Prima</a> was a classmate and friend. While attending Hunter, Lorde published her first poem in <em>Seventeen</em> magazine after her school's literary journal rejected it for being inappropriate. Also in high school, Lorde participated in poetry workshops sponsored by the Harlem Writers Guild, but noted that she always felt like somewhat of an outcast from the Guild. She felt she was not accepted because she "was both crazy and queer but [they thought] I would grow out of it all." Lorde graduated from Hunter College High School in 1951.
+                In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
               </p>
               <p>&nbsp;</p>
               <p>
-                From 1951 to 1952, she attended <a href="#">National Autonomous University of Mexico</a>, then she attended <a href="#">Hunter College</a> and graduated with a <a href="#">bachelor's degree</a> in library science in 1959. That same year, she received a <a href="#">master's degree</a> in library science from <a href="#">Columbia University</a>. From 1961 to 1968, Lorde worked as a librarian in several New York public schools. During these years, Lorde also held several teaching positions in the English departments of various universities.
+                In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
               </p>
-            </div>
-
-            <h3 class="subsection-heading">The Berlin years</h3>
-            <div class="body-text">
-              <p>
-                During the 1980s, Lorde was also a part of the German feminist movement. She made several trips to Germany which resulted in the 1984 anthology <em>Showing Our Colors: Afro-German Women Speak Out</em>.
-              </p>
-            </div>
-
-            <!-- Poetry Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Poetry</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. Her first volume of poems, <em>The First Cities</em> (1968), was published by <a href="#">Poets Press</a>. Her second, <em>Cables to Rage</em> (1970), which was mainly inspired by her Caribbean heritage, resulted in her receiving the Creative Artists Public Service Award.
-              </p>
-            </div>
-
-            <!-- Prose Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Prose</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                Lorde's prose writings include <em><a href="#">The Cancer Journals</a></em> (1980), the autobiography <em><a href="#">Zami: A New Spelling of My Name</a></em> (1982), and <em><a href="#">Sister Outsider</a></em> (1984), which collects essays and speeches.
-              </p>
-            </div>
-
-            <!-- Theory Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Theory</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                Lorde's work focuses on exploring and combating different forms of oppression through writing and teaching. Her work often addresses racism, sexism, classism, and homophobia. As a feminist, Lorde advocated for social and cultural change through writing and speeches.
-              </p>
-            </div>
-
-            <!-- Lorde and womanism Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Lorde and womanism</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                Lorde's work is closely associated with womanism, a term coined by <a href="#">Alice Walker</a> to describe a Black feminist or feminist of color. Lorde's focus on the intersection of race, class, and gender aligns with womanist thought.
-              </p>
-            </div>
-
-            <!-- Personal life Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Personal life</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                In 1962, Lorde married attorney Edwin Rollins, who was a white gay man. They had two children together, Elizabeth and Jonathan, and later divorced in 1970. During the marriage, Lorde began a long-term romantic relationship with Frances Clayton.
-              </p>
-            </div>
-
-            <!-- Last years Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Last years</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                In 1984, Lorde was diagnosed with liver cancer. She took on the name Gamba Adisa, which means "Warrior: She Who Makes Her Meaning Known". On November 17, 1992, Lorde died of liver cancer in <a href="#">Saint Croix</a>, aged 58.
-              </p>
-            </div>
-
-            <!-- Honors Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Honors</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                In June 2019, Lorde was one of the first fifty American "pioneers, trailblazers, and heroes" inducted on the <a href="#">National LGBTQ Wall of Honor</a> within the <a href="#">Stonewall National Monument</a> in New York City's <a href="#">Stonewall Inn</a>.
-              </p>
-            </div>
-
-            <!-- Legacy Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Legacy</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p>
-                Lorde's poetry and prose confronts issues related to civil rights, feminism, and lesbianism. She was an intersectional feminist who viewed these issues as inextricably linked. In 2014, Lorde was inducted into the <a href="#">Legacy Walk</a>, an outdoor public display in Chicago celebrating LGBT history and people.
-              </p>
-            </div>
-
-            <!-- Works Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">Works</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p><strong>Poetry Books</strong></p>
-              <ul>
-                <li><em>The First Cities</em> (1968)</li>
-                <li><em>Cables to Rage</em> (1970)</li>
-                <li><em>From a Land Where Other People Live</em> (1973)</li>
-                <li><em>Coal</em> (1976)</li>
-                <li><em>The Black Unicorn</em> (1978)</li>
-              </ul>
               <p>&nbsp;</p>
-              <p><strong>Prose Books</strong></p>
-              <ul>
-                <li><em>The Cancer Journals</em> (1980)</li>
-                <li><em>Zami: A New Spelling of My Name</em> (1982)</li>
-                <li><em>Sister Outsider</em> (1984)</li>
-                <li><em>A Burst of Light</em> (1988)</li>
-              </ul>
-            </div>
-
-            <!-- See also Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">See also</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <ul>
-                <li><a href="#">List of African-American writers</a></li>
-                <li><a href="#">List of civil rights leaders</a></li>
-                <li><a href="#">List of feminist poets</a></li>
-              </ul>
-            </div>
-
-            <!-- References Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">References</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <p><em>This article incorporates text from Wikipedia, which is available under the <a href="#">Creative Commons Attribution-ShareAlike License</a>.</em></p>
-            </div>
-
-            <!-- External links Section -->
-            <div class="section-heading">
-              <h2 class="heading-text">External links</h2>
-              <div class="heading-divider"></div>
-            </div>
-
-            <div class="body-text">
-              <ul>
-                <li><a href="#">Audre Lorde Papers</a> at Spelman College</li>
-                <li><a href="#">The Audre Lorde Project</a></li>
-                <li><a href="#">Poetry Foundation: Audre Lorde</a></li>
-              </ul>
+              <p>
+                From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Lorde taught in the Education Department at <a href="#">Lehman College</a> from 1969 to 1970, then as a professor of English at <a href="#">John Jay College of Criminal Justice</a> (both part of the <a href="#">City University of New York</a>, CUNY) from 1970 to 1981. There, she fought for the creation of a <a href="#">black studies</a> department. In 1981, she went on to teach at her alma mater, <a href="#">Hunter College</a> (also CUNY), as the distinguished Thomas Hunter chair. As a queer Black woman, she was an outsider in a <a href="#">white male</a> dominated field and her experiences in this environment deeply influenced her work. New fields such as <a href="#">African American studies</a> and <a href="#">women's studies</a> advanced the topics that scholars were addressing and garnered attention to groups that had previously been rarely discussed. With this newfound <a href="#">academic</a> environment, Lorde was inspired to not only write poetry but also essays and articles about queer, feminist, and African American studies.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
+              </p>
             </div>
           </div>
         </article>
