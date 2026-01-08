@@ -769,8 +769,20 @@
                 Help readers understand where this information is coming from by adding a citation.
               </p>
               <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleYesSuggestion1">Yes</button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="isCardExpanded = false">No</button>
+                <button 
+                  class="suggestion-btn" 
+                  :disabled="showCitationPopup1"
+                  @click="handleYesSuggestion1"
+                >
+                  Yes
+                </button>
+                <button 
+                  class="suggestion-btn suggestion-btn-secondary" 
+                  :disabled="showCitationPopup1"
+                  @click="isCardExpanded = false"
+                >
+                  No
+                </button>
               </div>
             </div>
           </div>
@@ -818,8 +830,20 @@
                 Help readers understand where this information is coming from by adding a citation.
               </p>
               <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleYesSuggestion2">Yes</button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="isCardExpanded2 = false">No</button>
+                <button 
+                  class="suggestion-btn" 
+                  :disabled="showCitationPopup2"
+                  @click="handleYesSuggestion2"
+                >
+                  Yes
+                </button>
+                <button 
+                  class="suggestion-btn suggestion-btn-secondary" 
+                  :disabled="showCitationPopup2"
+                  @click="isCardExpanded2 = false"
+                >
+                  No
+                </button>
               </div>
             </div>
           </div>
