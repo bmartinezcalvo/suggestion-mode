@@ -728,7 +728,7 @@
         >
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="!showSuccessMessage1"
+            v-if="!showSuccessMessage1 && citationNumber1 === null"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -790,7 +790,7 @@
 
           <!-- Success Message for Suggestion 1 -->
           <div 
-            v-else
+            v-if="showSuccessMessage1 && citationNumber1 !== null"
             ref="suggestionsSidebarRef"
             class="success-message"
             :style="{ top: `${sidebarTopOffset}px` }"
@@ -805,7 +805,7 @@
 
           <!-- Second Add Citation Suggestion Card -->
           <div 
-            v-if="!showSuccessMessage2"
+            v-if="!showSuccessMessage2 && citationNumber2 === null"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -867,7 +867,7 @@
 
           <!-- Success Message for Suggestion 2 -->
           <div 
-            v-else
+            v-if="showSuccessMessage2 && citationNumber2 !== null"
             ref="suggestionsSidebarRef2"
             class="success-message"
             :style="{ top: `${sidebarTopOffset2}px` }"
