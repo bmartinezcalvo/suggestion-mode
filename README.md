@@ -9,19 +9,14 @@ This template replicates the Wikipedia article experience with both **Read** and
 ## Features
 
 ### Read Mode
-- Full article layout with Table of Contents sidebar
-- Tools panel on the right
-- Responsive design (collapses at 1119px breakpoint)
+- Article layout with text content and infobox
+- Table of Contents sidebar on the left and Tools panel on the right
+- Responsive behavior (sidebar panels collapse at breakpoint-tablet from 1119px screens)
 - Wikipedia header with search functionality
-- Article infobox with image and metadata
 
 ### Edit Mode
-- Complete editor toolbar with formatting options
-- Editable article content (contenteditable)
-- Undo/Redo/Publish buttons (disabled until content is edited)
-- Inline infobox editing
-- Automatic change detection
-- Full-width layout (no sidebars)
+- Editor toolbar with options
+- Editable article content with automatic change detection
 
 ## Tech Stack
 
