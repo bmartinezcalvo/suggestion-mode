@@ -3237,6 +3237,9 @@ function markArticleEdited() {
   background-color: #ffffff;
   border: 1px solid #dadde3;
   border-radius: 2px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
 }
 
 .empty-state-icon {
