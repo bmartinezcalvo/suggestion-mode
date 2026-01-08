@@ -592,9 +592,34 @@
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
-                      In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
+                      In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.<sup v-if="showCitationPopup1 || citationNumber1" class="citation-marker" ref="citationMarker1">[{{ citationNumber1 || '...' }}]</sup>
                     </span>
                   </p>
+
+                  <!-- Citation Popup 1 -->
+                  <div v-if="showCitationPopup1" class="citation-popup">
+                    <div class="citation-popup-header">
+                      <h3 class="citation-popup-title">Add citation</h3>
+                      <button class="citation-popup-close" @click="showCitationPopup1 = false" aria-label="Close">
+                        <cdx-icon :icon="cdxIconClose" size="medium" />
+                      </button>
+                    </div>
+                    <div class="citation-popup-tabs">
+                      <button class="citation-tab citation-tab--active">Automatic</button>
+                      <button class="citation-tab">Manual</button>
+                      <button class="citation-tab">Re-use</button>
+                    </div>
+                    <div class="citation-popup-content">
+                      <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+                      <input 
+                        v-model="citationUrl1" 
+                        type="text" 
+                        class="citation-input" 
+                        placeholder="https://www.womenshistory.org/biographies/audre-lorde"
+                      />
+                      <button class="citation-create-btn" @click="createCitation1">Create</button>
+                    </div>
+                  </div>
                   
                   <p v-else>
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
@@ -631,9 +656,34 @@
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
-                      In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
+                      In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker" ref="citationMarker2">[{{ citationNumber2 || '...' }}]</sup>
                     </span>
                   </p>
+
+                  <!-- Citation Popup 2 -->
+                  <div v-if="showCitationPopup2" class="citation-popup">
+                    <div class="citation-popup-header">
+                      <h3 class="citation-popup-title">Add citation</h3>
+                      <button class="citation-popup-close" @click="showCitationPopup2 = false" aria-label="Close">
+                        <cdx-icon :icon="cdxIconClose" size="medium" />
+                      </button>
+                    </div>
+                    <div class="citation-popup-tabs">
+                      <button class="citation-tab citation-tab--active">Automatic</button>
+                      <button class="citation-tab">Manual</button>
+                      <button class="citation-tab">Re-use</button>
+                    </div>
+                    <div class="citation-popup-content">
+                      <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+                      <input 
+                        v-model="citationUrl2" 
+                        type="text" 
+                        class="citation-input" 
+                        placeholder="https://www.womenshistory.org/biographies/audre-lorde"
+                      />
+                      <button class="citation-create-btn" @click="createCitation2">Create</button>
+                    </div>
+                  </div>
                   
                   <p v-else>
                     In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
@@ -697,8 +747,8 @@
                 Help readers understand where this information is coming from by adding a citation.
               </p>
               <div class="suggestion-actions">
-                <button class="suggestion-btn">Yes</button>
-                <button class="suggestion-btn suggestion-btn-secondary">No</button>
+                <button class="suggestion-btn" @click="handleYesSuggestion1">Yes</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="isCardExpanded = false">No</button>
               </div>
             </div>
           </div>
@@ -746,8 +796,8 @@
                 Help readers understand where this information is coming from by adding a citation.
               </p>
               <div class="suggestion-actions">
-                <button class="suggestion-btn">Yes</button>
-                <button class="suggestion-btn suggestion-btn-secondary">No</button>
+                <button class="suggestion-btn" @click="handleYesSuggestion2">Yes</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="isCardExpanded2 = false">No</button>
               </div>
             </div>
           </div>
@@ -824,7 +874,8 @@ import {
   cdxIconAlert,
   cdxIconEdit,
   cdxIconPuzzle,
-  cdxIconLightbulb
+  cdxIconLightbulb,
+  cdxIconClose
 } from '@wikimedia/codex-icons';
 
 // Wikipedia logo - solo el globo
@@ -869,6 +920,47 @@ const sidebarTopOffset2 = ref(0);
 
 // Computed: sincronizar hover entre texto y card (second suggestion)
 const isHovered2 = computed(() => isCardHovered2.value || isTextHovered2.value);
+
+// Citation flow states
+const showCitationPopup1 = ref(false);
+const showCitationPopup2 = ref(false);
+const citationUrl1 = ref('');
+const citationUrl2 = ref('');
+const citationNumber1 = ref(null); // null = no citation, number = citation created
+const citationNumber2 = ref(null);
+const citationCounter = ref(0); // Global counter for citations
+
+// Function to handle "Yes" click on suggestion 1
+function handleYesSuggestion1() {
+  showCitationPopup1.value = true;
+}
+
+// Function to handle "Yes" click on suggestion 2
+function handleYesSuggestion2() {
+  showCitationPopup2.value = true;
+}
+
+// Function to create citation for suggestion 1
+function createCitation1() {
+  if (citationUrl1.value.trim()) {
+    citationCounter.value++;
+    citationNumber1.value = citationCounter.value;
+    showCitationPopup1.value = false;
+    // Dismiss the suggestion card
+    isCardExpanded.value = false;
+  }
+}
+
+// Function to create citation for suggestion 2
+function createCitation2() {
+  if (citationUrl2.value.trim()) {
+    citationCounter.value++;
+    citationNumber2.value = citationCounter.value;
+    showCitationPopup2.value = false;
+    // Dismiss the suggestion card
+    isCardExpanded2.value = false;
+  }
+}
 
 // Watch to ensure only one suggestion is expanded at a time
 watch(isCardExpanded, (newValue) => {
@@ -2745,5 +2837,176 @@ function markArticleEdited() {
 }
 
 /* Suggestion card maintains fixed 325px width across all breakpoints */
+
+/* ===== CITATION MARKER ===== */
+.citation-marker {
+  font-family: 'Inter', sans-serif;
+  font-size: 11px;
+  font-weight: 400;
+  line-height: 1;
+  color: #36c;
+  cursor: pointer;
+  margin-left: 1px;
+}
+
+.citation-marker:hover {
+  text-decoration: underline;
+}
+
+/* ===== CITATION POPUP ===== */
+.citation-popup {
+  position: absolute;
+  width: 448px;
+  max-width: calc(100vw - 32px);
+  background: white;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  margin-top: 8px;
+}
+
+.citation-popup-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+  border-bottom: 1px solid #dadde3;
+}
+
+.citation-popup-title {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 24px;
+  color: #202122;
+  margin: 0;
+}
+
+.citation-popup-close {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  color: #72777d;
+}
+
+.citation-popup-close:hover {
+  background-color: #f8f9fa;
+}
+
+.citation-popup-tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid #dadde3;
+  padding: 0 16px;
+}
+
+.citation-tab {
+  padding: 12px 16px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #72777d;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.citation-tab:hover {
+  color: #202122;
+}
+
+.citation-tab--active {
+  color: #36c;
+  border-bottom-color: #36c;
+  font-weight: 700;
+}
+
+.citation-popup-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.citation-popup-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #54595d;
+  margin: 0;
+}
+
+.citation-input {
+  width: 100%;
+  height: 32px;
+  padding: 4px 8px;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  line-height: 20px;
+  color: #202122;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.citation-input:hover {
+  border-color: #72777d;
+}
+
+.citation-input:focus {
+  border-color: #36c;
+  box-shadow: inset 0 0 0 1px #36c;
+}
+
+.citation-create-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 32px;
+  padding: 4px 12px;
+  background-color: #36c;
+  border: 1px solid #36c;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #ffffff;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+  align-self: flex-start;
+}
+
+.citation-create-btn:hover {
+  background-color: #447ff5;
+  border-color: #447ff5;
+}
+
+.citation-create-btn:active {
+  background-color: #2a4b8d;
+  border-color: #2a4b8d;
+}
+
+.citation-create-btn:disabled {
+  background-color: #dadde3;
+  border-color: #dadde3;
+  color: #a2a9b1;
+  cursor: not-allowed;
+}
 </style>
 
