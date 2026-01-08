@@ -598,11 +598,14 @@
 
                   <!-- Citation Popup 1 -->
                   <div v-if="showCitationPopup1" class="citation-popup">
+                    <!-- Pointer arrow -->
+                    <div class="citation-popup-pointer"></div>
+                    
                     <div class="citation-popup-header">
-                      <h3 class="citation-popup-title">Add citation</h3>
                       <button class="citation-popup-close" @click="showCitationPopup1 = false" aria-label="Close">
                         <cdx-icon :icon="cdxIconClose" size="medium" />
                       </button>
+                      <h3 class="citation-popup-title">Add citation</h3>
                     </div>
                     <div class="citation-popup-tabs">
                       <button class="citation-tab citation-tab--active">Automatic</button>
@@ -611,13 +614,15 @@
                     </div>
                     <div class="citation-popup-content">
                       <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
-                      <input 
-                        v-model="citationUrl1" 
-                        type="text" 
-                        class="citation-input" 
-                        placeholder="https://www.womenshistory.org/biographies/audre-lorde"
-                      />
-                      <button class="citation-create-btn" @click="createCitation1">Create</button>
+                      <div class="citation-input-group">
+                        <input 
+                          v-model="citationUrl1" 
+                          type="text" 
+                          class="citation-input" 
+                          placeholder="https://www.womenshistory.org/biographies/audre-lorde"
+                        />
+                        <button class="citation-create-btn" @click="createCitation1">Create</button>
+                      </div>
                     </div>
                   </div>
                   
@@ -662,11 +667,14 @@
 
                   <!-- Citation Popup 2 -->
                   <div v-if="showCitationPopup2" class="citation-popup">
+                    <!-- Pointer arrow -->
+                    <div class="citation-popup-pointer"></div>
+                    
                     <div class="citation-popup-header">
-                      <h3 class="citation-popup-title">Add citation</h3>
                       <button class="citation-popup-close" @click="showCitationPopup2 = false" aria-label="Close">
                         <cdx-icon :icon="cdxIconClose" size="medium" />
                       </button>
+                      <h3 class="citation-popup-title">Add citation</h3>
                     </div>
                     <div class="citation-popup-tabs">
                       <button class="citation-tab citation-tab--active">Automatic</button>
@@ -675,13 +683,15 @@
                     </div>
                     <div class="citation-popup-content">
                       <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
-                      <input 
-                        v-model="citationUrl2" 
-                        type="text" 
-                        class="citation-input" 
-                        placeholder="https://www.womenshistory.org/biographies/audre-lorde"
-                      />
-                      <button class="citation-create-btn" @click="createCitation2">Create</button>
+                      <div class="citation-input-group">
+                        <input 
+                          v-model="citationUrl2" 
+                          type="text" 
+                          class="citation-input" 
+                          placeholder="https://www.womenshistory.org/biographies/audre-lorde"
+                        />
+                        <button class="citation-create-btn" @click="createCitation2">Create</button>
+                      </div>
                     </div>
                   </div>
                   
@@ -2861,26 +2871,30 @@ function markArticleEdited() {
   background: white;
   border: 1px solid #a2a9b1;
   border-radius: 2px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.06), 0px 0px 8px 0px rgba(0, 0, 0, 0.06);
   z-index: 50;
-  margin-top: 8px;
+  margin-top: 12px;
+}
+
+/* Pointer arrow pointing up */
+.citation-popup-pointer {
+  position: absolute;
+  top: -12px;
+  left: 50%;
+  transform: translateX(-50%) rotate(225deg);
+  width: 16px;
+  height: 16px;
+  background: white;
+  border: 1px solid #a2a9b1;
+  border-left: none;
+  border-top: none;
 }
 
 .citation-popup-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 16px;
-  border-bottom: 1px solid #dadde3;
-}
-
-.citation-popup-title {
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 700;
-  line-height: 24px;
-  color: #202122;
-  margin: 0;
+  padding: 8px 16px;
+  gap: 8px;
 }
 
 .citation-popup-close {
@@ -2889,81 +2903,101 @@ function markArticleEdited() {
   justify-content: center;
   width: 32px;
   height: 32px;
-  padding: 0;
+  padding: 5px;
   background: transparent;
   border: none;
   border-radius: 2px;
   cursor: pointer;
-  color: #72777d;
+  color: #202122;
+  flex-shrink: 0;
 }
 
 .citation-popup-close:hover {
   background-color: #f8f9fa;
 }
 
+.citation-popup-title {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 26px;
+  color: #202122;
+  margin: 0;
+  text-align: center;
+}
+
 .citation-popup-tabs {
   display: flex;
-  gap: 0;
-  border-bottom: 1px solid #dadde3;
-  padding: 0 16px;
+  gap: 4px;
+  background-color: #eaecf0;
+  padding: 8px 8px 0 8px;
 }
 
 .citation-tab {
-  padding: 12px 16px;
+  padding: 4px 12px;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
-  font-weight: 400;
+  font-weight: 700;
   line-height: 20px;
-  color: #72777d;
+  color: #202122;
   background: transparent;
   border: none;
-  border-bottom: 2px solid transparent;
+  border-radius: 2px 2px 0 0;
   cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  transition: background-color 0.2s ease;
 }
 
 .citation-tab:hover {
-  color: #202122;
+  background-color: rgba(255, 255, 255, 0.5);
 }
 
 .citation-tab--active {
-  color: #36c;
-  border-bottom-color: #36c;
-  font-weight: 700;
+  background-color: white;
+  color: #202122;
 }
 
 .citation-popup-content {
   padding: 16px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 10px;
+  background: white;
 }
 
 .citation-popup-description {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 400;
-  line-height: 20px;
-  color: #54595d;
+  line-height: 22px;
+  color: #202122;
   margin: 0;
 }
 
+/* Input group: input + button together */
+.citation-input-group {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
 .citation-input {
-  width: 100%;
+  flex: 1;
   height: 32px;
   padding: 4px 8px;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   line-height: 20px;
   color: #202122;
-  border: 1px solid #a2a9b1;
-  border-radius: 2px;
+  border: 1px solid #72777d;
+  border-right: none;
+  border-radius: 2px 0 0 2px;
   outline: none;
   transition: border-color 0.2s ease;
 }
 
 .citation-input:hover {
-  border-color: #72777d;
+  border-color: #202122;
 }
 
 .citation-input:focus {
@@ -2978,28 +3012,28 @@ function markArticleEdited() {
   height: 32px;
   min-width: 32px;
   padding: 4px 12px;
-  background-color: #36c;
-  border: 1px solid #36c;
-  border-radius: 2px;
+  background-color: #f8f9fa;
+  border: 1px solid #72777d;
+  border-radius: 0 2px 2px 0;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   font-weight: 700;
   line-height: 20px;
-  color: #ffffff;
+  color: #202122;
   text-align: center;
   transition: background-color 0.2s ease, border-color 0.2s ease;
-  align-self: flex-start;
+  flex-shrink: 0;
 }
 
 .citation-create-btn:hover {
-  background-color: #447ff5;
-  border-color: #447ff5;
+  background-color: #ffffff;
+  border-color: #202122;
 }
 
 .citation-create-btn:active {
-  background-color: #2a4b8d;
-  border-color: #2a4b8d;
+  background-color: #eaecf0;
+  border-color: #72777d;
 }
 
 .citation-create-btn:disabled {
