@@ -3,6 +3,6 @@ import vue from '@vitejs/plugin-vue'
 
 export default defineConfig({
   plugins: [vue()],
-  base: '/suggestion-mode/', // Base URL for GitHub Pages
+  base: '/', // Base URL for Netlify (use '/' for root deployment)
 })
 
