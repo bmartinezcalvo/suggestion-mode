@@ -578,7 +578,7 @@
                   <p>&nbsp;</p>
                   <!-- Highlighted Text with interactive states -->
                   <p 
-                    v-if="showSuggestions && !showSuccessMessage1 && citationNumber1 === null"
+                    v-if="showSuggestions && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
                     ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -653,7 +653,7 @@
                   </p>
                   <p>&nbsp;</p>
                   <p 
-                    v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null"
+                    v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
                     ref="highlightedTextRef2"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -728,7 +728,7 @@
         >
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="!showSuccessMessage1 && citationNumber1 === null"
+            v-if="!showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -780,7 +780,7 @@
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup1"
-                  @click="isCardExpanded = false"
+                  @click="handleNoSuggestion1"
                 >
                   No
                 </button>
@@ -805,7 +805,7 @@
 
           <!-- Second Add Citation Suggestion Card -->
           <div 
-            v-if="!showSuccessMessage2 && citationNumber2 === null"
+            v-if="!showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -857,7 +857,7 @@
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup2"
-                  @click="isCardExpanded2 = false"
+                  @click="handleNoSuggestion2"
                 >
                   No
                 </button>
@@ -1010,6 +1010,8 @@ const citationNumber2 = ref(null);
 const citationCounter = ref(0); // Global counter for citations
 const showSuccessMessage1 = ref(false); // Show success message after citation is created
 const showSuccessMessage2 = ref(false);
+const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
+const isSuggestionDeclined2 = ref(false);
 
 // Computed properties to validate URLs
 const isValidUrl1 = computed(() => {
@@ -1042,6 +1044,18 @@ function handleYesSuggestion1() {
 // Function to handle "Yes" click on suggestion 2
 function handleYesSuggestion2() {
   showCitationPopup2.value = true;
+}
+
+// Function to handle "No" click on suggestion 1 (decline/skip)
+function handleNoSuggestion1() {
+  isSuggestionDeclined1.value = true;
+  isCardExpanded.value = false;
+}
+
+// Function to handle "No" click on suggestion 2 (decline/skip)
+function handleNoSuggestion2() {
+  isSuggestionDeclined2.value = true;
+  isCardExpanded2.value = false;
 }
 
 // Function to create citation for suggestion 1
