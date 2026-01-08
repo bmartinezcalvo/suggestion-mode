@@ -889,7 +889,7 @@
               <cdx-icon :icon="cdxIconLightbulb" size="medium" />
             </div>
             <div class="empty-state-content">
-              <p class="empty-state-text">There are no more suggestions to improve this article.</p>
+              <p class="empty-state-text">There are no more suggestions to improve this article. You can explore suggestions in other articles.</p>
             </div>
           </div>
         </aside>
