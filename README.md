@@ -1,101 +1,181 @@
-# Wikipedia Article Template
+# Wikipedia Suggestion Mode Prototype
 
-Interactive UX prototype template for Wikipedia article pages, built with Vue 3 and Wikimedia Codex design system.
+Interactive UX prototype demonstrating the **Suggestion Mode** feature in Wikipedia's Edit interface.
 
-## Overview
+## 📋 Overview
 
-This template replicates the Wikipedia article experience with both **Read** and **Edit** modes, designed for UX testing and prototyping. It prioritizes design fidelity over production code quality.
+This project is an interactive prototype that implements a suggestion mode for Wikipedia's article editing interface. When enabled, the suggestion mode displays AI-powered or rule-based suggestions (e.g., "Add a citation") alongside the article content, helping editors improve article quality.
 
-## Features
+## ✨ Features
 
-### Read Mode
-- Article layout with text content and infobox
-- Table of Contents sidebar on the left and Tools panel on the right
-- Responsive behavior (sidebar panels collapse at breakpoint-tablet from 1119px screens)
-- Wikipedia header with search functionality
+### Suggestion Mode in Edit Mode
 
-### Edit Mode
-- Editor toolbar with options
-- Editable article content with automatic change detection
+- **Toggle Suggestions**: Lightbulb button in the editor toolbar to enable/disable suggestions
+- **Dynamic Layout**: 
+  - **Default**: Article content is centered on the page (949px max-width)
+  - **With suggestions active**: Content shifts left with a smooth CSS Grid animation, and a 325px suggestions panel appears on the right
+- **Interactive Suggestion Cards**:
+  - Collapsed and expanded states
+  - Hover effects synchronized with highlighted text
+  - Click to expand/collapse
+- **Highlighted Text**: Visual indicators in the article showing where suggestions apply
+- **Smooth Transitions**: CSS Grid-based layout with 250ms ease transitions
 
-## Tech Stack
+### Technical Implementation
 
-- **Vue 3** (Composition API with `<script setup>`)
-- **Wikimedia Codex** - Official design system
-- **Vite** - Build tool
-- **Custom CSS** - No Tailwind or other CSS frameworks
+- **CSS Grid Layout**: Responsive grid that adapts when suggestions are toggled
+- **Grid columns**:
+  - Without suggestions: `1fr minmax(0, 949px) 1fr` (centered)
+  - With suggestions: `minmax(0, 949px) 24px 325px` (left-aligned with right panel)
+- **Vue 3 Composition API**: Reactive state management
+- **Wikimedia Codex**: Design system components and tokens
 
-## Installation
+## 🚀 Getting Started
+
+### Prerequisites
+
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Installation
 
 ```bash
+# Clone the repository
+git clone https://github.com/bmartinezcalvo/suggestion-mode.git
+
+# Navigate to project directory
+cd suggestion-mode
+
+# Install dependencies
 npm install
 ```
 
-## Usage
+### Development
 
 ```bash
+# Run development server
 npm run dev
+
+# Open browser to http://localhost:5173
 ```
 
-Open [http://localhost:5174](http://localhost:5174) in your browser.
+### Build
 
-## Project Structure
+```bash
+# Build for production
+npm run build
+
+# Preview production build
+npm run preview
+```
+
+## 🎯 Usage
+
+1. **Navigate to Edit Mode**: Click the "Edit" tab in the article toolbar
+2. **Enable Suggestions**: Click the lightbulb icon in the editor toolbar
+3. **View Suggestions**: The layout will shift and suggestion cards will appear on the right
+4. **Interact with Suggestions**:
+   - Hover over highlighted text or suggestion cards
+   - Click to expand/collapse suggestion details
+   - Click "Yes" or "No" to accept or dismiss suggestions
+
+## 🛠️ Tech Stack
+
+- **Vue 3** - Progressive JavaScript framework
+- **Vite** - Build tool and dev server
+- **Wikimedia Codex** - Design system for Wikimedia projects
+- **CSS Grid** - Layout system for responsive design
+- **TypeScript** - Type-safe JavaScript
+
+## 📐 Layout Specifications
+
+### Without Suggestions
+- Article content: 949px max-width
+- Position: Centered in viewport
+- Grid: `1fr minmax(0, 949px) 1fr`
+
+### With Suggestions
+- Article content: 949px (left-aligned)
+- Gap: 24px
+- Suggestions panel: 325px
+- Grid: `minmax(0, 949px) 24px 325px`
+- Total width: 1298px
+
+## 🎨 Design Tokens
+
+This project uses Wikimedia Codex design tokens for:
+- Colors
+- Typography
+- Spacing
+- Border radius
+- Shadows
+- Transitions
+
+## 📝 Project Structure
 
 ```
 src/
 ├── components/
-│   └── WikipediaPage.vue    # Main article component
-├── App.vue                   # App wrapper
-└── style.css                 # Global styles
+│   └── WikipediaPage.vue    # Main component with suggestion mode
+├── assets/
+│   └── images/              # Article images and icons
+├── App.vue                  # Root component
+└── main.js                  # Application entry point
 ```
 
-## Customization
+## 🔄 State Management
 
-### Content
-Edit article content directly in `WikipediaPage.vue`:
-- Text sections (intro, Early life, Career)
-- Infobox data
-- Images (update `audreImage` constant)
+The suggestion mode is controlled by a simple reactive boolean:
 
-### Design Tokens
-This project uses Codex design tokens. Reference:
-- [Codex Design Tokens](https://doc.wikimedia.org/codex/latest/design-tokens/)
-- [Codex Components](https://doc.wikimedia.org/codex/latest/components/overview.html)
-- [Codex Icons](https://doc.wikimedia.org/codex/latest/icons/all-icons.html)
+```javascript
+const showSuggestions = ref(false)
+```
 
-### Layout Widths
-- Page container: 1596px max
-- Article (Read mode): 1067px max
-- Article (Edit mode): 1532px max
-- TOC sidebar: 209px
-- Tools sidebar: 208px
+When toggled:
+1. CSS Grid layout transitions smoothly (250ms)
+2. Suggestion cards appear/disappear
+3. Highlighted text is shown/hidden
+4. Layout shifts from centered to left-aligned
 
-## Design Principles
+## 🎭 Interaction States
 
-✅ **Fidelity to design** - Match Figma designs exactly  
-✅ **Explicit state** - Easy to trigger and observe interactions  
-✅ **Fake data** - No backend, uses local state  
-❌ **Not production code** - Prioritizes clarity over optimization  
-❌ **No abstractions** - Simple, explicit code  
+### Suggestion Cards
+- **Collapsed**: Border `#dadde3`, no shadow
+- **Expanded**: Border `#6485d1`, box shadow
+- **Hover**: Background `#e8eeff`
 
-## Contributing
+### Highlighted Text
+- **Default**: Background `#f8f9fa`
+- **Hover**: Background `#e8eeff`
+- **Selected**: Background `#e8eeff`
 
-This is a UX prototype template. When making changes:
-1. Keep design fidelity as the top priority
-2. Use Codex components and tokens
-3. Test on different screen sizes (especially 1119px breakpoint)
-4. Avoid over-engineering - this is for user testing
+## 🧪 Testing
 
-## Responsive Behavior
+This is a **UX prototype** designed for testing and demonstration purposes. It includes:
+- Fake data and mock interactions
+- No backend or API calls
+- Simplified state management
+- Focus on visual fidelity and interaction patterns
 
-- **≤ 1119px (tablet)**: TOC and Tools panels collapse, toggle buttons appear
-- **≤ 768px (mobile)**: Further layout adjustments
+## 📦 Base Template
 
-## License
+This project is based on the [Wikipedia Article Template](https://github.com/bmartinezcalvo/wikipedia-article-template) but extends it with the suggestion mode feature.
 
-This template is for internal UX prototyping and testing.
+## 👤 Author
+
+**Barbara Martinez Calvo**
+- GitHub: [@bmartinezcalvo](https://github.com/bmartinezcalvo)
+
+## 📄 License
+
+This project is intended for UX research and prototyping purposes.
+
+## 🙏 Acknowledgments
+
+- Wikipedia and Wikimedia Foundation for design inspiration
+- Wikimedia Codex design system
+- Vue.js community
 
 ---
 
-**Note**: This is an interactive prototype, not production code. It uses fake data and simplified interactions for UX testing purposes.
-
+**Note**: This is an interactive prototype for UX testing and demonstration purposes only. It is not production-ready code and should not be used in a live Wikipedia environment.
