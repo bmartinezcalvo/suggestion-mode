@@ -470,11 +470,7 @@
             </div>
 
             <!-- Article Content Edit -->
-            <div 
-              class="article-content-edit" 
-              :class="{ 'article-content-edit--centered': !showSuggestions }"
-              style="position: relative;"
-            >
+            <div class="article-content-edit">
               <div class="article-main-edit">
                 <!-- First Section with Infobox -->
                 <div class="article-first-section">
@@ -581,8 +577,9 @@
                   </p>
                   <p>&nbsp;</p>
                   <!-- Highlighted Text with interactive states -->
-                  <div 
+                  <p 
                     v-if="showSuggestions"
+                    ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
                       'highlighted-text-wrapper--hover': isHovered && showSuggestions && !isCardExpanded,
@@ -593,11 +590,11 @@
                     @mouseleave="isTextHovered = false"
                     @click="isCardExpanded = true"
                   >
-                    <div class="highlighted-text-rail"></div>
-                    <p class="highlighted-text-content">
+                    <span class="highlighted-text-rail"></span>
+                    <span class="highlighted-text-content">
                       In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
-                    </p>
-                  </div>
+                    </span>
+                  </p>
                   
                   <p v-else>
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
@@ -619,7 +616,26 @@
                     In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
                   </p>
                   <p>&nbsp;</p>
-                  <p>
+                  <p 
+                    v-if="showSuggestions"
+                    ref="highlightedTextRef2"
+                    :class="{ 
+                      'highlighted-text-wrapper': showSuggestions,
+                      'highlighted-text-wrapper--hover': isHovered2 && showSuggestions && !isCardExpanded2,
+                      'highlighted-text-wrapper--selected': isCardExpanded2 && showSuggestions
+                    }" 
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered2 = true"
+                    @mouseleave="isTextHovered2 = false"
+                    @click="isCardExpanded2 = true"
+                  >
+                    <span class="highlighted-text-rail"></span>
+                    <span class="highlighted-text-content">
+                      In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
+                    </span>
+                  </p>
+                  
+                  <p v-else>
                     In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
                   </p>
                   <p>&nbsp;</p>
@@ -629,57 +645,113 @@
                 </div>
               </div>
 
-              <!-- Suggestions Sidebar - 325px fixed width container for suggestions -->
-              <aside v-if="showSuggestions" class="suggestions-sidebar">
-                <!-- Add Citation Suggestion Card -->
-                <div 
-                  :class="{
-                    'suggestion-card--collapsed': !isCardExpanded,
-                    'suggestion-card--expanded': isCardExpanded,
-                    'suggestion-card--hover': isHovered
-                  }"
-                  class="suggestion-card"
-                  @mouseenter="isCardHovered = true"
-                  @mouseleave="isCardHovered = false"
-                >
-                  <!-- Collapsed state: just header -->
-                  <button 
-                    v-if="!isCardExpanded"
-                    class="suggestion-header suggestion-header--collapsed"
-                    @click="isCardExpanded = true"
-                  >
-                    <div class="suggestion-icon">
-                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                    </div>
-                    <div class="suggestion-title">Add a citation</div>
-                  </button>
-                  
-                  <!-- Expanded state: full content -->
-                  <template v-else>
-                    <button 
-                      class="suggestion-header suggestion-header--expanded"
-                      @click="isCardExpanded = false"
-                    >
-                      <div class="suggestion-icon">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </div>
-                      <div class="suggestion-title">Add a citation</div>
-                    </button>
-                    <div class="suggestion-content">
-                      <p class="suggestion-description">
-                        Help readers understand where this information is coming from by adding a citation.
-                      </p>
-                      <div class="suggestion-actions">
-                        <button class="suggestion-btn">Yes</button>
-                        <button class="suggestion-btn">No</button>
-                      </div>
-                    </div>
-                  </template>
-                </div>
-              </aside>
             </div>
           </div>
         </article>
+
+        <!-- Suggestions Sidebar (Right) - Only visible in Edit mode with suggestions -->
+        <aside 
+          v-if="isEditMode && showSuggestions" 
+          class="suggestions-sidebar"
+        >
+          <!-- First Add Citation Suggestion Card -->
+          <div 
+            ref="suggestionsSidebarRef"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded,
+              'suggestion-card--expanded': isCardExpanded,
+              'suggestion-card--hover': isHovered
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset}px` }"
+            @mouseenter="isCardHovered = true"
+            @mouseleave="isCardHovered = false"
+          >
+            <!-- Collapsed state: just header -->
+            <button 
+              v-if="!isCardExpanded"
+              class="suggestion-header suggestion-header--collapsed"
+              @click="isCardExpanded = true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Add a citation</div>
+            </button>
+            
+            <!-- Expanded state: header + content -->
+            <button 
+              v-if="isCardExpanded"
+              class="suggestion-header suggestion-header--expanded"
+              @click="isCardExpanded = false"
+              aria-expanded="true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Add a citation</div>
+            </button>
+            
+            <div v-if="isCardExpanded" class="suggestion-content">
+              <p class="suggestion-description">
+                Help readers understand where this information is coming from by adding a citation.
+              </p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn">Yes</button>
+                <button class="suggestion-btn suggestion-btn-secondary">No</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Second Add Citation Suggestion Card -->
+          <div 
+            ref="suggestionsSidebarRef2"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded2,
+              'suggestion-card--expanded': isCardExpanded2,
+              'suggestion-card--hover': isHovered2
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset2}px` }"
+            @mouseenter="isCardHovered2 = true"
+            @mouseleave="isCardHovered2 = false"
+          >
+            <!-- Collapsed state: just header -->
+            <button 
+              v-if="!isCardExpanded2"
+              class="suggestion-header suggestion-header--collapsed"
+              @click="isCardExpanded2 = true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Add a citation</div>
+            </button>
+            
+            <!-- Expanded state: header + content -->
+            <button 
+              v-if="isCardExpanded2"
+              class="suggestion-header suggestion-header--expanded"
+              @click="isCardExpanded2 = false"
+              aria-expanded="true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Add a citation</div>
+            </button>
+            
+            <div v-if="isCardExpanded2" class="suggestion-content">
+              <p class="suggestion-description">
+                Help readers understand where this information is coming from by adding a citation.
+              </p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn">Yes</button>
+                <button class="suggestion-btn suggestion-btn-secondary">No</button>
+              </div>
+            </div>
+          </div>
+        </aside>
 
         <!-- Tools Sidebar (Right) - Only visible in Read mode -->
         <aside v-if="!isEditMode" class="tools-sidebar">
@@ -728,7 +800,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount, nextTick, watch } from 'vue';
 import { CdxTypeaheadSearch, CdxIcon, CdxButton, CdxProgressBar, CdxToggleButton } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -772,13 +844,124 @@ const hasUnsavedChanges = ref(false);
 const isLoading = ref(false);
 const showSuggestions = ref(true);
 
-// Suggestion card states
+// First suggestion card states
 const isCardExpanded = ref(false);
 const isCardHovered = ref(false);
 const isTextHovered = ref(false);
 
-// Computed: sincronizar hover entre texto y card
+// Refs for alignment (first suggestion)
+const highlightedTextRef = ref(null);
+const suggestionsSidebarRef = ref(null);
+const sidebarTopOffset = ref(0);
+
+// Computed: sincronizar hover entre texto y card (first suggestion)
 const isHovered = computed(() => isCardHovered.value || isTextHovered.value);
+
+// Second suggestion card states
+const isCardExpanded2 = ref(false);
+const isCardHovered2 = ref(false);
+const isTextHovered2 = ref(false);
+
+// Refs for alignment (second suggestion)
+const highlightedTextRef2 = ref(null);
+const suggestionsSidebarRef2 = ref(null);
+const sidebarTopOffset2 = ref(0);
+
+// Computed: sincronizar hover entre texto y card (second suggestion)
+const isHovered2 = computed(() => isCardHovered2.value || isTextHovered2.value);
+
+// Function to calculate and align sidebar with highlighted text
+function alignSidebarWithText() {
+  if (!highlightedTextRef.value) return;
+  
+  nextTick(() => {
+    // Get the main-content-area container
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    
+    const textRect = highlightedTextRef.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    
+    // Calculate the offset of highlighted text from the top of main-content-area
+    const offset = textRect.top - containerRect.top;
+    sidebarTopOffset.value = offset;
+  });
+}
+
+// Watch for changes in showSuggestions to realign
+watch(showSuggestions, (newValue) => {
+  if (newValue) {
+    nextTick(() => {
+      alignSidebarWithText();
+    });
+  } else {
+    sidebarTopOffset.value = 0;
+  }
+});
+
+// Watch for changes in isEditMode to realign
+watch(isEditMode, (newValue) => {
+  if (newValue && showSuggestions.value) {
+    nextTick(() => {
+      alignBothSuggestions();
+    });
+  }
+});
+
+// Function to calculate and align second sidebar with highlighted text
+function alignSidebarWithText2() {
+  if (!highlightedTextRef2.value) return;
+  
+  nextTick(() => {
+    // Get the main-content-area container
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    
+    const textRect = highlightedTextRef2.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    
+    // Calculate the offset of highlighted text from the top of main-content-area
+    const offset = textRect.top - containerRect.top;
+    sidebarTopOffset2.value = offset;
+  });
+}
+
+// Function to align both suggestions
+function alignBothSuggestions() {
+  alignSidebarWithText();
+  alignSidebarWithText2();
+}
+
+// Watch for changes in showSuggestions to realign both
+watch(showSuggestions, (newValue) => {
+  if (newValue) {
+    nextTick(() => {
+      alignBothSuggestions();
+    });
+  } else {
+    sidebarTopOffset.value = 0;
+    sidebarTopOffset2.value = 0;
+  }
+});
+
+// Align on mount and add event listeners
+onMounted(() => {
+  if (isEditMode.value && showSuggestions.value) {
+    setTimeout(() => {
+      alignBothSuggestions();
+    }, 100);
+  }
+  
+  // Add event listeners to keep alignment updated for both suggestions
+  window.addEventListener('resize', alignBothSuggestions);
+  window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
+});
+
+// Clean up event listeners
+onBeforeUnmount(() => {
+  window.removeEventListener('resize', alignBothSuggestions);
+  window.removeEventListener('scroll', alignBothSuggestions, true);
+});
 
 // Handle search input
 function onSearchInput(value) {
@@ -1182,7 +1365,7 @@ function markArticleEdited() {
 .article {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0; /* No gap between article-chrome and edit-mode-content */
   width: 100%;
 }
 
@@ -1789,11 +1972,15 @@ function markArticleEdited() {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 42px;
+  min-height: 42px; /* Changed from height to min-height to allow wrapping */
+  flex-wrap: wrap; /* Allow items to wrap to next line */
   border-bottom: 1px solid #c8ccd1;
   box-shadow: inset 0px -1px 0px 0px #c8ccd1, 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
   padding: 0;
   background: #ffffff;
+  position: sticky; /* Stick to top when scrolling */
+  top: 0; /* Position at top of viewport */
+  z-index: 10; /* Ensure toolbar is above content */
 }
 
 .editor-toolbar-left,
@@ -1801,6 +1988,7 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   gap: 0;
+  flex-wrap: wrap; /* Allow buttons to wrap within each section */
 }
 
 .toolbar-btn {
@@ -1963,19 +2151,58 @@ function markArticleEdited() {
   color: #a2a9b1;
 }
 
-/* Article Content Edit - CSS GRID wrapper for article + suggestions sidebar */
-.article-content-edit {
+/* Edit Mode Grid Layout - applies to the entire article + suggestions in edit mode */
+.edit-mode .main-content-area {
   display: grid;
   width: 100%;
   align-items: start;
-  /* Default (no suggestions): centered column */
-  grid-template-columns: 1fr minmax(0, 949px) 1fr;
+  /* Default (no suggestions): 32px margin + centered column + 32px margin */
+  grid-template-columns: 32px 1fr minmax(0, 949px) 1fr 32px;
   transition: grid-template-columns 250ms ease;
 }
 
-/* With suggestions: no margins, article + gap + panel */
-.article-content-edit:not(.article-content-edit--centered) {
-  grid-template-columns: minmax(0, 949px) 24px 325px;
+/* With suggestions: 32px margin + article + sidebar + 32px margin (no gap) */
+.edit-mode .main-content-area.has-suggestions {
+  grid-template-columns: 32px minmax(0, 949px) 325px 32px;
+}
+
+/* Article takes center column when no suggestions */
+.edit-mode .main-content-area .article {
+  grid-column: 3; /* Center column (after left margin + left spacer) */
+  width: 100%;
+  max-width: 949px;
+}
+
+/* Article takes second column when suggestions are active */
+.edit-mode .main-content-area.has-suggestions .article {
+  grid-column: 2; /* Second column (after left margin) */
+  width: 100%;
+  max-width: 949px;
+}
+
+/* Suggestions sidebar - third column (no gap) */
+.suggestions-sidebar {
+  grid-column: 3; /* Third column (after left margin + article, no gap) */
+  width: 100%;
+  max-width: 325px;
+  position: relative;
+  align-self: start;
+  min-height: 100%; /* Allow sidebar to contain absolutely positioned cards */
+}
+
+/* Positioned suggestion cards within sidebar */
+.suggestion-card-positioned {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  transition: top 250ms ease; /* Smooth transition for alignment */
+}
+
+/* Article content wrapper in edit mode */
+.article-content-edit {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
 }
 
 .article-main-edit {
@@ -1984,23 +2211,6 @@ function markArticleEdited() {
   gap: 8px;
   width: 100%;
   max-width: 949px;
-  /* Grid placement: column 2 when centered, column 1 when suggestions active */
-}
-
-.article-content-edit--centered .article-main-edit {
-  grid-column: 2; /* Centered in 3-column grid */
-}
-
-.article-content-edit:not(.article-content-edit--centered) .article-main-edit {
-  grid-column: 1; /* First column in 4-column grid */
-}
-
-/* Suggestions sidebar - 325px fixed width */
-.suggestions-sidebar {
-  width: 100%;
-  max-width: 325px;
-  position: relative;
-  grid-column: 3; /* Third column (after gap) in 4-column grid */
 }
 
 .article-first-section {
@@ -2265,15 +2475,17 @@ function markArticleEdited() {
   cursor: pointer;
 }
 
-/* Wrapper with rail (vertical line) */
+/* Wrapper with rail (vertical line) - p element with flex */
 .highlighted-text-wrapper {
   display: flex;
   gap: 8px; /* 8px space between rail and text */
   align-items: flex-start;
+  margin: 0;
 }
 
 /* Rail - vertical blue line that covers full height */
 .highlighted-text-rail {
+  display: inline-block;
   width: 2px;
   background-color: #36c;
   flex-shrink: 0;
@@ -2519,15 +2731,6 @@ function markArticleEdited() {
   cursor: not-allowed;
 }
 
-/* Adjust positioning for different screen sizes */
-@media (max-width: 1119px) {
-  .suggestion-card {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: calc(100% - 32px);
-  }
-}
+/* Suggestion card maintains fixed 325px width across all breakpoints */
 </style>
 
