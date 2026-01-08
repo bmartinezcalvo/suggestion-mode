@@ -1052,6 +1052,10 @@ function createCitation1() {
     showCitationPopup1.value = false;
     // Show success message instead of suggestion card
     showSuccessMessage1.value = true;
+    // Hide success message after 4 seconds
+    setTimeout(() => {
+      showSuccessMessage1.value = false;
+    }, 4000);
   }
 }
 
@@ -1063,6 +1067,10 @@ function createCitation2() {
     showCitationPopup2.value = false;
     // Show success message instead of suggestion card
     showSuccessMessage2.value = true;
+    // Hide success message after 4 seconds
+    setTimeout(() => {
+      showSuccessMessage2.value = false;
+    }, 4000);
   }
 }
 
