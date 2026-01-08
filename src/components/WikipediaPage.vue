@@ -578,7 +578,7 @@
                   <p>&nbsp;</p>
                   <!-- Highlighted Text with interactive states -->
                   <p 
-                    v-if="showSuggestions"
+                    v-if="showSuggestions && !showSuccessMessage1"
                     ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -653,7 +653,7 @@
                   </p>
                   <p>&nbsp;</p>
                   <p 
-                    v-if="showSuggestions"
+                    v-if="showSuggestions && !showSuccessMessage2"
                     ref="highlightedTextRef2"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -728,6 +728,7 @@
         >
           <!-- First Add Citation Suggestion Card -->
           <div 
+            v-if="!showSuccessMessage1"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -787,8 +788,24 @@
             </div>
           </div>
 
+          <!-- Success Message for Suggestion 1 -->
+          <div 
+            v-else
+            ref="suggestionsSidebarRef"
+            class="success-message"
+            :style="{ top: `${sidebarTopOffset}px` }"
+          >
+            <div class="success-icon">
+              <cdx-icon :icon="cdxIconSuccess" size="medium" />
+            </div>
+            <div class="success-content">
+              <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
+            </div>
+          </div>
+
           <!-- Second Add Citation Suggestion Card -->
           <div 
+            v-if="!showSuccessMessage2"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -845,6 +862,21 @@
                   No
                 </button>
               </div>
+            </div>
+          </div>
+
+          <!-- Success Message for Suggestion 2 -->
+          <div 
+            v-else
+            ref="suggestionsSidebarRef2"
+            class="success-message"
+            :style="{ top: `${sidebarTopOffset2}px` }"
+          >
+            <div class="success-icon">
+              <cdx-icon :icon="cdxIconSuccess" size="medium" />
+            </div>
+            <div class="success-content">
+              <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
             </div>
           </div>
         </aside>
@@ -921,7 +953,8 @@ import {
   cdxIconEdit,
   cdxIconPuzzle,
   cdxIconLightbulb,
-  cdxIconClose
+  cdxIconClose,
+  cdxIconSuccess
 } from '@wikimedia/codex-icons';
 
 // Wikipedia logo - solo el globo
@@ -975,6 +1008,8 @@ const citationUrl2 = ref('');
 const citationNumber1 = ref(null); // null = no citation, number = citation created
 const citationNumber2 = ref(null);
 const citationCounter = ref(0); // Global counter for citations
+const showSuccessMessage1 = ref(false); // Show success message after citation is created
+const showSuccessMessage2 = ref(false);
 
 // Computed properties to validate URLs
 const isValidUrl1 = computed(() => {
@@ -1015,8 +1050,8 @@ function createCitation1() {
     citationCounter.value++;
     citationNumber1.value = citationCounter.value;
     showCitationPopup1.value = false;
-    // Dismiss the suggestion card
-    isCardExpanded.value = false;
+    // Show success message instead of suggestion card
+    showSuccessMessage1.value = true;
   }
 }
 
@@ -1026,8 +1061,8 @@ function createCitation2() {
     citationCounter.value++;
     citationNumber2.value = citationCounter.value;
     showCitationPopup2.value = false;
-    // Dismiss the suggestion card
-    isCardExpanded2.value = false;
+    // Show success message instead of suggestion card
+    showSuccessMessage2.value = true;
   }
 }
 
@@ -3100,6 +3135,47 @@ function markArticleEdited() {
   border-color: #dadde3;
   color: #a2a9b1;
   cursor: not-allowed;
+}
+
+/* ===== SUCCESS MESSAGE ===== */
+.success-message {
+  position: absolute;
+  width: 100%;
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 16px 0px rgba(0, 0, 0, 0.06);
+}
+
+.success-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.success-icon :deep(svg) {
+  fill: #099979;
+}
+
+.success-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.success-text {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #202122;
 }
 </style>
 
