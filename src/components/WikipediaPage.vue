@@ -3173,7 +3173,7 @@ function markArticleEdited() {
   margin: 0;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
-  font-weight: 700;
+  font-weight: 400;
   line-height: 20px;
   color: #202122;
 }
