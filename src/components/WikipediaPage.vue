@@ -381,7 +381,7 @@
                 <button class="toolbar-btn toolbar-btn-icon-only" :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }" :disabled="!hasUnsavedChanges">
                   <cdx-icon :icon="cdxIconUndo" size="medium" />
                 </button>
-                <button class="toolbar-btn toolbar-btn-icon-only" :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }" :disabled="!hasUnsavedChanges">
+                <button class="toolbar-btn toolbar-btn-icon-only toolbar-btn-disabled" disabled>
                   <cdx-icon :icon="cdxIconRedo" size="medium" />
                 </button>
                 <button class="toolbar-btn toolbar-btn-dropdown">
@@ -429,6 +429,14 @@
                   Publish changes...
                 </button>
               </div>
+            </div>
+
+            <!-- Loading Overlay (only covers content below toolbar) -->
+            <div v-if="isLoading" class="loading-overlay"></div>
+
+            <!-- ProgressBar (centered, 32px below toolbar) -->
+            <div v-if="isLoading" class="loading-progress">
+              <cdx-progress-bar aria-label="Loading edit mode" />
             </div>
 
             <!-- Tagline + Short description -->
@@ -631,7 +639,7 @@
 
 <script setup>
 import { ref } from 'vue';
-import { CdxTypeaheadSearch, CdxIcon, CdxButton } from '@wikimedia/codex';
+import { CdxTypeaheadSearch, CdxIcon, CdxButton, CdxProgressBar } from '@wikimedia/codex';
 import {
   cdxIconMenu,
   cdxIconBell,
@@ -659,8 +667,8 @@ import {
 // Wikipedia logo - solo el globo
 const wikipediaGlobe = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/103px-Wikipedia-logo-v2.svg.png";
 
-// Audre Lorde photo - versión de mejor calidad
-const audreImage = "https://upload.wikimedia.org/wikipedia/commons/a/a3/Audre_Lorde_in_1980.jpg";
+// Audre Lorde photo - versión thumbnail que carga más rápido
+const audreImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Audre_Lorde_in_1980.jpg/330px-Audre_Lorde_in_1980.jpg";
 
 // TypeaheadSearch state
 const searchResults = ref([]);
@@ -670,6 +678,7 @@ const currentSearchTerm = ref('');
 // Edit mode state
 const isEditMode = ref(false);
 const hasUnsavedChanges = ref(false);
+const isLoading = ref(false);
 
 // Handle search input
 function onSearchInput(value) {
@@ -731,11 +740,21 @@ function onSearchSubmit(value) {
   console.log('Search submitted:', value);
 }
 
-// Toggle edit mode
+// Toggle edit mode with loading state
 function toggleEditMode() {
-  isEditMode.value = !isEditMode.value;
-  if (isEditMode.value) {
+  if (!isEditMode.value) {
+    // Activating edit mode: switch to edit mode immediately and show loading overlay
+    isEditMode.value = true;
+    isLoading.value = true;
     hasUnsavedChanges.value = false;
+    
+    // Hide loading overlay after 2 seconds
+    setTimeout(() => {
+      isLoading.value = false;
+    }, 2000);
+  } else {
+    // Returning to read mode: no loading
+    isEditMode.value = false;
   }
 }
 
@@ -1664,6 +1683,7 @@ function markArticleEdited() {
   flex-direction: column;
   gap: 16px;
   width: 100%;
+  position: relative;
 }
 
 /* Editor Toolbar */
@@ -1772,6 +1792,29 @@ function markArticleEdited() {
 
 .dropdown-icon {
   margin-left: 2px;
+}
+
+/* Loading Overlay - only covers content below editor toolbar */
+.loading-overlay {
+  position: absolute;
+  top: 42px; /* Height of editor-toolbar */
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
+  z-index: 50;
+  min-height: 400px; /* Ensure it covers visible content */
+}
+
+/* ProgressBar - centered, 32px below editor toolbar */
+.loading-progress {
+  position: absolute;
+  top: 74px; /* 42px (editor-toolbar height) + 32px spacing */
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 51; /* Above overlay */
+  width: 512px;
+  max-width: calc(100% - 64px); /* Responsive with 32px padding on each side */
 }
 
 /* Edit Header */
