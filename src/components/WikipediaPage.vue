@@ -70,7 +70,7 @@
       </header>
 
       <!-- Main Content Area -->
-      <div class="main-content-area">
+      <div class="main-content-area" :class="{ 'has-suggestions': showSuggestions }">
         
         <!-- Table of Contents (Left Sidebar) - Only visible in Read mode -->
         <aside v-if="!isEditMode" class="toc-sidebar">
@@ -412,6 +412,24 @@
                 </button>
               </div>
               <div class="editor-toolbar-right">
+                <cdx-toggle-button 
+                  v-model="showSuggestions"
+                  quiet
+                  aria-label="Toggle suggestions"
+                  class="suggestions-toggle-btn"
+                  :class="{ 'suggestions-toggle-btn--active': showSuggestions }"
+                >
+                  <span class="lightbulb-icon-wrapper">
+                    <span v-if="showSuggestions" class="bulb-rays">
+                      <span class="ray ray-1"></span>
+                      <span class="ray ray-2"></span>
+                      <span class="ray ray-3"></span>
+                      <span class="ray ray-4"></span>
+                      <span class="ray ray-5"></span>
+                    </span>
+                    <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  </span>
+                </cdx-toggle-button>
                 <button class="toolbar-btn toolbar-btn-icon-only">
                   <cdx-icon :icon="cdxIconHelp" size="medium" />
                 </button>
@@ -452,7 +470,11 @@
             </div>
 
             <!-- Article Content Edit -->
-            <div class="article-content-edit">
+            <div 
+              class="article-content-edit" 
+              :class="{ 'article-content-edit--centered': !showSuggestions }"
+              style="position: relative;"
+            >
               <div class="article-main-edit">
                 <!-- First Section with Infobox -->
                 <div class="article-first-section">
@@ -558,7 +580,26 @@
                     In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
                   </p>
                   <p>&nbsp;</p>
-                  <p>
+                  <!-- Highlighted Text with interactive states -->
+                  <div 
+                    v-if="showSuggestions"
+                    :class="{ 
+                      'highlighted-text-wrapper': showSuggestions,
+                      'highlighted-text-wrapper--hover': isHovered && showSuggestions && !isCardExpanded,
+                      'highlighted-text-wrapper--selected': isCardExpanded && showSuggestions
+                    }" 
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered = true"
+                    @mouseleave="isTextHovered = false"
+                    @click="isCardExpanded = true"
+                  >
+                    <div class="highlighted-text-rail"></div>
+                    <p class="highlighted-text-content">
+                      In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
+                    </p>
+                  </div>
+                  
+                  <p v-else>
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
                   </p>
                   <p>&nbsp;</p>
@@ -587,6 +628,55 @@
                   </p>
                 </div>
               </div>
+
+              <!-- Suggestions Sidebar - 325px fixed width container for suggestions -->
+              <aside v-if="showSuggestions" class="suggestions-sidebar">
+                <!-- Add Citation Suggestion Card -->
+                <div 
+                  :class="{
+                    'suggestion-card--collapsed': !isCardExpanded,
+                    'suggestion-card--expanded': isCardExpanded,
+                    'suggestion-card--hover': isHovered
+                  }"
+                  class="suggestion-card"
+                  @mouseenter="isCardHovered = true"
+                  @mouseleave="isCardHovered = false"
+                >
+                  <!-- Collapsed state: just header -->
+                  <button 
+                    v-if="!isCardExpanded"
+                    class="suggestion-header suggestion-header--collapsed"
+                    @click="isCardExpanded = true"
+                  >
+                    <div class="suggestion-icon">
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </div>
+                    <div class="suggestion-title">Add a citation</div>
+                  </button>
+                  
+                  <!-- Expanded state: full content -->
+                  <template v-else>
+                    <button 
+                      class="suggestion-header suggestion-header--expanded"
+                      @click="isCardExpanded = false"
+                    >
+                      <div class="suggestion-icon">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </div>
+                      <div class="suggestion-title">Add a citation</div>
+                    </button>
+                    <div class="suggestion-content">
+                      <p class="suggestion-description">
+                        Help readers understand where this information is coming from by adding a citation.
+                      </p>
+                      <div class="suggestion-actions">
+                        <button class="suggestion-btn">Yes</button>
+                        <button class="suggestion-btn">No</button>
+                      </div>
+                    </div>
+                  </template>
+                </div>
+              </aside>
             </div>
           </div>
         </article>
@@ -638,8 +728,8 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import { CdxTypeaheadSearch, CdxIcon, CdxButton, CdxProgressBar } from '@wikimedia/codex';
+import { ref, computed } from 'vue';
+import { CdxTypeaheadSearch, CdxIcon, CdxButton, CdxProgressBar, CdxToggleButton } from '@wikimedia/codex';
 import {
   cdxIconMenu,
   cdxIconBell,
@@ -661,7 +751,8 @@ import {
   cdxIconHelp,
   cdxIconAlert,
   cdxIconEdit,
-  cdxIconPuzzle
+  cdxIconPuzzle,
+  cdxIconLightbulb
 } from '@wikimedia/codex-icons';
 
 // Wikipedia logo - solo el globo
@@ -679,6 +770,15 @@ const currentSearchTerm = ref('');
 const isEditMode = ref(false);
 const hasUnsavedChanges = ref(false);
 const isLoading = ref(false);
+const showSuggestions = ref(true);
+
+// Suggestion card states
+const isCardExpanded = ref(false);
+const isCardHovered = ref(false);
+const isTextHovered = ref(false);
+
+// Computed: sincronizar hover entre texto y card
+const isHovered = computed(() => isCardHovered.value || isTextHovered.value);
 
 // Handle search input
 function onSearchInput(value) {
@@ -778,8 +878,7 @@ function markArticleEdited() {
   flex-direction: column;
   gap: 32px;
   padding: 12px 0;
-  max-width: 1596px;
-  margin: 0 auto;
+  width: 100%;
 }
 
 /* ===== HEADER ===== */
@@ -952,7 +1051,7 @@ function markArticleEdited() {
 .main-content-area {
   display: flex;
   gap: 24px;
-  padding: 0 32px;
+  padding: 0;
   align-items: flex-start;
   width: 100%;
 }
@@ -1081,11 +1180,10 @@ function markArticleEdited() {
 
 /* ===== ARTICLE (CENTER COLUMN) ===== */
 .article {
-  flex: 1;
-  max-width: 1067px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  width: 100%;
 }
 
 /* Article Chrome (Title + Toolbar) */
@@ -1681,7 +1779,7 @@ function markArticleEdited() {
 .edit-mode-content {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 0;
   width: 100%;
   position: relative;
 }
@@ -1794,25 +1892,26 @@ function markArticleEdited() {
   margin-left: 2px;
 }
 
-/* Loading Overlay - only covers content below editor toolbar */
+/* Loading Overlay - covers entire page */
 .loading-overlay {
-  position: absolute;
-  top: 42px; /* Height of editor-toolbar */
+  position: fixed;
+  top: 0;
   left: 0;
   right: 0;
   bottom: 0;
+  width: 100vw;
+  height: 100vh;
   background-color: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
-  z-index: 50;
-  min-height: 400px; /* Ensure it covers visible content */
+  z-index: 100; /* Higher z-index to cover suggestion card */
 }
 
-/* ProgressBar - centered, 32px below editor toolbar */
+/* ProgressBar - centered on page */
 .loading-progress {
-  position: absolute;
-  top: 74px; /* 42px (editor-toolbar height) + 32px spacing */
+  position: fixed;
+  top: 50%;
   left: 50%;
-  transform: translateX(-50%);
-  z-index: 51; /* Above overlay */
+  transform: translate(-50%, -50%);
+  z-index: 101; /* Above overlay */
   width: 512px;
   max-width: calc(100% - 64px); /* Responsive with 32px padding on each side */
 }
@@ -1822,7 +1921,7 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 8px 0 16px 0;
+  padding: 16px 0;
 }
 
 .tagline-edit {
@@ -1864,19 +1963,44 @@ function markArticleEdited() {
   color: #a2a9b1;
 }
 
-/* Article Content Edit */
+/* Article Content Edit - CSS GRID wrapper for article + suggestions sidebar */
 .article-content-edit {
-  display: flex;
-  justify-content: center;
+  display: grid;
   width: 100%;
+  align-items: start;
+  /* Default (no suggestions): centered column */
+  grid-template-columns: 1fr minmax(0, 949px) 1fr;
+  transition: grid-template-columns 250ms ease;
+}
+
+/* With suggestions: no margins, article + gap + panel */
+.article-content-edit:not(.article-content-edit--centered) {
+  grid-template-columns: minmax(0, 949px) 24px 325px;
 }
 
 .article-main-edit {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-width: 949px;
   width: 100%;
+  max-width: 949px;
+  /* Grid placement: column 2 when centered, column 1 when suggestions active */
+}
+
+.article-content-edit--centered .article-main-edit {
+  grid-column: 2; /* Centered in 3-column grid */
+}
+
+.article-content-edit:not(.article-content-edit--centered) .article-main-edit {
+  grid-column: 1; /* First column in 4-column grid */
+}
+
+/* Suggestions sidebar - 325px fixed width */
+.suggestions-sidebar {
+  width: 100%;
+  max-width: 325px;
+  position: relative;
+  grid-column: 3; /* Third column (after gap) in 4-column grid */
 }
 
 .article-first-section {
@@ -2003,6 +2127,406 @@ function markArticleEdited() {
   
   .article-first-section .infobox {
     width: 100%;
+  }
+}
+
+/* ===== SUGGESTION MODE STYLES ===== */
+/* Toggle Button for Suggestions - using Codex ToggleButton quiet */
+.suggestions-toggle-btn {
+  width: 40px;
+  height: 42px;
+  min-width: 40px;
+  min-height: 42px;
+  padding: 5px;
+}
+
+/* Override Codex default padding for icon-only button */
+.suggestions-toggle-btn :deep(button) {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Lightbulb icon wrapper */
+.lightbulb-icon-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+}
+
+/* Rays container */
+.bulb-rays {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Individual ray styling - 5 rays in semicircle */
+.ray {
+  position: absolute;
+  width: 2px;
+  height: 3px;
+  background-color: #36c;
+  border-radius: 0.5px;
+  opacity: 0;
+  animation: rayFadeIn 0.3s ease-out forwards;
+  top: 50%;
+  left: 50%;
+  transform-origin: center center;
+}
+
+/* Ray 1: Far left (~-60deg from top) - 3px gap from bulb (adjusted for angle) */
+.ray-1 {
+  transform: translate(-50%, -50%) rotate(-60deg) translateY(-13px);
+  animation-delay: 0s;
+}
+
+/* Ray 2: Mid-left (~-30deg from top) - 3px gap from bulb (adjusted for angle) */
+.ray-2 {
+  transform: translate(-50%, -50%) rotate(-30deg) translateY(-12.5px);
+  animation-delay: 0.05s;
+}
+
+/* Ray 3: Top center (0deg) - 3px gap from bulb */
+.ray-3 {
+  transform: translate(-50%, -50%) rotate(0deg) translateY(-12px);
+  animation-delay: 0.1s;
+}
+
+/* Ray 4: Mid-right (~30deg from top) - 3px gap from bulb (adjusted for angle) */
+.ray-4 {
+  transform: translate(-50%, -50%) rotate(30deg) translateY(-12.5px);
+  animation-delay: 0.15s;
+}
+
+/* Ray 5: Far right (~60deg from top) - 3px gap from bulb (adjusted for angle) */
+.ray-5 {
+  transform: translate(-50%, -50%) rotate(60deg) translateY(-13px);
+  animation-delay: 0.2s;
+}
+
+/* Ray fade-in animation */
+@keyframes rayFadeIn {
+  0% {
+    opacity: 0;
+    height: 2px;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+    height: 3px;
+  }
+}
+
+/* Icon color when active */
+.suggestions-toggle-btn--active :deep(.cdx-icon) {
+  color: #36c;
+  animation: iconGlow 0.4s ease-out;
+}
+
+/* Icon glow animation */
+@keyframes iconGlow {
+  0% {
+    filter: brightness(1);
+    transform: scale(1);
+  }
+  40% {
+    filter: brightness(1.2);
+    transform: scale(1.08);
+  }
+  100% {
+    filter: brightness(1.1);
+    transform: scale(1);
+  }
+}
+
+/* Suggestion Container - wraps highlighted text and card */
+.suggestion-container {
+  position: relative;
+  width: 100%;
+}
+
+/* ===== HIGHLIGHTED TEXT STATES ===== */
+.suggestion-target {
+  position: relative;
+  margin: 0;
+  cursor: pointer;
+}
+
+/* Wrapper with rail (vertical line) */
+.highlighted-text-wrapper {
+  display: flex;
+  gap: 8px; /* 8px space between rail and text */
+  align-items: flex-start;
+}
+
+/* Rail - vertical blue line that covers full height */
+.highlighted-text-rail {
+  width: 2px;
+  background-color: #36c;
+  flex-shrink: 0;
+  align-self: stretch; /* Stretches to match content height */
+}
+
+/* Text content with per-line backgrounds */
+.highlighted-text-content {
+  flex: 1;
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 22px;
+  color: #202122;
+  /* Make background apply per-line */
+  display: inline;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Default state - subtle gray per line */
+.highlighted-text-wrapper .highlighted-text-content {
+  background-color: #f8f9fa;
+  border-radius: 2px;
+  padding: 0 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+
+/* Hover state - blue background per line */
+.highlighted-text-wrapper--hover .highlighted-text-content {
+  background-color: #e8eeff;
+}
+
+/* Selected state - blue background per line */
+.highlighted-text-wrapper--selected .highlighted-text-content {
+  background-color: #e8eeff;
+}
+
+/* Links inside highlighted text */
+.highlighted-text-content a {
+  color: #36c;
+  text-decoration: none;
+}
+
+.highlighted-text-content a:hover {
+  text-decoration: underline;
+}
+
+/* ===== SUGGESTION CARD STATES ===== */
+.suggestion-card {
+  width: 100%; /* Full width of container (325px) */
+  background-color: white;
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* Collapsed state - default */
+.suggestion-card--collapsed {
+  border: 1px solid #dadde3;
+  box-shadow: none;
+}
+
+/* Collapsed state - hover */
+.suggestion-card--collapsed.suggestion-card--hover {
+  border: 1px solid #3056a9;
+}
+
+.suggestion-card--collapsed.suggestion-card--hover .suggestion-header {
+  background-color: #e8eeff;
+}
+
+/* Collapsed state - active (press) */
+.suggestion-card--collapsed:active {
+  border: 1px solid #233566;
+}
+
+.suggestion-card--collapsed:active .suggestion-header {
+  background-color: #e8eeff;
+}
+
+/* Collapsed state - focus */
+.suggestion-card--collapsed:focus-within {
+  border: 2px solid #36c;
+  background-color: white;
+}
+
+/* Expanded state - default */
+.suggestion-card--expanded {
+  border: 1px solid #6485d1;
+  box-shadow: 
+    0px 4px 8px 0px rgba(0, 0, 0, 0.06),
+    0px 0px 16px 0px rgba(0, 0, 0, 0.06);
+}
+
+/* Expanded state - hover */
+.suggestion-card--expanded.suggestion-card--hover .suggestion-header {
+  cursor: pointer;
+}
+
+.suggestion-card--expanded.suggestion-card--hover {
+  border: 1px solid #3056a9;
+}
+
+/* Expanded state - active */
+.suggestion-card--expanded .suggestion-header:active {
+  border: 1px solid #233566;
+}
+
+/* ===== SUGGESTION HEADER ===== */
+.suggestion-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 10px 12px;
+  min-height: 40px;
+  border: none;
+  width: 100%;
+  text-align: left;
+  transition: background-color 0.2s ease;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.suggestion-header--collapsed {
+  cursor: pointer;
+  background-color: transparent;
+}
+
+.suggestion-header--expanded {
+  cursor: pointer;
+  background-color: #e8eeff;
+}
+
+.suggestion-header:focus {
+  outline: none;
+}
+
+.suggestion-icon {
+  width: 18px;
+  height: 20px;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.suggestion-icon .cdx-icon {
+  color: #36c;
+}
+
+.suggestion-title {
+  flex: 1;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #202122;
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+/* ===== SUGGESTION CONTENT (expanded only) ===== */
+.suggestion-content {
+  background-color: white;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.suggestion-description {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #54595d;
+  margin: 0;
+  white-space: pre-wrap;
+  cursor: default;
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
+
+.suggestion-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.suggestion-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 32px;
+  min-width: 32px;
+  max-width: 448px;
+  padding: 4px 12px;
+  background-color: #f8f9fa;
+  border: 1px solid #72777d;
+  border-radius: 2px;
+  cursor: pointer;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 20px;
+  color: #202122;
+  text-align: center;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.suggestion-btn:hover {
+  background-color: #ffffff;
+  border-color: #202122;
+}
+
+.suggestion-btn:active {
+  background-color: #eaecf0;
+  border-color: #72777d;
+}
+
+.suggestion-btn:disabled {
+  background-color: #dadde3;
+  border-color: transparent;
+  color: #a2a9b1;
+  cursor: not-allowed;
+}
+
+/* Adjust positioning for different screen sizes */
+@media (max-width: 1119px) {
+  .suggestion-card {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    max-width: calc(100% - 32px);
   }
 }
 </style>
