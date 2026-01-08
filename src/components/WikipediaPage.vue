@@ -621,7 +621,13 @@
                           class="citation-input" 
                           placeholder="https://www.womenshistory.org/biographies/audre-lorde"
                         />
-                        <button class="citation-create-btn" @click="createCitation1">Create</button>
+                        <button 
+                          class="citation-create-btn" 
+                          :disabled="!isValidUrl1"
+                          @click="createCitation1"
+                        >
+                          Create
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -690,7 +696,13 @@
                           class="citation-input" 
                           placeholder="https://www.womenshistory.org/biographies/audre-lorde"
                         />
-                        <button class="citation-create-btn" @click="createCitation2">Create</button>
+                        <button 
+                          class="citation-create-btn" 
+                          :disabled="!isValidUrl2"
+                          @click="createCitation2"
+                        >
+                          Create
+                        </button>
                       </div>
                     </div>
                   </div>
@@ -939,6 +951,29 @@ const citationUrl2 = ref('');
 const citationNumber1 = ref(null); // null = no citation, number = citation created
 const citationNumber2 = ref(null);
 const citationCounter = ref(0); // Global counter for citations
+
+// Computed properties to validate URLs
+const isValidUrl1 = computed(() => {
+  const url = citationUrl1.value.trim();
+  if (!url) return false;
+  try {
+    const urlObj = new URL(url);
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+  } catch {
+    return false;
+  }
+});
+
+const isValidUrl2 = computed(() => {
+  const url = citationUrl2.value.trim();
+  if (!url) return false;
+  try {
+    const urlObj = new URL(url);
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+  } catch {
+    return false;
+  }
+});
 
 // Function to handle "Yes" click on suggestion 1
 function handleYesSuggestion1() {
