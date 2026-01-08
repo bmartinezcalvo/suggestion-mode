@@ -578,7 +578,7 @@
                   <p>&nbsp;</p>
                   <!-- Highlighted Text with interactive states -->
                   <p 
-                    v-if="showSuggestions && !showSuccessMessage1"
+                    v-if="showSuggestions && !showSuccessMessage1 && citationNumber1 === null"
                     ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -653,7 +653,7 @@
                   </p>
                   <p>&nbsp;</p>
                   <p 
-                    v-if="showSuggestions && !showSuccessMessage2"
+                    v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null"
                     ref="highlightedTextRef2"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
