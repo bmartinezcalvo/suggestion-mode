@@ -870,6 +870,19 @@ const sidebarTopOffset2 = ref(0);
 // Computed: sincronizar hover entre texto y card (second suggestion)
 const isHovered2 = computed(() => isCardHovered2.value || isTextHovered2.value);
 
+// Watch to ensure only one suggestion is expanded at a time
+watch(isCardExpanded, (newValue) => {
+  if (newValue) {
+    isCardExpanded2.value = false;
+  }
+});
+
+watch(isCardExpanded2, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+  }
+});
+
 // Function to calculate and align sidebar with highlighted text
 function alignSidebarWithText() {
   if (!highlightedTextRef.value) return;
