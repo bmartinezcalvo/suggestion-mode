@@ -879,6 +879,19 @@
               <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
             </div>
           </div>
+
+          <!-- Empty State - Show when all suggestions are completed or declined -->
+          <div 
+            v-if="allSuggestionsHandled"
+            class="empty-state"
+          >
+            <div class="empty-state-icon">
+              <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+            </div>
+            <div class="empty-state-content">
+              <p class="empty-state-text">There are no more suggestions to improve this article.</p>
+            </div>
+          </div>
         </aside>
 
         <!-- Tools Sidebar (Right) - Only visible in Read mode -->
@@ -1034,6 +1047,20 @@ const isValidUrl2 = computed(() => {
   } catch {
     return false;
   }
+});
+
+// Check if all suggestions have been handled (completed or declined)
+const allSuggestionsHandled = computed(() => {
+  const suggestion1Handled = citationNumber1.value !== null || isSuggestionDeclined1.value;
+  const suggestion2Handled = citationNumber2.value !== null || isSuggestionDeclined2.value;
+  return suggestion1Handled && suggestion2Handled;
+});
+
+// Computed property to check if all suggestions are completed or declined (show empty state)
+const showEmptyState = computed(() => {
+  const suggestion1Done = citationNumber1.value !== null || isSuggestionDeclined1.value;
+  const suggestion2Done = citationNumber2.value !== null || isSuggestionDeclined2.value;
+  return suggestion1Done && suggestion2Done;
 });
 
 // Function to handle "Yes" click on suggestion 1
@@ -3198,6 +3225,45 @@ function markArticleEdited() {
   font-weight: 400;
   line-height: 20px;
   color: #202122;
+}
+
+/* ===== EMPTY STATE ===== */
+.empty-state {
+  width: 100%;
+  display: flex;
+  align-items: start;
+  gap: 8px;
+  padding: 10px 12px;
+  background-color: #ffffff;
+  border: 1px solid #dadde3;
+  border-radius: 2px;
+}
+
+.empty-state-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.empty-state-icon :deep(svg) {
+  fill: #72777d;
+}
+
+.empty-state-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.empty-state-text {
+  margin: 0;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: #72777d;
 }
 </style>
 
