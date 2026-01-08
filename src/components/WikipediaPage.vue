@@ -2446,6 +2446,7 @@ function markArticleEdited() {
   position: relative;
   align-self: start;
   min-height: 100%; /* Allow sidebar to contain absolutely positioned cards */
+  padding-top: 128px; /* Align with infobox */
 }
 
 /* Positioned suggestion cards within sidebar */
