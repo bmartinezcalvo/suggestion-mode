@@ -473,7 +473,7 @@
             <div class="article-content-edit">
               <div class="article-main-edit">
                 <!-- First Section with Infobox -->
-                <div class="article-first-section">
+                <div class="article-first-section" ref="articleFirstSectionRef">
                   <div class="article-text-block">
                     <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
                       <p>
@@ -725,6 +725,7 @@
         <aside 
           v-if="isEditMode && showSuggestions" 
           class="suggestions-sidebar"
+          :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
           <!-- First Add Citation Suggestion Card -->
           <div 
@@ -996,6 +997,8 @@ const isTextHovered = ref(false);
 const highlightedTextRef = ref(null);
 const suggestionsSidebarRef = ref(null);
 const sidebarTopOffset = ref(0);
+const articleFirstSectionRef = ref(null);
+const suggestionsTopOffset = ref(0);
 
 // Computed: sincronizar hover entre texto y card (first suggestion)
 const isHovered = computed(() => isCardHovered.value || isTextHovered.value);
@@ -1141,7 +1144,7 @@ function alignSidebarWithText() {
     const containerRect = mainContentArea.getBoundingClientRect();
     
     // Calculate the offset of highlighted text from the top of main-content-area
-    const offset = textRect.top - containerRect.top;
+    const offset = textRect.top - containerRect.top - suggestionsTopOffset.value;
     sidebarTopOffset.value = offset;
   });
 }
@@ -1179,13 +1182,28 @@ function alignSidebarWithText2() {
     const containerRect = mainContentArea.getBoundingClientRect();
     
     // Calculate the offset of highlighted text from the top of main-content-area
-    const offset = textRect.top - containerRect.top;
+    const offset = textRect.top - containerRect.top - suggestionsTopOffset.value;
     sidebarTopOffset2.value = offset;
+  });
+}
+
+function alignSuggestionsContainer() {
+  if (!articleFirstSectionRef.value) return;
+
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+
+    const sectionRect = articleFirstSectionRef.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    const offset = sectionRect.top - containerRect.top;
+    suggestionsTopOffset.value = Math.max(0, offset);
   });
 }
 
 // Function to align both suggestions
 function alignBothSuggestions() {
+  alignSuggestionsContainer();
   alignSidebarWithText();
   alignSidebarWithText2();
 }
@@ -1199,8 +1217,58 @@ watch(showSuggestions, (newValue) => {
   } else {
     sidebarTopOffset.value = 0;
     sidebarTopOffset2.value = 0;
+    suggestionsTopOffset.value = 0;
   }
 });
+
+// Auto scroll/expand helper
+let autoSuggestionTimer = null;
+
+function clearAutoSuggestionTimer() {
+  if (autoSuggestionTimer) {
+    clearTimeout(autoSuggestionTimer);
+    autoSuggestionTimer = null;
+  }
+}
+
+function scrollToSuggestion(targetRef) {
+  nextTick(() => {
+    const target = targetRef.value;
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+  });
+}
+
+function openFirstPendingSuggestion() {
+  if (!isEditMode.value || !showSuggestions.value) return;
+
+  const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
+  const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
+
+  if (suggestion1Pending) {
+    isCardExpanded.value = true;
+    isCardExpanded2.value = false;
+    scrollToSuggestion(highlightedTextRef);
+  } else if (suggestion2Pending) {
+    isCardExpanded2.value = true;
+    isCardExpanded.value = false;
+    scrollToSuggestion(highlightedTextRef2);
+  }
+}
+
+// Auto expand and scroll when edit mode + suggestions activate
+watch(
+  () => [isEditMode.value, showSuggestions.value],
+  ([editActive, suggestionsActive]) => {
+    clearAutoSuggestionTimer();
+    if (editActive && suggestionsActive) {
+      autoSuggestionTimer = setTimeout(() => {
+        openFirstPendingSuggestion();
+      }, 1200);
+    }
+  }
+);
 
 // Align on mount and add event listeners
 onMounted(() => {
@@ -1219,6 +1287,7 @@ onMounted(() => {
 onBeforeUnmount(() => {
   window.removeEventListener('resize', alignBothSuggestions);
   window.removeEventListener('scroll', alignBothSuggestions, true);
+  clearAutoSuggestionTimer();
 });
 
 // Handle search input
@@ -2446,7 +2515,7 @@ function markArticleEdited() {
   position: relative;
   align-self: start;
   min-height: 100%; /* Allow sidebar to contain absolutely positioned cards */
-  padding-top: 128px; /* Align with infobox */
+  padding-top: 0;
 }
 
 /* Positioned suggestion cards within sidebar */
@@ -3270,4 +3339,3 @@ function markArticleEdited() {
   color: #72777d;
 }
 </style>
-
