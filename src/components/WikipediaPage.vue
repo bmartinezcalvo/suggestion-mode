@@ -1,15 +1,25 @@
 <template>
-  <div :class="isEditMode ? 'edit-mode' : 'read-mode'">
+  <div ref="pageRoot" :class="[isEditMode ? 'edit-mode' : 'read-mode', isMinervaSkin ? 'minerva-skin' : 'vector-skin', isMinervaSkin && isEditMode && showSuggestions ? 'minerva-suggestions-on' : '', isMinervaSheetOpen ? 'minerva-sheet-open' : '']">
     <!-- Page Container -->
     <div class="page-container">
       
       <!-- Header -->
-      <header class="header-section">
-        <div class="header">
+      <header class="header-section" :class="{ 'header-section--minerva': isMinervaSkin }">
+        <div v-if="!isMinervaSkin" class="header">
           <!-- Menu Button -->
-          <button class="menu-button" aria-label="Menu">
+          <button class="menu-button" aria-label="Menu" @click="toggleSkinMenu">
             <cdx-icon :icon="cdxIconMenu" size="medium" />
           </button>
+          <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup" role="dialog" aria-label="Skin menu">
+            <label class="menu-radio">
+              <input type="radio" name="skin" value="vector22" v-model="selectedSkin" @change="isSkinMenuOpen = false">
+              <span>Vector22</span>
+            </label>
+            <label class="menu-radio">
+              <input type="radio" name="skin" value="minerva" v-model="selectedSkin" @change="isSkinMenuOpen = false">
+              <span>Minerva (mobile skin)</span>
+            </label>
+          </div>
 
           <!-- Wikipedia Logo -->
           <div class="wikipedia-logo">
@@ -64,6 +74,37 @@
             <button class="user-menu-btn" aria-label="User menu">
               <cdx-icon :icon="cdxIconUserAvatar" size="medium" />
               <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+            </button>
+          </div>
+        </div>
+
+        <div v-else class="header header--minerva">
+          <div class="minerva-header-left">
+            <button class="menu-button menu-button--minerva" aria-label="Menu" @click="toggleSkinMenu">
+              <cdx-icon :icon="cdxIconMenu" size="medium" />
+            </button>
+            <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup menu-popup--minerva" role="dialog" aria-label="Skin menu">
+              <label class="menu-radio">
+                <input type="radio" name="skin" value="vector22" v-model="selectedSkin" @change="isSkinMenuOpen = false">
+                <span>Vector22</span>
+              </label>
+              <label class="menu-radio">
+                <input type="radio" name="skin" value="minerva" v-model="selectedSkin" @change="isSkinMenuOpen = false">
+                <span>Minerva (mobile skin)</span>
+              </label>
+            </div>
+
+            <div class="minerva-brand">
+              <span class="minerva-brand-text">Wikipedia</span>
+            </div>
+          </div>
+
+          <div class="minerva-header-actions">
+            <button class="icon-btn" aria-label="Search">
+              <cdx-icon :icon="cdxIconSearch" size="medium" />
+            </button>
+            <button class="icon-btn" aria-label="Notifications">
+              <cdx-icon :icon="cdxIconBell" size="medium" />
             </button>
           </div>
         </div>
@@ -178,7 +219,7 @@
         <article class="article">
           <div class="article-chrome">
             <!-- Title and Toolbar -->
-            <div class="title-toolbar">
+            <div v-if="!isMinervaSkin" class="title-toolbar">
               <div class="article-title-section">
                 <div class="title-and-language">
                   <button class="toc-toggle-btn" aria-label="Toggle table of contents">
@@ -231,11 +272,46 @@
               </div>
             </div>
 
-            <p v-if="!isEditMode" class="article-tagline">From Wikipedia, the free encyclopedia</p>
+            <div v-else-if="!isEditMode" class="minerva-title-toolbar">
+              <div class="minerva-title-row">
+                <h1 class="minerva-article-title">Audre Lorde</h1>
+                <button class="minerva-language-button" aria-label="Language options">
+                  <cdx-icon :icon="cdxIconLanguage" size="medium" />
+                </button>
+              </div>
+              <div class="minerva-tabs">
+                <button class="minerva-tab minerva-tab--active">
+                  Article
+                </button>
+                <button class="minerva-tab">
+                  Talk
+                </button>
+              </div>
+              <div class="minerva-actions">
+                <button class="minerva-action-btn" aria-label="Language">
+                  <cdx-icon :icon="cdxIconLanguage" size="medium" />
+                </button>
+                <button class="minerva-action-btn" aria-label="Watch">
+                  <cdx-icon :icon="cdxIconWatchlist" size="medium" />
+                </button>
+                <button class="minerva-action-btn" aria-label="History">
+                  <cdx-icon :icon="cdxIconHistory" size="medium" />
+                </button>
+                <button class="minerva-action-btn" aria-label="Edit" @click="toggleEditMode">
+                  <cdx-icon :icon="cdxIconEdit" size="medium" />
+                </button>
+                <button class="minerva-action-btn" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-ellipsis-icon" />
+                </button>
+              </div>
+            </div>
+
+            <p v-if="!isEditMode && !isMinervaSkin" class="article-tagline">From Wikipedia, the free encyclopedia</p>
+            <p v-else-if="!isEditMode && isMinervaSkin" class="article-tagline article-tagline--minerva">From Wikipedia, the free encyclopedia</p>
           </div>
 
           <!-- Article Content -->
-          <div v-if="!isEditMode" class="article-content-section">
+          <div v-if="!isEditMode && !isMinervaSkin" class="article-content-section">
             <div class="article-ve-contents">
               <div class="article-content-grid">
                 <!-- Main Article Text -->
@@ -373,12 +449,282 @@
             </div>
           </div>
 
+          <div v-else-if="!isEditMode && isMinervaSkin" class="article-content-section minerva-article-content">
+            <div class="minerva-first-section">
+              <div class="minerva-intro">
+                <p>
+                  <strong>Audre Lorde</strong> (<a href="#">/ˈɔːdri ˈlɔːrd/</a> <em>AW-dree LORD</em>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, professor, philosopher, intersectional <a href="#">feminist</a>, <a href="#">poet</a> and <a href="#">civil rights activist</a>. She was a self-described "Black, lesbian, feminist, socialist, mother, warrior, poet" who dedicated her life and talents to confronting different forms of injustice, as she believed there could be "no hierarchy of oppressions" among "those who share the goals of liberation and a workable future for our children".
+                </p>
+                <p>&nbsp;</p>
+                <p>
+                  As a poet, she is well known for technical mastery and emotional expression, as well as her poems that express anger and outrage at civil and social injustices she observed throughout her life. She was the recipient of national and international awards and the founding member of <em>Kitchen Table: Women of Color Press</em>. As a <a href="#">spoken word</a> artist, her delivery has been called powerful, melodic, and intense by the Poetry Foundation. Her poems and prose largely deal with issues related to civil rights, feminism, lesbianism, illness, disability, and the exploration of Black female identity.
+                </p>
+              </div>
+
+              <aside class="infobox">
+                <div class="infobox-title">Audre Lorde</div>
+                
+                <div class="infobox-image-section">
+                  <div class="infobox-image">
+                    <img :src="audreImage" alt="Audre Lorde in 1980" />
+                  </div>
+                  <div class="infobox-caption">Lorde in 1980</div>
+                </div>
+
+                <div class="infobox-row">
+                  <div class="infobox-label">Born</div>
+                  <div class="infobox-value">
+                    Audrey Geraldine Lorde<br>
+                    February 18, 1934[1]<br>
+                    <a href="#">New York City</a>, U.S.
+                  </div>
+                </div>
+
+                <div class="infobox-row infobox-row-faded">
+                  <div class="infobox-label">Died</div>
+                  <div class="infobox-value">
+                    November 17, 1992 (aged 58)<br>
+                    <a href="#">Saint Croix, Virgin Islands</a>, U.S.
+                  </div>
+                </div>
+
+                <div class="infobox-row">
+                  <div class="infobox-label">Education</div>
+                  <div class="infobox-value infobox-value-link">
+                    <a href="#">National Autonomous University of Mexico</a><br>
+                    <a href="#">Hunter College (BA)</a><br>
+                    <a href="#">Columbia University (MLS)</a>
+                  </div>
+                </div>
+
+                <div class="infobox-row">
+                  <div class="infobox-label">Genre</div>
+                  <div class="infobox-value">
+                    Poetry<br>
+                    Nonfiction
+                  </div>
+                </div>
+
+                <div class="infobox-row">
+                  <div class="infobox-label">Notable works</div>
+                  <div class="infobox-value infobox-value-link">
+                    The First Cities<br>
+                    <a href="#">Zami: A New Spelling of My Name</a><br>
+                    <a href="#">The Cancer Journals</a>
+                  </div>
+                </div>
+              </aside>
+            </div>
+
+            <div class="minerva-accordion">
+              <div class="minerva-accordion-item">
+                <div class="minerva-accordion-header">
+                  <button class="minerva-accordion-toggle" @click="toggleMinervaSection('early-life')" :aria-expanded="isMinervaSectionOpen('early-life')">
+                    <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('early-life') }" />
+                    <span>Early life</span>
+                  </button>
+                  <button v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-edit" aria-label="Edit section">
+                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                  </button>
+                </div>
+                <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
+                  <div class="body-text">
+                    <p>
+                      Audre Lorde was born on February 18, 1934, in <a href="#">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde. Her father, Frederick Byron Lorde (Byron), was born on April 20, 1898, in <a href="#">Barbados</a>. Her mother, Linda Gertrude Belmar Lorde, was born in 1902 on the island <a href="#">Carriacou</a> in <a href="#">Grenada</a>. Lorde's mother was a light-skinned Black woman but sometimes passed as Spanish, for employment opportunities. Lorde's father was darker than the Belmar family liked, and they only allowed the couple to marry because of Byron's charm, ambition, and persistence. After their immigration, the new family settled in <a href="#">Harlem</a>, a diverse neighborhood in upper Manhattan, New York. Lorde was the youngest of three daughters. Lorde was nearsighted to the point of being legally blind. At the age of four she learned to read at the same time she learned to talk, with the help of Augusta Braxton Baker, then children's librarian at the 135th Street Branch of the New York Public Library. Her mother taught her to write at around the same time.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Born Audrey Geraldine Lorde, she chose to drop the "y" from her first name while still a child, explaining in <em><a href="#">Zami: A New Spelling of My Name</a></em> that she was more interested in the artistic symmetry of the "e"-endings in the two side-by-side names "Audre Lorde" than in spelling her name the way her parents had intended.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Lorde's relationship with her parents was difficult from a young age. She spent very little time with her father and mother, who were both busy maintaining their property management business in the tumultuous economy after <a href="#">the Great Depression</a>. When she did see them, they were often cold or emotionally distant. In particular, Lorde's relationship with her mother, who was deeply suspicious of people with darker skin than hers (which Lorde had) and the outside world in general, was characterized by "tough love" and strict adherence to family rules. Lorde's difficult relationship with her mother figured prominently in her later poems, such as <em>Coal</em>'s "Story Books on a Kitchen Table"
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      As a child, Lorde struggled with communication, and came to appreciate the power of poetry as a form of expression. She even described herself as thinking in poetry, stating that she would always "see things in terms of poetry". She explains that it was a way for her to understand and articulate her feelings. She went on to state that it was her way of "birthing myself into a world that I could bring into myself".
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="minerva-accordion-item">
+                <div class="minerva-accordion-header">
+                  <button class="minerva-accordion-toggle" @click="toggleMinervaSection('career')" :aria-expanded="isMinervaSectionOpen('career')">
+                    <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('career') }" />
+                    <span>Career</span>
+                  </button>
+                  <button v-if="isMinervaSectionOpen('career')" class="minerva-accordion-edit" aria-label="Edit section">
+                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                  </button>
+                </div>
+                <div v-if="isMinervaSectionOpen('career')" class="minerva-accordion-panel">
+                  <div class="body-text">
+                    <p>
+                      In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Lorde taught in the Education Department at <a href="#">Lehman College</a> from 1969 to 1970, then as a professor of English at <a href="#">John Jay College of Criminal Justice</a> (both part of the <a href="#">City University of New York</a>, CUNY) from 1970 to 1981. There, she fought for the creation of a <a href="#">black studies</a> department. In 1981, she went on to teach at her alma mater, <a href="#">Hunter College</a> (also CUNY), as the distinguished Thomas Hunter chair. As a queer Black woman, she was an outsider in a <a href="#">white male</a> dominated field and her experiences in this environment deeply influenced her work. New fields such as <a href="#">African American studies</a> and <a href="#">women's studies</a> advanced the topics that scholars were addressing and garnered attention to groups that had previously been rarely discussed. With this newfound <a href="#">academic</a> environment, Lorde was inspired to not only write poetry but also essays and articles about queer, feminist, and African American studies.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="minerva-accordion-item">
+                <div class="minerva-accordion-header">
+                  <button class="minerva-accordion-toggle" @click="toggleMinervaSection('poetry')" :aria-expanded="isMinervaSectionOpen('poetry')">
+                    <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('poetry') }" />
+                    <span>Poetry</span>
+                  </button>
+                  <button v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-edit" aria-label="Edit section">
+                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                  </button>
+                </div>
+                <div v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-panel">
+                  <div class="body-text">
+                    <p>
+                      Lorde's poetry is known for its technical mastery and emotional expression, often confronting injustice and celebrating identity.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="minerva-accordion-item">
+                <div class="minerva-accordion-header">
+                  <button class="minerva-accordion-toggle" @click="toggleMinervaSection('prose')" :aria-expanded="isMinervaSectionOpen('prose')">
+                    <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('prose') }" />
+                    <span>Prose</span>
+                  </button>
+                  <button v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-edit" aria-label="Edit section">
+                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                  </button>
+                </div>
+                <div v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-panel">
+                  <div class="body-text">
+                    <p>
+                      Her essays and memoirs explore feminism, race, sexuality, and power through personal narrative and cultural critique.
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="minerva-last-edited">
+              <cdx-icon :icon="cdxIconClock" size="small" />
+              <div class="minerva-last-edited-text">
+                <div class="minerva-last-edited-title">Last edited 1 month ago</div>
+                <div class="minerva-last-edited-subtitle">Unreviewed</div>
+              </div>
+              <cdx-icon :icon="cdxIconNext" size="small" class="minerva-last-edited-arrow" />
+            </div>
+
+            <div class="minerva-related">
+              <div class="minerva-related-title">RELATED PAGES</div>
+              <div class="minerva-related-list">
+                <div class="minerva-related-card">
+                  <cdx-icon :icon="cdxIconArticle" size="small" />
+                  <div class="minerva-related-content">
+                    <div class="minerva-related-name">Article title (max 2 lines)</div>
+                    <div class="minerva-related-meta">Wikipedia article (more) 1 mo</div>
+                  </div>
+                </div>
+                <div class="minerva-related-card">
+                  <cdx-icon :icon="cdxIconArticle" size="small" />
+                  <div class="minerva-related-content">
+                    <div class="minerva-related-name">Article title (max 2 lines)</div>
+                    <div class="minerva-related-meta">Wikipedia article (more) 1 mo</div>
+                  </div>
+                </div>
+                <div class="minerva-related-card">
+                  <cdx-icon :icon="cdxIconArticle" size="small" />
+                  <div class="minerva-related-content">
+                    <div class="minerva-related-name">Article title (max 2 lines)</div>
+                    <div class="minerva-related-meta">Wikipedia article (more) 1 mo</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <footer class="minerva-footer">
+              <div class="minerva-footer-brand">Wikipedia</div>
+              <div class="minerva-footer-meta">
+                Content is available under <a href="#">CC BY-SA 4.0</a> unless otherwise noted.
+              </div>
+            </footer>
+          </div>
+
           <!-- Edit Mode Content -->
           <div v-else class="edit-mode-content">
             <!-- Editor Toolbar -->
-            <div class="editor-toolbar">
+            <div v-if="isMinervaSkin" class="editor-toolbar editor-toolbar--minerva">
+              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
+                <cdx-icon :icon="cdxIconClose" size="medium" />
+              </button>
+              <button
+                class="toolbar-btn toolbar-btn-icon-only"
+                :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
+                :disabled="!hasUnsavedChanges"
+                aria-label="Undo"
+                @click="undoEdits"
+              >
+                <cdx-icon :icon="cdxIconUndo" size="medium" />
+              </button>
+              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Text styles">
+                <cdx-icon :icon="cdxIconTextStyle" size="medium" />
+                <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+              </button>
+              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Cite">
+                <cdx-icon :icon="cdxIconQuotes" size="medium" />
+              </button>
+              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Link">
+                <cdx-icon :icon="cdxIconLink" size="medium" />
+              </button>
+              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Edit options">
+                <cdx-icon :icon="cdxIconEdit" size="medium" />
+                <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+              </button>
+              <button
+                class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
+                :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
+                :disabled="!hasUnsavedChanges"
+                aria-label="Publish"
+              >
+                <cdx-icon :icon="cdxIconNext" size="medium" />
+              </button>
+            </div>
+            <div v-else class="editor-toolbar">
               <div class="editor-toolbar-left">
-                <button class="toolbar-btn toolbar-btn-icon-only" :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }" :disabled="!hasUnsavedChanges">
+                <button
+                  class="toolbar-btn toolbar-btn-icon-only"
+                  :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
+                  :disabled="!hasUnsavedChanges"
+                  @click="undoEdits"
+                >
                   <cdx-icon :icon="cdxIconUndo" size="medium" />
                 </button>
                 <button class="toolbar-btn toolbar-btn-icon-only toolbar-btn-disabled" disabled>
@@ -457,20 +803,19 @@
               <cdx-progress-bar aria-label="Loading edit mode" />
             </div>
 
-            <!-- Tagline + Short description -->
-            <div class="edit-header">
-              <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
-              
-              <div class="short-description-section">
-                <button class="short-description-btn">
-                  <cdx-icon :icon="cdxIconPuzzle" size="medium" class="short-description-icon" />
-                  <span class="short-description-text">Short description</span>
-                </button>
-              </div>
-            </div>
-
             <!-- Article Content Edit -->
             <div class="article-content-edit">
+              <!-- Tagline + Short description -->
+              <div class="edit-header">
+                <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
+                
+                <div class="short-description-section">
+                  <button class="short-description-btn">
+                    <cdx-icon :icon="cdxIconPuzzle" size="medium" class="short-description-icon" />
+                    <span class="short-description-text">Short description</span>
+                  </button>
+                </div>
+              </div>
               <div class="article-main-edit">
                 <!-- First Section with Infobox -->
                 <div class="article-first-section" ref="articleFirstSectionRef">
@@ -583,17 +928,28 @@
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
                       'highlighted-text-wrapper--hover': isHovered && showSuggestions && !isCardExpanded,
-                      'highlighted-text-wrapper--selected': isCardExpanded && showSuggestions
+                      'highlighted-text-wrapper--selected': isCardExpanded && showSuggestions,
+                      'minerva-suggestion-target': isMinervaSkin
                     }" 
                     class="suggestion-target"
                     @mouseenter="isTextHovered = true"
                     @mouseleave="isTextHovered = false"
-                    @click="isCardExpanded = true"
+                    @click="isMinervaSkin ? openMinervaSuggestion(1) : (isCardExpanded = true)"
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.<sup v-if="showCitationPopup1 || citationNumber1" class="citation-marker" ref="citationMarker1">[{{ citationNumber1 || '...' }}]</sup>
                     </span>
+                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @click.stop="openMinervaSuggestion(1)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
                   </p>
 
                   <!-- Citation Popup 1 -->
@@ -619,7 +975,7 @@
                           v-model="citationUrl1" 
                           type="text" 
                           class="citation-input" 
-                          placeholder="https://www.womenshistory.org/biographies/audre-lorde"
+                          placeholder="http://www.example.com"
                         />
                         <button 
                           class="citation-create-btn" 
@@ -658,17 +1014,28 @@
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
                       'highlighted-text-wrapper--hover': isHovered2 && showSuggestions && !isCardExpanded2,
-                      'highlighted-text-wrapper--selected': isCardExpanded2 && showSuggestions
+                      'highlighted-text-wrapper--selected': isCardExpanded2 && showSuggestions,
+                      'minerva-suggestion-target': isMinervaSkin
                     }" 
                     class="suggestion-target"
                     @mouseenter="isTextHovered2 = true"
                     @mouseleave="isTextHovered2 = false"
-                    @click="isCardExpanded2 = true"
+                    @click="isMinervaSkin ? openMinervaSuggestion(2) : (isCardExpanded2 = true)"
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker" ref="citationMarker2">[{{ citationNumber2 || '...' }}]</sup>
                     </span>
+                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @click.stop="openMinervaSuggestion(2)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
                   </p>
 
                   <!-- Citation Popup 2 -->
@@ -694,7 +1061,7 @@
                           v-model="citationUrl2" 
                           type="text" 
                           class="citation-input" 
-                          placeholder="https://www.womenshistory.org/biographies/audre-lorde"
+                          placeholder="http://www.example.com"
                         />
                         <button 
                           class="citation-create-btn" 
@@ -723,7 +1090,7 @@
 
         <!-- Suggestions Sidebar (Right) - Only visible in Edit mode with suggestions -->
         <aside 
-          v-if="isEditMode && showSuggestions" 
+          v-if="isEditMode && showSuggestions && !isMinervaSkin" 
           class="suggestions-sidebar"
           :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
@@ -895,6 +1262,88 @@
           </div>
         </aside>
 
+        <cdx-toggle-button
+          v-if="isMinervaSkin && isEditMode"
+          v-model="showSuggestions"
+          quiet
+          aria-label="Toggle suggestions"
+          class="minerva-suggestions-toggle"
+          :class="{ 'minerva-suggestions-toggle--active': showSuggestions }"
+          :style="{ bottom: isMinervaSheetOpen ? `calc(16px + ${minervaSheetHeight}px)` : '16px' }"
+        >
+          <span class="lightbulb-icon-wrapper">
+            <span v-if="showSuggestions" class="bulb-rays">
+              <span class="ray ray-1"></span>
+              <span class="ray ray-2"></span>
+              <span class="ray ray-3"></span>
+              <span class="ray ray-4"></span>
+              <span class="ray ray-5"></span>
+            </span>
+            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+          </span>
+        </cdx-toggle-button>
+
+        <div
+          v-if="isMinervaSkin && isEditMode && showSuggestions && isMinervaSheetOpen"
+          class="minerva-bottom-sheet"
+          role="dialog"
+          aria-label="Suggestion"
+          ref="minervaSheetRef"
+        >
+          <div class="minerva-sheet-header">
+            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+            <div class="minerva-sheet-title">Add a citation</div>
+            <button class="minerva-sheet-close" @click="closeMinervaSuggestion" aria-label="Close">
+              <cdx-icon :icon="cdxIconExpand" size="small" />
+            </button>
+          </div>
+          <p class="minerva-sheet-description">
+            Help readers understand where this information is coming from by adding a citation.
+          </p>
+          <div class="minerva-sheet-actions">
+            <cdx-button
+              v-if="activeMinervaSuggestion === 1"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              :disabled="showCitationPopup1"
+              @click="handleYesSuggestion1"
+            >
+              Yes
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 1"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              :disabled="showCitationPopup1"
+              @click="handleNoSuggestion1"
+            >
+              No
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 2"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              :disabled="showCitationPopup2"
+              @click="handleYesSuggestion2"
+            >
+              Yes
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 2"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              :disabled="showCitationPopup2"
+              @click="handleNoSuggestion2"
+            >
+              No
+            </cdx-button>
+          </div>
+        </div>
+
         <!-- Tools Sidebar (Right) - Only visible in Read mode -->
         <aside v-if="!isEditMode" class="tools-sidebar">
           <div class="tools-container">
@@ -954,6 +1403,9 @@ import {
   cdxIconLanguage,
   cdxIconStar,
   cdxIconNext,
+  cdxIconEllipsis,
+  cdxIconHistory,
+  cdxIconSearch,
   cdxIconListBullet,
   cdxIconUndo,
   cdxIconRedo,
@@ -967,26 +1419,44 @@ import {
   cdxIconEdit,
   cdxIconPuzzle,
   cdxIconLightbulb,
+  cdxIconClock,
+  cdxIconArticle,
   cdxIconClose,
   cdxIconSuccess
 } from '@wikimedia/codex-icons';
+import lordeImage from '../assets/lorde-1980.png';
 
 // Wikipedia logo - solo el globo
 const wikipediaGlobe = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/103px-Wikipedia-logo-v2.svg.png";
 
-// Audre Lorde photo - versión thumbnail que carga más rápido
-const audreImage = "https://upload.wikimedia.org/wikipedia/commons/thumb/a/a3/Audre_Lorde_in_1980.jpg/330px-Audre_Lorde_in_1980.jpg";
+// Audre Lorde photo - local asset
+const audreImage = lordeImage;
 
 // TypeaheadSearch state
 const searchResults = ref([]);
 const searchFooterUrl = ref('');
 const currentSearchTerm = ref('');
+const pageRoot = ref(null);
 
 // Edit mode state
 const isEditMode = ref(false);
 const hasUnsavedChanges = ref(false);
 const isLoading = ref(false);
 const showSuggestions = ref(true);
+const isSkinMenuOpen = ref(false);
+const selectedSkin = ref('vector22');
+const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
+const minervaOpenSections = ref({
+  'early-life': false,
+  career: false,
+  poetry: false,
+  prose: false
+});
+const editSnapshot = ref([]);
+const isMinervaSheetOpen = ref(false);
+const activeMinervaSuggestion = ref(1);
+const minervaSheetRef = ref(null);
+const minervaSheetHeight = ref(0);
 
 // First suggestion card states
 const isCardExpanded = ref(false);
@@ -1080,12 +1550,14 @@ function handleYesSuggestion2() {
 function handleNoSuggestion1() {
   isSuggestionDeclined1.value = true;
   isCardExpanded.value = false;
+  closeMinervaSuggestion();
 }
 
 // Function to handle "No" click on suggestion 2 (decline/skip)
 function handleNoSuggestion2() {
   isSuggestionDeclined2.value = true;
   isCardExpanded2.value = false;
+  closeMinervaSuggestion();
 }
 
 // Function to create citation for suggestion 1
@@ -1094,6 +1566,7 @@ function createCitation1() {
     citationCounter.value++;
     citationNumber1.value = citationCounter.value;
     showCitationPopup1.value = false;
+    closeMinervaSuggestion();
     // Show success message instead of suggestion card
     showSuccessMessage1.value = true;
     // Hide success message after 4 seconds
@@ -1109,6 +1582,7 @@ function createCitation2() {
     citationCounter.value++;
     citationNumber2.value = citationCounter.value;
     showCitationPopup2.value = false;
+    closeMinervaSuggestion();
     // Show success message instead of suggestion card
     showSuccessMessage2.value = true;
     // Hide success message after 4 seconds
@@ -1218,7 +1692,12 @@ watch(showSuggestions, (newValue) => {
     sidebarTopOffset.value = 0;
     sidebarTopOffset2.value = 0;
     suggestionsTopOffset.value = 0;
+    closeMinervaSuggestion();
   }
+});
+
+watch(isMinervaSheetOpen, () => {
+  updateMinervaSheetHeight();
 });
 
 // Auto scroll/expand helper
@@ -1241,7 +1720,7 @@ function scrollToSuggestion(targetRef) {
 }
 
 function openFirstPendingSuggestion() {
-  if (!isEditMode.value || !showSuggestions.value) return;
+  if (!isEditMode.value || !showSuggestions.value || isMinervaSkin.value) return;
 
   const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
@@ -1272,21 +1751,32 @@ watch(
 
 // Align on mount and add event listeners
 onMounted(() => {
+  if (typeof window !== 'undefined') {
+    const isMobile = window.matchMedia('(max-width: 640px)').matches;
+    selectedSkin.value = isMobile ? 'minerva' : 'vector22';
+  }
+
   if (isEditMode.value && showSuggestions.value) {
     setTimeout(() => {
       alignBothSuggestions();
     }, 100);
   }
   
-  // Add event listeners to keep alignment updated for both suggestions
-  window.addEventListener('resize', alignBothSuggestions);
-  window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
+  if (typeof window !== 'undefined') {
+    // Add event listeners to keep alignment updated for both suggestions
+    window.addEventListener('resize', alignBothSuggestions);
+    window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
+    window.addEventListener('resize', updateMinervaSheetHeight);
+  }
 });
 
 // Clean up event listeners
 onBeforeUnmount(() => {
-  window.removeEventListener('resize', alignBothSuggestions);
-  window.removeEventListener('scroll', alignBothSuggestions, true);
+  if (typeof window !== 'undefined') {
+    window.removeEventListener('resize', alignBothSuggestions);
+    window.removeEventListener('scroll', alignBothSuggestions, true);
+    window.removeEventListener('resize', updateMinervaSheetHeight);
+  }
   clearAutoSuggestionTimer();
 });
 
@@ -1355,8 +1845,12 @@ function toggleEditMode() {
   if (!isEditMode.value) {
     // Activating edit mode: switch to edit mode immediately and show loading overlay
     isEditMode.value = true;
+    isSkinMenuOpen.value = false;
     isLoading.value = true;
     hasUnsavedChanges.value = false;
+    nextTick(() => {
+      captureEditSnapshot();
+    });
     
     // Hide loading overlay after 2 seconds
     setTimeout(() => {
@@ -1364,8 +1858,86 @@ function toggleEditMode() {
     }, 2000);
   } else {
     // Returning to read mode: no loading
+    restoreEditSnapshot();
+    hasUnsavedChanges.value = false;
+    closeMinervaSuggestion();
     isEditMode.value = false;
   }
+}
+
+function toggleSkinMenu() {
+  if (isEditMode.value) {
+    return;
+  }
+  isSkinMenuOpen.value = !isSkinMenuOpen.value;
+}
+
+function toggleMinervaSection(sectionId) {
+  minervaOpenSections.value[sectionId] = !minervaOpenSections.value[sectionId];
+}
+
+function isMinervaSectionOpen(sectionId) {
+  return Boolean(minervaOpenSections.value[sectionId]);
+}
+
+function openMinervaSuggestion(suggestionId) {
+  activeMinervaSuggestion.value = suggestionId;
+  isMinervaSheetOpen.value = true;
+  if (suggestionId === 1) {
+    isCardExpanded.value = true;
+    isCardExpanded2.value = false;
+  } else {
+    isCardExpanded2.value = true;
+    isCardExpanded.value = false;
+  }
+  updateMinervaSheetHeight();
+}
+
+function closeMinervaSuggestion() {
+  isMinervaSheetOpen.value = false;
+  isCardExpanded.value = false;
+  isCardExpanded2.value = false;
+  minervaSheetHeight.value = 0;
+}
+
+function updateMinervaSheetHeight() {
+  if (!isMinervaSheetOpen.value) {
+    minervaSheetHeight.value = 0;
+    return;
+  }
+  nextTick(() => {
+    const sheet = minervaSheetRef.value;
+    if (sheet) {
+      minervaSheetHeight.value = sheet.offsetHeight;
+    }
+  });
+}
+
+function captureEditSnapshot() {
+  if (!pageRoot.value) {
+    return;
+  }
+  const nodes = pageRoot.value.querySelectorAll('.article-text-editable');
+  editSnapshot.value = Array.from(nodes).map((node) => ({
+    node,
+    html: node.innerHTML
+  }));
+}
+
+function restoreEditSnapshot() {
+  if (!editSnapshot.value.length) {
+    return;
+  }
+  editSnapshot.value.forEach(({ node, html }) => {
+    if (node) {
+      node.innerHTML = html;
+    }
+  });
+}
+
+function undoEdits() {
+  restoreEditSnapshot();
+  hasUnsavedChanges.value = false;
 }
 
 // Mark article as edited
@@ -1389,6 +1961,13 @@ function markArticleEdited() {
   gap: 32px;
   padding: 12px 0;
   width: 100%;
+  max-width: 1596px;
+  margin: 0 auto;
+}
+
+.minerva-skin .page-container {
+  max-width: 994px;
+  padding-top: 0;
 }
 
 /* ===== HEADER ===== */
@@ -1426,6 +2005,97 @@ function markArticleEdited() {
 
 .menu-button:hover {
   background-color: #f8f9fa;
+}
+
+.header-section--minerva {
+  padding: 0 16px;
+  background-color: #eaecf0;
+  border-bottom: 1px solid #c8ccd1;
+}
+
+.minerva-skin.edit-mode .header-section {
+  display: none;
+}
+
+.header--minerva {
+  background-color: transparent;
+  height: 48px;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.minerva-header-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.header--minerva .menu-button {
+  position: static;
+  transform: none;
+}
+
+.menu-button--minerva {
+  padding: 4px 8px;
+}
+
+.minerva-brand {
+  display: flex;
+  align-items: center;
+  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+  color: #54595d;
+}
+
+.minerva-brand-text {
+  width: 120px;
+  font-size: 20px;
+  letter-spacing: 0.6px;
+  font-variant: small-caps;
+}
+
+.minerva-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.header--minerva .icon-btn {
+  color: var(--color-subtle, #54595d);
+}
+
+.menu-popup {
+  position: absolute;
+  left: 0;
+  top: calc(50% + 22px);
+  background-color: #ffffff;
+  border: 1px solid #a2a9b1;
+  border-radius: 4px;
+  padding: 10px 12px;
+  display: grid;
+  gap: 8px;
+  min-width: 220px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  z-index: 10;
+}
+
+.menu-popup--minerva {
+  top: calc(100% + 6px);
+}
+
+.menu-radio {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #202122;
+  cursor: pointer;
+}
+
+.menu-radio input {
+  cursor: pointer;
 }
 
 /* Wikipedia Logo */
@@ -1561,9 +2231,27 @@ function markArticleEdited() {
 .main-content-area {
   display: flex;
   gap: 24px;
-  padding: 0;
+  padding: 0 32px;
   align-items: flex-start;
   width: 100%;
+}
+
+.minerva-skin .main-content-area {
+  padding: 0 16px;
+  gap: 0;
+}
+
+.minerva-suggestions-on .main-content-area {
+  padding-right: 0;
+}
+
+.minerva-skin .toc-sidebar,
+.minerva-skin .tools-sidebar {
+  display: none;
+}
+
+.minerva-skin .article {
+  max-width: 100%;
 }
 
 /* ===== TABLE OF CONTENTS (LEFT SIDEBAR) ===== */
@@ -1690,10 +2378,12 @@ function markArticleEdited() {
 
 /* ===== ARTICLE (CENTER COLUMN) ===== */
 .article {
+  flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0; /* No gap between article-chrome and edit-mode-content */
   width: 100%;
+  max-width: 1067px;
 }
 
 /* Article Chrome (Title + Toolbar) */
@@ -1706,6 +2396,100 @@ function markArticleEdited() {
 .title-toolbar {
   display: flex;
   flex-direction: column;
+}
+
+.minerva-title-toolbar {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 2px 0 6px;
+}
+
+.minerva-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid #c8ccd1;
+}
+
+.minerva-article-title {
+  color: var(--color-emphasized, #202122);
+  font-family: 'Source Serif Pro', serif;
+  font-size: var(--font-size-xxx-large, 28px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--line-height-xxx-large, 38px);
+  margin: 0;
+}
+
+.minerva-language-button {
+  display: none;
+}
+
+.minerva-tabs {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  border-bottom: 1px solid #c8ccd1;
+  padding-bottom: 0;
+}
+
+.minerva-tab {
+  border: none;
+  background: transparent;
+  color: var(--color-subtle, #54595d);
+  padding: 0 0 5px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+}
+
+.minerva-tab--active {
+  border-bottom-color: #202122;
+}
+
+.minerva-actions {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: 1fr;
+  align-items: center;
+  border-bottom: 1px solid #c8ccd1;
+  justify-items: center;
+  margin-top: 0;
+}
+
+.minerva-action-btn {
+  border: none;
+  background: none;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border-radius: 4px;
+  cursor: pointer;
+  color: var(--color-subtle, #54595d);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.minerva-actions .minerva-action-btn:first-child {
+  justify-self: start;
+}
+
+.minerva-actions .minerva-action-btn:last-child {
+  justify-self: end;
+}
+
+.minerva-action-btn:hover {
+  background-color: #eaecf0;
+}
+
+.minerva-ellipsis-icon :deep(svg) {
+  transform: rotate(90deg);
 }
 
 .article-title-section {
@@ -1928,11 +2712,233 @@ function markArticleEdited() {
   margin: 0;
 }
 
+.article-tagline--minerva {
+  font-family: 'Helvetica Neue', sans-serif;
+  font-size: 12.4px;
+  line-height: 17.3px;
+  color: #101418;
+  margin: 6px 0 2px;
+}
+
 /* Article Content */
 .article-content-section {
   display: flex;
   flex-direction: column;
   gap: 8px;
+}
+
+.minerva-article-content {
+  gap: 12px;
+}
+
+.minerva-first-section {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.minerva-intro {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #202122;
+}
+
+.minerva-intro p {
+  margin: 0;
+}
+
+.minerva-article-content .body-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
+  color: #202122;
+}
+
+.minerva-article-content .body-text a {
+  color: #3366cc;
+}
+
+.minerva-skin a {
+  color: var(--color-progressive, #36c);
+  text-decoration: none;
+}
+
+.minerva-skin a:hover,
+.minerva-skin a:active {
+  text-decoration: underline;
+}
+
+.minerva-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.minerva-accordion-item {
+  border-bottom: 1px solid #c8ccd1;
+}
+
+.minerva-accordion-item:first-child {
+  border-top: 1px solid #c8ccd1;
+}
+
+.minerva-accordion-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  height: 58px;
+}
+
+.minerva-accordion-toggle {
+  background: none;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-subtle, #54595d);
+  cursor: pointer;
+  padding: 0;
+}
+
+.minerva-accordion-toggle span {
+  color: var(--color-emphasized, #202122);
+  font-family: 'Source Serif Pro', serif;
+  font-size: var(--font-size-xx-large, 21px);
+  font-style: normal;
+  font-weight: 400;
+  line-height: var(--line-height-xx-large, 27.3px);
+}
+
+.minerva-accordion-panel {
+  padding: 0 0 12px;
+}
+
+.minerva-accordion-icon--open {
+  transform: rotate(180deg);
+}
+
+.minerva-accordion-toggle :deep(svg) {
+  transition: transform 0.2s ease;
+}
+
+.minerva-accordion-edit {
+  border: none;
+  background: none;
+  color: var(--color-subtle, #54595d);
+  padding: 4px;
+  cursor: pointer;
+}
+
+.minerva-last-edited {
+  margin-top: 8px;
+  background-color: #3366cc;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 0;
+  font-size: 12px;
+}
+
+.minerva-skin .minerva-last-edited :deep(.cdx-icon) {
+  color: var(--color-inverted, #ffffff);
+}
+
+.minerva-last-edited-text {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.minerva-last-edited-title {
+  font-weight: 600;
+}
+
+.minerva-last-edited-subtitle {
+  opacity: 0.9;
+}
+
+.minerva-last-edited-arrow {
+  margin-left: auto;
+}
+
+.minerva-related {
+  margin-top: 16px;
+}
+
+.minerva-related-title {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  color: #54595d;
+  margin-bottom: 8px;
+}
+
+.minerva-related-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.minerva-related-card {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px;
+  border: 1px solid #c8ccd1;
+  border-radius: 6px;
+  background: #ffffff;
+}
+
+.minerva-related-content {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.minerva-related-name {
+  font-size: 13px;
+  font-weight: 600;
+  color: #202122;
+}
+
+.minerva-related-meta {
+  font-size: 11px;
+  color: #54595d;
+}
+
+.minerva-footer {
+  margin-top: 24px;
+  padding: 16px 0 24px;
+  border-top: 1px solid #c8ccd1;
+  color: #54595d;
+}
+
+.minerva-footer-brand {
+  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+
+.minerva-footer-meta {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.minerva-footer-meta a {
+  color: #3366cc;
+  text-decoration: none;
+}
+
+.minerva-footer-meta a:hover {
+  text-decoration: underline;
 }
 
 .article-ve-contents {
@@ -1996,7 +3002,7 @@ function markArticleEdited() {
 }
 
 .heading-text {
-  font-family: 'Georgia', serif;
+  font-family: 'Source Serif Pro', serif;
   font-weight: 400;
   font-size: 21px;
   line-height: 27.3px;
@@ -2012,7 +3018,7 @@ function markArticleEdited() {
 }
 
 .subsection-heading {
-  font-family: 'Georgia', serif;
+  font-family: 'Source Serif Pro', serif;
   font-weight: 600;
   font-size: 17px;
   line-height: 24px;
@@ -2057,6 +3063,71 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.minerva-skin .infobox {
+  width: 318px;
+  background-color: #f8f9fa;
+  border-color: #c8ccd1;
+  padding: 6px;
+}
+
+@media (max-width: 639px) {
+  .minerva-skin .infobox {
+    width: 100%;
+  }
+}
+
+.minerva-skin .infobox-image {
+  max-width: 318px;
+  margin: 0 auto;
+  height: auto;
+}
+
+.minerva-skin .infobox-image img {
+  height: auto;
+  object-fit: contain;
+}
+
+.minerva-skin :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+}
+
+.minerva-skin.edit-mode .editor-toolbar--minerva :deep(.cdx-icon) {
+  color: var(--color-base, #202122);
+}
+
+.minerva-skin.edit-mode .editor-toolbar--minerva .toolbar-btn:disabled :deep(.cdx-icon),
+.minerva-skin.edit-mode .editor-toolbar--minerva .toolbar-btn-primary:disabled :deep(.cdx-icon) {
+  color: var(--color-disabled, #a2a9b1);
+}
+
+.minerva-skin.edit-mode .editor-toolbar--minerva .toolbar-btn-primary:not(:disabled) :deep(.cdx-icon) {
+  color: var(--color-inverted, #ffffff);
+}
+
+.minerva-skin :deep(.cdx-icon svg) {
+  width: 20px;
+  height: 20px;
+}
+
+.minerva-skin .infobox-title {
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.minerva-skin .infobox-caption {
+  font-size: 11px;
+  line-height: 16px;
+}
+
+.minerva-skin .infobox-row {
+  font-size: 14px;
+  gap: 6px;
+}
+
+.minerva-skin .infobox-label {
+  min-width: 80px;
 }
 
 .infobox-title {
@@ -2276,7 +3347,7 @@ function markArticleEdited() {
   background-color: #ffffff;
 }
 
-.edit-mode .article {
+.vector-skin.edit-mode .article {
   width: 100%;
   max-width: 949px;
   margin: 0 auto;
@@ -2308,6 +3379,33 @@ function markArticleEdited() {
   position: sticky; /* Stick to top when scrolling */
   top: 0; /* Position at top of viewport */
   z-index: 10; /* Ensure toolbar is above content */
+}
+
+.editor-toolbar--minerva {
+  justify-content: space-between;
+  gap: 0;
+}
+
+.editor-toolbar--minerva .toolbar-btn-primary {
+  margin-left: 0;
+  width: 44px;
+  height: 42px;
+  padding: 0;
+  border-radius: 0;
+}
+
+.minerva-skin.edit-mode .edit-mode-content {
+  padding-top: 42px;
+}
+
+.minerva-skin.edit-mode .editor-toolbar {
+  position: fixed;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  width: 100%;
+  max-width: 994px;
 }
 
 .editor-toolbar-left,
@@ -2437,6 +3535,7 @@ function markArticleEdited() {
   flex-direction: column;
   gap: 16px;
   padding: 16px 0;
+  background-color: var(--background-color-base, #ffffff);
 }
 
 .tagline-edit {
@@ -2479,29 +3578,31 @@ function markArticleEdited() {
 }
 
 /* Edit Mode Grid Layout - applies to the entire article + suggestions in edit mode */
-.edit-mode .main-content-area {
+.vector-skin.edit-mode .main-content-area {
   display: grid;
   width: 100%;
   align-items: start;
   /* Default (no suggestions): 32px margin + centered column + 32px margin */
   grid-template-columns: 32px 1fr minmax(0, 949px) 1fr 32px;
   transition: grid-template-columns 250ms ease;
+  padding: 0;
+  gap: 0;
 }
 
 /* With suggestions: 32px margin + article + sidebar + 32px margin (no gap) */
-.edit-mode .main-content-area.has-suggestions {
-  grid-template-columns: 32px minmax(0, 949px) 325px 32px;
+.vector-skin.edit-mode .main-content-area.has-suggestions {
+  grid-template-columns: 32px minmax(0, 949px) 24px 325px 32px;
 }
 
 /* Article takes center column when no suggestions */
-.edit-mode .main-content-area .article {
+.vector-skin.edit-mode .main-content-area .article {
   grid-column: 3; /* Center column (after left margin + left spacer) */
   width: 100%;
   max-width: 949px;
 }
 
 /* Article takes second column when suggestions are active */
-.edit-mode .main-content-area.has-suggestions .article {
+.vector-skin.edit-mode .main-content-area.has-suggestions .article {
   grid-column: 2; /* Second column (after left margin) */
   width: 100%;
   max-width: 949px;
@@ -2509,7 +3610,7 @@ function markArticleEdited() {
 
 /* Suggestions sidebar - third column (no gap) */
 .suggestions-sidebar {
-  grid-column: 3; /* Third column (after left margin + article, no gap) */
+  grid-column: 4; /* Fourth column (after left margin + article + gap) */
   width: 100%;
   max-width: 325px;
   position: relative;
@@ -2561,6 +3662,11 @@ function markArticleEdited() {
   outline: none;
 }
 
+.minerva-skin .article-text-editable {
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .article-text-editable p {
   margin: 0 0 8px 0;
 }
@@ -2583,7 +3689,7 @@ function markArticleEdited() {
 }
 
 .heading-text-edit {
-  font-family: 'Georgia', serif;
+  font-family: 'Source Serif Pro', serif;
   font-size: 21px;
   font-weight: 400;
   line-height: 27.3px;
@@ -2829,6 +3935,8 @@ function markArticleEdited() {
   font-weight: 400;
   line-height: 22px;
   color: #202122;
+  position: relative;
+  z-index: 2;
   /* Make background apply per-line */
   display: inline;
   box-decoration-break: clone;
@@ -2854,6 +3962,21 @@ function markArticleEdited() {
   background-color: #e8eeff;
 }
 
+.minerva-skin .highlighted-text-wrapper .highlighted-text-content {
+  background-color: transparent;
+  border-radius: 0;
+  padding: 0;
+  line-height: 24px;
+  background-image: linear-gradient(var(--background-color-neutral-subtle, #f8f9fa), var(--background-color-neutral-subtle, #f8f9fa));
+  background-size: 100% 24px;
+  background-repeat: repeat-y;
+}
+
+.minerva-skin .highlighted-text-wrapper--hover .highlighted-text-content,
+.minerva-skin .highlighted-text-wrapper--selected .highlighted-text-content {
+  background-image: linear-gradient(var(--background-color-progressive-subtle, #e8eeff), var(--background-color-progressive-subtle, #e8eeff));
+}
+
 /* Links inside highlighted text */
 .highlighted-text-content a {
   color: #36c;
@@ -2862,6 +3985,177 @@ function markArticleEdited() {
 
 .highlighted-text-content a:hover {
   text-decoration: underline;
+}
+
+.minerva-suggestion-target {
+  padding-right: 0;
+  position: relative;
+  z-index: 3;
+}
+
+.minerva-suggestion-target .highlighted-text-rail {
+  display: none;
+}
+
+.minerva-highlight-rail {
+  position: absolute;
+  right: calc(var(--minerva-suggestion-gutter, 44px) - 61px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #36c;
+  border-radius: 2px;
+  z-index: 4;
+}
+
+.minerva-suggestion-trigger {
+  position: absolute;
+  right: calc(-1 * (var(--minerva-suggestion-gutter, 44px) + 16px) + 12px);
+  top: 0;
+  transform: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-progressive, #36c);
+  cursor: pointer;
+  box-shadow: none;
+  z-index: 5;
+}
+
+.minerva-suggestion-trigger :deep(.cdx-icon),
+.minerva-suggestion-trigger :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.minerva-suggestion-trigger:active {
+  background-color: transparent;
+}
+
+.minerva-suggestions-on .article-content-edit {
+  --minerva-suggestion-gutter: 44px;
+  padding-right: calc(var(--minerva-suggestion-gutter) + 16px);
+  position: relative;
+  background: var(--background-color-base, #ffffff);
+}
+
+.minerva-suggestions-on .minerva-suggestion-target {
+  padding-right: 0;
+}
+
+.minerva-suggestions-on {
+  background-color: var(--background-color-base, #ffffff);
+}
+
+.minerva-suggestions-on .article-content-edit::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: var(--minerva-suggestion-gutter);
+  height: 100%;
+  background-color: var(--background-color-neutral-subtle, #f8f9fa);
+  pointer-events: none;
+}
+
+
+.minerva-suggestions-toggle {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  z-index: 70;
+  background: var(--color-base, #ffffff);
+}
+
+
+.minerva-suggestions-toggle :deep(.cdx-icon) {
+  color: var(--color-base, #202122);
+}
+
+.minerva-suggestions-toggle--active {
+  background: var(--color-progressive-subtle, #e8eeff);
+  border-color: var(--color-progressive, #36c);
+}
+
+.minerva-suggestions-toggle--active :deep(.cdx-icon) {
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-suggestions-toggle :deep(button) {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+}
+
+.minerva-bottom-sheet {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #ffffff;
+  border-top: 1px solid #c8ccd1;
+  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 80;
+  padding: 16px 16px 20px;
+}
+
+.minerva-sheet-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+}
+
+.minerva-sheet-title {
+  font-size: 16px;
+  font-weight: 600;
+  color: #202122;
+}
+
+.minerva-sheet-close {
+  margin-left: auto;
+  border: none;
+  background: transparent;
+  padding: 4px;
+  cursor: pointer;
+  color: #54595d;
+}
+
+.minerva-sheet-close :deep(svg) {
+  transform: none;
+}
+
+.minerva-sheet-description {
+  margin-top: 0;
+  font-size: 16px;
+  line-height: 24px;
+  color: #54595d;
+}
+
+.minerva-sheet-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.minerva-sheet-btn {
+  min-width: 88px;
+}
+
+.minerva-skin.edit-mode .edit-mode-content {
+  padding-bottom: 88px;
 }
 
 /* ===== SUGGESTION CARD STATES ===== */
@@ -3087,6 +4381,28 @@ function markArticleEdited() {
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.06), 0px 0px 8px 0px rgba(0, 0, 0, 0.06);
   z-index: 50;
   margin-top: 12px;
+}
+
+.minerva-skin .citation-popup {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  border-radius: 0;
+  margin-top: 0;
+  z-index: 90;
+  display: flex;
+  flex-direction: column;
+}
+
+.minerva-skin .citation-popup-pointer {
+  display: none;
+}
+
+.minerva-skin .citation-popup-content {
+  flex: 1;
+  overflow-y: auto;
 }
 
 /* Pointer arrow pointing up */
