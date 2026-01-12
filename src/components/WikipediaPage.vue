@@ -1,5 +1,5 @@
 <template>
-  <div ref="pageRoot" :class="[isEditMode ? 'edit-mode' : 'read-mode', isMinervaSkin ? 'minerva-skin' : 'vector-skin', isMinervaSkin && isEditMode && showSuggestions ? 'minerva-suggestions-on' : '', isMinervaSheetOpen ? 'minerva-sheet-open' : '']">
+  <div ref="pageRoot" :class="[isEditMode ? 'edit-mode' : 'read-mode', isMinervaSkin ? 'minerva-skin' : 'vector-skin', isMinervaSkin && isEditMode && showSuggestions && !showEmptyState ? 'minerva-suggestions-on' : '', isMinervaSheetOpen ? 'minerva-sheet-open' : '']">
     <!-- Page Container -->
     <div class="page-container">
       
@@ -248,7 +248,7 @@
                   </div>
                   
                   <div class="tabs-end">
-                    <div class="tab" :class="{ 'tab-selected': !isEditMode }" @click="isEditMode = false">
+                    <div class="tab" :class="{ 'tab-selected': !isEditMode }" @click="handleReadClick">
                       <span class="tab-text" :class="{ 'tab-link': isEditMode }">Read</span>
                       <div v-if="!isEditMode" class="tab-indicator"></div>
                     </div>
@@ -1094,9 +1094,34 @@
           class="suggestions-sidebar"
           :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
+          <!-- Notification card -->
+          <div
+            v-if="showSuggestions && showSuggestionNotification && hasPendingSuggestions"
+            class="suggestion-card suggestion-card--expanded suggestion-notification-card"
+            role="button"
+            tabindex="0"
+            @click="handleNotificationClick"
+            @keydown="handleNotificationKeydown"
+          >
+            <div class="suggestion-header suggestion-header--expanded suggestion-notification-header">
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">2 suggestions available</div>
+              <cdx-button
+                class="suggestion-notification-action"
+                action="default"
+                weight="quiet"
+                @click.stop="handleNotificationClick"
+              >
+                Scroll to first
+              </cdx-button>
+            </div>
+          </div>
+
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="!showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+            v-if="showSuggestions && !showSuggestionNotification && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -1158,7 +1183,7 @@
 
           <!-- Success Message for Suggestion 1 -->
           <div 
-            v-if="showSuccessMessage1 && citationNumber1 !== null"
+            v-if="showSuggestions && !showSuggestionNotification && showSuccessMessage1 && citationNumber1 !== null"
             ref="suggestionsSidebarRef"
             class="success-message"
             :style="{ top: `${sidebarTopOffset}px` }"
@@ -1173,7 +1198,7 @@
 
           <!-- Second Add Citation Suggestion Card -->
           <div 
-            v-if="!showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+            v-if="showSuggestions && !showSuggestionNotification && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -1235,7 +1260,7 @@
 
           <!-- Success Message for Suggestion 2 -->
           <div 
-            v-if="showSuccessMessage2 && citationNumber2 !== null"
+            v-if="showSuggestions && !showSuggestionNotification && showSuccessMessage2 && citationNumber2 !== null"
             ref="suggestionsSidebarRef2"
             class="success-message"
             :style="{ top: `${sidebarTopOffset2}px` }"
@@ -1250,14 +1275,14 @@
 
           <!-- Empty State - Show when all suggestions are completed or declined -->
           <div 
-            v-if="allSuggestionsHandled"
+            v-if="showSuggestions && !showSuggestionNotification && allSuggestionsHandled"
             class="empty-state"
           >
             <div class="empty-state-icon">
               <cdx-icon :icon="cdxIconLightbulb" size="medium" />
             </div>
             <div class="empty-state-content">
-              <p class="empty-state-text">There are no more suggestions to improve this article.</p>
+              <p class="empty-state-text">There are no suggestions to improve this article yet.</p>
             </div>
           </div>
         </aside>
@@ -1290,17 +1315,40 @@
           aria-label="Suggestion"
           ref="minervaSheetRef"
         >
-          <div class="minerva-sheet-header">
+          <div
+            class="minerva-sheet-header"
+            :class="{
+              'minerva-sheet-header--empty': shouldShowEmptyState,
+              'minerva-sheet-header--notification': showSuggestionNotification
+            }"
+          >
             <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-            <div class="minerva-sheet-title">Add a citation</div>
-            <button class="minerva-sheet-close" @click="closeMinervaSuggestion" aria-label="Close">
+            <div class="minerva-sheet-title">{{ minervaSheetTitle }}</div>
+            <cdx-button
+              v-if="showSuggestionNotification"
+              class="minerva-sheet-notification-btn"
+              action="default"
+              weight="quiet"
+              @click.stop="handleNotificationClick"
+            >
+              Scroll to first
+            </cdx-button>
+            <button
+              v-if="!showSuggestionNotification"
+              class="minerva-sheet-close"
+              @click="closeMinervaSuggestion"
+              aria-label="Close"
+            >
               <cdx-icon :icon="cdxIconExpand" size="small" />
             </button>
           </div>
-          <p class="minerva-sheet-description">
+          <p v-if="shouldShowEmptyState" class="minerva-empty-sheet-text">
+            There are no suggestions to improve this article yet.
+          </p>
+          <p v-else-if="!showSuggestionNotification" class="minerva-sheet-description">
             Help readers understand where this information is coming from by adding a citation.
           </p>
-          <div class="minerva-sheet-actions">
+          <div v-if="!shouldShowEmptyState && !showSuggestionNotification" class="minerva-sheet-actions">
             <cdx-button
               v-if="activeMinervaSuggestion === 1"
               class="minerva-sheet-btn"
@@ -1385,6 +1433,40 @@
           </div>
         </aside>
 
+        <div
+          v-if="isPrototypeDialogOpen"
+          class="prototype-dialog-backdrop"
+          role="presentation"
+          @click.self="closePrototypeDialog"
+        >
+          <div class="prototype-dialog" role="dialog" aria-modal="true" aria-label="Choose prototype">
+            <div class="prototype-dialog-header">
+              <h2 class="prototype-dialog-title">Choose prototype</h2>
+            </div>
+            <fieldset class="prototype-dialog-options" role="radiogroup" aria-label="Prototype options">
+              <label class="prototype-radio">
+                <input type="radio" value="no-scroll" v-model="selectedPrototype">
+                <span>Suggestions (no scroll)</span>
+              </label>
+              <label class="prototype-radio">
+                <input type="radio" value="scroll" v-model="selectedPrototype">
+                <span>Scroll to 1st suggestion</span>
+              </label>
+              <label class="prototype-radio">
+                <input type="radio" value="notification" v-model="selectedPrototype">
+                <span>Notification with available suggestions</span>
+              </label>
+              <label class="prototype-radio">
+                <input type="radio" value="empty" v-model="selectedPrototype">
+                <span>Empty State (no suggestions)</span>
+              </label>
+            </fieldset>
+            <div class="prototype-dialog-actions">
+              <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1443,6 +1525,8 @@ const isEditMode = ref(false);
 const hasUnsavedChanges = ref(false);
 const isLoading = ref(false);
 const showSuggestions = ref(true);
+const enableAutoScroll = ref(true);
+const showSuggestionNotification = ref(false);
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -1498,6 +1582,8 @@ const showSuccessMessage1 = ref(false); // Show success message after citation i
 const showSuccessMessage2 = ref(false);
 const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
 const isSuggestionDeclined2 = ref(false);
+const isPrototypeDialogOpen = ref(false);
+const selectedPrototype = ref('scroll');
 
 // Computed properties to validate URLs
 const isValidUrl1 = computed(() => {
@@ -1535,6 +1621,103 @@ const showEmptyState = computed(() => {
   const suggestion2Done = citationNumber2.value !== null || isSuggestionDeclined2.value;
   return suggestion1Done && suggestion2Done;
 });
+const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
+const minervaSheetTitle = computed(() => {
+  if (showSuggestionNotification.value) return '2 suggestions available';
+  if (shouldShowEmptyState.value) return 'No suggestions';
+  return 'Add a citation';
+});
+const hasPendingSuggestions = computed(() => {
+  const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
+  const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
+  return suggestion1Pending || suggestion2Pending;
+});
+
+function resetSuggestionState() {
+  showCitationPopup1.value = false;
+  showCitationPopup2.value = false;
+  citationUrl1.value = '';
+  citationUrl2.value = '';
+  citationNumber1.value = null;
+  citationNumber2.value = null;
+  citationCounter.value = 0;
+  showSuccessMessage1.value = false;
+  showSuccessMessage2.value = false;
+  isSuggestionDeclined1.value = false;
+  isSuggestionDeclined2.value = false;
+  isCardExpanded.value = false;
+  isCardExpanded2.value = false;
+  isCardHovered.value = false;
+  isCardHovered2.value = false;
+  isTextHovered.value = false;
+  isTextHovered2.value = false;
+  closeMinervaSuggestion();
+}
+
+function applyPrototypeMode(mode) {
+  resetSuggestionState();
+  showSuggestionNotification.value = false;
+  enableAutoScroll.value = mode === 'scroll';
+
+  if (mode === 'notification') {
+    showSuggestions.value = true;
+    showSuggestionNotification.value = true;
+    if (isMinervaSkin.value) {
+      isMinervaSheetOpen.value = true;
+    }
+    return;
+  }
+
+  showSuggestions.value = true;
+
+  if (mode === 'empty') {
+    isSuggestionDeclined1.value = true;
+    isSuggestionDeclined2.value = true;
+    if (isMinervaSkin.value) {
+      isMinervaSheetOpen.value = true;
+    }
+  }
+}
+
+function openPrototypeDialog() {
+  if (isEditMode.value) return;
+  isPrototypeDialogOpen.value = true;
+}
+
+function closePrototypeDialog() {
+  isPrototypeDialogOpen.value = false;
+}
+
+function startPrototype() {
+  applyPrototypeMode(selectedPrototype.value);
+  closePrototypeDialog();
+  enterEditMode();
+}
+
+function handleNotificationClick() {
+  showSuggestions.value = true;
+  showSuggestionNotification.value = false;
+  if (isMinervaSkin.value) {
+    isMinervaSheetOpen.value = true;
+  }
+  nextTick(() => {
+    openFirstPendingSuggestion();
+  });
+}
+
+function handleNotificationKeydown(event) {
+  if (event.key === 'Enter' || event.key === ' ') {
+    event.preventDefault();
+    handleNotificationClick();
+  }
+}
+
+function handleReadClick() {
+  closePrototypeDialog();
+  if (isEditMode.value) {
+    exitEditMode();
+  }
+}
 
 // Function to handle "Yes" click on suggestion 1
 function handleYesSuggestion1() {
@@ -1696,6 +1879,15 @@ watch(showSuggestions, (newValue) => {
   }
 });
 
+watch(
+  () => [showSuggestions.value, showEmptyState.value, isMinervaSkin.value],
+  ([suggestionsActive, emptyActive, isMinerva]) => {
+    if (isMinerva && suggestionsActive && emptyActive) {
+      isMinervaSheetOpen.value = true;
+    }
+  }
+);
+
 watch(isMinervaSheetOpen, () => {
   updateMinervaSheetHeight();
 });
@@ -1710,29 +1902,44 @@ function clearAutoSuggestionTimer() {
   }
 }
 
-function scrollToSuggestion(targetRef) {
+function isTargetVisibleInViewport(target) {
+  if (!target || typeof window === 'undefined') return false;
+  const rect = target.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  return rect.bottom > 0 && rect.top < viewportHeight;
+}
+
+function scrollToSuggestionIfNeeded(targetRef) {
   nextTick(() => {
     const target = targetRef.value;
-    if (target) {
+    if (target && !isTargetVisibleInViewport(target)) {
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   });
 }
 
 function openFirstPendingSuggestion() {
-  if (!isEditMode.value || !showSuggestions.value || isMinervaSkin.value) return;
+  if (!isEditMode.value || !showSuggestions.value) return;
 
   const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
 
   if (suggestion1Pending) {
-    isCardExpanded.value = true;
-    isCardExpanded2.value = false;
-    scrollToSuggestion(highlightedTextRef);
+    if (isMinervaSkin.value) {
+      openMinervaSuggestion(1);
+    } else {
+      isCardExpanded.value = true;
+      isCardExpanded2.value = false;
+    }
+    scrollToSuggestionIfNeeded(highlightedTextRef);
   } else if (suggestion2Pending) {
-    isCardExpanded2.value = true;
-    isCardExpanded.value = false;
-    scrollToSuggestion(highlightedTextRef2);
+    if (isMinervaSkin.value) {
+      openMinervaSuggestion(2);
+    } else {
+      isCardExpanded2.value = true;
+      isCardExpanded.value = false;
+    }
+    scrollToSuggestionIfNeeded(highlightedTextRef2);
   }
 }
 
@@ -1741,7 +1948,7 @@ watch(
   () => [isEditMode.value, showSuggestions.value],
   ([editActive, suggestionsActive]) => {
     clearAutoSuggestionTimer();
-    if (editActive && suggestionsActive) {
+    if (editActive && suggestionsActive && enableAutoScroll.value) {
       autoSuggestionTimer = setTimeout(() => {
         openFirstPendingSuggestion();
       }, 1200);
@@ -1841,28 +2048,36 @@ function onSearchSubmit(value) {
 }
 
 // Toggle edit mode with loading state
+function enterEditMode() {
+  // Activating edit mode: switch to edit mode immediately and show loading overlay
+  isEditMode.value = true;
+  isSkinMenuOpen.value = false;
+  isLoading.value = true;
+  hasUnsavedChanges.value = false;
+  nextTick(() => {
+    captureEditSnapshot();
+  });
+  
+  // Hide loading overlay after 2 seconds
+  setTimeout(() => {
+    isLoading.value = false;
+  }, 2000);
+}
+
+function exitEditMode() {
+  // Returning to read mode: no loading
+  restoreEditSnapshot();
+  hasUnsavedChanges.value = false;
+  closeMinervaSuggestion();
+  isEditMode.value = false;
+}
+
 function toggleEditMode() {
   if (!isEditMode.value) {
-    // Activating edit mode: switch to edit mode immediately and show loading overlay
-    isEditMode.value = true;
-    isSkinMenuOpen.value = false;
-    isLoading.value = true;
-    hasUnsavedChanges.value = false;
-    nextTick(() => {
-      captureEditSnapshot();
-    });
-    
-    // Hide loading overlay after 2 seconds
-    setTimeout(() => {
-      isLoading.value = false;
-    }, 2000);
-  } else {
-    // Returning to read mode: no loading
-    restoreEditSnapshot();
-    hasUnsavedChanges.value = false;
-    closeMinervaSuggestion();
-    isEditMode.value = false;
+    openPrototypeDialog();
+    return;
   }
+  exitEditMode();
 }
 
 function toggleSkinMenu() {
@@ -4106,7 +4321,7 @@ function markArticleEdited() {
   bottom: 0;
   background: #ffffff;
   border-top: 1px solid #c8ccd1;
-  box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   z-index: 80;
   padding: 16px 16px 20px;
 }
@@ -4638,7 +4853,7 @@ function markArticleEdited() {
 }
 
 .empty-state-icon :deep(svg) {
-  fill: #72777d;
+  fill: var(--color-placeholder, #72777d);
 }
 
 .empty-state-content {
@@ -4652,6 +4867,172 @@ function markArticleEdited() {
   font-size: 14px;
   font-weight: 400;
   line-height: 20px;
-  color: #72777d;
+  color: var(--color-placeholder, #72777d);
+}
+
+.prototype-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(32, 33, 36, 0.48);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+}
+
+.prototype-dialog {
+  width: 420px;
+  max-width: calc(100% - 32px);
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.prototype-dialog-header {
+  margin-bottom: 16px;
+}
+
+.prototype-dialog-title {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #202122;
+}
+
+.prototype-dialog-options {
+  border: none;
+  padding: 0;
+  margin: 0 0 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.prototype-radio {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+  color: #202122;
+}
+
+.prototype-radio input {
+  accent-color: #36c;
+}
+
+.prototype-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.prototype-dialog-btn {
+  background: #36c;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.prototype-dialog-btn:hover {
+  background: #2a4b8d;
+}
+
+.suggestion-notification {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0 16px;
+  padding: 12px 14px;
+  border-radius: 6px;
+  background: #f8f9fa;
+  border: 1px solid #eaecf0;
+  color: #202122;
+}
+
+.suggestion-notification-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.suggestion-notification-text {
+  margin: 0;
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.suggestion-notification-card {
+  position: sticky;
+  top: 0;
+  cursor: pointer;
+  border: 1px solid var(--border-color-muted, #c8ccd1);
+  background: var(--background-color-base, #ffffff);
+  box-shadow: none;
+}
+
+.suggestion-notification-card:focus-visible {
+  outline: 2px solid #36c;
+  outline-offset: 2px;
+}
+
+.suggestion-notification-header {
+  align-items: center;
+  gap: 8px;
+  background-color: var(--background-color-base, #ffffff);
+}
+
+.suggestion-notification-header .suggestion-title {
+  white-space: nowrap;
+}
+
+.suggestion-notification-card--minerva {
+  position: static;
+  width: 100%;
+  margin-top: 12px;
+}
+
+.suggestion-notification-action {
+  width: auto;
+  margin-left: auto;
+}
+
+.suggestion-notification-action--icon {
+  padding: 0;
+  min-width: auto;
+}
+
+.vector-skin .suggestion-notification-header .suggestion-title,
+.vector-skin .suggestion-notification-action {
+  font-size: 14px;
+}
+
+.minerva-sheet-header--empty :deep(svg) {
+  fill: var(--color-placeholder, #72777d);
+}
+
+.minerva-sheet-header--empty .minerva-sheet-title {
+  color: var(--color-placeholder, #72777d);
+}
+
+.minerva-sheet-header--notification :deep(svg) {
+  fill: var(--color-progressive, #36c);
+}
+
+.minerva-sheet-notification-btn {
+  margin-left: auto;
+}
+
+.minerva-empty-sheet-text {
+  margin: 8px 0 0;
+  font-size: 16px;
+  line-height: 22px;
+  color: var(--color-placeholder, #72777d);
 }
 </style>
