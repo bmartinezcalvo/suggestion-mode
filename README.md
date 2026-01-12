@@ -1,4 +1,4 @@
-# Wikipedia Suggestion Mode Prototype
+# Wikipedia Suggestion Mode Template
 
 Interactive UX prototype showing the **Suggestion Mode** feature in the edit mode of a Wikipedia's article.
 
