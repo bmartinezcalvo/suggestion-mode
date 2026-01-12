@@ -1,36 +1,32 @@
 # Wikipedia Suggestion Mode Prototype
 
-Interactive UX prototype demonstrating the **Suggestion Mode** feature in Wikipedia's Edit interface.
+Interactive UX prototype showing the **Suggestion Mode** feature in the edit mode of a Wikipedia's article.
 
-## 📋 Overview
+## Overview
 
-This project is an interactive prototype that implements a suggestion mode for Wikipedia's article editing interface. When enabled, the suggestion mode displays AI-powered or rule-based suggestions (e.g., "Add a citation") alongside the article content, helping editors improve article quality.
+This template replicates the Wikipedia article experience with both **Read** and **Edit** modes. When enabled the Suggestion Mode on Edit mode, some suggestions are displayed alongside the article content, showing editors potential improvements for the article.
 
-## ✨ Features
+## Features
+
+### Skins
+- Vector22 is the default skin
+- Minerva (mobile) is selectable via the header menu or when opening the prototype on screens less than 640px
 
 ### Suggestion Mode in Edit Mode
 
-- **Toggle Suggestions**: Lightbulb button in the editor toolbar to enable/disable suggestions
+Implemented the following in the **Edit mode** of the article:
+
+- **Toggle Suggestions**: Lightbulb button to show/hide suggestions in the article
 - **Dynamic Layout**: 
-  - **Default**: Article content is centered on the page (949px max-width)
-  - **With suggestions active**: Content shifts left with a smooth CSS Grid animation, and a 325px suggestions panel appears on the right
+  - **Default**: Article content is centered on the page
+  - **With suggestions active**: Content shifts left and suggestions appear on the right
 - **Interactive Suggestion Cards**:
   - Collapsed and expanded states
-  - Hover effects synchronized with highlighted text
-  - Click to expand/collapse
+  - Hover and selected effects synchronized with highlighted text
+  - Card becomes a bottom sheet in Minerva skin (mobile)
 - **Highlighted Text**: Visual indicators in the article showing where suggestions apply
-- **Smooth Transitions**: CSS Grid-based layout with 250ms ease transitions
 
-### Technical Implementation
-
-- **CSS Grid Layout**: Responsive grid that adapts when suggestions are toggled
-- **Grid columns**:
-  - Without suggestions: `1fr minmax(0, 949px) 1fr` (centered)
-  - With suggestions: `minmax(0, 949px) 24px 325px` (left-aligned with right panel)
-- **Vue 3 Composition API**: Reactive state management
-- **Wikimedia Codex**: Design system components and tokens
-
-## 🚀 Getting Started
+## Getting Started
 
 ### Prerequisites
 
@@ -69,7 +65,7 @@ npm run build
 npm run preview
 ```
 
-## 🎯 Usage
+## Usage
 
 1. **Navigate to Edit Mode**: Click the "Edit" tab in the article toolbar
 2. **Enable Suggestions**: Click the lightbulb icon in the editor toolbar
@@ -79,7 +75,7 @@ npm run preview
    - Click to expand/collapse suggestion details
    - Click "Yes" or "No" to accept or dismiss suggestions
 
-## 🛠️ Tech Stack
+## Tech Stack
 
 - **Vue 3** - Progressive JavaScript framework
 - **Vite** - Build tool and dev server
@@ -87,95 +83,36 @@ npm run preview
 - **CSS Grid** - Layout system for responsive design
 - **TypeScript** - Type-safe JavaScript
 
-## 📐 Layout Specifications
+## Customization
 
-### Without Suggestions
-- Article content: 949px max-width
-- Position: Centered in viewport
-- Grid: `1fr minmax(0, 949px) 1fr`
+### Content
+Edit article content directly in `WikipediaPage.vue`:
+- Text sections (intro, Early life, Career)
+- Infobox data
+- Images (update `audreImage` constant)
+  
+### Skins
+- Vector22 is the default skin
+- Minerva (mobile) is selectable via the header menu
 
-### With Suggestions
-- Article content: 949px (left-aligned)
-- Gap: 24px
-- Suggestions panel: 325px
-- Grid: `minmax(0, 949px) 24px 325px`
-- Total width: 1298px
+### Codex Design System
+This project uses the Codex Wikimedia design system. Reference:
+- [Codex Design Tokens](https://doc.wikimedia.org/codex/latest/design-tokens/)
+- [Codex Components](https://doc.wikimedia.org/codex/latest/components/overview.html)
+- [Codex Icons](https://doc.wikimedia.org/codex/latest/icons/all-icons.html)
 
-## 🎨 Design Tokens
+## Contributing
 
-This project uses Wikimedia Codex design tokens for:
-- Colors
-- Typography
-- Spacing
-- Border radius
-- Shadows
-- Transitions
+This is a UX prototype template. When making changes:
+1. Keep design fidelity as the top priority
+2. Use Codex components and tokens
+3. Test on different screen sizes
+4. Avoid over-engineering - this is for user testing
 
-## 📝 Project Structure
+## License
 
-```
-src/
-├── components/
-│   └── WikipediaPage.vue    # Main component with suggestion mode
-├── assets/
-│   └── images/              # Article images and icons
-├── App.vue                  # Root component
-└── main.js                  # Application entry point
-```
-
-## 🔄 State Management
-
-The suggestion mode is controlled by a simple reactive boolean:
-
-```javascript
-const showSuggestions = ref(false)
-```
-
-When toggled:
-1. CSS Grid layout transitions smoothly (250ms)
-2. Suggestion cards appear/disappear
-3. Highlighted text is shown/hidden
-4. Layout shifts from centered to left-aligned
-
-## 🎭 Interaction States
-
-### Suggestion Cards
-- **Collapsed**: Border `#dadde3`, no shadow
-- **Expanded**: Border `#6485d1`, box shadow
-- **Hover**: Background `#e8eeff`
-
-### Highlighted Text
-- **Default**: Background `#f8f9fa`
-- **Hover**: Background `#e8eeff`
-- **Selected**: Background `#e8eeff`
-
-## 🧪 Testing
-
-This is a **UX prototype** designed for testing and demonstration purposes. It includes:
-- Fake data and mock interactions
-- No backend or API calls
-- Simplified state management
-- Focus on visual fidelity and interaction patterns
-
-## 📦 Base Template
-
-This project is based on the [Wikipedia Article Template](https://github.com/bmartinezcalvo/wikipedia-article-template) but extends it with the suggestion mode feature.
-
-## 👤 Author
-
-**Barbara Martinez Calvo**
-- GitHub: [@bmartinezcalvo](https://github.com/bmartinezcalvo)
-
-## 📄 License
-
-This project is intended for UX research and prototyping purposes.
-
-## 🙏 Acknowledgments
-
-- Wikipedia and Wikimedia Foundation for design inspiration
-- Wikimedia Codex design system
-- Vue.js community
+This template is for internal UX prototyping and testing.
 
 ---
 
-**Note**: This is an interactive prototype for UX testing and demonstration purposes only. It is not production-ready code and should not be used in a live Wikipedia environment.
+**Note**: This is an interactive prototype, not production code. It uses fake data and simplified interactions for UX testing purposes.
