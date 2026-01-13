@@ -111,7 +111,10 @@
       </header>
 
       <!-- Main Content Area -->
-      <div class="main-content-area" :class="{ 'has-suggestions': showSuggestions }">
+      <div
+        class="main-content-area"
+        :class="{ 'has-suggestions': showSuggestions && (availableSuggestionCount > 0 || showSuggestionBadge) }"
+      >
         
         <!-- Table of Contents (Left Sidebar) - Only visible in Read mode -->
         <aside v-if="!isEditMode" class="toc-sidebar">
@@ -759,6 +762,7 @@
               </div>
               <div class="editor-toolbar-right">
                 <cdx-toggle-button 
+                  v-if="showToolbarToggle"
                   v-model="showSuggestions"
                   quiet
                   aria-label="Toggle suggestions"
@@ -774,6 +778,13 @@
                       <span class="ray ray-5"></span>
                     </span>
                     <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    <span
+                      v-if="showToggleBadge"
+                      class="suggestions-badge"
+                      :class="{ 'suggestions-badge--empty': availableSuggestionCount === 0 }"
+                    >
+                      {{ availableSuggestionCount }}
+                    </span>
                   </span>
                 </cdx-toggle-button>
                 <button class="toolbar-btn toolbar-btn-icon-only">
@@ -806,6 +817,88 @@
             <!-- Article Content Edit -->
             <div class="article-content-edit">
               <!-- Tagline + Short description -->
+              <transition name="banner-reveal" appear>
+                <div
+                  v-if="shouldShowBanner && isBannerDelayReady && !isBannerDismissed"
+                  class="suggestions-banner"
+                  :class="{
+                    'suggestions-banner--empty': availableSuggestionCount === 0,
+                    'suggestions-banner--minerva-bottom': isMinervaSkin && (showSuggestionToggle || showSuggestions),
+                    'suggestions-banner--minerva-top': isMinervaSkin && !showSuggestionToggle && !showSuggestions,
+                    'suggestions-banner--minerva': isMinervaSkin,
+                    'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
+                    'suggestions-banner--clickable': showSuggestions,
+                    'suggestions-banner--closing': isBannerClosing,
+                    'suggestions-banner--opening': isBannerOpening
+                  }"
+                  :role="showSuggestions ? 'button' : undefined"
+                  :tabindex="showSuggestions ? 0 : undefined"
+                  @click="showSuggestions ? handleBannerClick() : null"
+                  @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                >
+                  <div class="suggestions-banner-center">
+                    <div
+                      v-if="showSuggestionToggle || showSuggestions"
+                      class="suggestions-banner-text"
+                    >
+                      <strong>{{ availableSuggestionCount }}</strong> {{ bannerTextSuffix }}
+                    </div>
+                    <cdx-button
+                    v-if="!showSuggestionToggle && !isMinervaSkin"
+                    class="suggestions-banner-action"
+                    action="default"
+                    :weight="showSuggestions ? 'quiet' : 'normal'"
+                    size="small"
+                    @click.stop="handleHideSuggestionsBanner"
+                  >
+                    {{ bannerButtonLabel }}
+                  </cdx-button>
+                  <cdx-button
+                    v-if="isMinervaSkin && !showSuggestionToggle"
+                    class="suggestions-banner-action"
+                    action="default"
+                    :weight="showSuggestions ? 'quiet' : 'normal'"
+                    size="small"
+                    @click.stop="handleBannerToggleClick"
+                  >
+                    {{ bannerButtonLabel }}
+                  </cdx-button>
+                  </div>
+                  <div class="suggestions-banner-actions">
+                  <cdx-button
+                    v-if="showSuggestionToggle && availableSuggestionCount > 0"
+                    class="suggestions-banner-close"
+                    action="default"
+                    weight="quiet"
+                    @click.stop="handleBannerClose"
+                  >
+                    Hide
+                  </cdx-button>
+                  </div>
+                </div>
+              </transition>
+              <template v-if="isMinervaSkin && showSuggestionBadge && !anySuggestionVisible">
+                <button
+                  v-if="availableSuggestionCount > 0"
+                  class="suggestions-viewport-notification suggestions-viewport-notification--minerva"
+                  type="button"
+                  @click="handleBannerClick"
+                >
+                  <span class="suggestions-viewport-number">{{ availableSuggestionCount }}</span>
+                  suggestions available for improving this article
+                </button>
+                <div
+                  v-else
+                  class="empty-state empty-state--minerva"
+                >
+                  <div v-if="!showSuggestionBadge" class="empty-state-icon">
+                    <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  </div>
+                  <div class="empty-state-content">
+                    <p class="empty-state-text">0 suggestions available for improving this article</p>
+                  </div>
+                </div>
+              </template>
               <div class="edit-header">
                 <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
                 
@@ -1090,38 +1183,13 @@
 
         <!-- Suggestions Sidebar (Right) - Only visible in Edit mode with suggestions -->
         <aside 
-          v-if="isEditMode && showSuggestions && !isMinervaSkin" 
+          v-if="isEditMode && showSuggestions && !isMinervaSkin && (availableSuggestionCount > 0 || (showSuggestionBadge && availableSuggestionCount === 0))" 
           class="suggestions-sidebar"
           :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
-          <!-- Notification card -->
-          <div
-            v-if="showSuggestions && showSuggestionNotification && hasPendingSuggestions"
-            class="suggestion-card suggestion-card--expanded suggestion-notification-card"
-            role="button"
-            tabindex="0"
-            @click="handleNotificationClick"
-            @keydown="handleNotificationKeydown"
-          >
-            <div class="suggestion-header suggestion-header--expanded suggestion-notification-header">
-              <div class="suggestion-icon">
-                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-              </div>
-              <div class="suggestion-title">2 suggestions available</div>
-              <cdx-button
-                class="suggestion-notification-action"
-                action="default"
-                weight="quiet"
-                @click.stop="handleNotificationClick"
-              >
-                Scroll to first
-              </cdx-button>
-            </div>
-          </div>
-
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestions && !showSuggestionNotification && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+            v-if="showSuggestions && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -1183,7 +1251,7 @@
 
           <!-- Success Message for Suggestion 1 -->
           <div 
-            v-if="showSuggestions && !showSuggestionNotification && showSuccessMessage1 && citationNumber1 !== null"
+            v-if="showSuggestions && showSuccessMessage1 && citationNumber1 !== null"
             ref="suggestionsSidebarRef"
             class="success-message"
             :style="{ top: `${sidebarTopOffset}px` }"
@@ -1198,7 +1266,7 @@
 
           <!-- Second Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestions && !showSuggestionNotification && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+            v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -1260,7 +1328,7 @@
 
           <!-- Success Message for Suggestion 2 -->
           <div 
-            v-if="showSuggestions && !showSuggestionNotification && showSuccessMessage2 && citationNumber2 !== null"
+            v-if="showSuggestions && showSuccessMessage2 && citationNumber2 !== null"
             ref="suggestionsSidebarRef2"
             class="success-message"
             :style="{ top: `${sidebarTopOffset2}px` }"
@@ -1274,27 +1342,38 @@
           </div>
 
           <!-- Empty State - Show when all suggestions are completed or declined -->
+          <button
+            v-if="showSuggestionBadge && !anySuggestionVisible && availableSuggestionCount > 0"
+            class="suggestions-viewport-notification"
+            type="button"
+            @click="handleBannerClick"
+          >
+            <span class="suggestions-viewport-number">{{ availableSuggestionCount }}</span>
+            suggestions available for improving this article
+          </button>
           <div 
-            v-if="showSuggestions && !showSuggestionNotification && allSuggestionsHandled"
+            v-if="(showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge)"
             class="empty-state"
           >
-            <div class="empty-state-icon">
+            <div v-if="!showSuggestionBadge" class="empty-state-icon">
               <cdx-icon :icon="cdxIconLightbulb" size="medium" />
             </div>
             <div class="empty-state-content">
-              <p class="empty-state-text">There are no suggestions to improve this article yet.</p>
+              <p class="empty-state-text">
+                {{ showSuggestionBadge ? '0 suggestions available for improving this article' : 'There are no suggestions to improve this article yet.' }}
+              </p>
             </div>
           </div>
         </aside>
 
         <cdx-toggle-button
-          v-if="isMinervaSkin && isEditMode"
+          v-if="isMinervaSkin && isEditMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
           v-model="showSuggestions"
           quiet
           aria-label="Toggle suggestions"
           class="minerva-suggestions-toggle"
           :class="{ 'minerva-suggestions-toggle--active': showSuggestions }"
-          :style="{ bottom: isMinervaSheetOpen ? `calc(16px + ${minervaSheetHeight}px)` : '16px' }"
+          :style="{ bottom: minervaToggleBottom }"
         >
           <span class="lightbulb-icon-wrapper">
             <span v-if="showSuggestions" class="bulb-rays">
@@ -1305,36 +1384,27 @@
               <span class="ray ray-5"></span>
             </span>
             <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+            <span
+              v-if="showToggleBadge"
+              class="suggestions-badge"
+              :class="{ 'suggestions-badge--empty': availableSuggestionCount === 0 }"
+            >
+              {{ availableSuggestionCount }}
+            </span>
           </span>
         </cdx-toggle-button>
 
         <div
-          v-if="isMinervaSkin && isEditMode && showSuggestions && isMinervaSheetOpen"
+          v-if="isMinervaSkin && isEditMode && showSuggestions && isMinervaSheetOpen && availableSuggestionCount > 0"
           class="minerva-bottom-sheet"
           role="dialog"
           aria-label="Suggestion"
           ref="minervaSheetRef"
         >
-          <div
-            class="minerva-sheet-header"
-            :class="{
-              'minerva-sheet-header--empty': shouldShowEmptyState,
-              'minerva-sheet-header--notification': showSuggestionNotification
-            }"
-          >
+          <div class="minerva-sheet-header" :class="{ 'minerva-sheet-header--empty': shouldShowEmptyState }">
             <cdx-icon :icon="cdxIconLightbulb" size="medium" />
             <div class="minerva-sheet-title">{{ minervaSheetTitle }}</div>
-            <cdx-button
-              v-if="showSuggestionNotification"
-              class="minerva-sheet-notification-btn"
-              action="default"
-              weight="quiet"
-              @click.stop="handleNotificationClick"
-            >
-              Scroll to first
-            </cdx-button>
             <button
-              v-if="!showSuggestionNotification"
               class="minerva-sheet-close"
               @click="closeMinervaSuggestion"
               aria-label="Close"
@@ -1342,13 +1412,13 @@
               <cdx-icon :icon="cdxIconExpand" size="small" />
             </button>
           </div>
-          <p v-if="shouldShowEmptyState" class="minerva-empty-sheet-text">
+          <p v-if="shouldShowEmptyState && !showSuggestionNotification" class="minerva-empty-sheet-text">
             There are no suggestions to improve this article yet.
           </p>
-          <p v-else-if="!showSuggestionNotification" class="minerva-sheet-description">
+          <p v-else class="minerva-sheet-description">
             Help readers understand where this information is coming from by adding a citation.
           </p>
-          <div v-if="!shouldShowEmptyState && !showSuggestionNotification" class="minerva-sheet-actions">
+          <div v-if="!shouldShowEmptyState" class="minerva-sheet-actions">
             <cdx-button
               v-if="activeMinervaSuggestion === 1"
               class="minerva-sheet-btn"
@@ -1433,40 +1503,6 @@
           </div>
         </aside>
 
-        <div
-          v-if="isPrototypeDialogOpen"
-          class="prototype-dialog-backdrop"
-          role="presentation"
-          @click.self="closePrototypeDialog"
-        >
-          <div class="prototype-dialog" role="dialog" aria-modal="true" aria-label="Choose prototype">
-            <div class="prototype-dialog-header">
-              <h2 class="prototype-dialog-title">Choose prototype</h2>
-            </div>
-            <fieldset class="prototype-dialog-options" role="radiogroup" aria-label="Prototype options">
-              <label class="prototype-radio">
-                <input type="radio" value="no-scroll" v-model="selectedPrototype">
-                <span>Suggestions (no scroll)</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="scroll" v-model="selectedPrototype">
-                <span>Scroll to 1st suggestion</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="notification" v-model="selectedPrototype">
-                <span>Notification with available suggestions</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="empty" v-model="selectedPrototype">
-                <span>Empty State (no suggestions)</span>
-              </label>
-            </fieldset>
-            <div class="prototype-dialog-actions">
-              <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -1525,8 +1561,16 @@ const isEditMode = ref(false);
 const hasUnsavedChanges = ref(false);
 const isLoading = ref(false);
 const showSuggestions = ref(true);
-const enableAutoScroll = ref(true);
+const enableAutoScroll = ref(false);
 const showSuggestionNotification = ref(false);
+const showSuggestionToggle = ref(true);
+const isBannerDismissed = ref(false);
+const isBannerDelayReady = ref(false);
+const isBannerClosing = ref(false);
+const isBannerOpening = ref(false);
+let bannerDelayTimer = null;
+let bannerCloseTimer = null;
+let bannerOpenTimer = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -1582,8 +1626,7 @@ const showSuccessMessage1 = ref(false); // Show success message after citation i
 const showSuccessMessage2 = ref(false);
 const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
 const isSuggestionDeclined2 = ref(false);
-const isPrototypeDialogOpen = ref(false);
-const selectedPrototype = ref('scroll');
+const showSuggestionBadge = ref(false);
 
 // Computed properties to validate URLs
 const isValidUrl1 = computed(() => {
@@ -1622,15 +1665,54 @@ const showEmptyState = computed(() => {
   return suggestion1Done && suggestion2Done;
 });
 const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
+const availableSuggestionCount = computed(() => {
+  const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
+  const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
+  return (suggestion1Pending ? 1 : 0) + (suggestion2Pending ? 1 : 0);
+});
+const showToolbarToggle = computed(() => (
+  !isMinervaSkin.value &&
+  (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
+));
+const showToggleBadge = computed(() => (
+  availableSuggestionCount.value > 0 &&
+  (
+    showSuggestionBadge.value ||
+    (showSuggestionToggle.value && !showSuggestions.value) ||
+    (showSuggestionToggle.value && showSuggestionNotification.value && isBannerDismissed.value) ||
+    (!showSuggestionToggle.value && !showSuggestions.value)
+  )
+));
 const minervaSheetTitle = computed(() => {
-  if (showSuggestionNotification.value) return '2 suggestions available';
   if (shouldShowEmptyState.value) return 'No suggestions';
   return 'Add a citation';
 });
-const hasPendingSuggestions = computed(() => {
-  const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
-  const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
-  return suggestion1Pending || suggestion2Pending;
+const minervaToggleBottom = computed(() => {
+  const bannerVisible = isMinervaSkin.value && showSuggestionToggle.value && showSuggestionNotification.value && showSuggestions.value;
+  const base = isMinervaSheetOpen.value ? 16 + minervaSheetHeight.value : (bannerVisible ? 0 : 16);
+  const bannerOffset = bannerVisible ? 52 : 0;
+  return `${base + bannerOffset}px`;
+});
+const anySuggestionVisible = ref(false);
+const shouldShowBanner = computed(() => {
+  if (!showSuggestionNotification.value) return false;
+  if (!showSuggestionToggle.value && !showSuggestions.value) return false;
+  if (showSuggestionToggle.value && !showSuggestions.value) return false;
+  return !anySuggestionVisible.value;
+});
+const bannerTextSuffix = computed(() => {
+  if (!showSuggestionToggle.value) {
+    return 'suggestions available for improving this article';
+  }
+  return isMinervaSkin.value
+    ? 'suggestions available'
+    : 'suggestions available for improving this article';
+});
+const bannerButtonLabel = computed(() => {
+  if (isMinervaSkin.value && !showSuggestionToggle.value) {
+    return showSuggestions.value ? 'Hide' : 'Show';
+  }
+  return showSuggestions.value ? 'Hide suggestions' : 'Show suggestions';
 });
 
 function resetSuggestionState() {
@@ -1651,66 +1733,77 @@ function resetSuggestionState() {
   isCardHovered2.value = false;
   isTextHovered.value = false;
   isTextHovered2.value = false;
+  isBannerDismissed.value = false;
+  isBannerClosing.value = false;
+  isBannerOpening.value = false;
   closeMinervaSuggestion();
 }
 
 function applyPrototypeMode(mode) {
   resetSuggestionState();
-  showSuggestionNotification.value = false;
-  enableAutoScroll.value = mode === 'scroll';
+  showSuggestionNotification.value = mode !== 'toggle-badge';
+  showSuggestionBadge.value = mode === 'toggle-badge';
+  isBannerDismissed.value = false;
+  isBannerClosing.value = false;
+  isBannerOpening.value = false;
+  isBannerDelayReady.value = false;
+  enableAutoScroll.value = false;
+  showSuggestions.value = true;
+  showSuggestionToggle.value = mode === 'toggle-banner' || mode === 'toggle-badge';
+}
 
-  if (mode === 'notification') {
+function handleHideSuggestionsBanner() {
+  showSuggestions.value = !showSuggestions.value;
+}
+
+function handleBannerToggleClick() {
+  showSuggestions.value = !showSuggestions.value;
+}
+
+function handleBannerClose() {
+  if (isBannerClosing.value || isBannerDismissed.value) return;
+  isBannerClosing.value = true;
+  if (bannerCloseTimer) {
+    clearTimeout(bannerCloseTimer);
+  }
+  bannerCloseTimer = setTimeout(() => {
+    isBannerDismissed.value = true;
+    isBannerClosing.value = false;
+    bannerCloseTimer = null;
+  }, 220);
+}
+
+function handleBannerClick() {
+  if (!showSuggestions.value) {
     showSuggestions.value = true;
-    showSuggestionNotification.value = true;
-    if (isMinervaSkin.value) {
-      isMinervaSheetOpen.value = true;
-    }
-    return;
-  }
-
-  showSuggestions.value = true;
-
-  if (mode === 'empty') {
-    isSuggestionDeclined1.value = true;
-    isSuggestionDeclined2.value = true;
-    if (isMinervaSkin.value) {
-      isMinervaSheetOpen.value = true;
-    }
-  }
-}
-
-function openPrototypeDialog() {
-  if (isEditMode.value) return;
-  isPrototypeDialogOpen.value = true;
-}
-
-function closePrototypeDialog() {
-  isPrototypeDialogOpen.value = false;
-}
-
-function startPrototype() {
-  applyPrototypeMode(selectedPrototype.value);
-  closePrototypeDialog();
-  enterEditMode();
-}
-
-function handleNotificationClick() {
-  showSuggestions.value = true;
-  showSuggestionNotification.value = false;
-  if (isMinervaSkin.value) {
-    isMinervaSheetOpen.value = true;
   }
   nextTick(() => {
     openFirstPendingSuggestion();
   });
 }
 
-function handleNotificationKeydown(event) {
+function handleBannerKeydown(event) {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
-    handleNotificationClick();
+    handleBannerClick();
   }
 }
+
+function updateSuggestionVisibility() {
+  if (!showSuggestions.value) {
+    anySuggestionVisible.value = false;
+    return;
+  }
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const isVisible = (el) => {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    return rect.bottom > 0 && rect.top < viewportHeight;
+  };
+  anySuggestionVisible.value =
+    isVisible(highlightedTextRef.value) || isVisible(highlightedTextRef2.value);
+}
+
 
 function handleReadClick() {
   closePrototypeDialog();
@@ -1868,8 +1961,21 @@ function alignBothSuggestions() {
 // Watch for changes in showSuggestions to realign both
 watch(showSuggestions, (newValue) => {
   if (newValue) {
+    isBannerDismissed.value = false;
+    if (showSuggestionToggle.value) {
+      isBannerDelayReady.value = false;
+      if (bannerDelayTimer) {
+        clearTimeout(bannerDelayTimer);
+      }
+      bannerDelayTimer = setTimeout(() => {
+        if (isEditMode.value && showSuggestions.value) {
+          isBannerDelayReady.value = true;
+        }
+      }, 1000);
+    }
     nextTick(() => {
       alignBothSuggestions();
+      updateSuggestionVisibility();
     });
   } else {
     sidebarTopOffset.value = 0;
@@ -1891,6 +1997,35 @@ watch(
 watch(isMinervaSheetOpen, () => {
   updateMinervaSheetHeight();
 });
+
+watch(
+  () => [showSuggestions.value, showSuggestionNotification.value],
+  () => {
+    nextTick(() => {
+      updateSuggestionVisibility();
+    });
+  }
+);
+
+watch(availableSuggestionCount, (newValue, oldValue) => {
+  if (oldValue !== undefined && newValue !== oldValue) {
+    isBannerDismissed.value = false;
+  }
+});
+
+watch(isLoading, (newValue) => {
+  if (!newValue && isEditMode.value) {
+    if (bannerDelayTimer) {
+      clearTimeout(bannerDelayTimer);
+    }
+    bannerDelayTimer = setTimeout(() => {
+      if (isEditMode.value && !isLoading.value) {
+        isBannerDelayReady.value = true;
+      }
+    }, 1000);
+  }
+});
+
 
 // Auto scroll/expand helper
 let autoSuggestionTimer = null;
@@ -1956,6 +2091,23 @@ watch(
   }
 );
 
+watch(
+  () => [showSuggestions.value, showSuggestionToggle.value, showSuggestionNotification.value],
+  ([suggestionsActive, hasToggle, hasBanner], [prevSuggestionsActive]) => {
+    if (!hasToggle || !hasBanner) return;
+    if (!prevSuggestionsActive && suggestionsActive && availableSuggestionCount.value > 0) {
+      if (bannerOpenTimer) {
+        clearTimeout(bannerOpenTimer);
+      }
+      isBannerOpening.value = true;
+      bannerOpenTimer = setTimeout(() => {
+        isBannerOpening.value = false;
+        bannerOpenTimer = null;
+      }, 220);
+    }
+  }
+);
+
 // Align on mount and add event listeners
 onMounted(() => {
   if (typeof window !== 'undefined') {
@@ -1966,6 +2118,7 @@ onMounted(() => {
   if (isEditMode.value && showSuggestions.value) {
     setTimeout(() => {
       alignBothSuggestions();
+      updateSuggestionVisibility();
     }, 100);
   }
   
@@ -1974,6 +2127,8 @@ onMounted(() => {
     window.addEventListener('resize', alignBothSuggestions);
     window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
     window.addEventListener('resize', updateMinervaSheetHeight);
+    window.addEventListener('scroll', updateSuggestionVisibility, true);
+    window.addEventListener('resize', updateSuggestionVisibility);
   }
 });
 
@@ -1983,8 +2138,18 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', alignBothSuggestions);
     window.removeEventListener('scroll', alignBothSuggestions, true);
     window.removeEventListener('resize', updateMinervaSheetHeight);
+    window.removeEventListener('scroll', updateSuggestionVisibility, true);
+    window.removeEventListener('resize', updateSuggestionVisibility);
   }
   clearAutoSuggestionTimer();
+  if (bannerCloseTimer) {
+    clearTimeout(bannerCloseTimer);
+    bannerCloseTimer = null;
+  }
+  if (bannerOpenTimer) {
+    clearTimeout(bannerOpenTimer);
+    bannerOpenTimer = null;
+  }
 });
 
 // Handle search input
@@ -2057,6 +2222,9 @@ function enterEditMode() {
   nextTick(() => {
     captureEditSnapshot();
   });
+  isBannerDelayReady.value = false;
+  isBannerClosing.value = false;
+  isBannerOpening.value = false;
   
   // Hide loading overlay after 2 seconds
   setTimeout(() => {
@@ -2070,11 +2238,27 @@ function exitEditMode() {
   hasUnsavedChanges.value = false;
   closeMinervaSuggestion();
   isEditMode.value = false;
+  isBannerDelayReady.value = false;
+  isBannerClosing.value = false;
+  isBannerOpening.value = false;
+  if (bannerDelayTimer) {
+    clearTimeout(bannerDelayTimer);
+    bannerDelayTimer = null;
+  }
+  if (bannerCloseTimer) {
+    clearTimeout(bannerCloseTimer);
+    bannerCloseTimer = null;
+  }
+  if (bannerOpenTimer) {
+    clearTimeout(bannerOpenTimer);
+    bannerOpenTimer = null;
+  }
 }
 
 function toggleEditMode() {
   if (!isEditMode.value) {
-    openPrototypeDialog();
+    applyPrototypeMode('toggle-banner');
+    enterEditMode();
     return;
   }
   exitEditMode();
@@ -3749,7 +3933,7 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  padding: 16px 0;
+  padding: 8px 0 16px;
   background-color: var(--background-color-base, #ffffff);
 }
 
@@ -3832,6 +4016,42 @@ function markArticleEdited() {
   align-self: start;
   min-height: 100%; /* Allow sidebar to contain absolutely positioned cards */
   padding-top: 0;
+}
+
+.suggestions-viewport-notification {
+  width: 100%;
+  border: 1px solid #dadde3;
+  background: #ffffff;
+  color: var(--color-subtle, #54595d);
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  padding: 10px 12px;
+  border-radius: 2px;
+  cursor: pointer;
+  text-align: left;
+  max-width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: start;
+  gap: 8px;
+}
+
+.suggestions-viewport-number {
+  font-weight: 700;
+  color: var(--color-progressive, #36c);
+}
+
+.suggestions-viewport-notification:hover,
+.suggestions-viewport-notification:active {
+  background: #ffffff;
+}
+
+.suggestions-viewport-notification:focus-visible {
+  outline: 2px solid var(--color-progressive, #36c);
+  outline-offset: 2px;
 }
 
 /* Positioned suggestion cards within sidebar */
@@ -4007,6 +4227,7 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   justify-content: center;
+  position: relative;
 }
 
 /* Lightbulb icon wrapper */
@@ -4312,6 +4533,7 @@ function markArticleEdited() {
   width: 100%;
   height: 100%;
   padding: 0;
+  position: relative;
 }
 
 .minerva-bottom-sheet {
@@ -4870,6 +5092,216 @@ function markArticleEdited() {
   color: var(--color-placeholder, #72777d);
 }
 
+.suggestions-banner {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 8px;
+  margin: 0 0 8px;
+  height: 40px;
+  padding: 0 12px;
+  border: none;
+  background: var(--background-color-progressive-subtle, #eaf3ff);
+  border-radius: 0;
+  font-family: 'Inter', sans-serif;
+  color: var(--color-subtle, #54595d);
+  position: sticky;
+  top: 42px;
+  z-index: 9;
+  text-align: center;
+  transform-origin: top;
+  will-change: transform, opacity;
+}
+
+.banner-reveal-enter-active,
+.banner-reveal-leave-active {
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.banner-reveal-enter-from,
+.banner-reveal-leave-to {
+  transform: scaleY(0.1);
+  opacity: 0;
+}
+
+.banner-reveal-enter-to,
+.banner-reveal-leave-from {
+  transform: scaleY(1);
+  opacity: 1;
+}
+
+.suggestions-banner--clickable:not(.suggestions-banner--empty):hover {
+  background: var(--background-color-progressive-subtle--hover, #dbe8ff);
+}
+
+.suggestions-banner--clickable:not(.suggestions-banner--empty):active {
+  background: var(--background-color-progressive-subtle--active, #c5d7ff);
+}
+
+.suggestions-banner--closing {
+  animation: banner-to-badge 220ms ease forwards;
+  transform-origin: right center;
+  pointer-events: none;
+}
+
+.suggestions-banner--opening {
+  animation: badge-to-banner 220ms ease forwards;
+  transform-origin: right center;
+  pointer-events: none;
+}
+
+@keyframes banner-to-badge {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+
+@keyframes badge-to-banner {
+  0% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.suggestions-banner--empty {
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+  color: var(--color-placeholder, #72777d);
+}
+
+.suggestions-banner--hidden {
+  background: var(--background-color-base, #ffffff);
+}
+
+.suggestions-banner-text {
+  min-width: 0;
+}
+
+.suggestions-banner-center {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.suggestions-banner-actions {
+  position: absolute;
+  right: 12px;
+  display: inline-flex;
+  align-items: center;
+}
+
+.suggestions-banner-action {
+  height: 24px;
+}
+
+.suggestions-banner-action :deep(button) {
+  height: 24px;
+  max-height: 24px;
+  min-height: 24px;
+  padding: 0 8px;
+  line-height: 24px;
+}
+
+.suggestions-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border-radius: 2px;
+  background: var(--background-color-progressive, #36c);
+  color: #ffffff;
+  border: 1px solid var(--border-color-inverted, #ffffff);
+  font-size: 12px;
+  font-weight: 700;
+  line-height: 16px;
+  z-index: 2;
+  pointer-events: none;
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  transform: translate(50%, 50%);
+}
+
+.suggestions-badge--empty {
+  background: var(--background-color-neutral, #eaecf0);
+  color: #202122;
+}
+
+
+.minerva-skin .suggestions-badge {
+  font-size: 14px;
+  line-height: 16px;
+}
+
+.suggestions-banner-close {
+  display: inline-flex;
+}
+
+.suggestions-banner-close :deep(button) {
+  padding: 0;
+}
+
+.minerva-skin .suggestions-banner--minerva-bottom {
+  position: fixed;
+  bottom: 0;
+  top: auto;
+  margin: 0;
+  z-index: 69;
+  left: 0;
+  right: 0;
+}
+
+.minerva-skin .suggestions-banner--minerva {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.minerva-skin .suggestions-banner--minerva-top {
+  position: fixed;
+  top: 42px;
+  bottom: auto;
+  margin: 0;
+  z-index: 69;
+  left: 0;
+  right: 0;
+}
+
+.minerva-skin .suggestions-viewport-notification--minerva,
+.minerva-skin .empty-state--minerva {
+  position: fixed;
+  bottom: 0;
+  top: auto;
+  left: 0;
+  right: 0;
+  margin: 0;
+  z-index: 69;
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+
+.vector-skin .suggestions-banner {
+  font-size: 12px;
+  line-height: 16px;
+}
+
+.minerva-skin .suggestions-banner {
+  font-size: 14px;
+  line-height: 20px;
+}
+
 .prototype-dialog-backdrop {
   position: fixed;
   inset: 0;
@@ -5019,14 +5451,6 @@ function markArticleEdited() {
 
 .minerva-sheet-header--empty .minerva-sheet-title {
   color: var(--color-placeholder, #72777d);
-}
-
-.minerva-sheet-header--notification :deep(svg) {
-  fill: var(--color-progressive, #36c);
-}
-
-.minerva-sheet-notification-btn {
-  margin-left: auto;
 }
 
 .minerva-empty-sheet-text {
