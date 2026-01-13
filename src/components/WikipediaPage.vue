@@ -823,8 +823,8 @@
                   class="suggestions-banner"
                   :class="{
                     'suggestions-banner--empty': availableSuggestionCount === 0,
-                    'suggestions-banner--minerva-bottom': isMinervaSkin && (showSuggestionToggle || showSuggestions),
-                    'suggestions-banner--minerva-top': isMinervaSkin && !showSuggestionToggle && !showSuggestions,
+                    'suggestions-banner--minerva-bottom': false,
+                    'suggestions-banner--minerva-top': isMinervaSkin,
                     'suggestions-banner--minerva': isMinervaSkin,
                     'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                     'suggestions-banner--clickable': showSuggestions,
@@ -865,40 +865,9 @@
                   </cdx-button>
                   </div>
                   <div class="suggestions-banner-actions">
-                  <cdx-button
-                    v-if="showSuggestionToggle && availableSuggestionCount > 0"
-                    class="suggestions-banner-close"
-                    action="default"
-                    weight="quiet"
-                    @click.stop="handleBannerClose"
-                  >
-                    Hide
-                  </cdx-button>
                   </div>
                 </div>
               </transition>
-              <template v-if="isMinervaSkin && showSuggestionBadge && !anySuggestionVisible">
-                <button
-                  v-if="availableSuggestionCount > 0"
-                  class="suggestions-viewport-notification suggestions-viewport-notification--minerva"
-                  type="button"
-                  @click="handleBannerClick"
-                >
-                  <span class="suggestions-viewport-number">{{ availableSuggestionCount }}</span>
-                  suggestions available for improving this article
-                </button>
-                <div
-                  v-else
-                  class="empty-state empty-state--minerva"
-                >
-                  <div v-if="!showSuggestionBadge" class="empty-state-icon">
-                    <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                  </div>
-                  <div class="empty-state-content">
-                    <p class="empty-state-text">0 suggestions available for improving this article</p>
-                  </div>
-                </div>
-              </template>
               <div class="edit-header">
                 <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
                 
@@ -1343,7 +1312,7 @@
 
           <!-- Empty State - Show when all suggestions are completed or declined -->
           <button
-            v-if="showSuggestionBadge && !anySuggestionVisible && availableSuggestionCount > 0"
+            v-if="showSuggestionBadge && !anySuggestionVisible && availableSuggestionCount > 0 && !showSuggestions"
             class="suggestions-viewport-notification"
             type="button"
             @click="handleBannerClick"
@@ -1503,6 +1472,32 @@
           </div>
         </aside>
 
+        <div
+          v-if="isPrototypeDialogOpen"
+          class="prototype-dialog-backdrop"
+          role="presentation"
+          @click.self="closePrototypeDialog"
+        >
+          <div class="prototype-dialog" role="dialog" aria-modal="true" aria-label="Choose prototype">
+            <div class="prototype-dialog-header">
+              <h2 class="prototype-dialog-title">Choose prototype</h2>
+            </div>
+            <fieldset class="prototype-dialog-options" role="radiogroup" aria-label="Prototype options">
+              <label class="prototype-radio">
+                <input type="radio" value="editors-off" v-model="selectedPrototype">
+                <span>Experience editors</span>
+              </label>
+              <label class="prototype-radio">
+                <input type="radio" value="newcomers-on" v-model="selectedPrototype">
+                <span>Newcomers</span>
+              </label>
+            </fieldset>
+            <div class="prototype-dialog-actions">
+              <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -1626,6 +1621,8 @@ const showSuccessMessage1 = ref(false); // Show success message after citation i
 const showSuccessMessage2 = ref(false);
 const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
 const isSuggestionDeclined2 = ref(false);
+const isPrototypeDialogOpen = ref(false);
+const selectedPrototype = ref('newcomers-on');
 const showSuggestionBadge = ref(false);
 
 // Computed properties to validate URLs
@@ -1676,6 +1673,7 @@ const showToolbarToggle = computed(() => (
 ));
 const showToggleBadge = computed(() => (
   availableSuggestionCount.value > 0 &&
+  !shouldShowBanner.value &&
   (
     showSuggestionBadge.value ||
     (showSuggestionToggle.value && !showSuggestions.value) ||
@@ -1688,10 +1686,7 @@ const minervaSheetTitle = computed(() => {
   return 'Add a citation';
 });
 const minervaToggleBottom = computed(() => {
-  const bannerVisible = isMinervaSkin.value && showSuggestionToggle.value && showSuggestionNotification.value && showSuggestions.value;
-  const base = isMinervaSheetOpen.value ? 16 + minervaSheetHeight.value : (bannerVisible ? 0 : 16);
-  const bannerOffset = bannerVisible ? 52 : 0;
-  return `${base + bannerOffset}px`;
+  return '16px';
 });
 const anySuggestionVisible = ref(false);
 const shouldShowBanner = computed(() => {
@@ -1741,15 +1736,30 @@ function resetSuggestionState() {
 
 function applyPrototypeMode(mode) {
   resetSuggestionState();
-  showSuggestionNotification.value = mode !== 'toggle-badge';
-  showSuggestionBadge.value = mode === 'toggle-badge';
+  showSuggestionNotification.value = true;
+  showSuggestionBadge.value = mode === 'newcomers-on';
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
   isBannerDelayReady.value = false;
   enableAutoScroll.value = false;
-  showSuggestions.value = true;
-  showSuggestionToggle.value = mode === 'toggle-banner' || mode === 'toggle-badge';
+  showSuggestions.value = mode === 'newcomers-on';
+  showSuggestionToggle.value = true;
+}
+
+function openPrototypeDialog() {
+  if (isEditMode.value) return;
+  isPrototypeDialogOpen.value = true;
+}
+
+function closePrototypeDialog() {
+  isPrototypeDialogOpen.value = false;
+}
+
+function startPrototype() {
+  applyPrototypeMode(selectedPrototype.value);
+  closePrototypeDialog();
+  enterEditMode();
 }
 
 function handleHideSuggestionsBanner() {
@@ -1778,7 +1788,7 @@ function handleBannerClick() {
     showSuggestions.value = true;
   }
   nextTick(() => {
-    openFirstPendingSuggestion();
+    openFirstPendingSuggestion(true);
   });
 }
 
@@ -2053,28 +2063,46 @@ function scrollToSuggestionIfNeeded(targetRef) {
   });
 }
 
-function openFirstPendingSuggestion() {
+function openFirstPendingSuggestion(expandAfterScroll = false) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
   const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
 
-  if (suggestion1Pending) {
+  const openSuggestion = (id) => {
     if (isMinervaSkin.value) {
-      openMinervaSuggestion(1);
-    } else {
+      openMinervaSuggestion(id);
+      return;
+    }
+    if (id === 1) {
       isCardExpanded.value = true;
       isCardExpanded2.value = false;
-    }
-    scrollToSuggestionIfNeeded(highlightedTextRef);
-  } else if (suggestion2Pending) {
-    if (isMinervaSkin.value) {
-      openMinervaSuggestion(2);
     } else {
       isCardExpanded2.value = true;
       isCardExpanded.value = false;
     }
-    scrollToSuggestionIfNeeded(highlightedTextRef2);
+  };
+
+  const run = (id, targetRef) => {
+    if (expandAfterScroll) {
+      const target = targetRef.value;
+      const shouldScroll = target && !isTargetVisibleInViewport(target);
+      if (shouldScroll) {
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => {
+          openSuggestion(id);
+        }, 1000);
+        return;
+      }
+    }
+    openSuggestion(id);
+    scrollToSuggestionIfNeeded(targetRef);
+  };
+
+  if (suggestion1Pending) {
+    run(1, highlightedTextRef);
+  } else if (suggestion2Pending) {
+    run(2, highlightedTextRef2);
   }
 }
 
@@ -2257,8 +2285,7 @@ function exitEditMode() {
 
 function toggleEditMode() {
   if (!isEditMode.value) {
-    applyPrototypeMode('toggle-banner');
-    enterEditMode();
+    openPrototypeDialog();
     return;
   }
   exitEditMode();
