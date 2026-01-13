@@ -2,14 +2,15 @@ name: Deploy branch preview
 
 on:
   push:
-    branches:
-      - first-suggestion-findability
+    branches-ignore:
+      - main
+      - gh-pages
 
 permissions:
   contents: write
 
 concurrency:
-  group: preview-first-suggestion-findability
+  group: preview-${{ github.ref_name }}
   cancel-in-progress: true
 
 jobs:
@@ -21,13 +22,17 @@ jobs:
         with:
           node-version: 20
           cache: npm
+      - name: Set preview path
+        run: |
+          SAFE_BRANCH="${GITHUB_REF_NAME//\//-}"
+          echo "SAFE_BRANCH=$SAFE_BRANCH" >> "$GITHUB_ENV"
       - run: npm ci
       - run: npm run build
         env:
-          BASE_PATH: /suggestion-mode/first-suggestion-findability/
+          BASE_PATH: /suggestion-mode/${{ env.SAFE_BRANCH }}/
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
-          destination_dir: first-suggestion-findability
+          destination_dir: ${{ env.SAFE_BRANCH }}
           keep_files: true
