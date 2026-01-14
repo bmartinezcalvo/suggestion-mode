@@ -331,7 +331,12 @@
 
                   <!-- Early Life Section -->
                   <div class="section-heading">
-                    <h2 class="heading-text">Early life</h2>
+                    <div class="section-heading-row">
+                      <h2 class="heading-text">Early life</h2>
+                      <span class="section-edit">
+                        <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit</a><span class="section-edit-bracket">]</span>
+                      </span>
+                    </div>
                     <div class="heading-divider"></div>
                   </div>
 
@@ -413,7 +418,12 @@
 
             <!-- Career Section -->
             <div class="section-heading">
-              <h2 class="heading-text">Career</h2>
+              <div class="section-heading-row">
+                <h2 class="heading-text">Career</h2>
+                <span class="section-edit">
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit</a><span class="section-edit-bracket">]</span>
+                </span>
+              </div>
               <div class="heading-divider"></div>
             </div>
 
@@ -448,6 +458,114 @@
               <p>&nbsp;</p>
               <p>
                 In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
+              </p>
+            </div>
+
+            <!-- Poetry Section -->
+            <div class="section-heading">
+              <div class="section-heading-row">
+                <h2 class="heading-text">Poetry</h2>
+                <span class="section-edit">
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit</a><span class="section-edit-bracket">]</span>
+                </span>
+              </div>
+              <div class="heading-divider"></div>
+            </div>
+
+            <div class="body-text">
+              <p>
+                Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
+              </p>
+              <p>&nbsp;</p>
+              <p><strong>Early works</strong></p>
+              <p>&nbsp;</p>
+              <p>
+                Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Nominated for the National Book Award for poetry in 1974, From a Land Where Other People Live (Broadside Press) shows Lorde's personal struggles with identity and anger at social injustice. The volume deals with themes of anger, loneliness, and injustice, as well as what it means to be a black woman, mother, friend, and lover.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
+              </p>
+              <p>&nbsp;</p>
+              <p><strong>Wider recognition</strong></p>
+              <p>&nbsp;</p>
+              <p>
+                Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
+              </p>
+            </div>
+
+            <!-- Prose Section -->
+            <div class="section-heading">
+              <div class="section-heading-row">
+                <h2 class="heading-text">Prose</h2>
+                <span class="section-edit">
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('prose')">edit</a><span class="section-edit-bracket">]</span>
+                </span>
+              </div>
+              <div class="heading-divider"></div>
+            </div>
+
+            <div class="body-text">
+              <p>
+                The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
+              </p>
+              <p>&nbsp;</p>
+              <p><strong>Sister Outsider</strong></p>
+              <p>&nbsp;</p>
+              <p>
+                In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Her most famous essay, "The Master's Tools Will Never Dismantle the Master's House", is included in Sister Outsider. Lorde questions the scope and ability for change to be instigated when examining problems through a racist, patriarchal lens. She insists that women see differences between other women not as something to be tolerated, but something that is necessary to generate power and to actively "be" in the world. This will create a community that embraces differences, which will ultimately lead to liberation. Lorde elucidates, "Divide and conquer, in our world, must become define and empower." Also, people must educate themselves about the oppression of others because expecting a marginalized group to educate the oppressors is the continuation of racist, patriarchal thought. She explains that this is a major tool utilized by oppressors to keep the oppressed occupied with the master's concerns. She concludes that to bring about real change, we cannot work within the racist, patriarchal framework because change brought about in that will not remain.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Also in Sister Outsider is the essay, "The Transformation of Silence into Language and Action". Lorde discusses the importance of speaking, even when afraid, because otherwise silence immobilizes and chokes us. Many people fear to speak the truth because of the real risks of retaliation, but Lorde warns, "Your silence does not protect you." Lorde emphasizes that "the transformation of silence into language and action is a self-revelation, and that always seems fraught with danger." People are afraid of others' reactions for speaking, but mostly for demanding visibility, which is essential to live. Lorde adds, "We can sit in our corners mute forever while our sisters and ourselves are wasted, while our children are distorted and destroyed, while our earth is poisoned; we can sit in our safe corners mute as bottles, and we will still be no less afraid." "People are taught to respect their fear of speaking more than silence, but ultimately, the silence will choke us anyway, so we might as well speak the truth." Lorde writes that we can learn to speak even when we are afraid.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In "Age, Race, Class, and Sex: Women Redefining Difference", Lorde emphasizes the importance of educating others. However, she stresses that in order to educate others, one must first be educated. Empowering people who are doing the work does not mean using privilege to overstep and overpower such groups; but rather, privilege must be used to hold door open for other allies. Lorde describes the inherent problems within society by saying, "racism, the belief in the inherent superiority of one race over all others and thereby the right to dominance. Sexism, the belief in the inherent superiority of one sex over the other and thereby the right to dominance. Ageism. Heterosexism. Elitism. Classism." Lorde finds herself among some of these "deviant" groups in society, which set the tone for the status quo and what "not to be" in society. Lorde argues that women feel pressure to conform to their "oneness" before recognizing the separation among them due to their "manyness", or aspects of their identity. She stresses that this behavior is exactly what "explains feminists' inability to forge the kind of alliances necessary to create a better world".
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                In relation to non-intersectional feminism in the United States, Lorde famously said:
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
+              </p>
+              <p>&nbsp;</p>
+              <p>
+                — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
               </p>
             </div>
           </div>
@@ -526,7 +644,7 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('early-life') }" />
                     <span>Early life</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-edit" aria-label="Edit section">
+                  <button v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
                     <cdx-icon :icon="cdxIconEdit" size="small" />
                   </button>
                 </div>
@@ -557,7 +675,7 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('career') }" />
                     <span>Career</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('career')" class="minerva-accordion-edit" aria-label="Edit section">
+                  <button v-if="isMinervaSectionOpen('career')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('career')">
                     <cdx-icon :icon="cdxIconEdit" size="small" />
                   </button>
                 </div>
@@ -604,14 +722,54 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('poetry') }" />
                     <span>Poetry</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-edit" aria-label="Edit section">
+                  <button v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
                     <cdx-icon :icon="cdxIconEdit" size="small" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-panel">
                   <div class="body-text">
                     <p>
-                      Lorde's poetry is known for its technical mastery and emotional expression, often confronting injustice and celebrating identity.
+                      Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p><strong>Early works</strong></p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Nominated for the National Book Award for poetry in 1974, From a Land Where Other People Live (Broadside Press) shows Lorde's personal struggles with identity and anger at social injustice. The volume deals with themes of anger, loneliness, and injustice, as well as what it means to be a black woman, mother, friend, and lover.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p><strong>Wider recognition</strong></p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
                     </p>
                   </div>
                 </div>
@@ -623,14 +781,48 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('prose') }" />
                     <span>Prose</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-edit" aria-label="Edit section">
+                  <button v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('prose')">
                     <cdx-icon :icon="cdxIconEdit" size="small" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-panel">
                   <div class="body-text">
                     <p>
-                      Her essays and memoirs explore feminism, race, sexuality, and power through personal narrative and cultural critique.
+                      The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p><strong>Sister Outsider</strong></p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Her most famous essay, "The Master's Tools Will Never Dismantle the Master's House", is included in Sister Outsider. Lorde questions the scope and ability for change to be instigated when examining problems through a racist, patriarchal lens. She insists that women see differences between other women not as something to be tolerated, but something that is necessary to generate power and to actively "be" in the world. This will create a community that embraces differences, which will ultimately lead to liberation. Lorde elucidates, "Divide and conquer, in our world, must become define and empower." Also, people must educate themselves about the oppression of others because expecting a marginalized group to educate the oppressors is the continuation of racist, patriarchal thought. She explains that this is a major tool utilized by oppressors to keep the oppressed occupied with the master's concerns. She concludes that to bring about real change, we cannot work within the racist, patriarchal framework because change brought about in that will not remain.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Also in Sister Outsider is the essay, "The Transformation of Silence into Language and Action". Lorde discusses the importance of speaking, even when afraid, because otherwise silence immobilizes and chokes us. Many people fear to speak the truth because of the real risks of retaliation, but Lorde warns, "Your silence does not protect you." Lorde emphasizes that "the transformation of silence into language and action is a self-revelation, and that always seems fraught with danger." People are afraid of others' reactions for speaking, but mostly for demanding visibility, which is essential to live. Lorde adds, "We can sit in our corners mute forever while our sisters and ourselves are wasted, while our children are distorted and destroyed, while our earth is poisoned; we can sit in our safe corners mute as bottles, and we will still be no less afraid." "People are taught to respect their fear of speaking more than silence, but ultimately, the silence will choke us anyway, so we might as well speak the truth." Lorde writes that we can learn to speak even when we are afraid.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In "Age, Race, Class, and Sex: Women Redefining Difference", Lorde emphasizes the importance of educating others. However, she stresses that in order to educate others, one must first be educated. Empowering people who are doing the work does not mean using privilege to overstep and overpower such groups; but rather, privilege must be used to hold door open for other allies. Lorde describes the inherent problems within society by saying, "racism, the belief in the inherent superiority of one race over all others and thereby the right to dominance. Sexism, the belief in the inherent superiority of one sex over the other and thereby the right to dominance. Ageism. Heterosexism. Elitism. Classism." Lorde finds herself among some of these "deviant" groups in society, which set the tone for the status quo and what "not to be" in society. Lorde argues that women feel pressure to conform to their "oneness" before recognizing the separation among them due to their "manyness", or aspects of their identity. She stresses that this behavior is exactly what "explains feminists' inability to forge the kind of alliances necessary to create a better world".
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      In relation to non-intersectional feminism in the United States, Lorde famously said:
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
                     </p>
                   </div>
                 </div>
@@ -684,7 +876,7 @@
           <!-- Edit Mode Content -->
           <div v-else class="edit-mode-content">
             <!-- Editor Toolbar -->
-            <div v-if="isMinervaSkin" class="editor-toolbar editor-toolbar--minerva">
+            <div v-if="isMinervaSkin" class="editor-toolbar editor-toolbar--minerva" :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }">
               <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
@@ -720,7 +912,7 @@
                 <cdx-icon :icon="cdxIconNext" size="medium" />
               </button>
             </div>
-            <div v-else class="editor-toolbar">
+            <div v-else class="editor-toolbar" :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }">
               <div class="editor-toolbar-left">
                 <button
                   class="toolbar-btn toolbar-btn-icon-only"
@@ -829,7 +1021,8 @@
                     'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                     'suggestions-banner--clickable': showSuggestions,
                     'suggestions-banner--closing': isBannerClosing,
-                    'suggestions-banner--opening': isBannerOpening
+                    'suggestions-banner--opening': isBannerOpening,
+                    'suggestions-banner--scrolled': isEditToolbarScrolled
                   }"
                   :role="showSuggestions ? 'button' : undefined"
                   :tabindex="showSuggestions ? 0 : undefined"
@@ -841,7 +1034,7 @@
                       v-if="showSuggestionToggle || showSuggestions"
                       class="suggestions-banner-text"
                     >
-                      <strong>{{ availableSuggestionCount }}</strong> {{ bannerTextSuffix }}
+                      <strong>{{ availableSuggestionCount }} {{ bannerCountLabel }}</strong> {{ bannerTextRemainder }}
                     </div>
                     <cdx-button
                     v-if="!showSuggestionToggle && !isMinervaSkin"
@@ -953,7 +1146,7 @@
                 </div>
 
                 <!-- Early Life Section -->
-                <div class="section-heading-edit">
+                <div class="section-heading-edit" ref="editSectionEarlyLife">
                   <h2 class="heading-text-edit">Early life</h2>
                   <div class="heading-divider"></div>
                 </div>
@@ -973,7 +1166,7 @@
                 </div>
 
                 <!-- Career Section -->
-                <div class="section-heading-edit">
+                <div class="section-heading-edit" ref="editSectionCareer">
                   <h2 class="heading-text-edit">Career</h2>
                   <div class="heading-divider"></div>
                 </div>
@@ -1070,7 +1263,59 @@
                     In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
                   </p>
                   <p>&nbsp;</p>
-                  <p 
+                  <p>
+                    In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
+                  </p>
+                </div>
+
+                <!-- Poetry Section -->
+                <div class="section-heading-edit" ref="editSectionPoetry">
+                  <h2 class="heading-text-edit">Poetry</h2>
+                  <div class="heading-divider"></div>
+                </div>
+
+                <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
+                  <p>
+                    Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p><strong class="subsection-title">Early works</strong></p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Nominated for the National Book Award for poetry in 1974, From a Land Where Other People Live (Broadside Press) shows Lorde's personal struggles with identity and anger at social injustice. The volume deals with themes of anger, loneliness, and injustice, as well as what it means to be a black woman, mother, friend, and lover.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p><strong class="subsection-title">Wider recognition</strong></p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
+                  </p>
+                  <p>&nbsp;</p>
+                  <p
                     v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
                     ref="highlightedTextRef2"
                     :class="{ 
@@ -1078,7 +1323,7 @@
                       'highlighted-text-wrapper--hover': isHovered2 && showSuggestions && !isCardExpanded2,
                       'highlighted-text-wrapper--selected': isCardExpanded2 && showSuggestions,
                       'minerva-suggestion-target': isMinervaSkin
-                    }" 
+                    }"
                     class="suggestion-target"
                     @mouseenter="isTextHovered2 = true"
                     @mouseleave="isTextHovered2 = false"
@@ -1086,7 +1331,7 @@
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
-                      In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker" ref="citationMarker2">[{{ citationNumber2 || '...' }}]</sup>
+                      In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker">[{{ citationNumber2 || '...' }}]</sup>
                     </span>
                     <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
                     <button
@@ -1099,7 +1344,9 @@
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
                   </p>
-
+                  <p v-else>
+                    In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
+                  </p>
                   <!-- Citation Popup 2 -->
                   <div v-if="showCitationPopup2" class="citation-popup">
                     <!-- Pointer arrow -->
@@ -1135,14 +1382,120 @@
                       </div>
                     </div>
                   </div>
-                  
-                  <p v-else>
-                    In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
+                  <p>&nbsp;</p>
+                  <p>
+                    Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
+                  </p>
+                </div>
+
+                <!-- Prose Section -->
+                <div class="section-heading-edit" ref="editSectionProse">
+                  <h2 class="heading-text-edit">Prose</h2>
+                  <div class="heading-divider"></div>
+                </div>
+
+                <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
+                  <p>
+                    The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                   </p>
                   <p>&nbsp;</p>
                   <p>
-                    In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
+                    Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
                   </p>
+                  <p>&nbsp;</p>
+                  <p><strong class="subsection-title">Sister Outsider</strong></p>
+                  <p>&nbsp;</p>
+                  <p>
+                    In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Her most famous essay, "The Master's Tools Will Never Dismantle the Master's House", is included in Sister Outsider. Lorde questions the scope and ability for change to be instigated when examining problems through a racist, patriarchal lens. She insists that women see differences between other women not as something to be tolerated, but something that is necessary to generate power and to actively "be" in the world. This will create a community that embraces differences, which will ultimately lead to liberation. Lorde elucidates, "Divide and conquer, in our world, must become define and empower." Also, people must educate themselves about the oppression of others because expecting a marginalized group to educate the oppressors is the continuation of racist, patriarchal thought. She explains that this is a major tool utilized by oppressors to keep the oppressed occupied with the master's concerns. She concludes that to bring about real change, we cannot work within the racist, patriarchal framework because change brought about in that will not remain.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Also in Sister Outsider is the essay, "The Transformation of Silence into Language and Action". Lorde discusses the importance of speaking, even when afraid, because otherwise silence immobilizes and chokes us. Many people fear to speak the truth because of the real risks of retaliation, but Lorde warns, "Your silence does not protect you." Lorde emphasizes that "the transformation of silence into language and action is a self-revelation, and that always seems fraught with danger." People are afraid of others' reactions for speaking, but mostly for demanding visibility, which is essential to live. Lorde adds, "We can sit in our corners mute forever while our sisters and ourselves are wasted, while our children are distorted and destroyed, while our earth is poisoned; we can sit in our safe corners mute as bottles, and we will still be no less afraid." "People are taught to respect their fear of speaking more than silence, but ultimately, the silence will choke us anyway, so we might as well speak the truth." Lorde writes that we can learn to speak even when we are afraid.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    In "Age, Race, Class, and Sex: Women Redefining Difference", Lorde emphasizes the importance of educating others. However, she stresses that in order to educate others, one must first be educated. Empowering people who are doing the work does not mean using privilege to overstep and overpower such groups; but rather, privilege must be used to hold door open for other allies. Lorde describes the inherent problems within society by saying, "racism, the belief in the inherent superiority of one race over all others and thereby the right to dominance. Sexism, the belief in the inherent superiority of one sex over the other and thereby the right to dominance. Ageism. Heterosexism. Elitism. Classism." Lorde finds herself among some of these "deviant" groups in society, which set the tone for the status quo and what "not to be" in society. Lorde argues that women feel pressure to conform to their "oneness" before recognizing the separation among them due to their "manyness", or aspects of their identity. She stresses that this behavior is exactly what "explains feminists' inability to forge the kind of alliances necessary to create a better world".
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    In relation to non-intersectional feminism in the United States, Lorde famously said:
+                  </p>
+                  <p>&nbsp;</p>
+                  <p>
+                    Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
+                  </p>
+                  <p>&nbsp;</p>
+                  <p
+                    v-if="showSuggestions && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+                    ref="highlightedTextRef3"
+                    :class="{ 
+                      'highlighted-text-wrapper': showSuggestions,
+                      'highlighted-text-wrapper--hover': isHovered3 && showSuggestions && !isCardExpanded3,
+                      'highlighted-text-wrapper--selected': isCardExpanded3 && showSuggestions,
+                      'minerva-suggestion-target': isMinervaSkin
+                    }"
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered3 = true"
+                    @mouseleave="isTextHovered3 = false"
+                    @click="isMinervaSkin ? openMinervaSuggestion(3) : (isCardExpanded3 = true)"
+                  >
+                    <span class="highlighted-text-rail"></span>
+                    <span class="highlighted-text-content">
+                      — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)<sup v-if="showCitationPopup3 || citationNumber3" class="citation-marker">[{{ citationNumber3 || '...' }}]</sup>
+                    </span>
+                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @click.stop="openMinervaSuggestion(3)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
+                  </p>
+                  <p v-else>
+                    — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
+                  </p>
+                  <!-- Citation Popup 3 -->
+                  <div v-if="showCitationPopup3" class="citation-popup">
+                    <!-- Pointer arrow -->
+                    <div class="citation-popup-pointer"></div>
+                    
+                    <div class="citation-popup-header">
+                      <button class="citation-popup-close" @click="showCitationPopup3 = false" aria-label="Close">
+                        <cdx-icon :icon="cdxIconClose" size="medium" />
+                      </button>
+                      <h3 class="citation-popup-title">Add citation</h3>
+                    </div>
+                    <div class="citation-popup-tabs">
+                      <button class="citation-tab citation-tab--active">Automatic</button>
+                      <button class="citation-tab">Manual</button>
+                      <button class="citation-tab">Re-use</button>
+                    </div>
+                    <div class="citation-popup-content">
+                      <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+                      <div class="citation-input-group">
+                        <input 
+                          v-model="citationUrl3" 
+                          type="text" 
+                          class="citation-input" 
+                          placeholder="http://www.example.com"
+                        />
+                        <button 
+                          class="citation-create-btn" 
+                          :disabled="!isValidUrl3"
+                          @click="createCitation3"
+                        >
+                          Create
+                        </button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
 
@@ -1310,6 +1663,83 @@
             </div>
           </div>
 
+          <!-- Third Add Citation Suggestion Card -->
+          <div 
+            v-if="showSuggestions && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+            ref="suggestionsSidebarRef3"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded3,
+              'suggestion-card--expanded': isCardExpanded3,
+              'suggestion-card--hover': isHovered3
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset3}px` }"
+            @mouseenter="isCardHovered3 = true"
+            @mouseleave="isCardHovered3 = false"
+          >
+            <!-- Collapsed state: just header -->
+            <button 
+              v-if="!isCardExpanded3"
+              class="suggestion-header suggestion-header--collapsed"
+              @click="isCardExpanded3 = true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Add a citation</div>
+            </button>
+            
+            <!-- Expanded state: header + content -->
+            <button 
+              v-if="isCardExpanded3"
+              class="suggestion-header suggestion-header--expanded"
+              @click="isCardExpanded3 = false"
+              aria-expanded="true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Add a citation</div>
+            </button>
+            
+            <div v-if="isCardExpanded3" class="suggestion-content">
+              <p class="suggestion-description">
+                Help readers understand where this information is coming from by adding a citation.
+              </p>
+              <div class="suggestion-actions">
+                <button 
+                  class="suggestion-btn" 
+                  :disabled="showCitationPopup3"
+                  @click="handleYesSuggestion3"
+                >
+                  Yes
+                </button>
+                <button 
+                  class="suggestion-btn suggestion-btn-secondary" 
+                  :disabled="showCitationPopup3"
+                  @click="handleNoSuggestion3"
+                >
+                  No
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Success Message for Suggestion 3 -->
+          <div 
+            v-if="showSuggestions && showSuccessMessage3 && citationNumber3 !== null"
+            ref="suggestionsSidebarRef3"
+            class="success-message"
+            :style="{ top: `${sidebarTopOffset3}px` }"
+          >
+            <div class="success-icon">
+              <cdx-icon :icon="cdxIconSuccess" size="medium" />
+            </div>
+            <div class="success-content">
+              <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
+            </div>
+          </div>
+
           <!-- Empty State - Show when all suggestions are completed or declined -->
           <button
             v-if="showSuggestionBadge && !anySuggestionVisible && availableSuggestionCount > 0 && !showSuggestions"
@@ -1321,7 +1751,7 @@
             suggestions available for improving this article
           </button>
           <div 
-            v-if="(showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge)"
+            v-if="isMinervaSkin && ((showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge))"
             class="empty-state"
           >
             <div v-if="!showSuggestionBadge" class="empty-state-icon">
@@ -1425,6 +1855,26 @@
               weight="normal"
               :disabled="showCitationPopup2"
               @click="handleNoSuggestion2"
+            >
+              No
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 3"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              :disabled="showCitationPopup3"
+              @click="handleYesSuggestion3"
+            >
+              Yes
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 3"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              :disabled="showCitationPopup3"
+              @click="handleNoSuggestion3"
             >
               No
             </cdx-button>
@@ -1563,6 +2013,7 @@ const isBannerDismissed = ref(false);
 const isBannerDelayReady = ref(false);
 const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
+const isEditToolbarScrolled = ref(false);
 let bannerDelayTimer = null;
 let bannerCloseTimer = null;
 let bannerOpenTimer = null;
@@ -1609,21 +2060,44 @@ const sidebarTopOffset2 = ref(0);
 // Computed: sincronizar hover entre texto y card (second suggestion)
 const isHovered2 = computed(() => isCardHovered2.value || isTextHovered2.value);
 
+// Third suggestion card states
+const isCardExpanded3 = ref(false);
+const isCardHovered3 = ref(false);
+const isTextHovered3 = ref(false);
+
+// Refs for alignment (third suggestion)
+const highlightedTextRef3 = ref(null);
+const suggestionsSidebarRef3 = ref(null);
+const sidebarTopOffset3 = ref(0);
+
+// Computed: sincronizar hover entre texto y card (third suggestion)
+const isHovered3 = computed(() => isCardHovered3.value || isTextHovered3.value);
+
 // Citation flow states
 const showCitationPopup1 = ref(false);
 const showCitationPopup2 = ref(false);
+const showCitationPopup3 = ref(false);
 const citationUrl1 = ref('');
 const citationUrl2 = ref('');
+const citationUrl3 = ref('');
 const citationNumber1 = ref(null); // null = no citation, number = citation created
 const citationNumber2 = ref(null);
+const citationNumber3 = ref(null);
 const citationCounter = ref(0); // Global counter for citations
 const showSuccessMessage1 = ref(false); // Show success message after citation is created
 const showSuccessMessage2 = ref(false);
+const showSuccessMessage3 = ref(false);
 const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
 const isSuggestionDeclined2 = ref(false);
+const isSuggestionDeclined3 = ref(false);
 const isPrototypeDialogOpen = ref(false);
 const selectedPrototype = ref('newcomers-on');
 const showSuggestionBadge = ref(false);
+const pendingScrollSection = ref(null);
+const editSectionEarlyLife = ref(null);
+const editSectionCareer = ref(null);
+const editSectionPoetry = ref(null);
+const editSectionProse = ref(null);
 
 // Computed properties to validate URLs
 const isValidUrl1 = computed(() => {
@@ -1648,24 +2122,38 @@ const isValidUrl2 = computed(() => {
   }
 });
 
+const isValidUrl3 = computed(() => {
+  const url = citationUrl3.value.trim();
+  if (!url) return false;
+  try {
+    const urlObj = new URL(url);
+    return urlObj.protocol === 'http:' || urlObj.protocol === 'https:';
+  } catch {
+    return false;
+  }
+});
+
 // Check if all suggestions have been handled (completed or declined)
 const allSuggestionsHandled = computed(() => {
   const suggestion1Handled = citationNumber1.value !== null || isSuggestionDeclined1.value;
   const suggestion2Handled = citationNumber2.value !== null || isSuggestionDeclined2.value;
-  return suggestion1Handled && suggestion2Handled;
+  const suggestion3Handled = citationNumber3.value !== null || isSuggestionDeclined3.value;
+  return suggestion1Handled && suggestion2Handled && suggestion3Handled;
 });
 
 // Computed property to check if all suggestions are completed or declined (show empty state)
 const showEmptyState = computed(() => {
   const suggestion1Done = citationNumber1.value !== null || isSuggestionDeclined1.value;
   const suggestion2Done = citationNumber2.value !== null || isSuggestionDeclined2.value;
-  return suggestion1Done && suggestion2Done;
+  const suggestion3Done = citationNumber3.value !== null || isSuggestionDeclined3.value;
+  return suggestion1Done && suggestion2Done && suggestion3Done;
 });
 const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
 const availableSuggestionCount = computed(() => {
   const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
-  return (suggestion1Pending ? 1 : 0) + (suggestion2Pending ? 1 : 0);
+  const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
+  return (suggestion1Pending ? 1 : 0) + (suggestion2Pending ? 1 : 0) + (suggestion3Pending ? 1 : 0);
 });
 const showToolbarToggle = computed(() => (
   !isMinervaSkin.value &&
@@ -1674,12 +2162,7 @@ const showToolbarToggle = computed(() => (
 const showToggleBadge = computed(() => (
   availableSuggestionCount.value > 0 &&
   !shouldShowBanner.value &&
-  (
-    showSuggestionBadge.value ||
-    (showSuggestionToggle.value && !showSuggestions.value) ||
-    (showSuggestionToggle.value && showSuggestionNotification.value && isBannerDismissed.value) ||
-    (!showSuggestionToggle.value && !showSuggestions.value)
-  )
+  !showSuggestions.value
 ));
 const minervaSheetTitle = computed(() => {
   if (shouldShowEmptyState.value) return 'No suggestions';
@@ -1703,6 +2186,12 @@ const bannerTextSuffix = computed(() => {
     ? 'suggestions available'
     : 'suggestions available for improving this article';
 });
+const bannerCountLabel = computed(() => (
+  availableSuggestionCount.value === 1 ? 'suggestion' : 'suggestions'
+));
+const bannerTextRemainder = computed(() => (
+  showSuggestionToggle.value ? bannerTextSuffix.value.replace(/^suggestions\\s*/i, '') : bannerTextSuffix.value
+));
 const bannerButtonLabel = computed(() => {
   if (isMinervaSkin.value && !showSuggestionToggle.value) {
     return showSuggestions.value ? 'Hide' : 'Show';
@@ -1762,6 +2251,11 @@ function startPrototype() {
   enterEditMode();
 }
 
+function openEditAtSection(sectionId) {
+  pendingScrollSection.value = sectionId;
+  openPrototypeDialog();
+}
+
 function handleHideSuggestionsBanner() {
   showSuggestions.value = !showSuggestions.value;
 }
@@ -1788,7 +2282,7 @@ function handleBannerClick() {
     showSuggestions.value = true;
   }
   nextTick(() => {
-    openFirstPendingSuggestion(true);
+    scrollToNearestSuggestionFromBanner();
   });
 }
 
@@ -1796,6 +2290,20 @@ function handleBannerKeydown(event) {
   if (event.key === 'Enter' || event.key === ' ') {
     event.preventDefault();
     handleBannerClick();
+  }
+}
+
+const editSectionRefs = {
+  'early-life': editSectionEarlyLife,
+  career: editSectionCareer,
+  poetry: editSectionPoetry,
+  prose: editSectionProse
+};
+
+function scrollToEditSection(sectionId) {
+  const targetRef = editSectionRefs[sectionId];
+  if (targetRef && targetRef.value) {
+    targetRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
 }
 
@@ -1811,9 +2319,15 @@ function updateSuggestionVisibility() {
     return rect.bottom > 0 && rect.top < viewportHeight;
   };
   anySuggestionVisible.value =
-    isVisible(highlightedTextRef.value) || isVisible(highlightedTextRef2.value);
+    isVisible(highlightedTextRef.value) ||
+    isVisible(highlightedTextRef2.value) ||
+    isVisible(highlightedTextRef3.value);
 }
 
+function updateEditToolbarScrolled() {
+  if (typeof window === 'undefined') return;
+  isEditToolbarScrolled.value = window.scrollY > 0;
+}
 
 function handleReadClick() {
   closePrototypeDialog();
@@ -1832,6 +2346,11 @@ function handleYesSuggestion2() {
   showCitationPopup2.value = true;
 }
 
+// Function to handle "Yes" click on suggestion 3
+function handleYesSuggestion3() {
+  showCitationPopup3.value = true;
+}
+
 // Function to handle "No" click on suggestion 1 (decline/skip)
 function handleNoSuggestion1() {
   isSuggestionDeclined1.value = true;
@@ -1843,6 +2362,13 @@ function handleNoSuggestion1() {
 function handleNoSuggestion2() {
   isSuggestionDeclined2.value = true;
   isCardExpanded2.value = false;
+  closeMinervaSuggestion();
+}
+
+// Function to handle "No" click on suggestion 3 (decline/skip)
+function handleNoSuggestion3() {
+  isSuggestionDeclined3.value = true;
+  isCardExpanded3.value = false;
   closeMinervaSuggestion();
 }
 
@@ -1878,16 +2404,41 @@ function createCitation2() {
   }
 }
 
+// Function to create citation for suggestion 3
+function createCitation3() {
+  if (citationUrl3.value.trim()) {
+    citationCounter.value++;
+    citationNumber3.value = citationCounter.value;
+    showCitationPopup3.value = false;
+    closeMinervaSuggestion();
+    // Show success message instead of suggestion card
+    showSuccessMessage3.value = true;
+    // Hide success message after 4 seconds
+    setTimeout(() => {
+      showSuccessMessage3.value = false;
+    }, 4000);
+  }
+}
+
 // Watch to ensure only one suggestion is expanded at a time
 watch(isCardExpanded, (newValue) => {
   if (newValue) {
     isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
   }
 });
 
 watch(isCardExpanded2, (newValue) => {
   if (newValue) {
     isCardExpanded.value = false;
+    isCardExpanded3.value = false;
+  }
+});
+
+watch(isCardExpanded3, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
   }
 });
 
@@ -1947,6 +2498,24 @@ function alignSidebarWithText2() {
   });
 }
 
+// Function to calculate and align third sidebar with highlighted text
+function alignSidebarWithText3() {
+  if (!highlightedTextRef3.value) return;
+  
+  nextTick(() => {
+    // Get the main-content-area container
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    
+    const textRect = highlightedTextRef3.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    
+    // Calculate the offset of highlighted text from the top of main-content-area
+    const offset = textRect.top - containerRect.top - suggestionsTopOffset.value;
+    sidebarTopOffset3.value = offset;
+  });
+}
+
 function alignSuggestionsContainer() {
   if (!articleFirstSectionRef.value) return;
 
@@ -1966,6 +2535,7 @@ function alignBothSuggestions() {
   alignSuggestionsContainer();
   alignSidebarWithText();
   alignSidebarWithText2();
+  alignSidebarWithText3();
 }
 
 // Watch for changes in showSuggestions to realign both
@@ -1990,6 +2560,7 @@ watch(showSuggestions, (newValue) => {
   } else {
     sidebarTopOffset.value = 0;
     sidebarTopOffset2.value = 0;
+    sidebarTopOffset3.value = 0;
     suggestionsTopOffset.value = 0;
     closeMinervaSuggestion();
   }
@@ -2063,46 +2634,138 @@ function scrollToSuggestionIfNeeded(targetRef) {
   });
 }
 
+function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false) {
+  const openSuggestion = (suggestionId) => {
+    if (isMinervaSkin.value) {
+      openMinervaSuggestion(suggestionId);
+      return;
+    }
+    if (suggestionId === 1) {
+      isCardExpanded.value = true;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = false;
+    } else if (suggestionId === 2) {
+      isCardExpanded2.value = true;
+      isCardExpanded.value = false;
+      isCardExpanded3.value = false;
+    } else {
+      isCardExpanded.value = false;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = true;
+    }
+  };
+
+  if (expandAfterScroll) {
+    const target = targetRef.value;
+    const shouldScroll = target && !isTargetVisibleInViewport(target);
+    if (shouldScroll) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      setTimeout(() => {
+        openSuggestion(id);
+      }, 1000);
+      return;
+    }
+  }
+  openSuggestion(id);
+  scrollToSuggestionIfNeeded(targetRef);
+}
+
+function getPendingSuggestionTargets() {
+  const targets = [];
+  if (citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value && highlightedTextRef.value) {
+    targets.push({ id: 1, ref: highlightedTextRef });
+  }
+  if (citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value && highlightedTextRef2.value) {
+    targets.push({ id: 2, ref: highlightedTextRef2 });
+  }
+  if (citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value && highlightedTextRef3.value) {
+    targets.push({ id: 3, ref: highlightedTextRef3 });
+  }
+  return targets;
+}
+
+function getCurrentSectionId(currentY) {
+  const sections = [
+    { id: 'early-life', ref: editSectionEarlyLife },
+    { id: 'career', ref: editSectionCareer },
+    { id: 'poetry', ref: editSectionPoetry },
+    { id: 'prose', ref: editSectionProse }
+  ].filter((section) => section.ref.value);
+
+  if (!sections.length) {
+    return null;
+  }
+
+  const positions = sections.map((section) => ({
+    id: section.id,
+    top: section.ref.value.getBoundingClientRect().top + window.scrollY
+  }));
+
+  positions.sort((a, b) => a.top - b.top);
+
+  let currentSection = positions[0].id;
+  for (let i = 0; i < positions.length; i++) {
+    if (currentY >= positions[i].top) {
+      currentSection = positions[i].id;
+    } else {
+      break;
+    }
+  }
+  return currentSection;
+}
+
+function scrollToNearestSuggestionFromBanner() {
+  if (!isEditMode.value || !showSuggestions.value) return;
+
+  const pendingTargets = getPendingSuggestionTargets();
+  if (!pendingTargets.length) return;
+
+  const currentY = window.scrollY + window.innerHeight / 2;
+  const sectionToSuggestion = {
+    career: 1,
+    poetry: 2,
+    prose: 3
+  };
+  const currentSectionId = getCurrentSectionId(currentY);
+  const sectionSuggestionId = sectionToSuggestion[currentSectionId];
+  if (sectionSuggestionId) {
+    const sameSectionTarget = pendingTargets.find((target) => target.id === sectionSuggestionId);
+    if (sameSectionTarget) {
+      openSuggestionAtTarget(sameSectionTarget.id, sameSectionTarget.ref, true);
+      return;
+    }
+  }
+
+  const positionedTargets = pendingTargets
+    .map((target) => ({
+      ...target,
+      top: target.ref.value.getBoundingClientRect().top + window.scrollY
+    }))
+    .sort((a, b) => a.top - b.top);
+
+  const below = positionedTargets.filter((target) => target.top >= currentY);
+  if (below.length) {
+    openSuggestionAtTarget(below[0].id, below[0].ref, true);
+    return;
+  }
+
+  const lastAbove = positionedTargets[positionedTargets.length - 1];
+  openSuggestionAtTarget(lastAbove.id, lastAbove.ref, true);
+}
+
 function openFirstPendingSuggestion(expandAfterScroll = false) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
   const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
-
-  const openSuggestion = (id) => {
-    if (isMinervaSkin.value) {
-      openMinervaSuggestion(id);
-      return;
-    }
-    if (id === 1) {
-      isCardExpanded.value = true;
-      isCardExpanded2.value = false;
-    } else {
-      isCardExpanded2.value = true;
-      isCardExpanded.value = false;
-    }
-  };
-
-  const run = (id, targetRef) => {
-    if (expandAfterScroll) {
-      const target = targetRef.value;
-      const shouldScroll = target && !isTargetVisibleInViewport(target);
-      if (shouldScroll) {
-        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(() => {
-          openSuggestion(id);
-        }, 1000);
-        return;
-      }
-    }
-    openSuggestion(id);
-    scrollToSuggestionIfNeeded(targetRef);
-  };
+  const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
 
   if (suggestion1Pending) {
-    run(1, highlightedTextRef);
+    openSuggestionAtTarget(1, highlightedTextRef, expandAfterScroll);
   } else if (suggestion2Pending) {
-    run(2, highlightedTextRef2);
+    openSuggestionAtTarget(2, highlightedTextRef2, expandAfterScroll);
+  } else if (suggestion3Pending) {
+    openSuggestionAtTarget(3, highlightedTextRef3, expandAfterScroll);
   }
 }
 
@@ -2136,6 +2799,19 @@ watch(
   }
 );
 
+watch(
+  () => isLoading.value,
+  (loading) => {
+    if (!loading && pendingScrollSection.value) {
+      const target = pendingScrollSection.value;
+      pendingScrollSection.value = null;
+      nextTick(() => {
+        scrollToEditSection(target);
+      });
+    }
+  }
+);
+
 // Align on mount and add event listeners
 onMounted(() => {
   if (typeof window !== 'undefined') {
@@ -2157,6 +2833,8 @@ onMounted(() => {
     window.addEventListener('resize', updateMinervaSheetHeight);
     window.addEventListener('scroll', updateSuggestionVisibility, true);
     window.addEventListener('resize', updateSuggestionVisibility);
+    window.addEventListener('scroll', updateEditToolbarScrolled, true);
+    updateEditToolbarScrolled();
   }
 });
 
@@ -2168,6 +2846,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateMinervaSheetHeight);
     window.removeEventListener('scroll', updateSuggestionVisibility, true);
     window.removeEventListener('resize', updateSuggestionVisibility);
+    window.removeEventListener('scroll', updateEditToolbarScrolled, true);
   }
   clearAutoSuggestionTimer();
   if (bannerCloseTimer) {
@@ -2312,9 +2991,15 @@ function openMinervaSuggestion(suggestionId) {
   if (suggestionId === 1) {
     isCardExpanded.value = true;
     isCardExpanded2.value = false;
-  } else {
+    isCardExpanded3.value = false;
+  } else if (suggestionId === 2) {
     isCardExpanded2.value = true;
     isCardExpanded.value = false;
+    isCardExpanded3.value = false;
+  } else {
+    isCardExpanded3.value = true;
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
   }
   updateMinervaSheetHeight();
 }
@@ -2323,6 +3008,7 @@ function closeMinervaSuggestion() {
   isMinervaSheetOpen.value = false;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
+  isCardExpanded3.value = false;
   minervaSheetHeight.value = 0;
 }
 
@@ -3427,6 +4113,12 @@ function markArticleEdited() {
   gap: 4px;
 }
 
+.section-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
 .heading-text {
   font-family: 'Source Serif Pro', serif;
   font-weight: 400;
@@ -3435,6 +4127,33 @@ function markArticleEdited() {
   color: #202122;
   margin: 0;
   white-space: pre-wrap;
+}
+
+.section-edit {
+  font-size: 12px;
+  margin-left: 8px;
+}
+
+.section-edit-bracket {
+  color: var(--color-subtle, #54595d);
+}
+
+.section-edit-link {
+  color: var(--color-progressive, #36c);
+  text-decoration: none;
+}
+
+.section-edit-link:hover {
+  text-decoration: underline;
+}
+
+.subsection-title {
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.minerva-skin .subsection-title {
+  font-size: 20px;
 }
 
 .heading-divider {
@@ -3799,12 +4518,16 @@ function markArticleEdited() {
   min-height: 42px; /* Changed from height to min-height to allow wrapping */
   flex-wrap: wrap; /* Allow items to wrap to next line */
   border-bottom: 1px solid #c8ccd1;
-  box-shadow: inset 0px -1px 0px 0px #c8ccd1, 0px 1px 1px 0px rgba(0, 0, 0, 0.1);
+  box-shadow: none;
   padding: 0;
   background: #ffffff;
   position: sticky; /* Stick to top when scrolling */
   top: 0; /* Position at top of viewport */
   z-index: 10; /* Ensure toolbar is above content */
+}
+
+.editor-toolbar--scrolled {
+  box-shadow: 0 4px 4px 0 rgba( 0, 0, 0, 0.06 ), 0 0 8px 0 rgba( 0, 0, 0, 0.06 );
 }
 
 .editor-toolbar--minerva {
@@ -5129,16 +5852,21 @@ function markArticleEdited() {
   height: 40px;
   padding: 0 12px;
   border: none;
+  border-bottom: 1px solid var(--border-color-muted, #c8ccd1);
   background: var(--background-color-progressive-subtle, #eaf3ff);
   border-radius: 0;
   font-family: 'Inter', sans-serif;
-  color: var(--color-subtle, #54595d);
+  color: var(--color-base, #202122);
   position: sticky;
   top: 42px;
-  z-index: 9;
+  z-index: 11;
   text-align: center;
   transform-origin: top;
   will-change: transform, opacity;
+}
+
+.suggestions-banner--scrolled {
+  box-shadow: 0 4px 4px 0 rgba( 0, 0, 0, 0.06 ), 0 0 8px 0 rgba( 0, 0, 0, 0.06 );
 }
 
 .banner-reveal-enter-active,
@@ -5202,7 +5930,7 @@ function markArticleEdited() {
 
 .suggestions-banner--empty {
   background: var(--background-color-neutral-subtle, #f8f9fa);
-  color: var(--color-placeholder, #72777d);
+  color: var(--color-subtle, #54595d);
 }
 
 .suggestions-banner--hidden {
@@ -5300,7 +6028,7 @@ function markArticleEdited() {
   top: 42px;
   bottom: auto;
   margin: 0;
-  z-index: 69;
+  z-index: 70;
   left: 0;
   right: 0;
 }
@@ -5320,8 +6048,8 @@ function markArticleEdited() {
 }
 
 .vector-skin .suggestions-banner {
-  font-size: 12px;
-  line-height: 16px;
+  font-size: 14px;
+  line-height: 20px;
 }
 
 .minerva-skin .suggestions-banner {
