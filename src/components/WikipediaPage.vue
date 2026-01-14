@@ -1,5 +1,14 @@
 <template>
-  <div ref="pageRoot" :class="[isEditMode ? 'edit-mode' : 'read-mode', isMinervaSkin ? 'minerva-skin' : 'vector-skin', isMinervaSkin && isEditMode && showSuggestions && !showEmptyState ? 'minerva-suggestions-on' : '', isMinervaSheetOpen ? 'minerva-sheet-open' : '']">
+  <div
+    ref="pageRoot"
+    :class="[
+      isEditMode ? 'edit-mode' : 'read-mode',
+      isMinervaSkin ? 'minerva-skin' : 'vector-skin',
+      isMinervaSkin && isEditMode && showSuggestions && !showEmptyState ? 'minerva-suggestions-on' : '',
+      isMinervaSheetOpen ? 'minerva-sheet-open' : '',
+      isSuggestionLightFlash ? 'suggestion-light-flash' : ''
+    ]"
+  >
     <!-- Page Container -->
     <div class="page-container">
       
@@ -1061,6 +1070,18 @@
                   </div>
                 </div>
               </transition>
+              <div
+                v-if="isMinervaSkin && showSuggestions && showMinervaSuccessMessage"
+                ref="minervaSuccessRef"
+                class="success-message success-message--minerva"
+              >
+                <div class="success-icon">
+                  <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                </div>
+                <div class="success-content">
+                  <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
+                </div>
+              </div>
               <div class="edit-header">
                 <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
                 
@@ -2014,9 +2035,12 @@ const isBannerDelayReady = ref(false);
 const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
 const isEditToolbarScrolled = ref(false);
+const isSuggestionLightFlash = ref(false);
+const minervaSuccessRef = ref(null);
 let bannerDelayTimer = null;
 let bannerCloseTimer = null;
 let bannerOpenTimer = null;
+let suggestionLightTimer = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -2180,24 +2204,25 @@ const shouldShowBanner = computed(() => {
 });
 const bannerTextSuffix = computed(() => {
   if (!showSuggestionToggle.value) {
-    return 'suggestions available for improving this article';
+    return 'available for improving this article';
   }
   return isMinervaSkin.value
-    ? 'suggestions available'
-    : 'suggestions available for improving this article';
+    ? 'available'
+    : 'available for improving this article';
 });
 const bannerCountLabel = computed(() => (
   availableSuggestionCount.value === 1 ? 'suggestion' : 'suggestions'
 ));
-const bannerTextRemainder = computed(() => (
-  showSuggestionToggle.value ? bannerTextSuffix.value.replace(/^suggestions\\s*/i, '') : bannerTextSuffix.value
-));
+const bannerTextRemainder = computed(() => bannerTextSuffix.value);
 const bannerButtonLabel = computed(() => {
   if (isMinervaSkin.value && !showSuggestionToggle.value) {
     return showSuggestions.value ? 'Hide' : 'Show';
   }
   return showSuggestions.value ? 'Hide suggestions' : 'Show suggestions';
 });
+const showMinervaSuccessMessage = computed(() => (
+  showSuccessMessage1.value || showSuccessMessage2.value || showSuccessMessage3.value
+));
 
 function resetSuggestionState() {
   showCitationPopup1.value = false;
@@ -2318,7 +2343,13 @@ function updateSuggestionVisibility() {
     const rect = el.getBoundingClientRect();
     return rect.bottom > 0 && rect.top < viewportHeight;
   };
+  const successVisible =
+    (showSuccessMessage1.value && isVisible(suggestionsSidebarRef.value)) ||
+    (showSuccessMessage2.value && isVisible(suggestionsSidebarRef2.value)) ||
+    (showSuccessMessage3.value && isVisible(suggestionsSidebarRef3.value)) ||
+    (showMinervaSuccessMessage.value && isVisible(minervaSuccessRef.value));
   anySuggestionVisible.value =
+    successVisible ||
     isVisible(highlightedTextRef.value) ||
     isVisible(highlightedTextRef2.value) ||
     isVisible(highlightedTextRef3.value);
@@ -2384,6 +2415,9 @@ function createCitation1() {
     // Hide success message after 4 seconds
     setTimeout(() => {
       showSuccessMessage1.value = false;
+      nextTick(() => {
+        updateSuggestionVisibility();
+      });
     }, 4000);
   }
 }
@@ -2400,6 +2434,9 @@ function createCitation2() {
     // Hide success message after 4 seconds
     setTimeout(() => {
       showSuccessMessage2.value = false;
+      nextTick(() => {
+        updateSuggestionVisibility();
+      });
     }, 4000);
   }
 }
@@ -2416,6 +2453,9 @@ function createCitation3() {
     // Hide success message after 4 seconds
     setTimeout(() => {
       showSuccessMessage3.value = false;
+      nextTick(() => {
+        updateSuggestionVisibility();
+      });
     }, 4000);
   }
 }
@@ -2566,6 +2606,19 @@ watch(showSuggestions, (newValue) => {
   }
 });
 
+watch(showSuggestions, (newValue, oldValue) => {
+  if (newValue && !oldValue) {
+    isSuggestionLightFlash.value = true;
+    if (suggestionLightTimer) {
+      clearTimeout(suggestionLightTimer);
+    }
+    suggestionLightTimer = setTimeout(() => {
+      isSuggestionLightFlash.value = false;
+      suggestionLightTimer = null;
+    }, 900);
+  }
+});
+
 watch(
   () => [showSuggestions.value, showEmptyState.value, isMinervaSkin.value],
   ([suggestionsActive, emptyActive, isMinerva]) => {
@@ -2581,6 +2634,22 @@ watch(isMinervaSheetOpen, () => {
 
 watch(
   () => [showSuggestions.value, showSuggestionNotification.value],
+  () => {
+    nextTick(() => {
+      updateSuggestionVisibility();
+    });
+  }
+);
+
+watch(
+  () => [
+    citationNumber1.value,
+    citationNumber2.value,
+    citationNumber3.value,
+    isSuggestionDeclined1.value,
+    isSuggestionDeclined2.value,
+    isSuggestionDeclined3.value
+  ],
   () => {
     nextTick(() => {
       updateSuggestionVisibility();
@@ -2856,6 +2925,10 @@ onBeforeUnmount(() => {
   if (bannerOpenTimer) {
     clearTimeout(bannerOpenTimer);
     bannerOpenTimer = null;
+  }
+  if (suggestionLightTimer) {
+    clearTimeout(suggestionLightTimer);
+    suggestionLightTimer = null;
   }
 });
 
@@ -5773,6 +5846,16 @@ function markArticleEdited() {
   box-shadow: 0px 4px 8px 0px rgba(0, 0, 0, 0.06), 0px 0px 16px 0px rgba(0, 0, 0, 0.06);
 }
 
+.minerva-skin .success-message--minerva {
+  position: fixed;
+  top: 58px;
+  left: 16px;
+  right: 16px;
+  z-index: 70;
+  width: auto;
+  margin: 0;
+}
+
 .success-icon {
   display: flex;
   align-items: center;
@@ -6048,13 +6131,36 @@ function markArticleEdited() {
 }
 
 .vector-skin .suggestions-banner {
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 12px;
+  line-height: 16px;
 }
 
 .minerva-skin .suggestions-banner {
   font-size: 14px;
   line-height: 20px;
+}
+
+.edit-mode.suggestion-light-flash::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(60% 50% at 50% 0%, rgba(255, 248, 230, 0.55) 0%, rgba(255, 248, 230, 0.2) 45%, rgba(255, 248, 230, 0) 70%);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  animation: suggestion-light-glow 900ms ease;
+}
+
+@keyframes suggestion-light-glow {
+  0% {
+    opacity: 0;
+  }
+  35% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 
 .prototype-dialog-backdrop {
