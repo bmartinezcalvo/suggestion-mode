@@ -6,7 +6,10 @@
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
       isMinervaSkin && isEditMode && showSuggestions && !showEmptyState ? 'minerva-suggestions-on' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
-      isSuggestionLightFlash ? 'suggestion-light-flash' : ''
+      isSuggestionLightFlash ? 'suggestion-light-flash' : '',
+      isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
+      isSuggestionsFadingOut ? 'suggestion-markers-hiding' : '',
+      isSuggestionGlowActive ? 'suggestion-glow-active' : ''
     ]"
   >
     <!-- Page Container -->
@@ -122,7 +125,7 @@
       <!-- Main Content Area -->
       <div
         class="main-content-area"
-        :class="{ 'has-suggestions': showSuggestions && (availableSuggestionCount > 0 || showSuggestionBadge) }"
+        :class="{ 'has-suggestions': showSuggestions && availableSuggestionCount > 0 }"
       >
         
         <!-- Table of Contents (Left Sidebar) - Only visible in Read mode -->
@@ -1199,7 +1202,7 @@
                   <p>&nbsp;</p>
                   <!-- Highlighted Text with interactive states -->
                   <p 
-                    v-if="showSuggestions && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+                    v-if="showSuggestionsDisplay && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
                     ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -1337,7 +1340,7 @@
                   </p>
                   <p>&nbsp;</p>
                   <p
-                    v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+                    v-if="showSuggestionsDisplay && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
                     ref="highlightedTextRef2"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -1451,7 +1454,7 @@
                   </p>
                   <p>&nbsp;</p>
                   <p
-                    v-if="showSuggestions && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+                    v-if="showSuggestionsDisplay && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
                     ref="highlightedTextRef3"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
@@ -1526,13 +1529,13 @@
 
         <!-- Suggestions Sidebar (Right) - Only visible in Edit mode with suggestions -->
         <aside 
-          v-if="isEditMode && showSuggestions && !isMinervaSkin && (availableSuggestionCount > 0 || (showSuggestionBadge && availableSuggestionCount === 0))" 
+          v-if="isEditMode && showSuggestionsDisplay && !isMinervaSkin && availableSuggestionCount > 0" 
           class="suggestions-sidebar"
           :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestions && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+            v-if="showSuggestionsDisplay && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -1594,7 +1597,7 @@
 
           <!-- Success Message for Suggestion 1 -->
           <div 
-            v-if="showSuggestions && showSuccessMessage1 && citationNumber1 !== null"
+            v-if="showSuggestionsDisplay && showSuccessMessage1 && citationNumber1 !== null"
             ref="suggestionsSidebarRef"
             class="success-message"
             :style="{ top: `${sidebarTopOffset}px` }"
@@ -1609,7 +1612,7 @@
 
           <!-- Second Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestions && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+            v-if="showSuggestionsDisplay && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -1671,7 +1674,7 @@
 
           <!-- Success Message for Suggestion 2 -->
           <div 
-            v-if="showSuggestions && showSuccessMessage2 && citationNumber2 !== null"
+            v-if="showSuggestionsDisplay && showSuccessMessage2 && citationNumber2 !== null"
             ref="suggestionsSidebarRef2"
             class="success-message"
             :style="{ top: `${sidebarTopOffset2}px` }"
@@ -1686,7 +1689,7 @@
 
           <!-- Third Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestions && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+            v-if="showSuggestionsDisplay && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
             ref="suggestionsSidebarRef3"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded3,
@@ -1748,7 +1751,7 @@
 
           <!-- Success Message for Suggestion 3 -->
           <div 
-            v-if="showSuggestions && showSuccessMessage3 && citationNumber3 !== null"
+            v-if="showSuggestionsDisplay && showSuccessMessage3 && citationNumber3 !== null"
             ref="suggestionsSidebarRef3"
             class="success-message"
             :style="{ top: `${sidebarTopOffset3}px` }"
@@ -1815,7 +1818,7 @@
         </cdx-toggle-button>
 
         <div
-          v-if="isMinervaSkin && isEditMode && showSuggestions && isMinervaSheetOpen && availableSuggestionCount > 0"
+          v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && availableSuggestionCount > 0"
           class="minerva-bottom-sheet"
           role="dialog"
           aria-label="Suggestion"
@@ -2036,11 +2039,18 @@ const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
 const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
+const isSuggestionGlowActive = ref(false);
+const isSuggestionMarkersVisible = ref(showSuggestions.value);
+const isSuggestionsFadingOut = ref(false);
+const showSuggestionsDisplay = ref(showSuggestions.value);
 const minervaSuccessRef = ref(null);
 let bannerDelayTimer = null;
 let bannerCloseTimer = null;
 let bannerOpenTimer = null;
 let suggestionLightTimer = null;
+let suggestionGlowTimer = null;
+let suggestionMarkersTimer = null;
+let suggestionFadeTimer = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -2608,6 +2618,9 @@ watch(showSuggestions, (newValue) => {
 
 watch(showSuggestions, (newValue, oldValue) => {
   if (newValue && !oldValue) {
+    showSuggestionsDisplay.value = true;
+    isSuggestionsFadingOut.value = false;
+    isSuggestionMarkersVisible.value = false;
     isSuggestionLightFlash.value = true;
     if (suggestionLightTimer) {
       clearTimeout(suggestionLightTimer);
@@ -2615,7 +2628,46 @@ watch(showSuggestions, (newValue, oldValue) => {
     suggestionLightTimer = setTimeout(() => {
       isSuggestionLightFlash.value = false;
       suggestionLightTimer = null;
-    }, 900);
+    }, 150);
+    if (suggestionMarkersTimer) {
+      clearTimeout(suggestionMarkersTimer);
+    }
+    suggestionMarkersTimer = setTimeout(() => {
+      isSuggestionMarkersVisible.value = true;
+      suggestionMarkersTimer = null;
+    }, 150);
+    if (suggestionGlowTimer) {
+      clearTimeout(suggestionGlowTimer);
+    }
+    isSuggestionGlowActive.value = true;
+    suggestionGlowTimer = setTimeout(() => {
+      isSuggestionGlowActive.value = false;
+      suggestionGlowTimer = null;
+    }, 200);
+    return;
+  }
+
+  if (!newValue && oldValue) {
+    isSuggestionLightFlash.value = false;
+    isSuggestionGlowActive.value = false;
+    isSuggestionMarkersVisible.value = false;
+    isSuggestionsFadingOut.value = true;
+    if (suggestionMarkersTimer) {
+      clearTimeout(suggestionMarkersTimer);
+      suggestionMarkersTimer = null;
+    }
+    if (suggestionGlowTimer) {
+      clearTimeout(suggestionGlowTimer);
+      suggestionGlowTimer = null;
+    }
+    if (suggestionFadeTimer) {
+      clearTimeout(suggestionFadeTimer);
+    }
+    suggestionFadeTimer = setTimeout(() => {
+      showSuggestionsDisplay.value = false;
+      isSuggestionsFadingOut.value = false;
+      suggestionFadeTimer = null;
+    }, 100);
   }
 });
 
@@ -2929,6 +2981,18 @@ onBeforeUnmount(() => {
   if (suggestionLightTimer) {
     clearTimeout(suggestionLightTimer);
     suggestionLightTimer = null;
+  }
+  if (suggestionGlowTimer) {
+    clearTimeout(suggestionGlowTimer);
+    suggestionGlowTimer = null;
+  }
+  if (suggestionMarkersTimer) {
+    clearTimeout(suggestionMarkersTimer);
+    suggestionMarkersTimer = null;
+  }
+  if (suggestionFadeTimer) {
+    clearTimeout(suggestionFadeTimer);
+    suggestionFadeTimer = null;
   }
 });
 
@@ -6144,24 +6208,52 @@ function markArticleEdited() {
   content: '';
   position: fixed;
   inset: 0;
-  background: radial-gradient(60% 50% at 50% 0%, rgba(255, 248, 230, 0.55) 0%, rgba(255, 248, 230, 0.2) 45%, rgba(255, 248, 230, 0) 70%);
+  background: radial-gradient(60% 50% at 50% 0%, rgba(207, 227, 255, 0.12) 0%, rgba(207, 227, 255, 0.08) 45%, rgba(207, 227, 255, 0) 70%);
   opacity: 0;
   pointer-events: none;
   z-index: 5;
-  animation: suggestion-light-glow 900ms ease;
+  animation: suggestion-light-glow 150ms ease;
 }
 
 @keyframes suggestion-light-glow {
   0% {
     opacity: 0;
   }
-  35% {
+  50% {
     opacity: 1;
   }
   100% {
     opacity: 0;
   }
 }
+
+.edit-mode .suggestion-target,
+.edit-mode .suggestion-card,
+.edit-mode .minerva-suggestion-trigger {
+  opacity: 0;
+  transition: opacity 150ms ease, filter 200ms ease;
+}
+
+.edit-mode.suggestion-markers-visible .suggestion-target,
+.edit-mode.suggestion-markers-visible .suggestion-card,
+.edit-mode.suggestion-markers-visible .minerva-suggestion-trigger {
+  opacity: 1;
+}
+
+.edit-mode.suggestion-markers-hiding .suggestion-target,
+.edit-mode.suggestion-markers-hiding .suggestion-card,
+.edit-mode.suggestion-markers-hiding .minerva-suggestion-trigger {
+  transition-duration: 100ms;
+}
+
+.edit-mode.suggestion-glow-active .suggestion-card {
+  filter: drop-shadow(0 0 10px rgba(51, 102, 204, 0.25));
+}
+
+.edit-mode.suggestion-glow-active .minerva-suggestion-trigger {
+  filter: drop-shadow(0 0 8px rgba(51, 102, 204, 0.35));
+}
+
 
 .prototype-dialog-backdrop {
   position: fixed;
