@@ -1095,14 +1095,17 @@
             </div>
 
             <!-- Article Content Edit -->
-            <div class="article-content-edit">
+            <div
+              class="article-content-edit"
+              :class="{ 'article-content-edit--section-only': isMinervaSkin && minervaEditSectionOnly }"
+            >
               <!-- Tagline + Short description -->
               <transition name="banner-reveal" appear>
                 <div
                   v-if="shouldShowBanner && isBannerDelayReady && !isBannerDismissed"
                   class="suggestions-banner"
                   :class="{
-                    'suggestions-banner--empty': availableSuggestionCount === 0,
+                    'suggestions-banner--empty': bannerSuggestionCount === 0,
                     'suggestions-banner--minerva-bottom': false,
                     'suggestions-banner--minerva-top': isMinervaSkin,
                     'suggestions-banner--minerva': isMinervaSkin,
@@ -1122,7 +1125,7 @@
                       v-if="showSuggestionToggle || showSuggestions"
                       class="suggestions-banner-text"
                     >
-                      <strong>{{ availableSuggestionCount }} {{ bannerCountLabel }}</strong> {{ bannerTextRemainder }}
+                      <strong>{{ bannerSuggestionCount }} {{ bannerCountLabel }}</strong> {{ bannerTextRemainder }}
                     </div>
                     <cdx-button
                     v-if="!showSuggestionToggle && !isMinervaSkin"
@@ -1245,7 +1248,7 @@
                   <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
                 </div>
               </div>
-              <div class="edit-header">
+              <div v-if="!isMinervaSkin || !minervaEditSectionOnly" class="edit-header">
                 <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
                 
                 <div class="short-description-section">
@@ -1257,7 +1260,11 @@
               </div>
               <div class="article-main-edit">
                 <!-- First Section with Infobox -->
-                <div class="article-first-section" ref="articleFirstSectionRef">
+                <div
+                  v-if="!isMinervaSkin || !minervaEditSectionOnly"
+                  class="article-first-section"
+                  ref="articleFirstSectionRef"
+                >
                   <div class="article-text-block">
                     <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
                       <p>
@@ -1330,32 +1337,86 @@
                 </div>
 
                 <!-- Early Life Section -->
-                <div class="section-heading-edit" ref="editSectionEarlyLife">
-                  <h2 class="heading-text-edit">Early life</h2>
-                  <div class="heading-divider"></div>
+                <div v-if="shouldRenderSection('early-life')" class="minerva-edit-section">
+                <div class="edit-full-page-btn-wrapper">
+                  <cdx-button
+                    v-if="showEditFullPageButtons('early-life')"
+                    class="edit-full-page-btn"
+                    action="default"
+                    weight="normal"
+                    @click="showFullPageEdit"
+                  >
+                    Edit full page
+                  </cdx-button>
+                  <span
+                    v-if="showSuggestions && showOtherSectionBadge"
+                    class="suggestions-badge edit-full-page-badge"
+                  >
+                    {{ otherSuggestionCount }}
+                  </span>
                 </div>
-                
-                <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                  <p>
-                    Lorde was born in New York City, the best city in the world. Her father, Frederick Byron Lorde, (known as Byron) hailed from Barbados and her mother, Linda Gertrude Belmar Lorde, was Grenadian and had been born in the amazing island of <a href="#">Carriacou</a>.
-                  </p>
-                  <p>&nbsp;</p>
-                  <p>
-                    Lorde's mother was of mixed ancestry but could "<a href="#">pass</a>" for '<a href="#">Spanish</a>',which was a source of pride for her family. Lorde's father was darker than the Belmar family liked, and they only allowed the couple to marry because of Byron Lorde's charm, ambition, and persistence.
-                  </p>
-                  <p>&nbsp;</p>
-                  <p>
-                    The family settled in <a href="#">Harlem</a>. Lord was <a href="#">nearsighted</a> to the point of <a href="#">being legally</a> blind and the youngest of three daughters (her two older sisters were named Phyllis and Helen), Lorde grew up hearing her mother's stories about the <a href="#">West Indies</a>. At the age of four, she learned to talk while she learned to read, and her mother taught her to write at around the same time. She wrote her first poem when she was in eighth grade.
-                  </p>
+                  <div class="section-heading-edit" ref="editSectionEarlyLife">
+                    <h2 class="heading-text-edit">Early life</h2>
+                    <div class="heading-divider"></div>
+                  </div>
+                  
+                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
+                    <p>
+                      Lorde was born in New York City, the best city in the world. Her father, Frederick Byron Lorde, (known as Byron) hailed from Barbados and her mother, Linda Gertrude Belmar Lorde, was Grenadian and had been born in the amazing island of <a href="#">Carriacou</a>.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      Lorde's mother was of mixed ancestry but could "<a href="#">pass</a>" for '<a href="#">Spanish</a>',which was a source of pride for her family. Lorde's father was darker than the Belmar family liked, and they only allowed the couple to marry because of Byron Lorde's charm, ambition, and persistence.
+                    </p>
+                    <p>&nbsp;</p>
+                    <p>
+                      The family settled in <a href="#">Harlem</a>. Lord was <a href="#">nearsighted</a> to the point of <a href="#">being legally</a> blind and the youngest of three daughters (her two older sisters were named Phyllis and Helen), Lorde grew up hearing her mother's stories about the <a href="#">West Indies</a>. At the age of four, she learned to talk while she learned to read, and her mother taught her to write at around the same time. She wrote her first poem when she was in eighth grade.
+                    </p>
+                  </div>
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('early-life')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
                 </div>
 
                 <!-- Career Section -->
-                <div class="section-heading-edit" ref="editSectionCareer">
-                  <h2 class="heading-text-edit">Career</h2>
-                  <div class="heading-divider"></div>
-                </div>
-                
-                <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
+                <div v-if="shouldRenderSection('career')" class="minerva-edit-section">
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('career')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
+                  <div class="section-heading-edit" ref="editSectionCareer">
+                    <h2 class="heading-text-edit">Career</h2>
+                    <div class="heading-divider"></div>
+                  </div>
+                  
+                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
                   <p>
                     In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
                   </p>
@@ -1456,14 +1517,50 @@
                     In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
                   </p>
                 </div>
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('career')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
+              </div>
 
                 <!-- Poetry Section -->
-                <div class="section-heading-edit" ref="editSectionPoetry">
-                  <h2 class="heading-text-edit">Poetry</h2>
-                  <div class="heading-divider"></div>
-                </div>
+                <div v-if="shouldRenderSection('poetry')" class="minerva-edit-section">
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('poetry')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
+                  <div class="section-heading-edit" ref="editSectionPoetry">
+                    <h2 class="heading-text-edit">Poetry</h2>
+                    <div class="heading-divider"></div>
+                  </div>
 
-                <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
+                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
                   <p>
                     Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
                   </p>
@@ -1573,14 +1670,50 @@
                     Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
                   </p>
                 </div>
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('poetry')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
+              </div>
 
                 <!-- Prose Section -->
-                <div class="section-heading-edit" ref="editSectionProse">
-                  <h2 class="heading-text-edit">Prose</h2>
-                  <div class="heading-divider"></div>
-                </div>
-
-                <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
+                <div v-if="shouldRenderSection('prose')" class="minerva-edit-section">
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('prose')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
+                  <div class="section-heading-edit" ref="editSectionProse">
+                    <h2 class="heading-text-edit">Prose</h2>
+                    <div class="heading-divider"></div>
+                  </div>
+                  
+                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
                   <p>
                     The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                   </p>
@@ -1684,10 +1817,28 @@
                     </div>
                   </div>
                 </div>
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('prose')"
+                      class="edit-full-page-btn"
+                      action="default"
+                      weight="normal"
+                      @click="showFullPageEdit"
+                    >
+                      Edit full page
+                    </cdx-button>
+                    <span
+                      v-if="showSuggestions && showOtherSectionBadge"
+                      class="suggestions-badge edit-full-page-badge"
+                    >
+                      {{ otherSuggestionCount }}
+                    </span>
+                  </div>
               </div>
 
             </div>
           </div>
+        </div>
         </article>
 
         <!-- Suggestions Sidebar (Right) - Only visible in Edit mode with suggestions -->
@@ -2334,6 +2485,7 @@ const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
 const pendingScrollSection = ref(null);
+const minervaEditSectionOnly = ref(null);
 const editSectionEarlyLife = ref(null);
 const editSectionCareer = ref(null);
 const editSectionPoetry = ref(null);
@@ -2389,12 +2541,49 @@ const showEmptyState = computed(() => {
   return suggestion1Done && suggestion2Done && suggestion3Done;
 });
 const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
-const availableSuggestionCount = computed(() => {
-  const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
-  const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
-  const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
-  return (suggestion1Pending ? 1 : 0) + (suggestion2Pending ? 1 : 0) + (suggestion3Pending ? 1 : 0);
+const isSuggestion1Pending = computed(() => (
+  citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value
+));
+const isSuggestion2Pending = computed(() => (
+  citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value
+));
+const isSuggestion3Pending = computed(() => (
+  citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value
+));
+const availableSuggestionCount = computed(() => (
+  (isSuggestion1Pending.value ? 1 : 0) +
+  (isSuggestion2Pending.value ? 1 : 0) +
+  (isSuggestion3Pending.value ? 1 : 0)
+));
+const sectionSuggestionCount = computed(() => {
+  if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
+    return availableSuggestionCount.value;
+  }
+  if (minervaEditSectionOnly.value === 'career') {
+    return isSuggestion1Pending.value ? 1 : 0;
+  }
+  if (minervaEditSectionOnly.value === 'poetry') {
+    return isSuggestion2Pending.value ? 1 : 0;
+  }
+  if (minervaEditSectionOnly.value === 'prose') {
+    return isSuggestion3Pending.value ? 1 : 0;
+  }
+  return 0;
 });
+const otherSuggestionCount = computed(() => {
+  if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
+    return 0;
+  }
+  return Math.max(availableSuggestionCount.value - sectionSuggestionCount.value, 0);
+});
+const showOtherSectionBadge = computed(() => (
+  isMinervaSkin.value && minervaEditSectionOnly.value && otherSuggestionCount.value > 0
+));
+const bannerSuggestionCount = computed(() => (
+  isMinervaSkin.value && minervaEditSectionOnly.value
+    ? sectionSuggestionCount.value
+    : availableSuggestionCount.value
+));
 const showToolbarToggle = computed(() => (
   !isMinervaSkin.value &&
   (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
@@ -2419,6 +2608,9 @@ const shouldShowBanner = computed(() => {
   return !anySuggestionVisible.value;
 });
 const bannerTextSuffix = computed(() => {
+  if (isMinervaSkin.value && minervaEditSectionOnly.value) {
+    return 'available in this section';
+  }
   if (!showSuggestionToggle.value) {
     return 'available for improving this article';
   }
@@ -2427,7 +2619,7 @@ const bannerTextSuffix = computed(() => {
     : 'available for improving this article';
 });
 const bannerCountLabel = computed(() => (
-  availableSuggestionCount.value === 1 ? 'suggestion' : 'suggestions'
+  bannerSuggestionCount.value === 1 ? 'suggestion' : 'suggestions'
 ));
 const bannerTextRemainder = computed(() => bannerTextSuffix.value);
 const bannerButtonLabel = computed(() => {
@@ -2514,8 +2706,11 @@ function applyPrototypeMode(mode) {
   showSuggestionToggle.value = true;
 }
 
-function openPrototypeDialog() {
+function openPrototypeDialog(fromSection = false) {
   if (isEditMode.value) return;
+  if (!fromSection) {
+    minervaEditSectionOnly.value = null;
+  }
   isPrototypeDialogOpen.value = true;
 }
 
@@ -2531,7 +2726,24 @@ function startPrototype() {
 
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
-  openPrototypeDialog();
+  minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
+  openPrototypeDialog(true);
+}
+
+function showFullPageEdit() {
+  minervaEditSectionOnly.value = null;
+}
+
+function shouldRenderSection(sectionId) {
+  if (!isMinervaSkin.value) return true;
+  if (!minervaEditSectionOnly.value) return true;
+  return minervaEditSectionOnly.value === sectionId;
+}
+
+function showEditFullPageButtons(sectionId) {
+  return isMinervaSkin.value &&
+    minervaEditSectionOnly.value === sectionId &&
+    isEditToolbarScrolled.value;
 }
 
 function handleHideSuggestionsBanner() {
@@ -4686,6 +4898,31 @@ function markArticleEdited() {
   width: 100%;
 }
 
+.edit-full-page-btn-wrapper {
+  position: relative;
+  display: block;
+  width: fit-content;
+  margin: 12px auto;
+}
+
+.edit-full-page-btn {
+  display: block;
+  margin: 0;
+}
+
+.edit-full-page-btn :deep(.cdx-button) {
+  background-color: var(--background-color-interactive-subtle);
+  border-color: var(--border-color-interactive);
+}
+
+.edit-full-page-badge {
+  top: 0;
+  right: 0;
+  bottom: auto;
+  transform: translate(50%, -50%);
+}
+
+
 .subsection-heading {
   font-family: 'Source Serif Pro', serif;
   font-weight: 600;
@@ -5437,6 +5674,10 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   width: 100%;
+}
+
+.minerva-skin .article-content-edit--section-only {
+  padding-top: 48px;
 }
 
 .article-main-edit {
