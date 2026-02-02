@@ -268,7 +268,6 @@
                     <cdx-icon :icon="cdxIconArrowDown" size="medium" />
                     <span class="banner-text">
                       <span class="banner-text-bold">{{ bannerSuggestionCount }} suggestions</span>
-                      <span class="banner-text-regular">available</span>
                     </span>
                   </template>
                   <template v-else>
@@ -2702,12 +2701,12 @@ const showMinervaBanner = computed(() => {
 const showVectorHelpButton = computed(() => (
   !isMinervaSkin.value &&
   isEditMode.value &&
-  activePrototype.value === 'option-1'
+  activePrototype.value !== 'option-1' && activePrototype.value !== 'option-2'
 ));
 const showMinervaHelpButton = computed(() => (
   isMinervaSkin.value &&
   isEditMode.value &&
-  activePrototype.value === 'option-1'
+  activePrototype.value !== 'option-1' && activePrototype.value !== 'option-2'
 ));
 const minervaAddMenuItems = computed(() => ([
   { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
@@ -2739,16 +2738,7 @@ const isMinervaPaginationNextDisabled = computed(() => (
   minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
 ));
 const showMinervaPagination = computed(() => {
-  if (activePrototype.value === 'option-1') {
-    return false;
-  }
-  if (activePrototype.value !== 'option-2') {
-    return false;
-  }
-  if (minervaEditSectionOnly.value) {
-    return sectionSuggestionCount.value > 1;
-  }
-  return minervaPaginationTotal.value > 1;
+  return false;
 });
 
 function resetSuggestionState() {
@@ -7264,7 +7254,7 @@ function markArticleEdited() {
   position: fixed;
   left: 0;
   right: 0;
-  bottom: 16px;
+  bottom: 0;
   z-index: 70;
   display: flex;
   align-items: center;
@@ -7278,11 +7268,21 @@ function markArticleEdited() {
   margin: 0;
 }
 
+.minerva-suggestions-banner:not(.suggestions-banner--option-2) {
+  width: 100%;
+  border-radius: 0;
+  border: 0;
+  border-top: 1px solid #dadde3;
+  font-size: 16px;
+  line-height: 24px;
+}
+
 .minerva-suggestions-banner.suggestions-banner--option-2 {
   flex: 0 0 auto;
   width: auto;
   margin: 0 auto;
   padding: 0 16px;
+  margin-bottom: 16px;
 }
 
 .help-button {
