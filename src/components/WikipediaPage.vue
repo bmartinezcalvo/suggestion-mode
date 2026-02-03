@@ -1291,17 +1291,23 @@
                 </div>
 
                 <!-- Early Life Section -->
-                <div v-if="shouldRenderSection('early-life')" class="minerva-edit-section">
+                <div v-if="shouldRenderSection('early-life')" class="minerva-edit-section" data-section="early-life">
                 <div class="edit-full-page-btn-wrapper">
                   <cdx-button
                     v-if="showEditFullPageButtons('early-life')"
                     class="edit-full-page-btn"
                     action="default"
                     weight="normal"
-                    @click="showFullPageEdit"
-                  >
-                    Edit full page
-                  </cdx-button>
+                    @click="showFullPageEdit($event)"
+                  ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
+                    </cdx-button>
                 </div>
                   <div class="section-heading-edit" ref="editSectionEarlyLife">
                     <h2 class="heading-text-edit">Early life</h2>
@@ -1327,24 +1333,36 @@
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
                 </div>
 
                 <!-- Career Section -->
-                <div v-if="shouldRenderSection('career')" class="minerva-edit-section">
+                <div v-if="shouldRenderSection('career')" class="minerva-edit-section" data-section="career">
                   <div class="edit-full-page-btn-wrapper">
                     <cdx-button
                       v-if="showEditFullPageButtons('career')"
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
                   <div class="section-heading-edit" ref="editSectionCareer">
@@ -1459,24 +1477,36 @@
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
               </div>
 
                 <!-- Poetry Section -->
-                <div v-if="shouldRenderSection('poetry')" class="minerva-edit-section">
+                <div v-if="shouldRenderSection('poetry')" class="minerva-edit-section" data-section="poetry">
                   <div class="edit-full-page-btn-wrapper">
                     <cdx-button
                       v-if="showEditFullPageButtons('poetry')"
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
                   <div class="section-heading-edit" ref="editSectionPoetry">
@@ -1600,24 +1630,36 @@
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
               </div>
 
                 <!-- Prose Section -->
-                <div v-if="shouldRenderSection('prose')" class="minerva-edit-section">
+                <div v-if="shouldRenderSection('prose')" class="minerva-edit-section" data-section="prose">
                   <div class="edit-full-page-btn-wrapper">
                     <cdx-button
                       v-if="showEditFullPageButtons('prose')"
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
                   <div class="section-heading-edit" ref="editSectionProse">
@@ -1735,9 +1777,15 @@
                       class="edit-full-page-btn"
                       action="default"
                       weight="normal"
-                      @click="showFullPageEdit"
-                    >
-                      Edit full page
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
                     </cdx-button>
                   </div>
               </div>
@@ -2026,7 +2074,7 @@
             <transition name="banner-reveal" appear>
               <div
               v-if="isBannerDelayReady && !isBannerDismissed && (activePrototype === 'option-2'
-                ? (shouldShowBanner && bannerSuggestionCount > 0)
+                ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
                 : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
               class="suggestions-banner"
               :class="{
@@ -2520,6 +2568,12 @@ const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
 const pendingScrollSection = ref(null);
 const minervaEditSectionOnly = ref(null);
+const minervaSectionBannerDismissed = ref({
+  'early-life': false,
+  career: false,
+  poetry: false,
+  prose: false
+});
 const editSectionEarlyLife = ref(null);
 const editSectionCareer = ref(null);
 const editSectionPoetry = ref(null);
@@ -2648,6 +2702,20 @@ const minervaToggleBottom = computed(() => {
 const anySuggestionVisible = ref(false);
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
+  if (activePrototype.value === 'option-2' && isMinervaSkin.value && minervaEditSectionOnly.value) {
+    const sectionToSuggestionId = {
+      career: 1,
+      poetry: 2,
+      prose: 3
+    };
+    const sectionId = minervaEditSectionOnly.value;
+    const suggestionId = sectionToSuggestionId[sectionId];
+    const targetRef = getSuggestionRefById(suggestionId);
+    if (targetRef && targetRef.value) {
+      return !isTargetVisibleInViewport(targetRef.value);
+    }
+    return false;
+  }
   if (activePrototype.value !== 'option-2') {
     if (!showSuggestionToggle.value && !showSuggestions.value) return false;
     if (showSuggestionToggle.value && !showSuggestions.value) return false;
@@ -2688,8 +2756,16 @@ const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
   if (activePrototype.value !== 'option-2' && !showSuggestionsDisplay.value) return false;
+  if (activePrototype.value === 'option-2' && minervaEditSectionOnly.value) {
+    if (minervaSectionBannerDismissed.value[minervaEditSectionOnly.value]) {
+      return false;
+    }
+  }
   if (!shouldShowBanner.value || !isBannerDelayReady.value || isBannerDismissed.value) return false;
   if (activePrototype.value === 'option-2' && bannerSuggestionCount.value === 0) {
+    return false;
+  }
+  if (activePrototype.value === 'option-2' && !showSuggestions.value) {
     return false;
   }
   if (showSuggestions.value && bannerSuggestionCount.value === 0) return true;
@@ -2762,6 +2838,12 @@ function resetSuggestionState() {
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
+  minervaSectionBannerDismissed.value = {
+    'early-life': false,
+    career: false,
+    poetry: false,
+    prose: false
+  };
   toneCheckActive.value = false;
   toneCheckDismissed.value = false;
   toneCheckHighlightRef.value = null;
@@ -2807,11 +2889,42 @@ function startPrototype() {
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
+  if (isMinervaSkin.value && activePrototype.value === 'option-2') {
+    minervaSectionBannerDismissed.value[sectionId] = false;
+  }
   openPrototypeDialog(true);
 }
 
-function showFullPageEdit() {
+function getEditSectionRefById(sectionId) {
+  if (sectionId === 'early-life') return editSectionEarlyLife;
+  if (sectionId === 'career') return editSectionCareer;
+  if (sectionId === 'poetry') return editSectionPoetry;
+  if (sectionId === 'prose') return editSectionProse;
+  return null;
+}
+
+function showFullPageEdit(event) {
+  const sectionId = event?.currentTarget?.closest('.minerva-edit-section')?.dataset?.section;
+  const targetRef = sectionId ? getEditSectionRefById(sectionId) : null;
+  const startY = typeof window !== 'undefined' ? window.scrollY : 0;
+  const startTop = targetRef?.value ? targetRef.value.getBoundingClientRect().top : 0;
   minervaEditSectionOnly.value = null;
+  if (activePrototype.value === 'option-2') {
+    isBannerDelayReady.value = false;
+    if (bannerDelayTimer) {
+      clearTimeout(bannerDelayTimer);
+    }
+    bannerDelayTimer = setTimeout(() => {
+      if (isEditMode.value && shouldShowBanner.value) {
+        isBannerDelayReady.value = true;
+      }
+    }, 2000);
+  }
+  nextTick(() => {
+    if (!targetRef?.value || typeof window === 'undefined') return;
+    const newTop = targetRef.value.getBoundingClientRect().top;
+    window.scrollTo(0, Math.max(0, startY + (newTop - startTop)));
+  });
 }
 
 function shouldRenderSection(sectionId) {
@@ -3077,6 +3190,9 @@ function handleBannerClick() {
   nextTick(() => {
     openFirstPendingSuggestionForContext();
   });
+  if (activePrototype.value === 'option-2' && isMinervaSkin.value && minervaEditSectionOnly.value) {
+    minervaSectionBannerDismissed.value[minervaEditSectionOnly.value] = true;
+  }
 }
 
 function handleBannerKeydown(event) {
@@ -5201,6 +5317,44 @@ function markArticleEdited() {
 .edit-full-page-btn :deep(.cdx-button) {
   background-color: var(--background-color-interactive-subtle);
   border-color: var(--border-color-interactive);
+}
+
+.edit-full-page-btn-content {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.edit-full-page-separator {
+  color: var(--color-subtle, #54595d);
+  font-weight: 400;
+}
+
+.edit-full-page-indicator {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+}
+
+.edit-full-page-icon {
+  color: var(--color-base, #202122);
+  width: 16px;
+  height: 16px;
+}
+
+.minerva-skin .edit-full-page-btn .edit-full-page-icon {
+  color: var(--color-base, #202122);
+}
+
+.edit-full-page-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-progressive, #36c);
 }
 
 .edit-full-page-badge {
