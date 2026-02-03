@@ -1000,7 +1000,7 @@
                   <span
                     v-if="showToggleBadge"
                     class="suggestions-badge"
-                    :class="{ 'suggestions-badge--zero': showToggleBadgeZero }"
+                    :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
                   >
                     {{ toggleBadgeCount }}
                   </span>
@@ -1120,7 +1120,7 @@
                     <span
                       v-if="showToggleBadge"
                       class="suggestions-badge"
-                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero }"
+                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
                     >
                       {{ toggleBadgeCount }}
                     </span>
@@ -2161,7 +2161,7 @@
             <span
               v-if="showToggleBadge"
               class="suggestions-badge"
-              :class="{ 'suggestions-badge--zero': showToggleBadgeZero }"
+              :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
             >
               {{ toggleBadgeCount }}
             </span>
@@ -2681,6 +2681,8 @@ const toggleBadgeCount = computed(() => (
     ? sectionSuggestionCount.value
     : availableSuggestionCount.value
 ));
+const badgePulse = ref(false);
+const badgePulseArmed = ref(false);
 const showToggleBadge = computed(() => {
   if (activePrototype.value === 'option-2') {
     return toggleBadgeCount.value > 0 || showSuggestions.value;
@@ -2914,6 +2916,7 @@ function showFullPageEdit(event) {
     if (bannerDelayTimer) {
       clearTimeout(bannerDelayTimer);
     }
+    badgePulseArmed.value = true;
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && shouldShowBanner.value) {
         isBannerDelayReady.value = true;
@@ -3706,6 +3709,17 @@ watch(anySuggestionVisible, (visible) => {
   if (visible && activePrototype.value === 'option-2') {
     isBannerDismissed.value = true;
   }
+});
+
+watch(toggleBadgeCount, (newValue, oldValue) => {
+  if (activePrototype.value !== 'option-2') return;
+  if (!badgePulseArmed.value) return;
+  if (newValue === oldValue) return;
+  badgePulse.value = true;
+  badgePulseArmed.value = false;
+  setTimeout(() => {
+    badgePulse.value = false;
+  }, 300);
 });
 
 watch(isLoading, (newValue) => {
@@ -7658,6 +7672,22 @@ function markArticleEdited() {
   background: #72777d;
   border-color: #72777d;
   color: #ffffff;
+}
+
+.suggestions-badge--pulse {
+  animation: badge-pulse 240ms ease;
+}
+
+@keyframes badge-pulse {
+  0% {
+    transform: translate(50%, 50%) scale(1);
+  }
+  50% {
+    transform: translate(50%, 50%) scale(1.18);
+  }
+  100% {
+    transform: translate(50%, 50%) scale(1);
+  }
 }
 
 
