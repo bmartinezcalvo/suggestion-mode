@@ -2359,32 +2359,6 @@
           </div>
         </aside>
 
-        <div
-          v-if="isPrototypeDialogOpen"
-          class="prototype-dialog-backdrop"
-          role="presentation"
-          @click.self="closePrototypeDialog"
-        >
-          <div class="prototype-dialog" role="dialog" aria-modal="true" aria-label="Choose prototype">
-            <div class="prototype-dialog-header">
-              <h2 class="prototype-dialog-title">Choose prototype</h2>
-            </div>
-            <fieldset class="prototype-dialog-options" role="radiogroup" aria-label="Prototype options">
-              <label class="prototype-radio">
-                <input type="radio" value="option-1" v-model="selectedPrototype">
-                <span>Op.1: Banner always visible</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-2" v-model="selectedPrototype">
-                <span>Op.2: Banner visible just the 1st time</span>
-              </label>
-            </fieldset>
-            <div class="prototype-dialog-actions">
-              <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -2561,8 +2535,6 @@ const toneCheckHighlightRef = ref(null);
 const toneCheckSidebarRef = ref(null);
 const toneCheckTopOffset = ref(0);
 const toneCheckEnterArmed = ref(false);
-const isPrototypeDialogOpen = ref(false);
-const selectedPrototype = ref('option-1');
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
@@ -2870,31 +2842,14 @@ function applyPrototypeMode(mode) {
   showSuggestionToggle.value = true;
 }
 
-function openPrototypeDialog(fromSection = false) {
-  if (isEditMode.value) return;
-  if (!fromSection) {
-    minervaEditSectionOnly.value = null;
-  }
-  isPrototypeDialogOpen.value = true;
-}
-
-function closePrototypeDialog() {
-  isPrototypeDialogOpen.value = false;
-}
-
-function startPrototype() {
-  applyPrototypeMode(selectedPrototype.value);
-  closePrototypeDialog();
-  enterEditMode();
-}
-
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
-  if (isMinervaSkin.value && activePrototype.value === 'option-2') {
+  applyPrototypeMode('option-2');
+  if (isMinervaSkin.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
-  openPrototypeDialog(true);
+  enterEditMode();
 }
 
 function getEditSectionRefById(sectionId) {
@@ -3270,7 +3225,6 @@ function updateEditToolbarScrolled() {
 }
 
 function handleReadClick() {
-  closePrototypeDialog();
   if (isEditMode.value) {
     exitEditMode();
   }
@@ -4113,7 +4067,9 @@ function exitEditMode() {
 
 function toggleEditMode() {
   if (!isEditMode.value) {
-    openPrototypeDialog();
+    minervaEditSectionOnly.value = null;
+    applyPrototypeMode('option-2');
+    enterEditMode();
     return;
   }
   exitEditMode();
@@ -7812,76 +7768,6 @@ function markArticleEdited() {
 }
 
 
-.prototype-dialog-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(32, 33, 36, 0.48);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
-}
-
-.prototype-dialog {
-  width: 420px;
-  max-width: calc(100% - 32px);
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  font-family: 'Inter', sans-serif;
-}
-
-.prototype-dialog-header {
-  margin-bottom: 16px;
-}
-
-.prototype-dialog-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #202122;
-}
-
-.prototype-dialog-options {
-  border: none;
-  padding: 0;
-  margin: 0 0 20px;
-  display: grid;
-  gap: 12px;
-}
-
-.prototype-radio {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 14px;
-  color: #202122;
-}
-
-.prototype-radio input {
-  accent-color: #36c;
-}
-
-.prototype-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.prototype-dialog-btn {
-  background: #36c;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.prototype-dialog-btn:hover {
-  background: #2a4b8d;
-}
 
 .suggestion-notification {
   display: flex;
