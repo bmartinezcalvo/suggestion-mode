@@ -272,7 +272,7 @@
                   </template>
                   <template v-else>
                     <cdx-icon :icon="cdxIconArrowDown" size="medium" />
-                    <span>Scroll to suggestions</span>
+                    <span>View suggestions</span>
                   </template>
                 </div>
               </div>
@@ -2108,7 +2108,7 @@
                   </template>
                   <template v-else>
                     <cdx-icon :icon="cdxIconArrowDown" size="medium" />
-                    <span>Scroll to suggestions</span>
+                    <span>View suggestions</span>
                   </template>
                 </div>
                 </div>
