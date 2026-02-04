@@ -1401,6 +1401,8 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(1)"
                       @click.stop="openMinervaSuggestion(1)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
@@ -1576,6 +1578,8 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(2)"
                       @click.stop="openMinervaSuggestion(2)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
@@ -1727,6 +1731,8 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(3)"
                       @click.stop="openMinervaSuggestion(3)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
@@ -2654,7 +2660,6 @@ const toggleBadgeCount = computed(() => (
     : availableSuggestionCount.value
 ));
 const badgePulse = ref(false);
-const badgePulseArmed = ref(false);
 const showToggleBadge = computed(() => {
   if (activePrototype.value === 'option-2') {
     return toggleBadgeCount.value > 0 || showSuggestions.value;
@@ -2871,7 +2876,6 @@ function showFullPageEdit(event) {
     if (bannerDelayTimer) {
       clearTimeout(bannerDelayTimer);
     }
-    badgePulseArmed.value = true;
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && shouldShowBanner.value) {
         isBannerDelayReady.value = true;
@@ -3666,11 +3670,8 @@ watch(anySuggestionVisible, (visible) => {
 });
 
 watch(toggleBadgeCount, (newValue, oldValue) => {
-  if (activePrototype.value !== 'option-2') return;
-  if (!badgePulseArmed.value) return;
   if (newValue === oldValue) return;
   badgePulse.value = true;
-  badgePulseArmed.value = false;
   setTimeout(() => {
     badgePulse.value = false;
   }, 300);
