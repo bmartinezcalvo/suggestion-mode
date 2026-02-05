@@ -7647,6 +7647,22 @@ function markArticleEdited() {
   }
 }
 
+.suggestions-toggle-btn--active .suggestions-badge,
+.minerva-toolbar-toggle--active .suggestions-badge,
+.minerva-suggestions-toggle--active .suggestions-badge {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+  border-color: var(--border-color-progressive, #36c);
+}
+
+.suggestions-toggle-btn--active .suggestions-badge--zero,
+.minerva-toolbar-toggle--active .suggestions-badge--zero,
+.minerva-suggestions-toggle--active .suggestions-badge--zero {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+  border-color: var(--border-color-progressive, #36c);
+}
+
 
 .minerva-skin .suggestions-badge {
   font-size: 14px;
