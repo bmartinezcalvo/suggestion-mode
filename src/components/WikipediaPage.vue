@@ -1856,14 +1856,14 @@
                   :disabled="showCitationPopup1"
                   @click="handleYesSuggestion1"
                 >
-                  Yes
+                  Add citation
                 </button>
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup1"
                   @click="handleNoSuggestion1"
                 >
-                  No
+                  Dismiss
                 </button>
                 <cdx-button
                   class="suggestion-more-actions"
@@ -1941,14 +1941,14 @@
                   :disabled="showCitationPopup2"
                   @click="handleYesSuggestion2"
                 >
-                  Yes
+                  Add citation
                 </button>
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup2"
                   @click="handleNoSuggestion2"
                 >
-                  No
+                  Dismiss
                 </button>
                 <cdx-button
                   class="suggestion-more-actions"
@@ -2026,14 +2026,14 @@
                   :disabled="showCitationPopup3"
                   @click="handleYesSuggestion3"
                 >
-                  Yes
+                  Add citation
                 </button>
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup3"
                   @click="handleNoSuggestion3"
                 >
-                  No
+                  Dismiss
                 </button>
                 <cdx-button
                   class="suggestion-more-actions"
@@ -2230,7 +2230,7 @@
               :disabled="showCitationPopup1"
               @click="handleYesSuggestion1"
             >
-              Yes
+              Add citation
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 1"
@@ -2240,7 +2240,7 @@
               :disabled="showCitationPopup1"
               @click="handleNoSuggestion1"
             >
-              No
+              Dismiss
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 2"
@@ -2250,7 +2250,7 @@
               :disabled="showCitationPopup2"
               @click="handleYesSuggestion2"
             >
-              Yes
+              Add citation
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 2"
@@ -2260,7 +2260,7 @@
               :disabled="showCitationPopup2"
               @click="handleNoSuggestion2"
             >
-              No
+              Dismiss
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 3"
@@ -2270,7 +2270,7 @@
               :disabled="showCitationPopup3"
               @click="handleYesSuggestion3"
             >
-              Yes
+              Add citation
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 3"
@@ -2280,7 +2280,7 @@
               :disabled="showCitationPopup3"
               @click="handleNoSuggestion3"
             >
-              No
+              Dismiss
             </cdx-button>
             <cdx-button
               class="minerva-sheet-btn minerva-sheet-more-actions"
