@@ -12,6 +12,14 @@
       isSuggestionGlowActive ? 'suggestion-glow-active' : ''
     ]"
   >
+    <div
+      v-if="isMinervaSkin && showMinervaToggleOffToast"
+      class="minerva-toast"
+      role="status"
+      aria-live="polite"
+    >
+      Suggestiones turned off
+    </div>
     <!-- Page Container -->
     <div class="page-container">
       
@@ -1410,7 +1418,7 @@
                   </p>
 
                   <!-- Citation Popup 1 -->
-                  <div v-if="showCitationPopup1" class="citation-popup">
+                  <div v-if="showCitationPopup1" class="citation-popup" contenteditable="false">
                     <!-- Pointer arrow -->
                     <div class="citation-popup-pointer"></div>
                     
@@ -1447,6 +1455,7 @@
                   
                   <p v-else>
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
+                    <sup v-if="citationNumber1" class="citation-marker">[{{ citationNumber1 }}]</sup>
                   </p>
                   <p>&nbsp;</p>
                   <p>
@@ -1587,9 +1596,10 @@
                   </p>
                   <p v-else>
                     In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
+                    <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
                   </p>
                   <!-- Citation Popup 2 -->
-                  <div v-if="showCitationPopup2" class="citation-popup">
+                  <div v-if="showCitationPopup2" class="citation-popup" contenteditable="false">
                     <!-- Pointer arrow -->
                     <div class="citation-popup-pointer"></div>
                     
@@ -1740,9 +1750,10 @@
                   </p>
                   <p v-else>
                     — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
+                    <sup v-if="citationNumber3" class="citation-marker">[{{ citationNumber3 }}]</sup>
                   </p>
                   <!-- Citation Popup 3 -->
-                  <div v-if="showCitationPopup3" class="citation-popup">
+                  <div v-if="showCitationPopup3" class="citation-popup" contenteditable="false">
                     <!-- Pointer arrow -->
                     <div class="citation-popup-pointer"></div>
                     
@@ -2450,6 +2461,7 @@ const isSuggestionGlowActive = ref(false);
 const isSuggestionMarkersVisible = ref(showSuggestions.value);
 const isSuggestionsFadingOut = ref(false);
 const showSuggestionsDisplay = ref(showSuggestions.value);
+const showMinervaToggleOffToast = ref(false);
 const minervaSuccessRef = ref(null);
 const activePrototype = ref('option-1');
 const dismissedSuggestionId = ref(null);
@@ -2462,6 +2474,7 @@ let suggestionGlowTimer = null;
 let suggestionMarkersTimer = null;
 let suggestionFadeTimer = null;
 let zeroSuggestionsBannerTimer = null;
+let minervaToggleOffToastTimer = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -3223,6 +3236,7 @@ function updateSuggestionVisibility() {
     isVisible(toneCheckHighlightRef.value);
 }
 
+
 function updateEditToolbarScrolled() {
   if (typeof window === 'undefined') return;
   isEditToolbarScrolled.value = window.scrollY > 0;
@@ -3549,6 +3563,22 @@ watch(showSuggestions, (newValue) => {
 });
 
 watch(showSuggestions, (newValue, oldValue) => {
+  if (!newValue && oldValue) {
+    
+  }
+  if (!newValue && oldValue && isMinervaSkin.value) {
+    showMinervaToggleOffToast.value = true;
+    if (minervaToggleOffToastTimer) {
+      clearTimeout(minervaToggleOffToastTimer);
+    }
+    minervaToggleOffToastTimer = setTimeout(() => {
+      showMinervaToggleOffToast.value = false;
+      minervaToggleOffToastTimer = null;
+    }, 2000);
+  }
+  if (newValue && showMinervaToggleOffToast.value) {
+    showMinervaToggleOffToast.value = false;
+  }
   if (newValue && !oldValue) {
     showSuggestionsDisplay.value = true;
     isSuggestionsFadingOut.value = false;
@@ -3917,6 +3947,7 @@ onMounted(() => {
     window.addEventListener('scroll', updateSuggestionVisibility, true);
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
+    
     updateEditToolbarScrolled();
   }
   updateToneCheckFromContent();
@@ -3931,6 +3962,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', updateSuggestionVisibility, true);
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
+    
   }
   clearAutoSuggestionTimer();
   if (bannerCloseTimer) {
@@ -3960,6 +3992,10 @@ onBeforeUnmount(() => {
   if (zeroSuggestionsBannerTimer) {
     clearTimeout(zeroSuggestionsBannerTimer);
     zeroSuggestionsBannerTimer = null;
+  }
+  if (minervaToggleOffToastTimer) {
+    clearTimeout(minervaToggleOffToastTimer);
+    minervaToggleOffToastTimer = null;
   }
 });
 
@@ -6522,6 +6558,23 @@ function markArticleEdited() {
   background: var(--color-base, #ffffff);
 }
 
+.minerva-toast {
+  position: fixed;
+  top: calc(42px + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #202122;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  z-index: 220;
+  box-shadow: none;
+}
+
+
 
 .minerva-suggestions-toggle :deep(.cdx-icon) {
   color: var(--color-base, #202122);
@@ -7293,7 +7346,7 @@ function markArticleEdited() {
   height: 44px;
   padding: 0 12px;
   border: 1px solid var(--border-color-muted, #c8ccd1);
-  background: var(--background-color-progressive-subtle, #eaf3ff);
+  background: #E8EEFF;
   border-radius: 2px;
   font-family: 'Inter', sans-serif;
   color: var(--color-progressive, #36c);
@@ -7305,6 +7358,14 @@ function markArticleEdited() {
   text-align: center;
   transform-origin: bottom;
   will-change: transform, opacity;
+}
+
+.minerva-skin .suggestions-banner-text {
+  font-size: 16px;
+}
+
+.vector-skin .suggestions-banner-text {
+  font-size: 14px;
 }
 
 .suggestions-banner--scrolled {
