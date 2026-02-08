@@ -12,6 +12,14 @@
       isSuggestionGlowActive ? 'suggestion-glow-active' : ''
     ]"
   >
+    <div
+      v-if="isMinervaSkin && showMinervaToggleOffToast"
+      class="minerva-toast"
+      role="status"
+      aria-live="polite"
+    >
+      Suggestions turned off
+    </div>
     <!-- Page Container -->
     <div class="page-container">
       
@@ -237,14 +245,49 @@
         >
           <cdx-icon :icon="cdxIconHelp" size="medium" />
         </button>
-        <div v-if="showMinervaBanner || showMinervaHelpButton" class="minerva-suggestions-bar">
+        <div
+          v-if="showMinervaBanner || showMinervaHelpButton"
+          class="minerva-suggestions-bar"
+          :class="{ 'minerva-suggestions-bar--arrow-only': activePrototype === 'option-3' }"
+        >
           <transition name="banner-reveal" appear>
+              <div
+                v-if="showMinervaBanner && activePrototype === 'option-3'"
+                class="suggestions-banner-arrow-buttons"
+                :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
+              >
+              <cdx-button
+                v-if="showBannerArrowUp"
+                class="suggestions-banner-arrow-btn"
+                :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                action="progressive"
+                weight="quiet"
+                aria-label="View previous suggestions"
+                @click="showSuggestions ? handleBannerClick() : null"
+                @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+              >
+                <cdx-icon :icon="cdxIconArrowUp" size="medium" />
+              </cdx-button>
+              <cdx-button
+                v-if="showBannerArrowDown"
+                class="suggestions-banner-arrow-btn"
+                :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                action="progressive"
+                weight="quiet"
+                aria-label="View next suggestions"
+                @click="showSuggestions ? handleBannerClick() : null"
+                @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+              >
+                <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+              </cdx-button>
+            </div>
             <div
-              v-if="showMinervaBanner"
+              v-else-if="showMinervaBanner"
               class="suggestions-banner minerva-suggestions-banner"
               :class="{
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
-                'suggestions-banner--option-2': activePrototype === 'option-2' && bannerSuggestionCount > 0,
+                'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
+                'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -271,11 +314,15 @@
                     </span>
                   </template>
                   <template v-else>
-                    <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                    <span v-if="activePrototype === 'option-3'" class="suggestions-banner-arrows">
+                      <cdx-icon v-if="showBannerArrowUp" :icon="cdxIconArrowUp" size="medium" />
+                      <cdx-icon v-if="showBannerArrowDown" :icon="cdxIconArrowDown" size="medium" />
+                    </span>
+                    <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
                     <span>View suggestions</span>
                   </template>
                 </div>
-              </div>
+                </div>
               <div class="suggestions-banner-actions"></div>
             </div>
           </transition>
@@ -948,7 +995,7 @@
           <div v-else class="edit-mode-content">
             <!-- Editor Toolbar -->
             <div
-              v-if="isMinervaSkin && (activePrototype === 'option-1' || activePrototype === 'option-2')"
+              v-if="isMinervaSkin && (activePrototype === 'option-1' || isArrowOnceMode)"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-spaced"
               :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
             >
@@ -1401,6 +1448,8 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(1)"
                       @click.stop="openMinervaSuggestion(1)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
@@ -1408,7 +1457,7 @@
                   </p>
 
                   <!-- Citation Popup 1 -->
-                  <div v-if="showCitationPopup1" class="citation-popup">
+                  <div v-if="showCitationPopup1" class="citation-popup" contenteditable="false">
                     <!-- Pointer arrow -->
                     <div class="citation-popup-pointer"></div>
                     
@@ -1445,6 +1494,7 @@
                   
                   <p v-else>
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
+                    <sup v-if="citationNumber1" class="citation-marker">[{{ citationNumber1 }}]</sup>
                   </p>
                   <p>&nbsp;</p>
                   <p>
@@ -1576,6 +1626,8 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(2)"
                       @click.stop="openMinervaSuggestion(2)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
@@ -1583,9 +1635,10 @@
                   </p>
                   <p v-else>
                     In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
+                    <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
                   </p>
                   <!-- Citation Popup 2 -->
-                  <div v-if="showCitationPopup2" class="citation-popup">
+                  <div v-if="showCitationPopup2" class="citation-popup" contenteditable="false">
                     <!-- Pointer arrow -->
                     <div class="citation-popup-pointer"></div>
                     
@@ -1727,6 +1780,8 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(3)"
                       @click.stop="openMinervaSuggestion(3)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
@@ -1734,9 +1789,10 @@
                   </p>
                   <p v-else>
                     — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
+                    <sup v-if="citationNumber3" class="citation-marker">[{{ citationNumber3 }}]</sup>
                   </p>
                   <!-- Citation Popup 3 -->
-                  <div v-if="showCitationPopup3" class="citation-popup">
+                  <div v-if="showCitationPopup3" class="citation-popup" contenteditable="false">
                     <!-- Pointer arrow -->
                     <div class="citation-popup-pointer"></div>
                     
@@ -1797,7 +1853,7 @@
 
         <!-- Suggestions Sidebar (Right) - Only visible in Edit mode with suggestions -->
         <aside 
-          v-if="isEditMode && !isMinervaSkin && (showSuggestionsDisplay || activePrototype === 'option-2')" 
+          v-if="isEditMode && !isMinervaSkin && (showSuggestionsDisplay || isArrowOnceMode)" 
           class="suggestions-sidebar"
           :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
@@ -1850,14 +1906,14 @@
                   :disabled="showCitationPopup1"
                   @click="handleYesSuggestion1"
                 >
-                  Yes
+                  Add citation
                 </button>
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup1"
                   @click="handleNoSuggestion1"
                 >
-                  No
+                  Dismiss
                 </button>
                 <cdx-button
                   class="suggestion-more-actions"
@@ -1935,14 +1991,14 @@
                   :disabled="showCitationPopup2"
                   @click="handleYesSuggestion2"
                 >
-                  Yes
+                  Add citation
                 </button>
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup2"
                   @click="handleNoSuggestion2"
                 >
-                  No
+                  Dismiss
                 </button>
                 <cdx-button
                   class="suggestion-more-actions"
@@ -2020,14 +2076,14 @@
                   :disabled="showCitationPopup3"
                   @click="handleYesSuggestion3"
                 >
-                  Yes
+                  Add citation
                 </button>
                 <button 
                   class="suggestion-btn suggestion-btn-secondary" 
                   :disabled="showCitationPopup3"
                   @click="handleNoSuggestion3"
                 >
-                  No
+                  Dismiss
                 </button>
                 <cdx-button
                   class="suggestion-more-actions"
@@ -2073,18 +2129,50 @@
           <div class="suggestions-banner-container">
             <transition name="banner-reveal" appear>
               <div
-              v-if="isBannerDelayReady && !isBannerDismissed && (activePrototype === 'option-2'
-                ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
-                : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
-              class="suggestions-banner"
-              :class="{
-                'suggestions-banner--empty': bannerSuggestionCount === 0,
-                'suggestions-banner--option-2': activePrototype === 'option-2' && bannerSuggestionCount > 0,
-                'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
-                'suggestions-banner--clickable': showSuggestions,
-                'suggestions-banner--closing': isBannerClosing,
-                'suggestions-banner--opening': isBannerOpening,
-                'suggestions-banner--scrolled': isEditToolbarScrolled
+                v-if="isMinervaSkin && isBannerDelayReady && !isBannerDismissed && activePrototype === 'option-3' && (isArrowOnceMode
+                  ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
+                  : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
+                class="suggestions-banner-arrow-buttons"
+              >
+                <cdx-button
+                  v-if="showBannerArrowUp"
+                  class="suggestions-banner-arrow-btn"
+                  :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                  action="progressive"
+                  weight="quiet"
+                  aria-label="View previous suggestions"
+                  @click="showSuggestions ? handleBannerClick() : null"
+                  @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                >
+                  <cdx-icon :icon="cdxIconArrowUp" size="medium" />
+                </cdx-button>
+                <cdx-button
+                  v-if="showBannerArrowDown"
+                  class="suggestions-banner-arrow-btn"
+                  :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                  action="progressive"
+                  weight="quiet"
+                  aria-label="View next suggestions"
+                  @click="showSuggestions ? handleBannerClick() : null"
+                  @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                >
+                  <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                </cdx-button>
+              </div>
+              <div
+                v-else-if="isBannerDelayReady && !isBannerDismissed && (isArrowOnceMode
+                  ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
+                  : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
+                class="suggestions-banner"
+                :class="{
+                  'suggestions-banner--empty': bannerSuggestionCount === 0,
+                  'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
+                  'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
+                  'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
+                  'suggestions-banner--clickable': showSuggestions,
+                  'suggestions-banner--closing': isBannerClosing,
+                  'suggestions-banner--opening': isBannerOpening,
+                  'suggestions-banner--scrolled': isEditToolbarScrolled
                 }"
                 :role="showSuggestions ? 'button' : undefined"
                 :tabindex="showSuggestions ? 0 : undefined"
@@ -2092,25 +2180,55 @@
                 @keydown="showSuggestions ? handleBannerKeydown($event) : null"
               >
                 <div class="suggestions-banner-center">
-                <div
-                  v-if="showSuggestionToggle || showSuggestions"
-                  class="suggestions-banner-text"
-                >
-                  <template v-if="bannerSuggestionCount === 0">
-                    <span>0 suggestions available</span>
-                  </template>
-                  <template v-else-if="activePrototype === 'option-1'">
-                    <cdx-icon :icon="cdxIconArrowDown" size="medium" />
-                    <span class="banner-text">
-                      <span class="banner-text-bold">{{ bannerSuggestionCount }} suggestions</span>
-                      <span class="banner-text-regular">available</span>
-                    </span>
-                  </template>
-                  <template v-else>
-                    <cdx-icon :icon="cdxIconArrowDown" size="medium" />
-                    <span>View suggestions</span>
-                  </template>
-                </div>
+                  <div
+                    v-if="showSuggestionToggle || showSuggestions"
+                    class="suggestions-banner-text"
+                  >
+                    <template v-if="bannerSuggestionCount === 0">
+                      <span>0 suggestions available</span>
+                    </template>
+                    <template v-else-if="activePrototype === 'option-1'">
+                      <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                      <span class="banner-text">
+                        <span class="banner-text-bold">{{ bannerSuggestionCount }} suggestions</span>
+                        <span class="banner-text-regular">available</span>
+                      </span>
+                    </template>
+                    <template v-else>
+                      <span
+                        v-if="activePrototype === 'option-3'"
+                        class="suggestions-banner-arrow-buttons"
+                        :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
+                      >
+                        <cdx-button
+                          v-if="showBannerArrowUp"
+                          class="suggestions-banner-arrow-btn"
+                          :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                          action="progressive"
+                          weight="quiet"
+                          aria-label="View previous suggestions"
+                          @click="showSuggestions ? handleBannerClick() : null"
+                          @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                        >
+                          <cdx-icon :icon="cdxIconArrowUp" size="medium" />
+                        </cdx-button>
+                        <cdx-button
+                          v-if="showBannerArrowDown"
+                          class="suggestions-banner-arrow-btn"
+                          :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                          action="progressive"
+                          weight="quiet"
+                          aria-label="View next suggestions"
+                          @click="showSuggestions ? handleBannerClick() : null"
+                          @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                        >
+                          <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                        </cdx-button>
+                      </span>
+                      <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
+                      <span>View suggestions</span>
+                    </template>
+                  </div>
                 </div>
                 <div class="suggestions-banner-actions"></div>
               </div>
@@ -2141,7 +2259,7 @@
         </aside>
 
         <cdx-toggle-button
-          v-if="isMinervaSkin && isEditMode && activePrototype !== 'option-1' && activePrototype !== 'option-2' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+          v-if="isMinervaSkin && isEditMode && activePrototype !== 'option-1' && !isArrowOnceMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
           v-model="showSuggestions"
           quiet
           aria-label="Toggle suggestions"
@@ -2224,7 +2342,7 @@
               :disabled="showCitationPopup1"
               @click="handleYesSuggestion1"
             >
-              Yes
+              Add citation
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 1"
@@ -2234,7 +2352,7 @@
               :disabled="showCitationPopup1"
               @click="handleNoSuggestion1"
             >
-              No
+              Dismiss
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 2"
@@ -2244,7 +2362,7 @@
               :disabled="showCitationPopup2"
               @click="handleYesSuggestion2"
             >
-              Yes
+              Add citation
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 2"
@@ -2254,7 +2372,7 @@
               :disabled="showCitationPopup2"
               @click="handleNoSuggestion2"
             >
-              No
+              Dismiss
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 3"
@@ -2264,7 +2382,7 @@
               :disabled="showCitationPopup3"
               @click="handleYesSuggestion3"
             >
-              Yes
+              Add citation
             </cdx-button>
             <cdx-button
               v-if="activeMinervaSuggestion === 3"
@@ -2274,7 +2392,7 @@
               :disabled="showCitationPopup3"
               @click="handleNoSuggestion3"
             >
-              No
+              Dismiss
             </cdx-button>
             <cdx-button
               class="minerva-sheet-btn minerva-sheet-more-actions"
@@ -2378,6 +2496,10 @@
                 <input type="radio" value="option-2" v-model="selectedPrototype">
                 <span>Op.2: Banner visible just the 1st time</span>
               </label>
+              <label class="prototype-radio">
+                <input type="radio" value="option-3" v-model="selectedPrototype">
+                <span>Op.3: Arrow visible just the 1st time</span>
+              </label>
             </fieldset>
             <div class="prototype-dialog-actions">
               <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
@@ -2409,6 +2531,7 @@ import {
   cdxIconWatchlist,
   cdxIconUserAvatar,
   cdxIconExpand,
+  cdxIconArrowUp,
   cdxIconArrowDown,
   cdxIconLanguage,
   cdxIconStar,
@@ -2470,6 +2593,7 @@ const isSuggestionGlowActive = ref(false);
 const isSuggestionMarkersVisible = ref(showSuggestions.value);
 const isSuggestionsFadingOut = ref(false);
 const showSuggestionsDisplay = ref(showSuggestions.value);
+const showMinervaToggleOffToast = ref(false);
 const minervaSuccessRef = ref(null);
 const activePrototype = ref('option-1');
 const dismissedSuggestionId = ref(null);
@@ -2482,6 +2606,8 @@ let suggestionGlowTimer = null;
 let suggestionMarkersTimer = null;
 let suggestionFadeTimer = null;
 let zeroSuggestionsBannerTimer = null;
+let minervaToggleOffToastTimer = null;
+let scrollReappearTimer = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -2676,15 +2802,20 @@ const showToolbarToggle = computed(() => (
   !isMinervaSkin.value &&
   (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
 ));
+const isArrowOnceMode = computed(() => (
+  activePrototype.value === 'option-2' || activePrototype.value === 'option-3'
+));
+const isArrowBounceActive = ref(true);
+const showBannerArrowUp = ref(false);
+const showBannerArrowDown = ref(true);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
     : availableSuggestionCount.value
 ));
 const badgePulse = ref(false);
-const badgePulseArmed = ref(false);
 const showToggleBadge = computed(() => {
-  if (activePrototype.value === 'option-2') {
+  if (isArrowOnceMode.value) {
     return toggleBadgeCount.value > 0 || showSuggestions.value;
   }
   return toggleBadgeCount.value > 0 &&
@@ -2692,7 +2823,7 @@ const showToggleBadge = computed(() => {
     !showSuggestions.value;
 });
 const showToggleBadgeZero = computed(() => (
-  activePrototype.value === 'option-2' && toggleBadgeCount.value === 0
+  isArrowOnceMode.value && toggleBadgeCount.value === 0
 ));
 const minervaSheetTitle = computed(() => {
   if (shouldShowEmptyState.value) return 'No suggestions';
@@ -2704,7 +2835,7 @@ const minervaToggleBottom = computed(() => {
 const anySuggestionVisible = ref(false);
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
-  if (activePrototype.value === 'option-2' && isMinervaSkin.value && minervaEditSectionOnly.value) {
+  if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     const sectionToSuggestionId = {
       career: 1,
       poetry: 2,
@@ -2718,7 +2849,7 @@ const shouldShowBanner = computed(() => {
     }
     return false;
   }
-  if (activePrototype.value !== 'option-2') {
+  if (!isArrowOnceMode.value) {
     if (!showSuggestionToggle.value && !showSuggestions.value) return false;
     if (showSuggestionToggle.value && !showSuggestions.value) return false;
   }
@@ -2757,17 +2888,17 @@ const isToneCheckMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
-  if (activePrototype.value !== 'option-2' && !showSuggestionsDisplay.value) return false;
-  if (activePrototype.value === 'option-2' && minervaEditSectionOnly.value) {
+  if (!isArrowOnceMode.value && !showSuggestionsDisplay.value) return false;
+  if (isArrowOnceMode.value && minervaEditSectionOnly.value) {
     if (minervaSectionBannerDismissed.value[minervaEditSectionOnly.value]) {
       return false;
     }
   }
   if (!shouldShowBanner.value || !isBannerDelayReady.value || isBannerDismissed.value) return false;
-  if (activePrototype.value === 'option-2' && bannerSuggestionCount.value === 0) {
+  if (isArrowOnceMode.value && bannerSuggestionCount.value === 0) {
     return false;
   }
-  if (activePrototype.value === 'option-2' && !showSuggestions.value) {
+  if (isArrowOnceMode.value && !showSuggestions.value) {
     return false;
   }
   if (showSuggestions.value && bannerSuggestionCount.value === 0) return true;
@@ -2779,12 +2910,12 @@ const showMinervaBanner = computed(() => {
 const showVectorHelpButton = computed(() => (
   !isMinervaSkin.value &&
   isEditMode.value &&
-  activePrototype.value !== 'option-1' && activePrototype.value !== 'option-2'
+  activePrototype.value !== 'option-1' && !isArrowOnceMode.value
 ));
 const showMinervaHelpButton = computed(() => (
   isMinervaSkin.value &&
   isEditMode.value &&
-  activePrototype.value !== 'option-1' && activePrototype.value !== 'option-2'
+  activePrototype.value !== 'option-1' && !isArrowOnceMode.value
 ));
 const minervaAddMenuItems = computed(() => ([
   { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
@@ -2855,8 +2986,8 @@ function resetSuggestionState() {
 function applyPrototypeMode(mode) {
   resetSuggestionState();
   activePrototype.value = mode;
-  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2';
-  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2';
+  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3';
+  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3';
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
@@ -2866,7 +2997,7 @@ function applyPrototypeMode(mode) {
   dontShowSuggestionInfo.value = false;
   isBannerDelayReady.value = false;
   enableAutoScroll.value = false;
-  showSuggestions.value = mode === 'option-1' || mode === 'option-2';
+  showSuggestions.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3';
   showSuggestionToggle.value = true;
 }
 
@@ -2891,7 +3022,7 @@ function startPrototype() {
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
-  if (isMinervaSkin.value && activePrototype.value === 'option-2') {
+  if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
   openPrototypeDialog(true);
@@ -2911,12 +3042,11 @@ function showFullPageEdit(event) {
   const startY = typeof window !== 'undefined' ? window.scrollY : 0;
   const startTop = targetRef?.value ? targetRef.value.getBoundingClientRect().top : 0;
   minervaEditSectionOnly.value = null;
-  if (activePrototype.value === 'option-2') {
+  if (isArrowOnceMode.value) {
     isBannerDelayReady.value = false;
     if (bannerDelayTimer) {
       clearTimeout(bannerDelayTimer);
     }
-    badgePulseArmed.value = true;
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && shouldShowBanner.value) {
         isBannerDelayReady.value = true;
@@ -3173,8 +3303,11 @@ function handleBannerClose() {
 }
 
 function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
-  if (activePrototype.value === 'option-2') return;
+  if (isArrowOnceMode.value) return;
   if (!showSuggestions.value) return;
+  if (activePrototype.value === 'option-3') {
+    isArrowBounceActive.value = true;
+  }
   isBannerDelayReady.value = false;
   if (bannerDelayTimer) {
     clearTimeout(bannerDelayTimer);
@@ -3190,10 +3323,13 @@ function handleBannerClick() {
   if (!showSuggestions.value) {
     showSuggestions.value = true;
   }
+  if (activePrototype.value === 'option-3') {
+    isArrowBounceActive.value = false;
+  }
   nextTick(() => {
     openFirstPendingSuggestionForContext();
   });
-  if (activePrototype.value === 'option-2' && isMinervaSkin.value && minervaEditSectionOnly.value) {
+  if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     minervaSectionBannerDismissed.value[minervaEditSectionOnly.value] = true;
   }
 }
@@ -3224,6 +3360,80 @@ function openFirstPendingSuggestionForContext() {
   }
 
   openFirstPendingSuggestion(true);
+}
+
+function getPendingSuggestionIdsForContext() {
+  const ids = [];
+  if (isMinervaSkin.value && minervaEditSectionOnly.value) {
+    if (minervaEditSectionOnly.value === 'career' && isSuggestion1Pending.value) ids.push(1);
+    if (minervaEditSectionOnly.value === 'poetry' && isSuggestion2Pending.value) ids.push(2);
+    if (minervaEditSectionOnly.value === 'prose' && isSuggestion3Pending.value) ids.push(3);
+    return ids;
+  }
+  if (isSuggestion1Pending.value) ids.push(1);
+  if (isSuggestion2Pending.value) ids.push(2);
+  if (isSuggestion3Pending.value) ids.push(3);
+  return ids;
+}
+
+function updateBannerArrowDirections() {
+  if (!showSuggestions.value || activePrototype.value !== 'option-3') {
+    showBannerArrowUp.value = false;
+    showBannerArrowDown.value = true;
+    return;
+  }
+  if (typeof window === 'undefined') return;
+  const ids = getPendingSuggestionIdsForContext();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  let hasAbove = false;
+  let hasBelow = false;
+  ids.forEach((id) => {
+    const targetRef = getSuggestionRefById(id);
+    if (!targetRef || !targetRef.value) return;
+    const rect = targetRef.value.getBoundingClientRect();
+    if (rect.bottom <= 0) {
+      hasAbove = true;
+    } else if (rect.top >= viewportHeight) {
+      hasBelow = true;
+    }
+  });
+  showBannerArrowUp.value = hasAbove;
+  showBannerArrowDown.value = hasBelow || (!hasAbove && !hasBelow);
+}
+
+function clearScrollReappear() {
+  if (scrollReappearTimer) {
+    clearTimeout(scrollReappearTimer);
+    scrollReappearTimer = null;
+  }
+}
+
+function handleScrollReappear() {
+  if (activePrototype.value !== 'option-3') return;
+  if (!showSuggestions.value) {
+    clearScrollReappear();
+    return;
+  }
+  if (anySuggestionVisible.value) {
+    clearScrollReappear();
+    return;
+  }
+  if (scrollReappearTimer) return;
+  scrollReappearTimer = setTimeout(() => {
+    if (activePrototype.value !== 'option-3') {
+      scrollReappearTimer = null;
+      return;
+    }
+    if (!showSuggestions.value || anySuggestionVisible.value) {
+      scrollReappearTimer = null;
+      return;
+    }
+    isBannerDismissed.value = false;
+    isBannerDelayReady.value = true;
+    isArrowBounceActive.value = true;
+    updateBannerArrowDirections();
+    scrollReappearTimer = null;
+  }, 1500);
 }
 
 const editSectionRefs = {
@@ -3262,6 +3472,7 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef2.value) ||
     isVisible(highlightedTextRef3.value) ||
     isVisible(toneCheckHighlightRef.value);
+  updateBannerArrowDirections();
 }
 
 function updateEditToolbarScrolled() {
@@ -3295,7 +3506,7 @@ function handleYesSuggestion3() {
 function handleNoSuggestion1() {
   isSuggestionDeclined1.value = true;
   isCardExpanded.value = false;
-  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(1);
     setTimeout(() => {
       if (showMinervaPagination.value) {
@@ -3314,7 +3525,7 @@ function handleNoSuggestion1() {
 function handleNoSuggestion2() {
   isSuggestionDeclined2.value = true;
   isCardExpanded2.value = false;
-  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(2);
     setTimeout(() => {
       if (showMinervaPagination.value) {
@@ -3333,7 +3544,7 @@ function handleNoSuggestion2() {
 function handleNoSuggestion3() {
   isSuggestionDeclined3.value = true;
   isCardExpanded3.value = false;
-  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(3);
     setTimeout(() => {
       if (showMinervaPagination.value) {
@@ -3354,7 +3565,7 @@ function createCitation1() {
     citationCounter.value++;
     citationNumber1.value = citationCounter.value;
     showCitationPopup1.value = false;
-    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
       if (showMinervaPagination.value) {
         advanceMinervaSuggestion(1);
       } else {
@@ -3382,7 +3593,7 @@ function createCitation2() {
     citationCounter.value++;
     citationNumber2.value = citationCounter.value;
     showCitationPopup2.value = false;
-    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
       if (showMinervaPagination.value) {
         advanceMinervaSuggestion(2);
       } else {
@@ -3410,7 +3621,7 @@ function createCitation3() {
     citationCounter.value++;
     citationNumber3.value = citationCounter.value;
     showCitationPopup3.value = false;
-    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
       if (showMinervaPagination.value) {
         advanceMinervaSuggestion(3);
       } else {
@@ -3554,8 +3765,12 @@ function alignBothSuggestions() {
 // Watch for changes in showSuggestions to realign both
 watch(showSuggestions, (newValue) => {
   if (newValue) {
-    if (activePrototype.value !== 'option-2' &&
-      !(isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2'))) {
+    if (activePrototype.value === 'option-3') {
+      isArrowBounceActive.value = true;
+    }
+    updateBannerArrowDirections();
+    if (!isArrowOnceMode.value &&
+      !(isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value))) {
       isBannerDismissed.value = false;
     }
     if (showSuggestionToggle.value) {
@@ -3576,7 +3791,8 @@ watch(showSuggestions, (newValue) => {
     });
   } else {
     updateToneCheckFromContent();
-    if (activePrototype.value === 'option-2') {
+    clearScrollReappear();
+    if (isArrowOnceMode.value) {
       isBannerDelayReady.value = true;
       if (!isBannerDismissed.value) {
         isBannerDismissed.value = false;
@@ -3591,6 +3807,19 @@ watch(showSuggestions, (newValue) => {
 });
 
 watch(showSuggestions, (newValue, oldValue) => {
+  if (!newValue && oldValue && isMinervaSkin.value) {
+    showMinervaToggleOffToast.value = true;
+    if (minervaToggleOffToastTimer) {
+      clearTimeout(minervaToggleOffToastTimer);
+    }
+    minervaToggleOffToastTimer = setTimeout(() => {
+      showMinervaToggleOffToast.value = false;
+      minervaToggleOffToastTimer = null;
+    }, 2000);
+  }
+  if (newValue && showMinervaToggleOffToast.value) {
+    showMinervaToggleOffToast.value = false;
+  }
   if (newValue && !oldValue) {
     showSuggestionsDisplay.value = true;
     isSuggestionsFadingOut.value = false;
@@ -3685,12 +3914,12 @@ watch(
 
 watch(availableSuggestionCount, (newValue, oldValue) => {
   if (oldValue !== undefined && newValue !== oldValue) {
-    if (activePrototype.value !== 'option-2' &&
-      !(isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2'))) {
+    if (!isArrowOnceMode.value &&
+      !(isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value))) {
       isBannerDismissed.value = false;
     }
   }
-  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || activePrototype.value === 'option-2')) {
+  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     if (newValue === 0) {
       if (zeroSuggestionsBannerTimer) {
         clearTimeout(zeroSuggestionsBannerTimer);
@@ -3706,17 +3935,18 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
 });
 
 watch(anySuggestionVisible, (visible) => {
-  if (visible && activePrototype.value === 'option-2') {
+  if (visible && isArrowOnceMode.value) {
     isBannerDismissed.value = true;
+  }
+  if (visible) {
+    clearScrollReappear();
   }
 });
 
 watch(toggleBadgeCount, (newValue, oldValue) => {
-  if (activePrototype.value !== 'option-2') return;
-  if (!badgePulseArmed.value) return;
+  if (!isArrowOnceMode.value) return;
   if (newValue === oldValue) return;
   badgePulse.value = true;
-  badgePulseArmed.value = false;
   setTimeout(() => {
     badgePulse.value = false;
   }, 300);
@@ -3962,6 +4192,7 @@ onMounted(() => {
     window.addEventListener('scroll', updateSuggestionVisibility, true);
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
+    window.addEventListener('scroll', handleScrollReappear, true);
     updateEditToolbarScrolled();
   }
   updateToneCheckFromContent();
@@ -3976,6 +4207,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', updateSuggestionVisibility, true);
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
+    window.removeEventListener('scroll', handleScrollReappear, true);
   }
   clearAutoSuggestionTimer();
   if (bannerCloseTimer) {
@@ -4005,6 +4237,14 @@ onBeforeUnmount(() => {
   if (zeroSuggestionsBannerTimer) {
     clearTimeout(zeroSuggestionsBannerTimer);
     zeroSuggestionsBannerTimer = null;
+  }
+  if (minervaToggleOffToastTimer) {
+    clearTimeout(minervaToggleOffToastTimer);
+    minervaToggleOffToastTimer = null;
+  }
+  if (scrollReappearTimer) {
+    clearTimeout(scrollReappearTimer);
+    scrollReappearTimer = null;
   }
 });
 
@@ -6565,6 +6805,22 @@ function markArticleEdited() {
   background: var(--color-base, #ffffff);
 }
 
+.minerva-toast {
+  position: fixed;
+  top: calc(42px + 12px);
+  left: 50%;
+  transform: translateX(-50%);
+  background: #202122;
+  color: #ffffff;
+  padding: 10px 16px;
+  border-radius: 2px;
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+  z-index: 220;
+  box-shadow: none;
+}
+
 
 .minerva-suggestions-toggle :deep(.cdx-icon) {
   color: var(--color-base, #202122);
@@ -7451,6 +7707,8 @@ function markArticleEdited() {
   margin: 0 auto;
   padding: 0 16px;
   margin-bottom: 16px;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .help-button {
@@ -7508,8 +7766,86 @@ function markArticleEdited() {
   color: var(--color-progressive, #36c);
 }
 
+.suggestions-banner-arrow-buttons {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.suggestions-banner-text .suggestions-banner-arrow-buttons {
+  margin-right: 2px;
+}
+
+.suggestions-banner-arrow-btn {
+  padding: 0;
+  min-height: auto;
+  min-width: auto;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.suggestions-banner-arrow-btn :deep(.cdx-icon),
+.suggestions-banner-arrow-btn :deep(svg) {
+  color: var(--color-progressive, #36c);
+}
+
+.suggestions-banner-arrow-buttons--bounce :deep(.cdx-icon),
+.suggestions-banner-arrow-buttons--bounce :deep(svg) {
+  animation: arrow-bounce 8s ease-in-out 0s infinite;
+}
+
+.suggestions-banner-icon-only--bounce :deep(.cdx-icon),
+.suggestions-banner-icon-only--bounce :deep(svg) {
+  animation: arrow-bounce 8s ease-in-out 0s infinite;
+}
+
+.suggestions-banner--arrow-bounce .suggestions-banner-text :deep(.cdx-icon),
+.suggestions-banner--arrow-bounce .suggestions-banner-text :deep(svg) {
+  animation: arrow-bounce 8s ease-in-out 0s infinite;
+}
+
+@keyframes arrow-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  12.5% {
+    transform: translateY(6px);
+  }
+  15% {
+    transform: translateY(0);
+  }
+  17.5% {
+    transform: translateY(6px);
+  }
+  20% {
+    transform: translateY(0);
+  }
+}
+
+.minerva-suggestions-bar--arrow-only {
+  justify-content: flex-end;
+}
+
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn {
+  width: 44px;
+  height: 42px;
+  padding: 0;
+}
+
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn :deep(button) {
+  width: 44px;
+  height: 42px;
+  padding: 0;
+}
+
 .suggestions-banner--option-2 {
   border-radius: 9999px;
+  background: var(--background-color-progressive--subtle, #e8eeff);
+  box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
+  border-color: var(--border-color-muted, #dadde3);
 }
 
 .suggestions-banner--option-2 .suggestions-banner-text {
@@ -7518,6 +7854,11 @@ function markArticleEdited() {
 
 .suggestions-banner--option-2 .suggestions-banner-text :deep(.cdx-icon) {
   color: var(--color-progressive, #36c);
+}
+
+.minerva-skin .suggestions-banner--option-2 .suggestions-banner-text {
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .banner-text {
@@ -7688,6 +8029,22 @@ function markArticleEdited() {
   100% {
     transform: translate(50%, 50%) scale(1);
   }
+}
+
+.suggestions-toggle-btn--active .suggestions-badge,
+.minerva-toolbar-toggle--active .suggestions-badge,
+.minerva-suggestions-toggle--active .suggestions-badge {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+  border-color: var(--border-color-progressive, #36c);
+}
+
+.suggestions-toggle-btn--active .suggestions-badge--zero,
+.minerva-toolbar-toggle--active .suggestions-badge--zero,
+.minerva-suggestions-toggle--active .suggestions-badge--zero {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+  border-color: var(--border-color-progressive, #36c);
 }
 
 
