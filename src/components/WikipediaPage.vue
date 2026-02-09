@@ -20,6 +20,14 @@
     >
       Suggestions turned off
     </div>
+    <div
+      v-if="isMinervaSkin && showMinervaMoreSuggestionsToast"
+      class="minerva-toast minerva-toast--more"
+      role="status"
+      aria-live="polite"
+    >
+      More suggestions are now available
+    </div>
     <!-- Page Container -->
     <div class="page-container">
       
@@ -248,11 +256,11 @@
         <div
           v-if="showMinervaBanner || showMinervaHelpButton"
           class="minerva-suggestions-bar"
-          :class="{ 'minerva-suggestions-bar--arrow-only': activePrototype === 'option-3' }"
+          :class="{ 'minerva-suggestions-bar--arrow-only': activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows) }"
         >
           <transition name="banner-reveal" appear>
               <div
-                v-if="showMinervaBanner && activePrototype === 'option-3'"
+                v-if="showMinervaBanner && !isAutoScrollActive && (activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows))"
                 class="suggestions-banner-arrow-buttons"
                 :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
               >
@@ -263,10 +271,10 @@
                 action="progressive"
                 weight="quiet"
                 aria-label="View previous suggestions"
-                @click="showSuggestions ? handleBannerClick() : null"
+                @click="showSuggestions ? scrollToSuggestionByDirection('up') : null"
                 @keydown="showSuggestions ? handleBannerKeydown($event) : null"
               >
-                <cdx-icon :icon="cdxIconArrowUp" size="medium" />
+                <cdx-icon :icon="cdxIconCollapse" size="medium" />
               </cdx-button>
               <cdx-button
                 v-if="showBannerArrowDown"
@@ -275,18 +283,19 @@
                 action="progressive"
                 weight="quiet"
                 aria-label="View next suggestions"
-                @click="showSuggestions ? handleBannerClick() : null"
+                @click="showSuggestions ? scrollToSuggestionByDirection('down') : null"
                 @keydown="showSuggestions ? handleBannerKeydown($event) : null"
               >
-                <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                <cdx-icon :icon="cdxIconExpand" size="medium" />
               </cdx-button>
             </div>
             <div
-              v-else-if="showMinervaBanner"
+              v-else-if="showMinervaBanner && !(activePrototype === 'option-4' && (hasUsedOption4Button || showOption4Arrows || isAutoScrollActive))"
               class="suggestions-banner minerva-suggestions-banner"
               :class="{
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
+                'suggestions-banner--option-4': activePrototype === 'option-4' && bannerSuggestionCount > 0,
                 'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
@@ -314,9 +323,9 @@
                     </span>
                   </template>
                   <template v-else>
-                    <span v-if="activePrototype === 'option-3'" class="suggestions-banner-arrows">
-                      <cdx-icon v-if="showBannerArrowUp" :icon="cdxIconArrowUp" size="medium" />
-                      <cdx-icon v-if="showBannerArrowDown" :icon="cdxIconArrowDown" size="medium" />
+                    <span v-if="activePrototype === 'option-3' && !isAutoScrollActive" class="suggestions-banner-arrows">
+                      <cdx-icon v-if="showBannerArrowUp" :icon="cdxIconCollapse" size="medium" />
+                      <cdx-icon v-if="showBannerArrowDown" :icon="cdxIconExpand" size="medium" />
                     </span>
                     <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
                     <span>View suggestions</span>
@@ -2144,7 +2153,7 @@
                   @click="showSuggestions ? handleBannerClick() : null"
                   @keydown="showSuggestions ? handleBannerKeydown($event) : null"
                 >
-                  <cdx-icon :icon="cdxIconArrowUp" size="medium" />
+                  <cdx-icon :icon="cdxIconCollapse" size="medium" />
                 </cdx-button>
                 <cdx-button
                   v-if="showBannerArrowDown"
@@ -2156,22 +2165,23 @@
                   @click="showSuggestions ? handleBannerClick() : null"
                   @keydown="showSuggestions ? handleBannerKeydown($event) : null"
                 >
-                  <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                  <cdx-icon :icon="cdxIconExpand" size="medium" />
                 </cdx-button>
               </div>
               <div
-                v-else-if="isBannerDelayReady && !isBannerDismissed && (isArrowOnceMode
+                v-else-if="isBannerDelayReady && !isBannerDismissed && !(activePrototype === 'option-4' && isAutoScrollActive) && (isArrowOnceMode
                   ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
                   : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
                 class="suggestions-banner"
-                :class="{
-                  'suggestions-banner--empty': bannerSuggestionCount === 0,
-                  'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
-                  'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
-                  'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
-                  'suggestions-banner--clickable': showSuggestions,
-                  'suggestions-banner--closing': isBannerClosing,
-                  'suggestions-banner--opening': isBannerOpening,
+              :class="{
+                'suggestions-banner--empty': bannerSuggestionCount === 0,
+                'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
+                'suggestions-banner--option-4': activePrototype === 'option-4' && bannerSuggestionCount > 0,
+                'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
+                'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
+                'suggestions-banner--clickable': showSuggestions,
+                'suggestions-banner--closing': isBannerClosing,
+                'suggestions-banner--opening': isBannerOpening,
                   'suggestions-banner--scrolled': isEditToolbarScrolled
                 }"
                 :role="showSuggestions ? 'button' : undefined"
@@ -2196,7 +2206,7 @@
                     </template>
                     <template v-else>
                       <span
-                        v-if="activePrototype === 'option-3'"
+                        v-if="activePrototype === 'option-3' && !isAutoScrollActive"
                         class="suggestions-banner-arrow-buttons"
                         :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
                       >
@@ -2207,10 +2217,10 @@
                           action="progressive"
                           weight="quiet"
                           aria-label="View previous suggestions"
-                          @click="showSuggestions ? handleBannerClick() : null"
+                          @click="showSuggestions ? scrollToSuggestionByDirection('up') : null"
                           @keydown="showSuggestions ? handleBannerKeydown($event) : null"
                         >
-                          <cdx-icon :icon="cdxIconArrowUp" size="medium" />
+                          <cdx-icon :icon="cdxIconCollapse" size="medium" />
                         </cdx-button>
                         <cdx-button
                           v-if="showBannerArrowDown"
@@ -2219,10 +2229,10 @@
                           action="progressive"
                           weight="quiet"
                           aria-label="View next suggestions"
-                          @click="showSuggestions ? handleBannerClick() : null"
+                          @click="showSuggestions ? scrollToSuggestionByDirection('down') : null"
                           @keydown="showSuggestions ? handleBannerKeydown($event) : null"
                         >
-                          <cdx-icon :icon="cdxIconArrowDown" size="medium" />
+                          <cdx-icon :icon="cdxIconExpand" size="medium" />
                         </cdx-button>
                       </span>
                       <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
@@ -2494,11 +2504,15 @@
               </label>
               <label class="prototype-radio">
                 <input type="radio" value="option-2" v-model="selectedPrototype">
-                <span>Op.2: Banner visible just the 1st time</span>
+                <span>Op.2: Button visible just the 1st time</span>
               </label>
               <label class="prototype-radio">
                 <input type="radio" value="option-3" v-model="selectedPrototype">
-                <span>Op.3: Arrow visible just the 1st time</span>
+                <span>Op.3: Persistent arrows</span>
+              </label>
+              <label class="prototype-radio">
+                <input type="radio" value="option-4" v-model="selectedPrototype">
+                <span>Op.4: Button + Arrows to navigate</span>
               </label>
             </fieldset>
             <div class="prototype-dialog-actions">
@@ -2531,11 +2545,12 @@ import {
   cdxIconWatchlist,
   cdxIconUserAvatar,
   cdxIconExpand,
-  cdxIconArrowUp,
+  cdxIconPrevious,
+  cdxIconNext,
+  cdxIconCollapse,
   cdxIconArrowDown,
   cdxIconLanguage,
   cdxIconStar,
-  cdxIconNext,
   cdxIconEllipsis,
   cdxIconHistory,
   cdxIconSearch,
@@ -2594,6 +2609,7 @@ const isSuggestionMarkersVisible = ref(showSuggestions.value);
 const isSuggestionsFadingOut = ref(false);
 const showSuggestionsDisplay = ref(showSuggestions.value);
 const showMinervaToggleOffToast = ref(false);
+const showMinervaMoreSuggestionsToast = ref(false);
 const minervaSuccessRef = ref(null);
 const activePrototype = ref('option-1');
 const dismissedSuggestionId = ref(null);
@@ -2607,7 +2623,9 @@ let suggestionMarkersTimer = null;
 let suggestionFadeTimer = null;
 let zeroSuggestionsBannerTimer = null;
 let minervaToggleOffToastTimer = null;
+let minervaMoreSuggestionsToastTimer = null;
 let scrollReappearTimer = null;
+let autoScrollTimer = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -2803,11 +2821,14 @@ const showToolbarToggle = computed(() => (
   (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
 ));
 const isArrowOnceMode = computed(() => (
-  activePrototype.value === 'option-2' || activePrototype.value === 'option-3'
+  activePrototype.value === 'option-2' || activePrototype.value === 'option-3' || activePrototype.value === 'option-4'
 ));
 const isArrowBounceActive = ref(true);
 const showBannerArrowUp = ref(false);
 const showBannerArrowDown = ref(true);
+const showOption4Arrows = ref(false);
+const hasUsedOption4Button = ref(false);
+const isAutoScrollActive = ref(false);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
@@ -2971,6 +2992,8 @@ function resetSuggestionState() {
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
+  showOption4Arrows.value = false;
+  hasUsedOption4Button.value = false;
   minervaSectionBannerDismissed.value = {
     'early-life': false,
     career: false,
@@ -2986,8 +3009,8 @@ function resetSuggestionState() {
 function applyPrototypeMode(mode) {
   resetSuggestionState();
   activePrototype.value = mode;
-  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3';
-  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3';
+  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3' || mode === 'option-4';
+  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3' || mode === 'option-4';
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
@@ -2997,7 +3020,7 @@ function applyPrototypeMode(mode) {
   dontShowSuggestionInfo.value = false;
   isBannerDelayReady.value = false;
   enableAutoScroll.value = false;
-  showSuggestions.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3';
+  showSuggestions.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3' || mode === 'option-4';
   showSuggestionToggle.value = true;
 }
 
@@ -3041,6 +3064,9 @@ function showFullPageEdit(event) {
   const targetRef = sectionId ? getEditSectionRefById(sectionId) : null;
   const startY = typeof window !== 'undefined' ? window.scrollY : 0;
   const startTop = targetRef?.value ? targetRef.value.getBoundingClientRect().top : 0;
+  const previousAvailable = minervaEditSectionOnly.value
+    ? sectionSuggestionCount.value
+    : availableSuggestionCount.value;
   minervaEditSectionOnly.value = null;
   if (isArrowOnceMode.value) {
     isBannerDelayReady.value = false;
@@ -3058,6 +3084,25 @@ function showFullPageEdit(event) {
     const newTop = targetRef.value.getBoundingClientRect().top;
     window.scrollTo(0, Math.max(0, startY + (newTop - startTop)));
   });
+  if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
+    nextTick(() => {
+      const newAvailable = availableSuggestionCount.value;
+      if (newAvailable > previousAvailable) {
+        showMinervaMoreSuggestionsToast.value = true;
+        if (showSuggestions.value) {
+          isBannerDismissed.value = false;
+          isBannerDelayReady.value = true;
+        }
+        if (minervaMoreSuggestionsToastTimer) {
+          clearTimeout(minervaMoreSuggestionsToastTimer);
+        }
+        minervaMoreSuggestionsToastTimer = setTimeout(() => {
+          showMinervaMoreSuggestionsToast.value = false;
+          minervaMoreSuggestionsToastTimer = null;
+        }, 2000);
+      }
+    });
+  }
 }
 
 function shouldRenderSection(sectionId) {
@@ -3323,8 +3368,15 @@ function handleBannerClick() {
   if (!showSuggestions.value) {
     showSuggestions.value = true;
   }
+  if (activePrototype.value === 'option-3' || activePrototype.value === 'option-4') {
+    startAutoScrollIndicator();
+  }
   if (activePrototype.value === 'option-3') {
     isArrowBounceActive.value = false;
+  }
+  if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
+    showOption4Arrows.value = true;
+    hasUsedOption4Button.value = true;
   }
   nextTick(() => {
     openFirstPendingSuggestionForContext();
@@ -3377,7 +3429,7 @@ function getPendingSuggestionIdsForContext() {
 }
 
 function updateBannerArrowDirections() {
-  if (!showSuggestions.value || activePrototype.value !== 'option-3') {
+  if (!showSuggestions.value || !(activePrototype.value === 'option-3' || (activePrototype.value === 'option-4' && showOption4Arrows.value))) {
     showBannerArrowUp.value = false;
     showBannerArrowDown.value = true;
     return;
@@ -3409,7 +3461,7 @@ function clearScrollReappear() {
 }
 
 function handleScrollReappear() {
-  if (activePrototype.value !== 'option-3') return;
+  if (!(activePrototype.value === 'option-3' || (activePrototype.value === 'option-4' && isMinervaSkin.value && showOption4Arrows.value))) return;
   if (!showSuggestions.value) {
     clearScrollReappear();
     return;
@@ -3420,13 +3472,16 @@ function handleScrollReappear() {
   }
   if (scrollReappearTimer) return;
   scrollReappearTimer = setTimeout(() => {
-    if (activePrototype.value !== 'option-3') {
+    if (!(activePrototype.value === 'option-3' || (activePrototype.value === 'option-4' && isMinervaSkin.value && showOption4Arrows.value))) {
       scrollReappearTimer = null;
       return;
     }
     if (!showSuggestions.value || anySuggestionVisible.value) {
       scrollReappearTimer = null;
       return;
+    }
+    if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
+      showOption4Arrows.value = true;
     }
     isBannerDismissed.value = false;
     isBannerDelayReady.value = true;
@@ -3987,9 +4042,21 @@ function scrollToSuggestionIfNeeded(targetRef) {
   nextTick(() => {
     const target = targetRef.value;
     if (target && !isTargetVisibleInViewport(target)) {
+      startAutoScrollIndicator();
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
   });
+}
+
+function startAutoScrollIndicator() {
+  isAutoScrollActive.value = true;
+  if (autoScrollTimer) {
+    clearTimeout(autoScrollTimer);
+  }
+  autoScrollTimer = setTimeout(() => {
+    isAutoScrollActive.value = false;
+    autoScrollTimer = null;
+  }, 1200);
 }
 
 function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false) {
@@ -4017,6 +4084,7 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false) {
     const target = targetRef.value;
     const shouldScroll = target && !isTargetVisibleInViewport(target);
     if (shouldScroll) {
+      startAutoScrollIndicator();
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
       setTimeout(() => {
         openSuggestion(id);
@@ -4109,6 +4177,33 @@ function scrollToNearestSuggestionFromBanner() {
 
   const lastAbove = positionedTargets[positionedTargets.length - 1];
   openSuggestionAtTarget(lastAbove.id, lastAbove.ref, true);
+}
+
+function scrollToSuggestionByDirection(direction) {
+  if (!isEditMode.value || !showSuggestions.value) return;
+  const pendingTargets = getPendingSuggestionTargets();
+  if (!pendingTargets.length) return;
+  const currentY = window.scrollY + window.innerHeight / 2;
+  const positionedTargets = pendingTargets
+    .map((target) => ({
+      ...target,
+      top: target.ref.value.getBoundingClientRect().top + window.scrollY
+    }))
+    .sort((a, b) => a.top - b.top);
+  if (direction === 'down') {
+    const below = positionedTargets.filter((target) => target.top > currentY);
+    if (below.length) {
+      openSuggestionAtTarget(below[0].id, below[0].ref, true);
+      return;
+    }
+    return;
+  }
+  if (direction === 'up') {
+    const above = positionedTargets.filter((target) => target.top < currentY);
+    if (above.length) {
+      openSuggestionAtTarget(above[above.length - 1].id, above[above.length - 1].ref, true);
+    }
+  }
 }
 
 function openFirstPendingSuggestion(expandAfterScroll = false) {
@@ -4242,9 +4337,17 @@ onBeforeUnmount(() => {
     clearTimeout(minervaToggleOffToastTimer);
     minervaToggleOffToastTimer = null;
   }
+  if (minervaMoreSuggestionsToastTimer) {
+    clearTimeout(minervaMoreSuggestionsToastTimer);
+    minervaMoreSuggestionsToastTimer = null;
+  }
   if (scrollReappearTimer) {
     clearTimeout(scrollReappearTimer);
     scrollReappearTimer = null;
+  }
+  if (autoScrollTimer) {
+    clearTimeout(autoScrollTimer);
+    autoScrollTimer = null;
   }
 });
 
@@ -6821,6 +6924,10 @@ function markArticleEdited() {
   box-shadow: none;
 }
 
+.minerva-toast--more {
+  top: calc(42px + 16px);
+}
+
 
 .minerva-suggestions-toggle :deep(.cdx-icon) {
   color: var(--color-base, #202122);
@@ -7770,7 +7877,7 @@ function markArticleEdited() {
   display: inline-flex;
   flex-direction: column;
   align-items: center;
-  gap: 8px;
+  gap: 4px;
 }
 
 .suggestions-banner-text .suggestions-banner-arrow-buttons {
@@ -7825,6 +7932,25 @@ function markArticleEdited() {
   }
 }
 
+@keyframes arrow-bounce-4 {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  25% {
+    transform: translateY(6px);
+  }
+  30% {
+    transform: translateY(0);
+  }
+  35% {
+    transform: translateY(6px);
+  }
+  40% {
+    transform: translateY(0);
+  }
+}
+
 .minerva-suggestions-bar--arrow-only {
   justify-content: flex-end;
 }
@@ -7854,6 +7980,14 @@ function markArticleEdited() {
 
 .suggestions-banner--option-2 .suggestions-banner-text :deep(.cdx-icon) {
   color: var(--color-progressive, #36c);
+}
+
+.suggestions-banner--option-4 {
+  border-color: var(--border-color-progressive, #36c);
+}
+
+.suggestions-banner--option-4 {
+  animation: arrow-bounce-4 4s ease-in-out 0s infinite;
 }
 
 .minerva-skin .suggestions-banner--option-2 .suggestions-banner-text {
