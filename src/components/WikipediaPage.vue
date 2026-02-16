@@ -4,7 +4,7 @@
     :class="[
       isEditMode ? 'edit-mode' : 'read-mode',
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
-      isMinervaSkin && isEditMode && showSuggestions && !showEmptyState ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 ? 'minerva-suggestions-on' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -21,12 +21,28 @@
       Suggestions turned off
     </div>
     <div
+      v-if="isMinervaSkin && showMinervaToggleOnToast"
+      class="minerva-toast"
+      role="status"
+      aria-live="polite"
+    >
+      Suggestions turned on
+    </div>
+    <div
       v-if="isMinervaSkin && showMinervaMoreSuggestionsToast"
       class="minerva-toast minerva-toast--more"
       role="status"
       aria-live="polite"
     >
       More suggestions are now available
+    </div>
+    <div
+      v-if="isMinervaSkin && showMinervaZeroSuggestionsToast"
+      class="minerva-toast minerva-toast--zero"
+      role="status"
+      aria-live="polite"
+    >
+      0 suggestions available for now
     </div>
     <!-- Page Container -->
     <div class="page-container">
@@ -2609,7 +2625,9 @@ const isSuggestionMarkersVisible = ref(showSuggestions.value);
 const isSuggestionsFadingOut = ref(false);
 const showSuggestionsDisplay = ref(showSuggestions.value);
 const showMinervaToggleOffToast = ref(false);
+const showMinervaToggleOnToast = ref(false);
 const showMinervaMoreSuggestionsToast = ref(false);
+const showMinervaZeroSuggestionsToast = ref(false);
 const minervaSuccessRef = ref(null);
 const activePrototype = ref('option-1');
 const dismissedSuggestionId = ref(null);
@@ -2623,7 +2641,9 @@ let suggestionMarkersTimer = null;
 let suggestionFadeTimer = null;
 let zeroSuggestionsBannerTimer = null;
 let minervaToggleOffToastTimer = null;
+let minervaToggleOnToastTimer = null;
 let minervaMoreSuggestionsToastTimer = null;
+let minervaZeroSuggestionsToastTimer = null;
 let scrollReappearTimer = null;
 let autoScrollTimer = null;
 const isSkinMenuOpen = ref(false);
@@ -3365,6 +3385,7 @@ function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
 }
 
 function handleBannerClick() {
+  const wasSuggestionsOff = !showSuggestions.value;
   if (!showSuggestions.value) {
     showSuggestions.value = true;
   }
@@ -3383,6 +3404,18 @@ function handleBannerClick() {
   });
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     minervaSectionBannerDismissed.value[minervaEditSectionOnly.value] = true;
+  }
+  if (wasSuggestionsOff && isMinervaSkin.value) {
+    if (minervaToggleOnToastTimer) {
+      clearTimeout(minervaToggleOnToastTimer);
+    }
+    minervaToggleOnToastTimer = setTimeout(() => {
+      showMinervaToggleOnToast.value = true;
+      minervaToggleOnToastTimer = setTimeout(() => {
+        showMinervaToggleOnToast.value = false;
+        minervaToggleOnToastTimer = null;
+      }, 2000);
+    }, 500);
   }
 }
 
@@ -3863,17 +3896,31 @@ watch(showSuggestions, (newValue) => {
 
 watch(showSuggestions, (newValue, oldValue) => {
   if (!newValue && oldValue && isMinervaSkin.value) {
-    showMinervaToggleOffToast.value = true;
     if (minervaToggleOffToastTimer) {
       clearTimeout(minervaToggleOffToastTimer);
     }
     minervaToggleOffToastTimer = setTimeout(() => {
-      showMinervaToggleOffToast.value = false;
-      minervaToggleOffToastTimer = null;
-    }, 2000);
+      showMinervaToggleOffToast.value = true;
+      minervaToggleOffToastTimer = setTimeout(() => {
+        showMinervaToggleOffToast.value = false;
+        minervaToggleOffToastTimer = null;
+      }, 2000);
+    }, 500);
   }
   if (newValue && showMinervaToggleOffToast.value) {
     showMinervaToggleOffToast.value = false;
+  }
+  if (newValue && !oldValue && isMinervaSkin.value) {
+    if (minervaToggleOnToastTimer) {
+      clearTimeout(minervaToggleOnToastTimer);
+    }
+    minervaToggleOnToastTimer = setTimeout(() => {
+      showMinervaToggleOnToast.value = true;
+      minervaToggleOnToastTimer = setTimeout(() => {
+        showMinervaToggleOnToast.value = false;
+        minervaToggleOnToastTimer = null;
+      }, 2000);
+    }, 500);
   }
   if (newValue && !oldValue) {
     showSuggestionsDisplay.value = true;
@@ -3974,6 +4021,18 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
       isBannerDismissed.value = false;
     }
   }
+  if (isMinervaSkin.value && oldValue > 0 && newValue === 0) {
+    if (minervaZeroSuggestionsToastTimer) {
+      clearTimeout(minervaZeroSuggestionsToastTimer);
+    }
+    minervaZeroSuggestionsToastTimer = setTimeout(() => {
+      showMinervaZeroSuggestionsToast.value = true;
+      minervaZeroSuggestionsToastTimer = setTimeout(() => {
+        showMinervaZeroSuggestionsToast.value = false;
+        minervaZeroSuggestionsToastTimer = null;
+      }, 2000);
+    }, 500);
+  }
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     if (newValue === 0) {
       if (zeroSuggestionsBannerTimer) {
@@ -3986,6 +4045,18 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
       clearTimeout(zeroSuggestionsBannerTimer);
       zeroSuggestionsBannerTimer = null;
     }
+  }
+  if (isMinervaSkin.value && newValue === 0 && oldValue !== undefined && newValue !== oldValue) {
+    if (minervaZeroSuggestionsToastTimer) {
+      clearTimeout(minervaZeroSuggestionsToastTimer);
+    }
+    minervaZeroSuggestionsToastTimer = setTimeout(() => {
+      showMinervaZeroSuggestionsToast.value = true;
+      minervaZeroSuggestionsToastTimer = setTimeout(() => {
+        showMinervaZeroSuggestionsToast.value = false;
+        minervaZeroSuggestionsToastTimer = null;
+      }, 2000);
+    }, 500);
   }
 });
 
@@ -4017,6 +4088,18 @@ watch(isLoading, (newValue) => {
         isBannerDelayReady.value = true;
       }
     }, 1000);
+  }
+  if (!newValue && isEditMode.value && isMinervaSkin.value && showSuggestions.value && availableSuggestionCount.value === 0) {
+    if (minervaZeroSuggestionsToastTimer) {
+      clearTimeout(minervaZeroSuggestionsToastTimer);
+    }
+    minervaZeroSuggestionsToastTimer = setTimeout(() => {
+      showMinervaZeroSuggestionsToast.value = true;
+      minervaZeroSuggestionsToastTimer = setTimeout(() => {
+        showMinervaZeroSuggestionsToast.value = false;
+        minervaZeroSuggestionsToastTimer = null;
+      }, 2000);
+    }, 500);
   }
 });
 
@@ -4337,9 +4420,17 @@ onBeforeUnmount(() => {
     clearTimeout(minervaToggleOffToastTimer);
     minervaToggleOffToastTimer = null;
   }
+  if (minervaToggleOnToastTimer) {
+    clearTimeout(minervaToggleOnToastTimer);
+    minervaToggleOnToastTimer = null;
+  }
   if (minervaMoreSuggestionsToastTimer) {
     clearTimeout(minervaMoreSuggestionsToastTimer);
     minervaMoreSuggestionsToastTimer = null;
+  }
+  if (minervaZeroSuggestionsToastTimer) {
+    clearTimeout(minervaZeroSuggestionsToastTimer);
+    minervaZeroSuggestionsToastTimer = null;
   }
   if (scrollReappearTimer) {
     clearTimeout(scrollReappearTimer);
@@ -6925,6 +7016,10 @@ function markArticleEdited() {
 }
 
 .minerva-toast--more {
+  top: calc(42px + 16px);
+}
+
+.minerva-toast--zero {
   top: calc(42px + 16px);
 }
 
