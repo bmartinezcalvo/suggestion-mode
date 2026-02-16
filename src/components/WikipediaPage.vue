@@ -2503,40 +2503,6 @@
           </div>
         </aside>
 
-        <div
-          v-if="isPrototypeDialogOpen"
-          class="prototype-dialog-backdrop"
-          role="presentation"
-          @click.self="closePrototypeDialog"
-        >
-          <div class="prototype-dialog" role="dialog" aria-modal="true" aria-label="Choose prototype">
-            <div class="prototype-dialog-header">
-              <h2 class="prototype-dialog-title">Choose prototype</h2>
-            </div>
-            <fieldset class="prototype-dialog-options" role="radiogroup" aria-label="Prototype options">
-              <label class="prototype-radio">
-                <input type="radio" value="option-1" v-model="selectedPrototype">
-                <span>Op.1: Banner always visible</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-2" v-model="selectedPrototype">
-                <span>Op.2: Button visible just the 1st time</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-3" v-model="selectedPrototype">
-                <span>Op.3: Persistent arrows</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-4" v-model="selectedPrototype">
-                <span>Op.4: Button + Arrows to navigate</span>
-              </label>
-            </fieldset>
-            <div class="prototype-dialog-actions">
-              <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
-            </div>
-          </div>
-        </div>
-
       </div>
     </div>
   </div>
@@ -2629,7 +2595,7 @@ const showMinervaToggleOnToast = ref(false);
 const showMinervaMoreSuggestionsToast = ref(false);
 const showMinervaZeroSuggestionsToast = ref(false);
 const minervaSuccessRef = ref(null);
-const activePrototype = ref('option-1');
+const activePrototype = ref('option-4');
 const dismissedSuggestionId = ref(null);
 let bannerDelayTimer = null;
 let bannerCloseTimer = null;
@@ -2725,8 +2691,6 @@ const toneCheckHighlightRef = ref(null);
 const toneCheckSidebarRef = ref(null);
 const toneCheckTopOffset = ref(0);
 const toneCheckEnterArmed = ref(false);
-const isPrototypeDialogOpen = ref(false);
-const selectedPrototype = ref('option-1');
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
@@ -3044,31 +3008,14 @@ function applyPrototypeMode(mode) {
   showSuggestionToggle.value = true;
 }
 
-function openPrototypeDialog(fromSection = false) {
-  if (isEditMode.value) return;
-  if (!fromSection) {
-    minervaEditSectionOnly.value = null;
-  }
-  isPrototypeDialogOpen.value = true;
-}
-
-function closePrototypeDialog() {
-  isPrototypeDialogOpen.value = false;
-}
-
-function startPrototype() {
-  applyPrototypeMode(selectedPrototype.value);
-  closePrototypeDialog();
-  enterEditMode();
-}
-
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
-  openPrototypeDialog(true);
+  applyPrototypeMode('option-4');
+  enterEditMode();
 }
 
 function getEditSectionRefById(sectionId) {
@@ -3569,7 +3516,6 @@ function updateEditToolbarScrolled() {
 }
 
 function handleReadClick() {
-  closePrototypeDialog();
   if (isEditMode.value) {
     exitEditMode();
   }
@@ -4547,7 +4493,8 @@ function exitEditMode() {
 
 function toggleEditMode() {
   if (!isEditMode.value) {
-    openPrototypeDialog();
+    applyPrototypeMode('option-4');
+    enterEditMode();
     return;
   }
   exitEditMode();
