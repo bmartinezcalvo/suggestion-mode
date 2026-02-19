@@ -24,15 +24,15 @@ jobs:
           cache: npm
       - name: Set preview path
         run: |
-          SAFE_BRANCH="${GITHUB_REF_NAME//\//-}"
-          echo "SAFE_BRANCH=$SAFE_BRANCH" >> "$GITHUB_ENV"
+          BRANCH_PATH="$GITHUB_REF_NAME"
+          echo "BRANCH_PATH=$BRANCH_PATH" >> "$GITHUB_ENV"
       - run: npm ci
       - run: npm run build
         env:
-          BASE_PATH: /suggestion-mode/${{ env.SAFE_BRANCH }}/
+          BASE_PATH: /suggestion-mode/${{ env.BRANCH_PATH }}/
       - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: dist
-          destination_dir: ${{ env.SAFE_BRANCH }}
+          destination_dir: ${{ env.BRANCH_PATH }}
           keep_files: true
