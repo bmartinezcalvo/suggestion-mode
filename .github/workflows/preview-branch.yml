@@ -24,7 +24,7 @@ jobs:
           cache: npm
       - name: Set preview path
         run: |
-          BRANCH_PATH="$GITHUB_REF_NAME"
+          BRANCH_PATH="${GITHUB_REF_NAME#suggestions-discoverability/}"
           echo "BRANCH_PATH=$BRANCH_PATH" >> "$GITHUB_ENV"
       - run: npm ci
       - run: npm run build
