@@ -13,7 +13,7 @@
     ]"
   >
     <div
-      v-if="isMinervaSkin && showMinervaToggleOffToast"
+      v-if="shouldShowToasts && showMinervaToggleOffToast"
       class="minerva-toast"
       role="status"
       aria-live="polite"
@@ -21,7 +21,7 @@
       Suggestions turned off
     </div>
     <div
-      v-if="isMinervaSkin && showMinervaToggleOnToast"
+      v-if="shouldShowToasts && showMinervaToggleOnToast"
       class="minerva-toast"
       role="status"
       aria-live="polite"
@@ -29,7 +29,7 @@
       Suggestions turned on
     </div>
     <div
-      v-if="isMinervaSkin && showMinervaMoreSuggestionsToast"
+      v-if="shouldShowToasts && showMinervaMoreSuggestionsToast"
       class="minerva-toast minerva-toast--more"
       role="status"
       aria-live="polite"
@@ -37,7 +37,7 @@
       More suggestions are now available
     </div>
     <div
-      v-if="isMinervaSkin && showMinervaZeroSuggestionsToast"
+      v-if="shouldShowToasts && showMinervaZeroSuggestionsToast"
       class="minerva-toast minerva-toast--zero"
       role="status"
       aria-live="polite"
@@ -270,16 +270,16 @@
           <cdx-icon :icon="cdxIconHelp" size="medium" />
         </button>
         <div
-          v-if="showMinervaBanner || showMinervaHelpButton"
+          v-if="showMinervaBanner || showMinervaHelpButton || showMinervaArrowOnly"
           class="minerva-suggestions-bar"
-          :class="{ 'minerva-suggestions-bar--arrow-only': activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows) }"
+          :class="{ 'minerva-suggestions-bar--arrow-only': showMinervaArrowOnly }"
         >
           <transition name="banner-reveal" appear>
-              <div
-                v-if="showMinervaBanner && !isAutoScrollActive && (activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows))"
-                class="suggestions-banner-arrow-buttons"
-                :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
-              >
+            <div
+              v-if="showMinervaArrowOnly"
+              class="suggestions-banner-arrow-buttons"
+              :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
+            >
               <cdx-button
                 v-if="showBannerArrowUp"
                 class="suggestions-banner-arrow-btn"
@@ -306,12 +306,12 @@
               </cdx-button>
             </div>
             <div
-              v-else-if="showMinervaBanner && !(activePrototype === 'option-4' && (hasUsedOption4Button || showOption4Arrows || isAutoScrollActive))"
+              v-else-if="showMinervaBanner"
               class="suggestions-banner minerva-suggestions-banner"
               :class="{
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
-                'suggestions-banner--option-4': activePrototype === 'option-4' && bannerSuggestionCount > 0,
+                'suggestions-banner--option-3': activePrototype === 'option-3' && bannerSuggestionCount > 0,
                 'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
@@ -339,9 +339,35 @@
                     </span>
                   </template>
                   <template v-else>
-                    <span v-if="activePrototype === 'option-3' && !isAutoScrollActive" class="suggestions-banner-arrows">
-                      <cdx-icon v-if="showBannerArrowUp" :icon="cdxIconCollapse" size="medium" />
-                      <cdx-icon v-if="showBannerArrowDown" :icon="cdxIconExpand" size="medium" />
+                    <span
+                      v-if="activePrototype === 'option-3' && !isAutoScrollActive"
+                      class="suggestions-banner-arrow-buttons"
+                      :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
+                    >
+                      <cdx-button
+                        v-if="showBannerArrowUp"
+                        class="suggestions-banner-arrow-btn"
+                        :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                        action="progressive"
+                        weight="quiet"
+                        aria-label="View previous suggestions"
+                        @click="showSuggestions ? scrollToSuggestionByDirection('up') : null"
+                        @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                      >
+                        <cdx-icon :icon="cdxIconCollapse" size="medium" />
+                      </cdx-button>
+                      <cdx-button
+                        v-if="showBannerArrowDown"
+                        class="suggestions-banner-arrow-btn"
+                        :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
+                        action="progressive"
+                        weight="quiet"
+                        aria-label="View next suggestions"
+                        @click="showSuggestions ? scrollToSuggestionByDirection('down') : null"
+                        @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                      >
+                        <cdx-icon :icon="cdxIconExpand" size="medium" />
+                      </cdx-button>
                     </span>
                     <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
                     <span>View suggestions</span>
@@ -2154,45 +2180,14 @@
           <div class="suggestions-banner-container">
             <transition name="banner-reveal" appear>
               <div
-                v-if="isMinervaSkin && isBannerDelayReady && !isBannerDismissed && activePrototype === 'option-3' && (isArrowOnceMode
-                  ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
-                  : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
-                class="suggestions-banner-arrow-buttons"
-              >
-                <cdx-button
-                  v-if="showBannerArrowUp"
-                  class="suggestions-banner-arrow-btn"
-                  :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                  action="progressive"
-                  weight="quiet"
-                  aria-label="View previous suggestions"
-                  @click="showSuggestions ? handleBannerClick() : null"
-                  @keydown="showSuggestions ? handleBannerKeydown($event) : null"
-                >
-                  <cdx-icon :icon="cdxIconCollapse" size="medium" />
-                </cdx-button>
-                <cdx-button
-                  v-if="showBannerArrowDown"
-                  class="suggestions-banner-arrow-btn"
-                  :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                  action="progressive"
-                  weight="quiet"
-                  aria-label="View next suggestions"
-                  @click="showSuggestions ? handleBannerClick() : null"
-                  @keydown="showSuggestions ? handleBannerKeydown($event) : null"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" />
-                </cdx-button>
-              </div>
-              <div
-                v-else-if="isBannerDelayReady && !isBannerDismissed && !(activePrototype === 'option-4' && isAutoScrollActive) && (isArrowOnceMode
+                v-if="isBannerDelayReady && !isBannerDismissed && !(activePrototype === 'option-3' && isAutoScrollActive) && (isArrowOnceMode
                   ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
                   : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
                 class="suggestions-banner"
               :class="{
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
-                'suggestions-banner--option-4': activePrototype === 'option-4' && bannerSuggestionCount > 0,
+                'suggestions-banner--option-3': activePrototype === 'option-3' && bannerSuggestionCount > 0,
                 'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
@@ -2513,24 +2508,29 @@
             <div class="prototype-dialog-header">
               <h2 class="prototype-dialog-title">Choose prototype</h2>
             </div>
-            <fieldset class="prototype-dialog-options" role="radiogroup" aria-label="Prototype options">
-              <label class="prototype-radio">
-                <input type="radio" value="option-1" v-model="selectedPrototype">
-                <span>Op.1: Banner always visible</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-2" v-model="selectedPrototype">
-                <span>Op.2: Button visible just the 1st time</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-3" v-model="selectedPrototype">
-                <span>Op.3: Persistent arrows</span>
-              </label>
-              <label class="prototype-radio">
-                <input type="radio" value="option-4" v-model="selectedPrototype">
-                <span>Op.4: Button + Arrows to navigate</span>
-              </label>
-            </fieldset>
+            <div class="prototype-dialog-options">
+              <cdx-field>
+                <template #label>Suggestions discoverability</template>
+                <fieldset class="prototype-dialog-radio-group" role="radiogroup">
+                  <label class="prototype-radio">
+                    <input type="radio" value="option-1" v-model="selectedPrototype">
+                    <span>Op.1: Persistent banner</span>
+                  </label>
+                  <label class="prototype-radio">
+                    <input type="radio" value="option-3" v-model="selectedPrototype">
+                    <span>Op.2: Persistent arrows</span>
+                  </label>
+                  <label class="prototype-radio">
+                    <input type="radio" value="option-2" v-model="selectedPrototype">
+                    <span>Op.3: Single-use button</span>
+                  </label>
+                </fieldset>
+              </cdx-field>
+              <cdx-field>
+                <template #label>Toasts</template>
+                <cdx-checkbox v-model="toastsEnabled">Enable toasts</cdx-checkbox>
+              </cdx-field>
+            </div>
             <div class="prototype-dialog-actions">
               <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
             </div>
@@ -2552,7 +2552,8 @@ import {
   CdxToggleButton,
   CdxMenu,
   CdxPopover,
-  CdxCheckbox
+  CdxCheckbox,
+  CdxField
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -2727,6 +2728,7 @@ const toneCheckTopOffset = ref(0);
 const toneCheckEnterArmed = ref(false);
 const isPrototypeDialogOpen = ref(false);
 const selectedPrototype = ref('option-1');
+const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
@@ -2841,14 +2843,14 @@ const showToolbarToggle = computed(() => (
   (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
 ));
 const isArrowOnceMode = computed(() => (
-  activePrototype.value === 'option-2' || activePrototype.value === 'option-3' || activePrototype.value === 'option-4'
+  activePrototype.value === 'option-2' || activePrototype.value === 'option-4' || activePrototype.value === 'option-3'
 ));
 const isArrowBounceActive = ref(true);
 const showBannerArrowUp = ref(false);
 const showBannerArrowDown = ref(true);
-const showOption4Arrows = ref(false);
 const hasUsedOption4Button = ref(false);
 const isAutoScrollActive = ref(false);
+const showMinervaArrowOnly = ref(false);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
@@ -2874,6 +2876,13 @@ const minervaToggleBottom = computed(() => {
   return '16px';
 });
 const anySuggestionVisible = ref(false);
+const shouldShowToasts = computed(() => (
+  isMinervaSkin.value &&
+  toastsEnabled.value &&
+  (activePrototype.value === 'option-1' ||
+    activePrototype.value === 'option-2' ||
+    activePrototype.value === 'option-3')
+));
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
@@ -2929,6 +2938,7 @@ const isToneCheckMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
+  if (showMinervaArrowOnly.value) return false;
   if (!isArrowOnceMode.value && !showSuggestionsDisplay.value) return false;
   if (isArrowOnceMode.value && minervaEditSectionOnly.value) {
     if (minervaSectionBannerDismissed.value[minervaEditSectionOnly.value]) {
@@ -3012,7 +3022,7 @@ function resetSuggestionState() {
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
-  showOption4Arrows.value = false;
+  showMinervaArrowOnly.value = false;
   hasUsedOption4Button.value = false;
   minervaSectionBannerDismissed.value = {
     'early-life': false,
@@ -3029,8 +3039,8 @@ function resetSuggestionState() {
 function applyPrototypeMode(mode) {
   resetSuggestionState();
   activePrototype.value = mode;
-  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3' || mode === 'option-4';
-  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3' || mode === 'option-4';
+  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-4' || mode === 'option-3';
+  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-4' || mode === 'option-3';
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
@@ -3040,7 +3050,7 @@ function applyPrototypeMode(mode) {
   dontShowSuggestionInfo.value = false;
   isBannerDelayReady.value = false;
   enableAutoScroll.value = false;
-  showSuggestions.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-3' || mode === 'option-4';
+  showSuggestions.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-4' || mode === 'option-3';
   showSuggestionToggle.value = true;
 }
 
@@ -3104,10 +3114,10 @@ function showFullPageEdit(event) {
     const newTop = targetRef.value.getBoundingClientRect().top;
     window.scrollTo(0, Math.max(0, startY + (newTop - startTop)));
   });
-  if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
+  if (activePrototype.value === 'option-3' && isMinervaSkin.value) {
     nextTick(() => {
       const newAvailable = availableSuggestionCount.value;
-      if (newAvailable > previousAvailable) {
+      if (newAvailable > previousAvailable && shouldShowToasts.value) {
         showMinervaMoreSuggestionsToast.value = true;
         if (showSuggestions.value) {
           isBannerDismissed.value = false;
@@ -3370,7 +3380,7 @@ function handleBannerClose() {
 function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
   if (isArrowOnceMode.value) return;
   if (!showSuggestions.value) return;
-  if (activePrototype.value === 'option-3') {
+  if (activePrototype.value === 'option-4') {
     isArrowBounceActive.value = true;
   }
   isBannerDelayReady.value = false;
@@ -3389,14 +3399,13 @@ function handleBannerClick() {
   if (!showSuggestions.value) {
     showSuggestions.value = true;
   }
-  if (activePrototype.value === 'option-3' || activePrototype.value === 'option-4') {
+  if (activePrototype.value === 'option-4' || activePrototype.value === 'option-3') {
     startAutoScrollIndicator();
   }
-  if (activePrototype.value === 'option-3') {
+  if (activePrototype.value === 'option-4') {
     isArrowBounceActive.value = false;
   }
-  if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
-    showOption4Arrows.value = true;
+  if (activePrototype.value === 'option-3' && isMinervaSkin.value) {
     hasUsedOption4Button.value = true;
   }
   nextTick(() => {
@@ -3405,7 +3414,7 @@ function handleBannerClick() {
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     minervaSectionBannerDismissed.value[minervaEditSectionOnly.value] = true;
   }
-  if (wasSuggestionsOff && isMinervaSkin.value) {
+  if (wasSuggestionsOff && shouldShowToasts.value) {
     if (minervaToggleOnToastTimer) {
       clearTimeout(minervaToggleOnToastTimer);
     }
@@ -3462,7 +3471,7 @@ function getPendingSuggestionIdsForContext() {
 }
 
 function updateBannerArrowDirections() {
-  if (!showSuggestions.value || !(activePrototype.value === 'option-3' || (activePrototype.value === 'option-4' && showOption4Arrows.value))) {
+  if (!showSuggestions.value || activePrototype.value !== 'option-3') {
     showBannerArrowUp.value = false;
     showBannerArrowDown.value = true;
     return;
@@ -3494,7 +3503,8 @@ function clearScrollReappear() {
 }
 
 function handleScrollReappear() {
-  if (!(activePrototype.value === 'option-3' || (activePrototype.value === 'option-4' && isMinervaSkin.value && showOption4Arrows.value))) return;
+  if (activePrototype.value !== 'option-3') return;
+  if (!isMinervaSkin.value) return;
   if (!showSuggestions.value) {
     clearScrollReappear();
     return;
@@ -3505,7 +3515,11 @@ function handleScrollReappear() {
   }
   if (scrollReappearTimer) return;
   scrollReappearTimer = setTimeout(() => {
-    if (!(activePrototype.value === 'option-3' || (activePrototype.value === 'option-4' && isMinervaSkin.value && showOption4Arrows.value))) {
+    if (activePrototype.value !== 'option-3') {
+      scrollReappearTimer = null;
+      return;
+    }
+    if (!isMinervaSkin.value) {
       scrollReappearTimer = null;
       return;
     }
@@ -3513,15 +3527,13 @@ function handleScrollReappear() {
       scrollReappearTimer = null;
       return;
     }
-    if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
-      showOption4Arrows.value = true;
-    }
+    showMinervaArrowOnly.value = true;
     isBannerDismissed.value = false;
     isBannerDelayReady.value = true;
     isArrowBounceActive.value = true;
     updateBannerArrowDirections();
     scrollReappearTimer = null;
-  }, 1500);
+  }, 1000);
 }
 
 const editSectionRefs = {
@@ -3789,7 +3801,41 @@ watch(isEditMode, (newValue) => {
       alignBothSuggestions();
     });
   }
+  if (!newValue) {
+    showMinervaArrowOnly.value = false;
+  }
+  if (newValue && isMinervaSkin.value && activePrototype.value === 'option-3') {
+    nextTick(() => {
+      updateSuggestionVisibility();
+      showMinervaArrowOnly.value = !anySuggestionVisible.value;
+    });
+  }
 });
+
+watch(toastsEnabled, (enabled) => {
+  if (enabled) return;
+  showMinervaToggleOffToast.value = false;
+  showMinervaToggleOnToast.value = false;
+  showMinervaMoreSuggestionsToast.value = false;
+  showMinervaZeroSuggestionsToast.value = false;
+  if (minervaToggleOffToastTimer) {
+    clearTimeout(minervaToggleOffToastTimer);
+    minervaToggleOffToastTimer = null;
+  }
+  if (minervaToggleOnToastTimer) {
+    clearTimeout(minervaToggleOnToastTimer);
+    minervaToggleOnToastTimer = null;
+  }
+  if (minervaMoreSuggestionsToastTimer) {
+    clearTimeout(minervaMoreSuggestionsToastTimer);
+    minervaMoreSuggestionsToastTimer = null;
+  }
+  if (minervaZeroSuggestionsToastTimer) {
+    clearTimeout(minervaZeroSuggestionsToastTimer);
+    minervaZeroSuggestionsToastTimer = null;
+  }
+});
+
 
 // Function to calculate and align second sidebar with highlighted text
 function alignSidebarWithText2() {
@@ -3853,7 +3899,7 @@ function alignBothSuggestions() {
 // Watch for changes in showSuggestions to realign both
 watch(showSuggestions, (newValue) => {
   if (newValue) {
-    if (activePrototype.value === 'option-3') {
+    if (activePrototype.value === 'option-4') {
       isArrowBounceActive.value = true;
     }
     updateBannerArrowDirections();
@@ -3900,6 +3946,7 @@ watch(showSuggestions, (newValue, oldValue) => {
       clearTimeout(minervaToggleOffToastTimer);
     }
     minervaToggleOffToastTimer = setTimeout(() => {
+      if (!shouldShowToasts.value) return;
       showMinervaToggleOffToast.value = true;
       minervaToggleOffToastTimer = setTimeout(() => {
         showMinervaToggleOffToast.value = false;
@@ -3915,6 +3962,7 @@ watch(showSuggestions, (newValue, oldValue) => {
       clearTimeout(minervaToggleOnToastTimer);
     }
     minervaToggleOnToastTimer = setTimeout(() => {
+      if (!shouldShowToasts.value) return;
       showMinervaToggleOnToast.value = true;
       minervaToggleOnToastTimer = setTimeout(() => {
         showMinervaToggleOnToast.value = false;
@@ -4021,11 +4069,12 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
       isBannerDismissed.value = false;
     }
   }
-  if (isMinervaSkin.value && oldValue > 0 && newValue === 0) {
+  if (shouldShowToasts.value && oldValue > 0 && newValue === 0) {
     if (minervaZeroSuggestionsToastTimer) {
       clearTimeout(minervaZeroSuggestionsToastTimer);
     }
     minervaZeroSuggestionsToastTimer = setTimeout(() => {
+      if (!shouldShowToasts.value) return;
       showMinervaZeroSuggestionsToast.value = true;
       minervaZeroSuggestionsToastTimer = setTimeout(() => {
         showMinervaZeroSuggestionsToast.value = false;
@@ -4046,11 +4095,12 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
       zeroSuggestionsBannerTimer = null;
     }
   }
-  if (isMinervaSkin.value && newValue === 0 && oldValue !== undefined && newValue !== oldValue) {
+  if (shouldShowToasts.value && newValue === 0 && oldValue !== undefined && newValue !== oldValue) {
     if (minervaZeroSuggestionsToastTimer) {
       clearTimeout(minervaZeroSuggestionsToastTimer);
     }
     minervaZeroSuggestionsToastTimer = setTimeout(() => {
+      if (!shouldShowToasts.value) return;
       showMinervaZeroSuggestionsToast.value = true;
       minervaZeroSuggestionsToastTimer = setTimeout(() => {
         showMinervaZeroSuggestionsToast.value = false;
@@ -4066,6 +4116,9 @@ watch(anySuggestionVisible, (visible) => {
   }
   if (visible) {
     clearScrollReappear();
+  }
+  if (visible || !showSuggestions.value || !isEditMode.value || !isMinervaSkin.value || activePrototype.value !== 'option-3') {
+    showMinervaArrowOnly.value = false;
   }
 });
 
@@ -4089,11 +4142,12 @@ watch(isLoading, (newValue) => {
       }
     }, 1000);
   }
-  if (!newValue && isEditMode.value && isMinervaSkin.value && showSuggestions.value && availableSuggestionCount.value === 0) {
+  if (!newValue && isEditMode.value && shouldShowToasts.value && showSuggestions.value && availableSuggestionCount.value === 0) {
     if (minervaZeroSuggestionsToastTimer) {
       clearTimeout(minervaZeroSuggestionsToastTimer);
     }
     minervaZeroSuggestionsToastTimer = setTimeout(() => {
+      if (!shouldShowToasts.value) return;
       showMinervaZeroSuggestionsToast.value = true;
       minervaZeroSuggestionsToastTimer = setTimeout(() => {
         showMinervaZeroSuggestionsToast.value = false;
@@ -8077,11 +8131,11 @@ function markArticleEdited() {
   color: var(--color-progressive, #36c);
 }
 
-.suggestions-banner--option-4 {
+.suggestions-banner--option-3 {
   border-color: var(--border-color-progressive, #36c);
 }
 
-.suggestions-banner--option-4 {
+.suggestions-banner--option-3 {
   animation: arrow-bounce-4 4s ease-in-out 0s infinite;
 }
 
@@ -8416,6 +8470,7 @@ function markArticleEdited() {
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
   padding: 20px;
   font-family: 'Inter', sans-serif;
+  font-size: 14px;
 }
 
 .prototype-dialog-header {
@@ -8430,9 +8485,16 @@ function markArticleEdited() {
 }
 
 .prototype-dialog-options {
-  border: none;
-  padding: 0;
   margin: 0 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.prototype-dialog-radio-group {
+  border: 0;
+  padding: 0;
+  margin: 0;
   display: grid;
   gap: 12px;
 }
@@ -8441,8 +8503,11 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   gap: 10px;
-  font-size: 14px;
   color: #202122;
+}
+
+.minerva-skin .prototype-dialog {
+  font-size: 16px;
 }
 
 .prototype-radio input {
