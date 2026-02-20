@@ -343,7 +343,12 @@
                       <cdx-icon v-if="showBannerArrowUp" :icon="cdxIconCollapse" size="medium" />
                       <cdx-icon v-if="showBannerArrowDown" :icon="cdxIconExpand" size="medium" />
                     </span>
-                    <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
+                    <cdx-icon
+                      v-else
+                      :icon="cdxIconArrowDown"
+                      size="medium"
+                      :class="{ 'suggestions-banner-icon--up': showBannerPrimaryArrowUp }"
+                    />
                     <span>View suggestions</span>
                   </template>
                 </div>
@@ -2251,7 +2256,12 @@
                           <cdx-icon :icon="cdxIconExpand" size="medium" />
                         </cdx-button>
                       </span>
-                      <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
+                      <cdx-icon
+                        v-else
+                        :icon="cdxIconArrowDown"
+                        size="medium"
+                        :class="{ 'suggestions-banner-icon--up': showBannerPrimaryArrowUp }"
+                      />
                       <span>View suggestions</span>
                     </template>
                   </div>
@@ -2531,6 +2541,7 @@ import {
   cdxIconNext,
   cdxIconCollapse,
   cdxIconArrowDown,
+  cdxIconArrowUp,
   cdxIconLanguage,
   cdxIconStar,
   cdxIconEllipsis,
@@ -2810,6 +2821,7 @@ const isArrowOnceMode = computed(() => (
 const isArrowBounceActive = ref(true);
 const showBannerArrowUp = ref(false);
 const showBannerArrowDown = ref(true);
+const showBannerPrimaryArrowUp = ref(false);
 const showOption4Arrows = ref(false);
 const hasUsedOption4Button = ref(false);
 const isAutoScrollActive = ref(false);
@@ -3433,6 +3445,33 @@ function updateBannerArrowDirections() {
   showBannerArrowDown.value = hasBelow || (!hasAbove && !hasBelow);
 }
 
+function updatePrimaryBannerDirection() {
+  if (typeof window === 'undefined') return;
+  const ids = getPendingSuggestionIdsForContext();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  let nearestDirection = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+  ids.forEach((id) => {
+    const targetRef = getSuggestionRefById(id);
+    if (!targetRef || !targetRef.value) return;
+    const rect = targetRef.value.getBoundingClientRect();
+    if (rect.bottom <= 0) {
+      const distance = Math.abs(rect.bottom);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestDirection = 'up';
+      }
+    } else if (rect.top >= viewportHeight) {
+      const distance = rect.top - viewportHeight;
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestDirection = 'down';
+      }
+    }
+  });
+  showBannerPrimaryArrowUp.value = nearestDirection === 'up';
+}
+
 function clearScrollReappear() {
   if (scrollReappearTimer) {
     clearTimeout(scrollReappearTimer);
@@ -3508,6 +3547,7 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef3.value) ||
     isVisible(toneCheckHighlightRef.value);
   updateBannerArrowDirections();
+  updatePrimaryBannerDirection();
 }
 
 function updateEditToolbarScrolled() {
@@ -4047,6 +4087,7 @@ watch(isLoading, (newValue) => {
       if (isEditMode.value && !isLoading.value) {
         updateSuggestionVisibility();
         updateBannerArrowDirections();
+        updatePrimaryBannerDirection();
         isBannerDelayReady.value = true;
       }
     }, 1000);
@@ -4305,6 +4346,10 @@ watch(
       pendingScrollSection.value = null;
       nextTick(() => {
         scrollToEditSection(target);
+        setTimeout(() => {
+          updateSuggestionVisibility();
+          updatePrimaryBannerDirection();
+        }, 0);
       });
     }
   }
@@ -7929,6 +7974,10 @@ function markArticleEdited() {
 
 .suggestions-banner-text :deep(.cdx-icon) {
   color: var(--color-progressive, #36c);
+}
+
+.suggestions-banner-text .suggestions-banner-icon--up :deep(svg) {
+  transform: rotate(180deg);
 }
 
 .suggestions-banner-arrow-buttons {
