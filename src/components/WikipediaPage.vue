@@ -276,7 +276,7 @@
         >
           <transition name="banner-reveal" appear>
               <div
-                v-if="showMinervaBanner && !isAutoScrollActive && (activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows))"
+                v-if="showMinervaBanner && !showSuggestions && !isAutoScrollActive && (activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows))"
                 class="suggestions-banner-arrow-buttons"
                 :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
               >
@@ -2154,7 +2154,7 @@
           <div class="suggestions-banner-container">
             <transition name="banner-reveal" appear>
               <div
-                v-if="isMinervaSkin && isBannerDelayReady && !isBannerDismissed && activePrototype === 'option-3' && (isArrowOnceMode
+                v-if="isMinervaSkin && !showSuggestions && isBannerDelayReady && !isBannerDismissed && activePrototype === 'option-3' && (isArrowOnceMode
                   ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
                   : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
                 class="suggestions-banner-arrow-buttons"
@@ -3734,6 +3734,20 @@ watch(isEditMode, (newValue) => {
     nextTick(() => {
       alignBothSuggestions();
     });
+    if (!isMinervaSkin.value) {
+      if (bannerDelayTimer) {
+        clearTimeout(bannerDelayTimer);
+      }
+      isBannerDelayReady.value = false;
+      bannerDelayTimer = setTimeout(() => {
+        if (!isEditMode.value) return;
+        updateSuggestionVisibility();
+        if (shouldShowBanner.value) {
+          isBannerDismissed.value = false;
+          isBannerDelayReady.value = true;
+        }
+      }, 0);
+    }
   }
 });
 
@@ -4031,6 +4045,8 @@ watch(isLoading, (newValue) => {
     }
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && !isLoading.value) {
+        updateSuggestionVisibility();
+        updateBannerArrowDirections();
         isBannerDelayReady.value = true;
       }
     }, 1000);
