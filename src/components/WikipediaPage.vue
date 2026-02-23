@@ -7800,7 +7800,7 @@ function markArticleEdited() {
   gap: 8px;
   margin: 0 0 8px;
   height: 44px;
-  padding: 0 12px;
+  padding: 0 16px;
   border: 1px solid var(--border-color-muted, #c8ccd1);
   background: var(--background-color-progressive-subtle, #eaf3ff);
   border-radius: 2px;
@@ -8348,6 +8348,10 @@ function markArticleEdited() {
   position: sticky;
   top: auto;
   bottom: 32px;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .minerva-skin .suggestions-banner {
