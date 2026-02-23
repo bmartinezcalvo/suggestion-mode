@@ -312,7 +312,7 @@
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
                 'suggestions-banner--option-3': activePrototype === 'option-3' && bannerSuggestionCount > 0,
-                'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
+                'suggestions-banner--single-use': activePrototype === 'option-2',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -339,37 +339,11 @@
                     </span>
                   </template>
                   <template v-else>
-                    <span
-                      v-if="activePrototype === 'option-3' && !isAutoScrollActive"
-                      class="suggestions-banner-arrow-buttons"
-                      :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
-                    >
-                      <cdx-button
-                        v-if="showBannerArrowUp"
-                        class="suggestions-banner-arrow-btn"
-                        :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                        action="progressive"
-                        weight="quiet"
-                        aria-label="View previous suggestions"
-                        @click="showSuggestions ? scrollToSuggestionByDirection('up') : null"
-                        @keydown="showSuggestions ? handleBannerKeydown($event) : null"
-                      >
-                        <cdx-icon :icon="cdxIconCollapse" size="medium" />
-                      </cdx-button>
-                      <cdx-button
-                        v-if="showBannerArrowDown"
-                        class="suggestions-banner-arrow-btn"
-                        :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                        action="progressive"
-                        weight="quiet"
-                        aria-label="View next suggestions"
-                        @click="showSuggestions ? scrollToSuggestionByDirection('down') : null"
-                        @keydown="showSuggestions ? handleBannerKeydown($event) : null"
-                      >
-                        <cdx-icon :icon="cdxIconExpand" size="medium" />
-                      </cdx-button>
-                    </span>
-                    <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
+                    <cdx-icon
+                      :icon="cdxIconArrowDown"
+                      size="medium"
+                      :class="{ 'suggestions-banner-icon--up': showBannerPrimaryArrowUp }"
+                    />
                     <span>View suggestions</span>
                   </template>
                 </div>
@@ -2188,7 +2162,7 @@
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
                 'suggestions-banner--option-3': activePrototype === 'option-3' && bannerSuggestionCount > 0,
-                'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
+                'suggestions-banner--single-use': activePrototype === 'option-2',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -2216,37 +2190,11 @@
                       </span>
                     </template>
                     <template v-else>
-                      <span
-                        v-if="activePrototype === 'option-3' && !isAutoScrollActive"
-                        class="suggestions-banner-arrow-buttons"
-                        :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
-                      >
-                        <cdx-button
-                          v-if="showBannerArrowUp"
-                          class="suggestions-banner-arrow-btn"
-                          :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                          action="progressive"
-                          weight="quiet"
-                          aria-label="View previous suggestions"
-                          @click="showSuggestions ? scrollToSuggestionByDirection('up') : null"
-                          @keydown="showSuggestions ? handleBannerKeydown($event) : null"
-                        >
-                          <cdx-icon :icon="cdxIconCollapse" size="medium" />
-                        </cdx-button>
-                        <cdx-button
-                          v-if="showBannerArrowDown"
-                          class="suggestions-banner-arrow-btn"
-                          :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                          action="progressive"
-                          weight="quiet"
-                          aria-label="View next suggestions"
-                          @click="showSuggestions ? scrollToSuggestionByDirection('down') : null"
-                          @keydown="showSuggestions ? handleBannerKeydown($event) : null"
-                        >
-                          <cdx-icon :icon="cdxIconExpand" size="medium" />
-                        </cdx-button>
-                      </span>
-                      <cdx-icon v-else :icon="cdxIconArrowDown" size="medium" />
+                      <cdx-icon
+                        :icon="cdxIconArrowDown"
+                        size="medium"
+                        :class="{ 'suggestions-banner-icon--up': showBannerPrimaryArrowUp }"
+                      />
                       <span>View suggestions</span>
                     </template>
                   </div>
@@ -2848,6 +2796,7 @@ const isArrowOnceMode = computed(() => (
 const isArrowBounceActive = ref(true);
 const showBannerArrowUp = ref(false);
 const showBannerArrowDown = ref(true);
+const showBannerPrimaryArrowUp = ref(false);
 const hasUsedOption4Button = ref(false);
 const isAutoScrollActive = ref(false);
 const showMinervaArrowOnly = ref(false);
@@ -3380,7 +3329,7 @@ function handleBannerClose() {
 function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
   if (isArrowOnceMode.value) return;
   if (!showSuggestions.value) return;
-  if (activePrototype.value === 'option-4') {
+  if (activePrototype.value === 'option-2') {
     isArrowBounceActive.value = true;
   }
   isBannerDelayReady.value = false;
@@ -3402,7 +3351,7 @@ function handleBannerClick() {
   if (activePrototype.value === 'option-4' || activePrototype.value === 'option-3') {
     startAutoScrollIndicator();
   }
-  if (activePrototype.value === 'option-4') {
+  if (activePrototype.value === 'option-2') {
     isArrowBounceActive.value = false;
   }
   if (activePrototype.value === 'option-3' && isMinervaSkin.value) {
@@ -3495,6 +3444,33 @@ function updateBannerArrowDirections() {
   showBannerArrowDown.value = hasBelow || (!hasAbove && !hasBelow);
 }
 
+function updatePrimaryBannerDirection() {
+  if (typeof window === 'undefined') return;
+  const ids = getPendingSuggestionIdsForContext();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  let nearestDirection = null;
+  let nearestDistance = Number.POSITIVE_INFINITY;
+  ids.forEach((id) => {
+    const targetRef = getSuggestionRefById(id);
+    if (!targetRef || !targetRef.value) return;
+    const rect = targetRef.value.getBoundingClientRect();
+    if (rect.bottom <= 0) {
+      const distance = Math.abs(rect.bottom);
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestDirection = 'up';
+      }
+    } else if (rect.top >= viewportHeight) {
+      const distance = rect.top - viewportHeight;
+      if (distance < nearestDistance) {
+        nearestDistance = distance;
+        nearestDirection = 'down';
+      }
+    }
+  });
+  showBannerPrimaryArrowUp.value = nearestDirection === 'up';
+}
+
 function clearScrollReappear() {
   if (scrollReappearTimer) {
     clearTimeout(scrollReappearTimer);
@@ -3573,6 +3549,7 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef3.value) ||
     isVisible(toneCheckHighlightRef.value);
   updateBannerArrowDirections();
+  updatePrimaryBannerDirection();
 }
 
 function updateEditToolbarScrolled() {
@@ -3899,7 +3876,7 @@ function alignBothSuggestions() {
 // Watch for changes in showSuggestions to realign both
 watch(showSuggestions, (newValue) => {
   if (newValue) {
-    if (activePrototype.value === 'option-4') {
+    if (activePrototype.value === 'option-2') {
       isArrowBounceActive.value = true;
     }
     updateBannerArrowDirections();
@@ -4138,6 +4115,9 @@ watch(isLoading, (newValue) => {
     }
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && !isLoading.value) {
+        updateSuggestionVisibility();
+        updateBannerArrowDirections();
+        updatePrimaryBannerDirection();
         isBannerDelayReady.value = true;
       }
     }, 1000);
@@ -8022,6 +8002,10 @@ function markArticleEdited() {
   color: var(--color-progressive, #36c);
 }
 
+.suggestions-banner-text .suggestions-banner-icon--up :deep(svg) {
+  transform: rotate(180deg);
+}
+
 .suggestions-banner-arrow-buttons {
   display: inline-flex;
   flex-direction: column;
@@ -8054,11 +8038,6 @@ function markArticleEdited() {
 
 .suggestions-banner-icon-only--bounce :deep(.cdx-icon),
 .suggestions-banner-icon-only--bounce :deep(svg) {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
-}
-
-.suggestions-banner--arrow-bounce .suggestions-banner-text :deep(.cdx-icon),
-.suggestions-banner--arrow-bounce .suggestions-banner-text :deep(svg) {
   animation: arrow-bounce 8s ease-in-out 0s infinite;
 }
 
@@ -8131,12 +8110,21 @@ function markArticleEdited() {
   color: var(--color-progressive, #36c);
 }
 
-.suggestions-banner--option-3 {
+.suggestions-banner--single-use {
   border-color: var(--border-color-progressive, #36c);
+  border-radius: 9999px;
 }
 
-.suggestions-banner--option-3 {
+.suggestions-banner--single-use {
+  padding: 0 16px;
   animation: arrow-bounce-4 4s ease-in-out 0s infinite;
+}
+
+.vector-skin .suggestions-banner.suggestions-banner--single-use {
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .minerva-skin .suggestions-banner--option-2 .suggestions-banner-text {
