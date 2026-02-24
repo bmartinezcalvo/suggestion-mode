@@ -3012,6 +3012,7 @@ const minervaAddMenuTriggerRef = ref(null);
 const minervaAddMenuPanelRef = ref(null);
 const minervaEditMenuTriggerRef = ref(null);
 const minervaEditMenuPanelRef = ref(null);
+const skipNextToggleOffToast = ref(false);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
@@ -3237,6 +3238,7 @@ function startOption3Prototype() {
   selectedPrototype.value = 'option-2';
   toastsEnabled.value = true;
   applyPrototypeMode('option-2');
+  skipNextToggleOffToast.value = true;
   showSuggestions.value = false;
   closePrototypeDialog();
   enterEditMode();
@@ -4339,17 +4341,23 @@ watch(showSuggestions, (newValue) => {
 
 watch(showSuggestions, (newValue, oldValue) => {
   if (!newValue && oldValue && isMinervaSkin.value) {
-    if (minervaToggleOffToastTimer) {
-      clearTimeout(minervaToggleOffToastTimer);
+    const suppressOffToast = skipNextToggleOffToast.value;
+    if (skipNextToggleOffToast.value) {
+      skipNextToggleOffToast.value = false;
     }
-    minervaToggleOffToastTimer = setTimeout(() => {
-      if (!shouldShowToasts.value) return;
-      showMinervaToggleOffToast.value = true;
+    if (!suppressOffToast) {
+      if (minervaToggleOffToastTimer) {
+        clearTimeout(minervaToggleOffToastTimer);
+      }
       minervaToggleOffToastTimer = setTimeout(() => {
-        showMinervaToggleOffToast.value = false;
-        minervaToggleOffToastTimer = null;
-      }, 2000);
-    }, 500);
+        if (!shouldShowToasts.value) return;
+        showMinervaToggleOffToast.value = true;
+        minervaToggleOffToastTimer = setTimeout(() => {
+          showMinervaToggleOffToast.value = false;
+          minervaToggleOffToastTimer = null;
+        }, 2000);
+      }, 500);
+    }
   }
   if (newValue && showMinervaToggleOffToast.value) {
     showMinervaToggleOffToast.value = false;
