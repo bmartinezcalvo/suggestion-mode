@@ -3237,6 +3237,7 @@ function startOption3Prototype() {
   selectedPrototype.value = 'option-2';
   toastsEnabled.value = true;
   applyPrototypeMode('option-2');
+  showSuggestions.value = false;
   closePrototypeDialog();
   enterEditMode();
 }
