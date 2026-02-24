@@ -2645,6 +2645,39 @@
           </div>
         </div>
 
+        <div
+          v-if="isMinervaAddCitationDialogOpen"
+          class="citation-popup"
+          contenteditable="false"
+        >
+          <div class="citation-popup-pointer"></div>
+          <div class="citation-popup-header">
+            <button class="citation-popup-close" @click="closeMinervaCitationDialog" aria-label="Close">
+              <cdx-icon :icon="cdxIconClose" size="medium" />
+            </button>
+            <h3 class="citation-popup-title">Add citation</h3>
+          </div>
+          <div class="citation-popup-tabs">
+            <button class="citation-tab citation-tab--active">Automatic</button>
+            <button class="citation-tab">Manual</button>
+            <button class="citation-tab">Re-use</button>
+          </div>
+          <div class="citation-popup-content">
+            <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+            <div class="citation-input-group">
+              <input
+                v-model="citationDialogUrl"
+                class="citation-input"
+                type="text"
+                placeholder="Paste a URL"
+              />
+              <button class="citation-create-btn" :disabled="!citationDialogUrl.trim()">
+                Create
+              </button>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -2731,6 +2764,7 @@ const isSuggestionLightFlash = ref(false);
 const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
+const isMinervaAddCitationDialogOpen = ref(false);
 const linkDialogTab = ref('wikipedia');
 const linkDialogText = ref('');
 const linkDialogQuery = ref('');
@@ -2738,6 +2772,7 @@ const linkDialogExternalUrl = ref('');
 const linkSearchResults = ref([]);
 const linkSearchFooterUrl = ref('');
 const linkSearchTerm = ref('');
+const citationDialogUrl = ref('');
 const isSuggestionInfoOpen = ref(false);
 const isMinervaInfoSheetOpen = ref(false);
 const isSuggestionGlowActive = ref(false);
@@ -3449,6 +3484,11 @@ function handleMinervaAddItem(value) {
     closeMinervaAddMenu();
     return;
   }
+  if (value === 'cite') {
+    openMinervaCitationDialog();
+    closeMinervaAddMenu();
+    return;
+  }
   closeMinervaAddMenu();
 }
 
@@ -3560,6 +3600,23 @@ function openMinervaLinkDialog() {
 
 function closeMinervaLinkDialog() {
   isMinervaAddLinkDialogOpen.value = false;
+}
+
+function openMinervaCitationDialog() {
+  const range = savedArticleSelectionRange ? savedArticleSelectionRange.cloneRange() : null;
+  const wordInfo = getLinkableWordRange(range);
+  if (!wordInfo) return;
+  const selection = window.getSelection();
+  if (selection && wordInfo.range) {
+    selection.removeAllRanges();
+    selection.addRange(wordInfo.range);
+  }
+  citationDialogUrl.value = '';
+  isMinervaAddCitationDialogOpen.value = true;
+}
+
+function closeMinervaCitationDialog() {
+  isMinervaAddCitationDialogOpen.value = false;
 }
 
 function handleToolbarMouseDown() {
