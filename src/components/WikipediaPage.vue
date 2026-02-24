@@ -1023,6 +1023,10 @@
               v-if="isMinervaSkin && (activePrototype === 'option-1' || isArrowOnceMode)"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-spaced"
               :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              @mousedown="handleToolbarMouseDown"
+              @touchstart="handleToolbarMouseDown"
+              @click="handleToolbarClick"
+              @touchend="handleToolbarClick"
             >
               <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
@@ -1043,13 +1047,31 @@
               <div class="toolbar-btn toolbar-btn-icon-only minerva-add-menu">
                 <button
                   class="minerva-add-menu-trigger"
+                  :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
                   aria-label="Add"
+                  ref="minervaAddMenuTriggerRef"
                   @click.stop="toggleMinervaAddMenu"
                 >
                   <cdx-icon :icon="cdxIconAdd" size="medium" />
                 </button>
-                <div v-if="isMinervaAddMenuOpen" class="minerva-add-menu-panel">
-                  <cdx-menu :items="minervaAddMenuItems" @item-click="handleMinervaAddItem" />
+                <div
+                  v-if="isMinervaAddMenuOpen"
+                  ref="minervaAddMenuPanelRef"
+                  class="minerva-add-menu-panel"
+                >
+                  <ul class="minerva-add-menu-list" role="menu">
+                    <li
+                      v-for="item in minervaAddMenuItems"
+                      :key="item.value"
+                      class="minerva-add-menu-item"
+                      role="none"
+                    >
+                      <button type="button" class="minerva-add-menu-button" role="menuitem" @click="handleMinervaAddItem(item.value)">
+                        <cdx-icon :icon="item.icon" size="medium" />
+                        <span>{{ item.label }}</span>
+                      </button>
+                    </li>
+                  </ul>
                 </div>
               </div>
               <cdx-toggle-button
@@ -1078,10 +1100,38 @@
                   </span>
                 </span>
               </cdx-toggle-button>
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Edit options">
-                <cdx-icon :icon="cdxIconEdit" size="medium" />
-                <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-              </button>
+              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu">
+                <button
+                  class="minerva-edit-menu-trigger"
+                  :class="{ 'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen }"
+                  aria-label="Edit options"
+                  ref="minervaEditMenuTriggerRef"
+                  @click.stop="toggleMinervaEditMenu"
+                >
+                  <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                </button>
+                <div
+                  v-if="isMinervaEditMenuOpen"
+                  ref="minervaEditMenuPanelRef"
+                  class="minerva-edit-menu-panel"
+                >
+                  <ul class="minerva-edit-menu-list" role="menu">
+                    <li class="minerva-edit-menu-item" role="none">
+                      <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
+                        <cdx-icon :icon="cdxIconEye" size="medium" />
+                        <span>Visual editing</span>
+                      </button>
+                    </li>
+                    <li class="minerva-edit-menu-item" role="none">
+                      <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
+                        <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                        <span>Source editing</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
                 :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
@@ -1095,6 +1145,10 @@
               v-else-if="isMinervaSkin"
               class="editor-toolbar editor-toolbar--minerva"
               :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              @mousedown="handleToolbarMouseDown"
+              @touchstart="handleToolbarMouseDown"
+              @click="handleToolbarClick"
+              @touchend="handleToolbarClick"
             >
               <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
@@ -1118,10 +1172,38 @@
               <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Link">
                 <cdx-icon :icon="cdxIconLink" size="medium" />
               </button>
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Edit options">
-                <cdx-icon :icon="cdxIconEdit" size="medium" />
-                <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-              </button>
+              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu">
+                <button
+                  class="minerva-edit-menu-trigger"
+                  :class="{ 'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen }"
+                  aria-label="Edit options"
+                  ref="minervaEditMenuTriggerRef"
+                  @click.stop="toggleMinervaEditMenu"
+                >
+                  <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                </button>
+                <div
+                  v-if="isMinervaEditMenuOpen"
+                  ref="minervaEditMenuPanelRef"
+                  class="minerva-edit-menu-panel"
+                >
+                  <ul class="minerva-edit-menu-list" role="menu">
+                    <li class="minerva-edit-menu-item" role="none">
+                      <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
+                        <cdx-icon :icon="cdxIconEye" size="medium" />
+                        <span>Visual editing</span>
+                      </button>
+                    </li>
+                    <li class="minerva-edit-menu-item" role="none">
+                      <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
+                        <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                        <span>Source editing</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
                 :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
@@ -1131,7 +1213,15 @@
                 <cdx-icon :icon="cdxIconNext" size="medium" />
               </button>
             </div>
-            <div v-else class="editor-toolbar" :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }">
+            <div
+              v-else
+              class="editor-toolbar"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              @mousedown="handleToolbarMouseDown"
+              @touchstart="handleToolbarMouseDown"
+              @click="handleToolbarClick"
+              @touchend="handleToolbarClick"
+            >
               <div class="editor-toolbar-left">
                 <button
                   class="toolbar-btn toolbar-btn-icon-only"
@@ -2485,6 +2575,76 @@
           </div>
         </div>
 
+        <div
+          v-if="isMinervaAddLinkDialogOpen"
+          class="link-dialog-backdrop"
+          role="presentation"
+        >
+          <div class="link-dialog" role="dialog" aria-modal="true" aria-label="Add a link">
+            <div class="link-dialog-header">
+              <button class="link-dialog-close" aria-label="Close" @click="closeMinervaLinkDialog">
+                <cdx-icon :icon="cdxIconClose" size="medium" />
+              </button>
+              <h2 class="link-dialog-title">Add a link</h2>
+              <button class="link-dialog-confirm" aria-label="Confirm" @click="closeMinervaLinkDialog">
+                <cdx-icon :icon="cdxIconSuccess" size="medium" />
+              </button>
+            </div>
+            <div class="link-dialog-tabs" role="tablist">
+              <button
+                class="link-dialog-tab"
+                :class="{ 'link-dialog-tab--active': linkDialogTab === 'wikipedia' }"
+                role="tab"
+                :aria-selected="linkDialogTab === 'wikipedia'"
+                @click="linkDialogTab = 'wikipedia'"
+              >
+                Wikipedia
+              </button>
+              <button
+                class="link-dialog-tab"
+                :class="{ 'link-dialog-tab--active': linkDialogTab === 'external' }"
+                role="tab"
+                :aria-selected="linkDialogTab === 'external'"
+                @click="linkDialogTab = 'external'"
+              >
+                External site
+              </button>
+            </div>
+            <div class="link-dialog-content">
+              <div v-if="linkDialogTab === 'wikipedia'" class="link-dialog-panel" role="tabpanel">
+                <cdx-field>
+                  <template #label>Text</template>
+                  <cdx-text-input v-model="linkDialogText" />
+                </cdx-field>
+                <cdx-field>
+                  <template #label>Link</template>
+                  <cdx-typeahead-search
+                    id="link-typeahead-search"
+                    :use-button="false"
+                    :search-results="linkSearchResults"
+                    :search-footer-url="linkSearchFooterUrl"
+                    :show-thumbnail="true"
+                    :highlight-query="true"
+                    placeholder="Search Wikipedia"
+                    v-model="linkDialogQuery"
+                    @input="onLinkSearchInput"
+                  />
+                </cdx-field>
+              </div>
+              <div v-else class="link-dialog-panel" role="tabpanel">
+                <cdx-field>
+                  <template #label>Text</template>
+                  <cdx-text-input v-model="linkDialogText" />
+                </cdx-field>
+                <cdx-field>
+                  <template #label>Link</template>
+                  <cdx-text-input v-model="linkDialogExternalUrl" placeholder="https://example.com" />
+                </cdx-field>
+              </div>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
@@ -2498,10 +2658,10 @@ import {
   CdxButton,
   CdxProgressBar,
   CdxToggleButton,
-  CdxMenu,
   CdxPopover,
   CdxCheckbox,
-  CdxField
+  CdxField,
+  CdxTextInput
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -2530,13 +2690,15 @@ import {
   cdxIconHelp,
   cdxIconAlert,
   cdxIconEdit,
+  cdxIconEye,
   cdxIconPuzzle,
   cdxIconLightbulb,
   cdxIconClock,
   cdxIconArticle,
   cdxIconClose,
   cdxIconSuccess,
-  cdxIconInfo
+  cdxIconInfo,
+  cdxIconWikiText
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
 
@@ -2567,6 +2729,15 @@ const isBannerOpening = ref(false);
 const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
 const isMinervaAddMenuOpen = ref(false);
+const isMinervaEditMenuOpen = ref(false);
+const isMinervaAddLinkDialogOpen = ref(false);
+const linkDialogTab = ref('wikipedia');
+const linkDialogText = ref('');
+const linkDialogQuery = ref('');
+const linkDialogExternalUrl = ref('');
+const linkSearchResults = ref([]);
+const linkSearchFooterUrl = ref('');
+const linkSearchTerm = ref('');
 const isSuggestionInfoOpen = ref(false);
 const isMinervaInfoSheetOpen = ref(false);
 const isSuggestionGlowActive = ref(false);
@@ -2595,6 +2766,8 @@ let minervaMoreSuggestionsToastTimer = null;
 let minervaZeroSuggestionsToastTimer = null;
 let scrollReappearTimer = null;
 let autoScrollTimer = null;
+let savedArticleSelectionRange = null;
+let lastArticleEditableElement = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -2800,6 +2973,10 @@ const showBannerPrimaryArrowUp = ref(false);
 const hasUsedOption4Button = ref(false);
 const isAutoScrollActive = ref(false);
 const showMinervaArrowOnly = ref(false);
+const minervaAddMenuTriggerRef = ref(null);
+const minervaAddMenuPanelRef = ref(null);
+const minervaEditMenuTriggerRef = ref(null);
+const minervaEditMenuPanelRef = ref(null);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
@@ -3254,8 +3431,185 @@ function closeMinervaAddMenu() {
   isMinervaAddMenuOpen.value = false;
 }
 
-function handleMinervaAddItem() {
+function toggleMinervaEditMenu() {
+  isMinervaEditMenuOpen.value = !isMinervaEditMenuOpen.value;
+}
+
+function closeMinervaEditMenu() {
+  isMinervaEditMenuOpen.value = false;
+}
+
+function handleMinervaEditMenuItem() {
+  closeMinervaEditMenu();
+}
+
+function handleMinervaAddItem(value) {
+  if (value === 'link') {
+    openMinervaLinkDialog();
+    closeMinervaAddMenu();
+    return;
+  }
   closeMinervaAddMenu();
+}
+
+function getLinkableSelectionText(rangeOverride = null) {
+  if (typeof window === 'undefined') return '';
+  const selection = window.getSelection();
+  const range = rangeOverride ||
+    (selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null);
+  if (!range) return '';
+  const container = range.commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (!element || !element.closest('.article-text-editable')) {
+    return '';
+  }
+  if (element.closest('a')) {
+    return '';
+  }
+  const selectedText = range.toString().trim();
+  if (selectedText) return selectedText;
+  const resolveTextNode = (node, offset) => {
+    if (node.nodeType === Node.TEXT_NODE) return { node, offset };
+    if (node.nodeType !== Node.ELEMENT_NODE) return null;
+    const child = node.childNodes[offset] || node.childNodes[offset - 1];
+    if (!child) return null;
+    let current = child;
+    while (current && current.nodeType !== Node.TEXT_NODE) {
+      current = current.firstChild;
+    }
+    return current ? { node: current, offset: 0 } : null;
+  };
+  const resolved = resolveTextNode(range.startContainer, range.startOffset || 0);
+  if (!resolved || !resolved.node || resolved.node.nodeType !== Node.TEXT_NODE) return '';
+  const nodeText = resolved.node.textContent || '';
+  const offset = resolved.offset ?? 0;
+  const leftPart = nodeText.slice(0, offset);
+  const rightPart = nodeText.slice(offset);
+  const leftMatch = leftPart.match(/\\b[\\w-]+$/);
+  const rightMatch = rightPart.match(/^[\\w-]+/);
+  const word = `${leftMatch ? leftMatch[0] : ''}${rightMatch ? rightMatch[0] : ''}`.trim();
+  return word;
+}
+
+function getLinkableWordRange(rangeOverride = null) {
+  if (typeof window === 'undefined') return null;
+  const selection = window.getSelection();
+  const range = rangeOverride ||
+    (selection && selection.rangeCount > 0 ? selection.getRangeAt(0) : null);
+  if (!range) return null;
+  const container = range.commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (!element || !element.closest('.article-text-editable')) return null;
+  if (element.closest('a')) return null;
+  const selectedText = range.toString().trim();
+  if (selectedText) {
+    return { text: selectedText, range: range.cloneRange() };
+  }
+  const resolveTextNode = (node, offset) => {
+    if (node.nodeType === Node.TEXT_NODE) return { node, offset };
+    if (node.nodeType !== Node.ELEMENT_NODE) return null;
+    const child = node.childNodes[offset] || node.childNodes[offset - 1];
+    if (!child) return null;
+    let current = child;
+    while (current && current.nodeType !== Node.TEXT_NODE) {
+      current = current.firstChild;
+    }
+    return current ? { node: current, offset: 0 } : null;
+  };
+  const resolved = resolveTextNode(range.startContainer, range.startOffset || 0);
+  if (!resolved || !resolved.node || resolved.node.nodeType !== Node.TEXT_NODE) return null;
+  const nodeText = resolved.node.textContent || '';
+  const offset = resolved.offset ?? 0;
+  const leftPart = nodeText.slice(0, offset);
+  const rightPart = nodeText.slice(offset);
+  const leftMatch = leftPart.match(/\\b[\\w-]+$/);
+  const rightMatch = rightPart.match(/^[\\w-]+/);
+  const word = `${leftMatch ? leftMatch[0] : ''}${rightMatch ? rightMatch[0] : ''}`.trim();
+  if (!word) return null;
+  const startOffset = offset - (leftMatch ? leftMatch[0].length : 0);
+  const endOffset = offset + (rightMatch ? rightMatch[0].length : 0);
+  const wordRange = document.createRange();
+  wordRange.setStart(resolved.node, Math.max(0, startOffset));
+  wordRange.setEnd(resolved.node, Math.max(startOffset, endOffset));
+  return { text: word, range: wordRange };
+}
+
+function openMinervaLinkDialog() {
+  const range = savedArticleSelectionRange ? savedArticleSelectionRange.cloneRange() : null;
+  const wordInfo = getLinkableWordRange(range);
+  if (!wordInfo) return;
+  const selection = window.getSelection();
+  if (selection && wordInfo.range) {
+    selection.removeAllRanges();
+    selection.addRange(wordInfo.range);
+  }
+  linkDialogText.value = wordInfo.text;
+  linkDialogQuery.value = wordInfo.text;
+  linkDialogExternalUrl.value = '';
+  linkDialogTab.value = 'wikipedia';
+  isMinervaAddLinkDialogOpen.value = true;
+  nextTick(() => {
+    onLinkSearchInput(wordInfo.text);
+    const input = document.querySelector('#link-typeahead-search input');
+    if (input) {
+      input.value = wordInfo.text;
+      input.dispatchEvent(new Event('input'));
+    }
+  });
+}
+
+function closeMinervaLinkDialog() {
+  isMinervaAddLinkDialogOpen.value = false;
+}
+
+function handleToolbarMouseDown() {
+  if (typeof window === 'undefined') return;
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return;
+  const anchorNode = selection.anchorNode;
+  if (!anchorNode) return;
+  const element = anchorNode.nodeType === Node.ELEMENT_NODE ? anchorNode : anchorNode.parentElement;
+  if (!element || !element.closest('.article-text-editable')) return;
+  savedArticleSelectionRange = selection.getRangeAt(0).cloneRange();
+  lastArticleEditableElement = element.closest('.article-text-editable');
+}
+
+function handleToolbarClick() {
+  if (typeof window === 'undefined') return;
+  if (!savedArticleSelectionRange) return;
+  requestAnimationFrame(() => {
+    const selection = window.getSelection();
+    if (!selection) return;
+    selection.removeAllRanges();
+    selection.addRange(savedArticleSelectionRange);
+    if (lastArticleEditableElement && typeof lastArticleEditableElement.focus === 'function') {
+      lastArticleEditableElement.focus();
+    }
+  });
+}
+
+function handleSelectionChange() {
+  if (typeof window === 'undefined') return;
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return;
+  const range = selection.getRangeAt(0);
+  const container = range.commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (!element || !element.closest('.article-text-editable')) return;
+  if (element.closest('a')) return;
+  savedArticleSelectionRange = range.cloneRange();
+  lastArticleEditableElement = element.closest('.article-text-editable');
+}
+
+function handleDocumentClick(event) {
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value) return;
+  const target = event.target;
+  if (minervaAddMenuPanelRef.value?.contains(target)) return;
+  if (minervaAddMenuTriggerRef.value?.contains(target)) return;
+  if (minervaEditMenuPanelRef.value?.contains(target)) return;
+  if (minervaEditMenuTriggerRef.value?.contains(target)) return;
+  closeMinervaAddMenu();
+  closeMinervaEditMenu();
 }
 
 function getSuggestionRefById(suggestionId) {
@@ -4407,6 +4761,8 @@ onMounted(() => {
     window.addEventListener('scroll', handleScrollReappear, true);
     updateEditToolbarScrolled();
   }
+  document.addEventListener('click', handleDocumentClick);
+  document.addEventListener('selectionchange', handleSelectionChange);
   updateToneCheckFromContent();
 });
 
@@ -4421,6 +4777,8 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
     window.removeEventListener('scroll', handleScrollReappear, true);
   }
+  document.removeEventListener('click', handleDocumentClick);
+  document.removeEventListener('selectionchange', handleSelectionChange);
   clearAutoSuggestionTimer();
   if (bannerCloseTimer) {
     clearTimeout(bannerCloseTimer);
@@ -4523,6 +4881,45 @@ function onSearchInput(value) {
     .catch(() => {
       searchResults.value = [];
       searchFooterUrl.value = '';
+    });
+}
+
+function onLinkSearchInput(value) {
+  linkSearchTerm.value = value;
+  linkDialogQuery.value = value;
+  if (!value || value === '') {
+    linkSearchResults.value = [];
+    linkSearchFooterUrl.value = '';
+    return;
+  }
+  function adaptApiResponse(pages) {
+    return pages.map(({ id, key, title, description, thumbnail }) => ({
+      label: title,
+      value: id,
+      description: description,
+      url: `https://en.wikipedia.org/wiki/${encodeURIComponent(key)}`,
+      thumbnail: thumbnail ? {
+        url: thumbnail.url,
+        width: thumbnail.width,
+        height: thumbnail.height
+      } : undefined
+    }));
+  }
+  fetch(
+    `https://en.wikipedia.org/w/rest.php/v1/search/title?q=${encodeURIComponent(value)}&limit=10`
+  )
+    .then((resp) => resp.json())
+    .then((data) => {
+      if (linkSearchTerm.value === value) {
+        linkSearchResults.value = data.pages && data.pages.length > 0
+          ? adaptApiResponse(data.pages)
+          : [];
+        linkSearchFooterUrl.value = `https://en.wikipedia.org/w/index.php?title=Special%3ASearch&fulltext=1&search=${encodeURIComponent(value)}`;
+      }
+    })
+    .catch(() => {
+      linkSearchResults.value = [];
+      linkSearchFooterUrl.value = '';
     });
 }
 
@@ -6232,6 +6629,10 @@ function markArticleEdited() {
   border-radius: 0;
 }
 
+.editor-toolbar--minerva .toolbar-btn-icon-only:first-child {
+  border-right: 1px solid var(--border-color-muted, #c8ccd1);
+}
+
 .minerva-skin.edit-mode .edit-mode-content {
   padding-top: 42px;
 }
@@ -6298,22 +6699,156 @@ function markArticleEdited() {
   cursor: pointer;
 }
 
+.minerva-add-menu-trigger--active {
+  background: var(--background-color-interactive-subtle, #eaecf0);
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
 .minerva-add-menu-panel {
-  position: absolute;
-  top: 46px;
+  position: fixed;
+  top: 42px;
   right: 0;
   left: auto;
-  min-width: 140px;
+  width: min(256px, 100vw);
+  max-width: 256px;
   background: #ffffff;
-  border: 1px solid #c8ccd1;
-  border-radius: 6px;
-  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.08);
-  padding: 6px;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
   z-index: 90;
 }
 
-.minerva-add-menu-panel :deep(.cdx-menu) {
+.minerva-add-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.minerva-add-menu-item {
+  display: flex;
+}
+
+.minerva-add-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-base, #202122);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.minerva-add-menu-button:hover {
+  background: #f8f9fa;
+}
+
+.minerva-add-menu-button :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+}
+
+.minerva-add-menu-button :deep(svg) {
+  width: 20px;
+  height: 20px;
+}
+
+.minerva-edit-menu {
+  position: relative;
+  padding: 0;
+}
+
+.minerva-edit-menu-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 42px;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.minerva-edit-menu-trigger--active {
+  background: var(--background-color-interactive-subtle, #eaecf0);
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
+.minerva-edit-menu-panel {
+  position: fixed;
+  top: 42px;
+  right: 0;
+  left: auto;
+  width: min(256px, 100vw);
+  max-width: 256px;
+  background: #ffffff;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+  z-index: 90;
+}
+
+.minerva-edit-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.minerva-edit-menu-item {
+  display: flex;
+}
+
+.minerva-edit-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-base, #202122);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.minerva-edit-menu-button:hover {
+  background: #f8f9fa;
+}
+
+.minerva-edit-menu-button--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-edit-menu-button--active :deep(.cdx-icon) {
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-edit-menu-button--active :deep(svg) {
+  fill: var(--color-progressive, #36c);
+}
+
+.minerva-edit-menu-button :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+}
+
+.minerva-edit-menu-button :deep(svg) {
+  width: 20px;
+  height: 20px;
 }
 
 .minerva-toolbar-toggle {
@@ -8520,6 +9055,108 @@ function markArticleEdited() {
 
 .prototype-dialog-btn:hover {
   background: #2a4b8d;
+}
+
+.link-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(255, 255, 255, 0.95);
+  z-index: 210;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 0;
+}
+
+.link-dialog {
+  width: 100%;
+  max-width: 520px;
+  background: #ffffff;
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  color: #202122;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.link-dialog-header {
+  display: grid;
+  grid-template-columns: 56px 1fr 56px;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color-base, #a2a9b1);
+}
+
+.link-dialog-title {
+  margin: 0;
+  font-size: 20px;
+  font-weight: 700;
+}
+
+.link-dialog-close,
+.link-dialog-confirm {
+  width: 56px;
+  height: 56px;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.link-dialog-confirm {
+  background: #36c;
+  color: #ffffff;
+}
+
+.link-dialog-confirm :deep(.cdx-icon),
+.link-dialog-confirm :deep(svg) {
+  color: #ffffff;
+}
+
+.link-dialog-tabs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  border-bottom: 1px solid var(--border-color-base, #a2a9b1);
+}
+
+.link-dialog-tab {
+  padding: 14px 12px;
+  border: none;
+  background: transparent;
+  font-weight: 700;
+  font-size: 16px;
+  color: #202122;
+  border-bottom: 3px solid transparent;
+  cursor: pointer;
+}
+
+.link-dialog-tab--active {
+  color: #36c;
+  border-bottom-color: #36c;
+}
+
+.link-dialog-content {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.link-dialog-panel :deep(.cdx-field__label) {
+  font-size: 16px;
+  font-weight: 700;
+  color: #202122;
+}
+
+.link-dialog-panel :deep(.cdx-text-input__input),
+.link-dialog-panel :deep(.cdx-typeahead-search__input) {
+  font-size: 16px;
+}
+
+.link-dialog-panel :deep(.cdx-typeahead-search__menu) {
+  max-height: 360px;
 }
 
 .suggestion-notification {
