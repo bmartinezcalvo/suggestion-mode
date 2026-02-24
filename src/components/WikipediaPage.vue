@@ -3233,13 +3233,21 @@ function startPrototype() {
   enterEditMode();
 }
 
+function startOption3Prototype() {
+  selectedPrototype.value = 'option-2';
+  toastsEnabled.value = true;
+  applyPrototypeMode('option-2');
+  closePrototypeDialog();
+  enterEditMode();
+}
+
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
-  openPrototypeDialog(true);
+  startOption3Prototype();
 }
 
 function getEditSectionRefById(sectionId) {
@@ -5035,7 +5043,7 @@ function exitEditMode() {
 
 function toggleEditMode() {
   if (!isEditMode.value) {
-    openPrototypeDialog();
+    startOption3Prototype();
     return;
   }
   exitEditMode();
