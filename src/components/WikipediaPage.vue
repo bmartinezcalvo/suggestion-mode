@@ -1044,7 +1044,7 @@
                 <cdx-icon :icon="cdxIconTextStyle" size="medium" />
                 <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
               </button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-add-menu">
+              <div v-if="minervaToolbarToggleEnabled" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu">
                 <button
                   class="minerva-add-menu-trigger"
                   :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
@@ -1074,8 +1074,16 @@
                   </ul>
                 </div>
               </div>
+              <template v-if="!minervaToolbarToggleEnabled">
+                <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Cite">
+                  <cdx-icon :icon="cdxIconQuotes" size="medium" />
+                </button>
+                <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Link">
+                  <cdx-icon :icon="cdxIconLink" size="medium" />
+                </button>
+              </template>
               <cdx-toggle-button
-                v-if="showSuggestionToggle || (!showSuggestionToggle && !showSuggestions)"
+                v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
                 v-model="showSuggestions"
                 quiet
                 aria-label="Toggle suggestions"
@@ -1127,6 +1135,20 @@
                       <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
                         <cdx-icon :icon="cdxIconWikiText" size="medium" />
                         <span>Source editing</span>
+                      </button>
+                    </li>
+                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
+                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-item" role="none">
+                      <button
+                        type="button"
+                        class="minerva-edit-menu-button"
+                        :class="{ 'minerva-edit-menu-button--active': showSuggestions }"
+                        role="menuitem"
+                        aria-pressed="showSuggestions"
+                        @click="handleMinervaSuggestionsMenuToggle"
+                      >
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                        <span>Suggestion mode</span>
                       </button>
                     </li>
                   </ul>
@@ -1199,6 +1221,20 @@
                       <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
                         <cdx-icon :icon="cdxIconWikiText" size="medium" />
                         <span>Source editing</span>
+                      </button>
+                    </li>
+                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
+                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-item" role="none">
+                      <button
+                        type="button"
+                        class="minerva-edit-menu-button"
+                        :class="{ 'minerva-edit-menu-button--active': showSuggestions }"
+                        role="menuitem"
+                        aria-pressed="showSuggestions"
+                        @click="handleMinervaSuggestionsMenuToggle"
+                      >
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                        <span>Suggestion mode</span>
                       </button>
                     </li>
                   </ul>
@@ -2568,6 +2604,10 @@
                 <template #label>Toasts</template>
                 <cdx-checkbox v-model="toastsEnabled">Enable toasts</cdx-checkbox>
               </cdx-field>
+              <cdx-field>
+                <template #label>ToggleButton on mobile</template>
+                <cdx-checkbox v-model="minervaToolbarToggleEnabled">Enable ToggleButton on mobile</cdx-checkbox>
+              </cdx-field>
             </div>
             <div class="prototype-dialog-actions">
               <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
@@ -2765,6 +2805,7 @@ const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
+const minervaToolbarToggleEnabled = ref(true);
 const linkDialogTab = ref('wikipedia');
 const linkDialogText = ref('');
 const linkDialogQuery = ref('');
@@ -3475,6 +3516,11 @@ function closeMinervaEditMenu() {
 }
 
 function handleMinervaEditMenuItem() {
+  closeMinervaEditMenu();
+}
+
+function handleMinervaSuggestionsMenuToggle() {
+  showSuggestions.value = !showSuggestions.value;
   closeMinervaEditMenu();
 }
 
@@ -6865,6 +6911,12 @@ function markArticleEdited() {
 
 .minerva-edit-menu-item {
   display: flex;
+}
+
+.minerva-edit-menu-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--border-color-subtle, #c8ccd1);
 }
 
 .minerva-edit-menu-button {
