@@ -3152,6 +3152,7 @@ const isToneCheckMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
+  if (activePrototype.value === 'option-3') return false;
   if (showMinervaArrowOnly.value) return false;
   if (!isArrowOnceMode.value && !showSuggestionsDisplay.value) return false;
   if (isArrowOnceMode.value && minervaEditSectionOnly.value) {
@@ -4237,6 +4238,7 @@ watch(showSuggestions, (newValue) => {
     });
   } else {
     sidebarTopOffset.value = 0;
+    showMinervaArrowOnly.value = false;
   }
 });
 
