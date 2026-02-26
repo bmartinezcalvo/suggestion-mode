@@ -1149,6 +1149,12 @@
                       >
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                         <span>Suggestion mode</span>
+                        <span
+                          v-if="showSuggestions && showToggleBadge"
+                          class="minerva-edit-menu-badge"
+                        >
+                          {{ toggleBadgeCount }}
+                        </span>
                       </button>
                     </li>
                   </ul>
@@ -1235,6 +1241,12 @@
                       >
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                         <span>Suggestion mode</span>
+                        <span
+                          v-if="showSuggestions && showToggleBadge"
+                          class="minerva-edit-menu-badge"
+                        >
+                          {{ toggleBadgeCount }}
+                        </span>
                       </button>
                     </li>
                   </ul>
@@ -2604,7 +2616,7 @@
                 <template #label>Toasts</template>
                 <cdx-checkbox v-model="toastsEnabled">Enable toasts</cdx-checkbox>
               </cdx-field>
-              <cdx-field>
+              <cdx-field v-if="isMinervaSkin">
                 <template #label>ToggleButton on mobile</template>
                 <cdx-checkbox v-model="minervaToolbarToggleEnabled">Enable ToggleButton on mobile</cdx-checkbox>
               </cdx-field>
@@ -5323,7 +5335,6 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 14px;
   color: #202122;
   cursor: pointer;
 }
@@ -5365,7 +5376,7 @@ function markArticleEdited() {
 
 .wikipedia-tagline {
   font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
-  font-size: 12px;
+  font-size: 14px;
   line-height: 1.2;
   color: #202122;
 }
@@ -6958,6 +6969,20 @@ function markArticleEdited() {
 .minerva-edit-menu-button :deep(svg) {
   width: 20px;
   height: 20px;
+}
+
+.minerva-edit-menu-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 2px;
+  background: transparent;
+  border: 1px solid var(--border-color-progressive, #36c);
+  color: var(--color-progressive, #36c);
+  font-weight: 700;
+  line-height: 20px;
+  text-align: center;
 }
 
 .minerva-toolbar-toggle {
