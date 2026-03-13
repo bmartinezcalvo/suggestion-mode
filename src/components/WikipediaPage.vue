@@ -278,12 +278,10 @@
               <div
                 v-if="showMinervaBanner && !showSuggestions && !isAutoScrollActive && (activePrototype === 'option-3' || (activePrototype === 'option-4' && showOption4Arrows))"
                 class="suggestions-banner-arrow-buttons"
-                :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
               >
               <cdx-button
                 v-if="showBannerArrowUp"
                 class="suggestions-banner-arrow-btn"
-                :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
                 action="progressive"
                 weight="quiet"
                 aria-label="View previous suggestions"
@@ -295,7 +293,6 @@
               <cdx-button
                 v-if="showBannerArrowDown"
                 class="suggestions-banner-arrow-btn"
-                :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
                 action="progressive"
                 weight="quiet"
                 aria-label="View next suggestions"
@@ -312,7 +309,6 @@
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
                 'suggestions-banner--option-4': activePrototype === 'option-4' && bannerSuggestionCount > 0,
-                'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -353,7 +349,19 @@
                   </template>
                 </div>
                 </div>
-              <div class="suggestions-banner-actions"></div>
+              <div class="suggestions-banner-actions">
+                <cdx-icon
+                  class="suggestions-banner-close-icon"
+                  :icon="cdxIconClose"
+                  size="small"
+                  role="button"
+                  tabindex="0"
+                  aria-label="Dismiss suggestions"
+                  @click.stop="handleBannerClose()"
+                  @keydown.enter.prevent="handleBannerClose()"
+                  @keydown.space.prevent="handleBannerClose()"
+                />
+              </div>
             </div>
           </transition>
           <button
@@ -2167,7 +2175,6 @@
                 <cdx-button
                   v-if="showBannerArrowUp"
                   class="suggestions-banner-arrow-btn"
-                  :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
                   action="progressive"
                   weight="quiet"
                   aria-label="View previous suggestions"
@@ -2179,7 +2186,6 @@
                 <cdx-button
                   v-if="showBannerArrowDown"
                   class="suggestions-banner-arrow-btn"
-                  :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
                   action="progressive"
                   weight="quiet"
                   aria-label="View next suggestions"
@@ -2198,7 +2204,6 @@
                 'suggestions-banner--empty': bannerSuggestionCount === 0,
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
                 'suggestions-banner--option-4': activePrototype === 'option-4' && bannerSuggestionCount > 0,
-                'suggestions-banner--arrow-bounce': activePrototype === 'option-3',
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -2229,12 +2234,10 @@
                       <span
                         v-if="activePrototype === 'option-3' && !isAutoScrollActive"
                         class="suggestions-banner-arrow-buttons"
-                        :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
                       >
                         <cdx-button
                           v-if="showBannerArrowUp"
                           class="suggestions-banner-arrow-btn"
-                          :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
                           action="progressive"
                           weight="quiet"
                           aria-label="View previous suggestions"
@@ -2246,7 +2249,6 @@
                         <cdx-button
                           v-if="showBannerArrowDown"
                           class="suggestions-banner-arrow-btn"
-                          :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
                           action="progressive"
                           weight="quiet"
                           aria-label="View next suggestions"
@@ -2266,7 +2268,19 @@
                     </template>
                   </div>
                 </div>
-                <div class="suggestions-banner-actions"></div>
+                <div class="suggestions-banner-actions">
+                  <cdx-icon
+                    class="suggestions-banner-close-icon"
+                    :icon="cdxIconClose"
+                    size="small"
+                    role="button"
+                    tabindex="0"
+                    aria-label="Dismiss suggestions"
+                    @click.stop="handleBannerClose()"
+                    @keydown.enter.prevent="handleBannerClose()"
+                    @keydown.space.prevent="handleBannerClose()"
+                  />
+                </div>
               </div>
             </transition>
           </div>
@@ -2333,139 +2347,139 @@
             aria-label="Suggestion"
             ref="minervaSheetRef"
           >
-            <div
-              class="minerva-sheet-header"
-              :class="{ 'minerva-sheet-header--empty': shouldShowEmptyState && !isToneCheckMode }"
-            >
-              <cdx-icon :icon="isToneCheckMode ? cdxIconAlert : cdxIconLightbulb" size="medium" />
-              <div class="minerva-sheet-title">
-                {{ isToneCheckMode ? 'Revise tone' : minervaSheetTitle }}
+              <div
+                class="minerva-sheet-header"
+                :class="{ 'minerva-sheet-header--empty': shouldShowEmptyState && !isToneCheckMode }"
+              >
+                <cdx-icon :icon="isToneCheckMode ? cdxIconAlert : cdxIconLightbulb" size="medium" />
+                <div class="minerva-sheet-title">
+                  {{ isToneCheckMode ? 'Revise tone' : minervaSheetTitle }}
+                </div>
               </div>
-            </div>
-          <p v-if="isToneCheckMode" class="minerva-sheet-description">
-            Other editors often revise this kind of wording to have a more balanced tone. Learn more
-          </p>
-          <p v-else-if="shouldShowEmptyState && !showSuggestionNotification" class="minerva-empty-sheet-text">
-            There are no suggestions to improve this article yet.
-          </p>
-          <p v-else class="minerva-sheet-description">
-            Help readers understand where this information is coming from by adding a citation.
-          </p>
-            <div v-if="isToneCheckMode" class="minerva-sheet-actions">
-            <cdx-button
-              class="minerva-sheet-btn"
-              action="default"
-              weight="normal"
-              @click="handleToneCheckRevise"
-            >
-              Revise
-            </cdx-button>
-            <cdx-button
-              class="minerva-sheet-btn minerva-sheet-btn-secondary"
-              action="default"
-              weight="normal"
-              @click="handleToneCheckDecline"
-            >
-              Decline
-            </cdx-button>
-          </div>
-            <div v-else-if="!shouldShowEmptyState" class="minerva-sheet-actions">
-            <cdx-button
-              v-if="activeMinervaSuggestion === 1"
-              class="minerva-sheet-btn"
-              action="default"
-              weight="normal"
-              :disabled="showCitationPopup1"
-              @click="handleYesSuggestion1"
-            >
-              Add citation
-            </cdx-button>
-            <cdx-button
-              v-if="activeMinervaSuggestion === 1"
-              class="minerva-sheet-btn minerva-sheet-btn-secondary"
-              action="default"
-              weight="normal"
-              :disabled="showCitationPopup1"
-              @click="handleNoSuggestion1"
-            >
-              Dismiss
-            </cdx-button>
-            <cdx-button
-              v-if="activeMinervaSuggestion === 2"
-              class="minerva-sheet-btn"
-              action="default"
-              weight="normal"
-              :disabled="showCitationPopup2"
-              @click="handleYesSuggestion2"
-            >
-              Add citation
-            </cdx-button>
-            <cdx-button
-              v-if="activeMinervaSuggestion === 2"
-              class="minerva-sheet-btn minerva-sheet-btn-secondary"
-              action="default"
-              weight="normal"
-              :disabled="showCitationPopup2"
-              @click="handleNoSuggestion2"
-            >
-              Dismiss
-            </cdx-button>
-            <cdx-button
-              v-if="activeMinervaSuggestion === 3"
-              class="minerva-sheet-btn"
-              action="default"
-              weight="normal"
-              :disabled="showCitationPopup3"
-              @click="handleYesSuggestion3"
-            >
-              Add citation
-            </cdx-button>
-            <cdx-button
-              v-if="activeMinervaSuggestion === 3"
-              class="minerva-sheet-btn minerva-sheet-btn-secondary"
-              action="default"
-              weight="normal"
-              :disabled="showCitationPopup3"
-              @click="handleNoSuggestion3"
-            >
-              Dismiss
-            </cdx-button>
-            <cdx-button
-              class="minerva-sheet-btn minerva-sheet-more-actions"
-              action="default"
-              weight="quiet"
-              aria-label="More actions"
-            >
-              <cdx-icon :icon="cdxIconEllipsis" size="small" />
-            </cdx-button>
-          </div>
-          <div
-            v-if="showMinervaPagination"
-            class="minerva-sheet-pagination"
-          >
-            <div class="minerva-pagination-count">{{ minervaPaginationLabel }}</div>
-            <div class="minerva-pagination-actions">
-              <button
-                class="minerva-pagination-btn"
-                type="button"
-                aria-label="Previous suggestion"
-                :disabled="isMinervaPaginationPrevDisabled"
-                @click="handleMinervaPaginationPrev"
+              <p v-if="isToneCheckMode" class="minerva-sheet-description">
+                Other editors often revise this kind of wording to have a more balanced tone. Learn more
+              </p>
+              <p v-else-if="shouldShowEmptyState && !showSuggestionNotification" class="minerva-empty-sheet-text">
+                There are no suggestions to improve this article yet.
+              </p>
+              <p v-else class="minerva-sheet-description">
+                Help readers understand where this information is coming from by adding a citation.
+              </p>
+              <div v-if="isToneCheckMode" class="minerva-sheet-actions">
+                <cdx-button
+                  class="minerva-sheet-btn"
+                  action="default"
+                  weight="normal"
+                  @click="handleToneCheckRevise"
+                >
+                  Revise
+                </cdx-button>
+                <cdx-button
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  @click="handleToneCheckDecline"
+                >
+                  Decline
+                </cdx-button>
+              </div>
+              <div v-else-if="!shouldShowEmptyState" class="minerva-sheet-actions">
+                <cdx-button
+                  v-if="activeMinervaSuggestion === 1"
+                  class="minerva-sheet-btn"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup1"
+                  @click="handleYesSuggestion1"
+                >
+                  Add citation
+                </cdx-button>
+                <cdx-button
+                  v-if="activeMinervaSuggestion === 1"
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup1"
+                  @click="handleNoSuggestion1"
+                >
+                  Dismiss
+                </cdx-button>
+                <cdx-button
+                  v-if="activeMinervaSuggestion === 2"
+                  class="minerva-sheet-btn"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup2"
+                  @click="handleYesSuggestion2"
+                >
+                  Add citation
+                </cdx-button>
+                <cdx-button
+                  v-if="activeMinervaSuggestion === 2"
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup2"
+                  @click="handleNoSuggestion2"
+                >
+                  Dismiss
+                </cdx-button>
+                <cdx-button
+                  v-if="activeMinervaSuggestion === 3"
+                  class="minerva-sheet-btn"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup3"
+                  @click="handleYesSuggestion3"
+                >
+                  Add citation
+                </cdx-button>
+                <cdx-button
+                  v-if="activeMinervaSuggestion === 3"
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup3"
+                  @click="handleNoSuggestion3"
+                >
+                  Dismiss
+                </cdx-button>
+                <cdx-button
+                  class="minerva-sheet-btn minerva-sheet-more-actions"
+                  action="default"
+                  weight="quiet"
+                  aria-label="More actions"
+                >
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+              <div
+                v-if="showMinervaPagination"
+                class="minerva-sheet-pagination"
               >
-                <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon minerva-pagination-icon--prev" />
-              </button>
-              <button
-                class="minerva-pagination-btn"
-                type="button"
-                aria-label="Next suggestion"
-                :disabled="isMinervaPaginationNextDisabled"
-                @click="handleMinervaPaginationNext"
-              >
-                <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon" />
-              </button>
-            </div>
+                <div class="minerva-pagination-count">{{ minervaPaginationLabel }}</div>
+                <div class="minerva-pagination-actions">
+                  <button
+                    class="minerva-pagination-btn"
+                    type="button"
+                    aria-label="Previous suggestion"
+                    :disabled="isMinervaPaginationPrevDisabled"
+                    @click="handleMinervaPaginationPrev"
+                  >
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon minerva-pagination-icon--prev" />
+                  </button>
+                  <button
+                    class="minerva-pagination-btn"
+                    type="button"
+                    aria-label="Next suggestion"
+                    :disabled="isMinervaPaginationNextDisabled"
+                    @click="handleMinervaPaginationNext"
+                  >
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon" />
+                  </button>
+                </div>
+              </div>
           </div>
-        </div>
         <div
           v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && availableSuggestionCount > 0"
           class="minerva-sheet-backdrop"
@@ -2818,7 +2832,6 @@ const showToolbarToggle = computed(() => (
 const isArrowOnceMode = computed(() => (
   activePrototype.value === 'option-2' || activePrototype.value === 'option-3' || activePrototype.value === 'option-4'
 ));
-const isArrowBounceActive = ref(true);
 const showBannerArrowUp = ref(false);
 const showBannerArrowDown = ref(true);
 const showBannerPrimaryArrowUp = ref(false);
@@ -2850,6 +2863,12 @@ const minervaToggleBottom = computed(() => {
   return '16px';
 });
 const anySuggestionVisible = ref(false);
+const anySuggestionExpanded = computed(() => (
+  isCardExpanded.value ||
+  isCardExpanded2.value ||
+  isCardExpanded3.value ||
+  (isMinervaSkin.value && isMinervaSheetOpen.value)
+));
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
@@ -2870,7 +2889,7 @@ const shouldShowBanner = computed(() => {
     if (!showSuggestionToggle.value && !showSuggestions.value) return false;
     if (showSuggestionToggle.value && !showSuggestions.value) return false;
   }
-  return !anySuggestionVisible.value;
+  return !(anySuggestionVisible.value && anySuggestionExpanded.value);
 });
 const bannerTextSuffix = computed(() => {
   if (isMinervaSkin.value && minervaEditSectionOnly.value) {
@@ -3329,9 +3348,6 @@ function handleBannerClose() {
 function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
   if (isArrowOnceMode.value) return;
   if (!showSuggestions.value) return;
-  if (activePrototype.value === 'option-3') {
-    isArrowBounceActive.value = true;
-  }
   isBannerDelayReady.value = false;
   if (bannerDelayTimer) {
     clearTimeout(bannerDelayTimer);
@@ -3350,9 +3366,6 @@ function handleBannerClick() {
   }
   if (activePrototype.value === 'option-3' || activePrototype.value === 'option-4') {
     startAutoScrollIndicator();
-  }
-  if (activePrototype.value === 'option-3') {
-    isArrowBounceActive.value = false;
   }
   if (activePrototype.value === 'option-4' && isMinervaSkin.value) {
     showOption4Arrows.value = true;
@@ -3504,7 +3517,6 @@ function handleScrollReappear() {
     }
     isBannerDismissed.value = false;
     isBannerDelayReady.value = true;
-    isArrowBounceActive.value = true;
     updateBannerArrowDirections();
     scrollReappearTimer = null;
   }, 1500);
@@ -3854,7 +3866,6 @@ function alignBothSuggestions() {
 watch(showSuggestions, (newValue) => {
   if (newValue) {
     if (activePrototype.value === 'option-3') {
-      isArrowBounceActive.value = true;
     }
     updateBannerArrowDirections();
     if (!isArrowOnceMode.value &&
@@ -4060,8 +4071,8 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
   }
 });
 
-watch(anySuggestionVisible, (visible) => {
-  if (visible && isArrowOnceMode.value) {
+watch([anySuggestionVisible, anySuggestionExpanded], ([visible, expanded]) => {
+  if (visible && expanded && isArrowOnceMode.value) {
     isBannerDismissed.value = true;
   }
   if (visible) {
@@ -7796,7 +7807,10 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: fit-content;
+  max-width: calc(100% - 24px);
+  margin-left: auto;
+  margin-right: auto;
   gap: 8px;
   margin: 0 0 8px;
   height: 44px;
@@ -8005,59 +8019,6 @@ function markArticleEdited() {
   color: var(--color-progressive, #36c);
 }
 
-.suggestions-banner-arrow-buttons--bounce :deep(.cdx-icon),
-.suggestions-banner-arrow-buttons--bounce :deep(svg) {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
-}
-
-.suggestions-banner-icon-only--bounce :deep(.cdx-icon),
-.suggestions-banner-icon-only--bounce :deep(svg) {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
-}
-
-.suggestions-banner--arrow-bounce .suggestions-banner-text :deep(.cdx-icon),
-.suggestions-banner--arrow-bounce .suggestions-banner-text :deep(svg) {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
-}
-
-@keyframes arrow-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  12.5% {
-    transform: translateY(6px);
-  }
-  15% {
-    transform: translateY(0);
-  }
-  17.5% {
-    transform: translateY(6px);
-  }
-  20% {
-    transform: translateY(0);
-  }
-}
-
-@keyframes arrow-bounce-4 {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  25% {
-    transform: translateY(6px);
-  }
-  30% {
-    transform: translateY(0);
-  }
-  35% {
-    transform: translateY(6px);
-  }
-  40% {
-    transform: translateY(0);
-  }
-}
-
 .minerva-suggestions-bar--arrow-only {
   justify-content: flex-end;
 }
@@ -8091,10 +8052,6 @@ function markArticleEdited() {
 
 .suggestions-banner--option-4 {
   border-color: var(--border-color-progressive, #36c);
-}
-
-.suggestions-banner--option-4 {
-  animation: arrow-bounce-4 4s ease-in-out 0s infinite;
 }
 
 .minerva-skin .suggestions-banner--option-2 .suggestions-banner-text {
@@ -8133,13 +8090,32 @@ function markArticleEdited() {
 }
 
 .suggestions-banner-actions {
-  position: absolute;
-  right: 12px;
-  top: 50%;
+  position: static;
   display: inline-flex;
   align-items: center;
-  transform: translateY(-50%);
+  margin-left: 7px;
   z-index: 1;
+}
+
+.suggestions-banner-close-icon {
+  width: 16px;
+  height: 16px;
+  min-width: 16px;
+  min-height: 16px;
+  cursor: pointer;
+  color: var(--color-progressive, #36c);
+}
+
+.suggestions-banner-close-icon :deep(svg) {
+  fill: currentColor;
+}
+
+.minerva-skin .suggestions-banner-close-icon {
+  color: var(--color-progressive, #36c);
+}
+
+.suggestions-banner-close-icon :deep(svg) {
+  display: block;
 }
 
 .suggestions-info-btn {
