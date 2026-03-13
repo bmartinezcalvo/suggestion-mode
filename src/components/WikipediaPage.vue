@@ -1610,6 +1610,7 @@
                       v-if="isMinervaSkin"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 1 }"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(1)"
@@ -1788,6 +1789,7 @@
                       v-if="isMinervaSkin"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 2 }"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(2)"
@@ -1942,6 +1944,7 @@
                       v-if="isMinervaSkin"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 3 }"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(3)"
@@ -2027,7 +2030,8 @@
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
               'suggestion-card--expanded': isCardExpanded,
-              'suggestion-card--hover': isHovered
+              'suggestion-card--hover': isHovered,
+              'suggestion-card--bounce': firstSuggestionBounceActiveId === 1
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset}px` }"
@@ -2112,7 +2116,8 @@
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
               'suggestion-card--expanded': isCardExpanded2,
-              'suggestion-card--hover': isHovered2
+              'suggestion-card--hover': isHovered2,
+              'suggestion-card--bounce': firstSuggestionBounceActiveId === 2
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset2}px` }"
@@ -2197,7 +2202,8 @@
             :class="{
               'suggestion-card--collapsed': !isCardExpanded3,
               'suggestion-card--expanded': isCardExpanded3,
-              'suggestion-card--hover': isHovered3
+              'suggestion-card--hover': isHovered3,
+              'suggestion-card--bounce': firstSuggestionBounceActiveId === 3
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset3}px` }"
@@ -2584,48 +2590,80 @@
           </div>
         </aside>
 
-        <div
-          v-if="isPrototypeDialogOpen"
-          class="prototype-dialog-backdrop"
-          role="presentation"
-          @click.self="closePrototypeDialog"
+        <cdx-dialog
+          v-model:open="isPrototypeDialogOpen"
+          title="Choose prototype"
+          :primary-action="{ label: 'See prototype', actionType: 'progressive' }"
+          use-close-button
+          @primary="startPrototype"
         >
-          <div class="prototype-dialog" role="dialog" aria-modal="true" aria-label="Choose prototype">
-            <div class="prototype-dialog-header">
-              <h2 class="prototype-dialog-title">Choose prototype</h2>
-            </div>
+          <div class="prototype-dialog-content">
+            <cdx-message type="notice">
+              See the validated version of Suggestion Mode in
+              <a href="https://bmartinezcalvo.github.io/suggestion-mode/preview/" target="_blank" rel="noopener">
+                this prototype
+              </a>.
+            </cdx-message>
             <div class="prototype-dialog-options">
               <cdx-field>
-                <template #label>Suggestions discoverability</template>
-                <fieldset class="prototype-dialog-radio-group" role="radiogroup">
-                  <label class="prototype-radio">
-                    <input type="radio" value="option-1" v-model="selectedPrototype">
-                    <span>Op.1: Persistent banner</span>
-                  </label>
-                  <label class="prototype-radio">
-                    <input type="radio" value="option-3" v-model="selectedPrototype">
-                    <span>Op.2: Persistent arrows</span>
-                  </label>
-                  <label class="prototype-radio">
-                    <input type="radio" value="option-2" v-model="selectedPrototype">
-                    <span>Op.3: Single-use button</span>
-                  </label>
-                </fieldset>
+                <template #label>
+                  Suggestions discoverability (<a href="https://phabricator.wikimedia.org/T414518" target="_blank" rel="noopener">T414518</a>)
+                </template>
+                <div class="cdx-radio-group" role="radiogroup">
+                  <cdx-radio
+                    v-model="selectedPrototype"
+                    name="suggestions-discoverability"
+                    input-value="option-1"
+                  >
+                    Op.1: Persistent banner
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="selectedPrototype"
+                    name="suggestions-discoverability"
+                    input-value="option-3"
+                  >
+                    Op.2: Persistent arrows
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="selectedPrototype"
+                    name="suggestions-discoverability"
+                    input-value="option-2"
+                  >
+                    Op.3: Single-use "View suggestions" button
+                  </cdx-radio>
+                </div>
               </cdx-field>
               <cdx-field>
-                <template #label>Toasts</template>
-                <cdx-checkbox v-model="toastsEnabled">Enable toasts</cdx-checkbox>
+                <template #label>When reaching 1st suggestion</template>
+                <div class="cdx-radio-group" role="radiogroup">
+                  <cdx-radio
+                    v-model="firstSuggestionExpansionMode"
+                    name="first-suggestion-expansion"
+                    input-value="auto-expand"
+                  >
+                    Auto-expand the first suggestion when reached (desktop + mobile)
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="firstSuggestionExpansionMode"
+                    name="first-suggestion-expansion"
+                    input-value="mobile-bounce-desktop-auto"
+                  >
+                    Bouncing icon on mobile + auto-expand card on desktop
+                  </cdx-radio>
+                </div>
               </cdx-field>
-              <cdx-field v-if="isMinervaSkin">
-                <template #label>ToggleButton on mobile</template>
-                <cdx-checkbox v-model="minervaToolbarToggleEnabled">Enable ToggleButton on mobile</cdx-checkbox>
+              <cdx-field>
+                <template #label>Others</template>
+                <cdx-checkbox v-model="toastsEnabled">
+                  Enable contextual Toasts (<a href="https://phabricator.wikimedia.org/T417827" target="_blank" rel="noopener">T417827</a>)
+                </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="minervaToolbarToggleEnabled">
+                  Enable ToggleButton on mobile (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
+                </cdx-checkbox>
               </cdx-field>
-            </div>
-            <div class="prototype-dialog-actions">
-              <button class="prototype-dialog-btn" @click="startPrototype">See prototype</button>
             </div>
           </div>
-        </div>
+        </cdx-dialog>
 
         <div
           v-if="isMinervaAddLinkDialogOpen"
@@ -2746,7 +2784,10 @@ import {
   CdxPopover,
   CdxCheckbox,
   CdxField,
-  CdxTextInput
+  CdxTextInput,
+  CdxMessage,
+  CdxRadio,
+  CdxDialog
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -2826,6 +2867,7 @@ const linkSearchResults = ref([]);
 const linkSearchFooterUrl = ref('');
 const linkSearchTerm = ref('');
 const citationDialogUrl = ref('');
+const firstSuggestionExpansionMode = ref('auto-expand');
 const isSuggestionInfoOpen = ref(false);
 const isMinervaInfoSheetOpen = ref(false);
 const isSuggestionGlowActive = ref(false);
@@ -2936,7 +2978,7 @@ const toneCheckSidebarRef = ref(null);
 const toneCheckTopOffset = ref(0);
 const toneCheckEnterArmed = ref(false);
 const isPrototypeDialogOpen = ref(false);
-const selectedPrototype = ref('option-1');
+const selectedPrototype = ref('option-2');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
@@ -3065,6 +3107,9 @@ const minervaAddMenuTriggerRef = ref(null);
 const minervaAddMenuPanelRef = ref(null);
 const minervaEditMenuTriggerRef = ref(null);
 const minervaEditMenuPanelRef = ref(null);
+const firstSuggestionAutoExpandedId = ref(null);
+const firstSuggestionBounceActiveId = ref(null);
+const firstSuggestionBounceDoneId = ref(null);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
@@ -4007,6 +4052,15 @@ function updateSuggestionVisibility() {
     const rect = el.getBoundingClientRect();
     return rect.bottom > 0 && rect.top < viewportHeight;
   };
+  const isQuarterVisible = (el) => {
+    if (!el) return false;
+    const rect = el.getBoundingClientRect();
+    const height = rect.height || 1;
+    const visibleTop = Math.max(rect.top, 0);
+    const visibleBottom = Math.min(rect.bottom, viewportHeight);
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+    return visibleHeight / height >= 0.75;
+  };
   const successVisible =
     (showSuccessMessage1.value && isVisible(suggestionsSidebarRef.value)) ||
     (showSuccessMessage2.value && isVisible(suggestionsSidebarRef2.value)) ||
@@ -4018,6 +4072,41 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef2.value) ||
     isVisible(highlightedTextRef3.value) ||
     isVisible(toneCheckHighlightRef.value);
+  const pendingIds = getPendingSuggestionIdsForContext();
+  const getRefForId = (id) => getSuggestionRefById(id);
+  const fullyVisible = pendingIds
+    .map((id) => {
+      const ref = getRefForId(id);
+      if (!ref || !ref.value) return null;
+      const rect = ref.value.getBoundingClientRect();
+      return { id, rect, ref: ref.value };
+    })
+    .filter((item) => item && isQuarterVisible(item.ref));
+  const firstFullyVisibleId = fullyVisible.length
+    ? fullyVisible.sort((a, b) => a.rect.top - b.rect.top)[0].id
+    : null;
+
+  if (firstSuggestionExpansionMode.value === 'auto-expand' &&
+    firstFullyVisibleId &&
+    firstSuggestionAutoExpandedId.value === null
+  ) {
+    firstSuggestionAutoExpandedId.value = firstFullyVisibleId;
+    if (isMinervaSkin.value) {
+      openMinervaSuggestion(firstFullyVisibleId);
+    } else {
+      isCardExpanded.value = firstFullyVisibleId === 1;
+      isCardExpanded2.value = firstFullyVisibleId === 2;
+      isCardExpanded3.value = firstFullyVisibleId === 3;
+    }
+  }
+
+  if (firstSuggestionExpansionMode.value === 'mobile-bounce-desktop-auto') {
+    if (firstFullyVisibleId && firstSuggestionBounceDoneId.value === null) {
+      firstSuggestionBounceActiveId.value = firstFullyVisibleId;
+    } else if (!firstFullyVisibleId) {
+      firstSuggestionBounceActiveId.value = null;
+    }
+  }
   updateBannerArrowDirections();
   updatePrimaryBannerDirection();
 }
@@ -4239,8 +4328,75 @@ watch(showSuggestions, (newValue) => {
   } else {
     sidebarTopOffset.value = 0;
     showMinervaArrowOnly.value = false;
+    firstSuggestionAutoExpandedId.value = null;
+    firstSuggestionBounceActiveId.value = null;
+    firstSuggestionBounceDoneId.value = null;
   }
 });
+
+watch(
+  () => [citationNumber1.value, isSuggestionDeclined1.value, showSuccessMessage1.value],
+  () => {
+    if (citationNumber1.value !== null || isSuggestionDeclined1.value || showSuccessMessage1.value) {
+      firstSuggestionAutoExpandedId.value = null;
+      firstSuggestionBounceDoneId.value = null;
+      firstSuggestionBounceActiveId.value = null;
+    }
+  }
+);
+
+watch(
+  () => [citationNumber2.value, isSuggestionDeclined2.value, showSuccessMessage2.value],
+  () => {
+    if (citationNumber2.value !== null || isSuggestionDeclined2.value || showSuccessMessage2.value) {
+      if (firstSuggestionAutoExpandedId.value === 2) firstSuggestionAutoExpandedId.value = null;
+      if (firstSuggestionBounceDoneId.value === 2) firstSuggestionBounceDoneId.value = null;
+      if (firstSuggestionBounceActiveId.value === 2) firstSuggestionBounceActiveId.value = null;
+    }
+  }
+);
+
+watch(
+  () => [citationNumber3.value, isSuggestionDeclined3.value, showSuccessMessage3.value],
+  () => {
+    if (citationNumber3.value !== null || isSuggestionDeclined3.value || showSuccessMessage3.value) {
+      if (firstSuggestionAutoExpandedId.value === 3) firstSuggestionAutoExpandedId.value = null;
+      if (firstSuggestionBounceDoneId.value === 3) firstSuggestionBounceDoneId.value = null;
+      if (firstSuggestionBounceActiveId.value === 3) firstSuggestionBounceActiveId.value = null;
+    }
+  }
+);
+
+watch(isCardExpanded, (expanded) => {
+  if (expanded && firstSuggestionExpansionMode.value === 'mobile-bounce-desktop-auto') {
+    firstSuggestionBounceActiveId.value = null;
+    firstSuggestionBounceDoneId.value = 1;
+  }
+});
+
+watch(isCardExpanded2, (expanded) => {
+  if (expanded && firstSuggestionExpansionMode.value === 'mobile-bounce-desktop-auto') {
+    firstSuggestionBounceActiveId.value = null;
+    firstSuggestionBounceDoneId.value = 2;
+  }
+});
+
+watch(isCardExpanded3, (expanded) => {
+  if (expanded && firstSuggestionExpansionMode.value === 'mobile-bounce-desktop-auto') {
+    firstSuggestionBounceActiveId.value = null;
+    firstSuggestionBounceDoneId.value = 3;
+  }
+});
+
+watch(
+  () => [isMinervaSheetOpen.value, activeMinervaSuggestion.value],
+  ([open, suggestionId]) => {
+    if (open && firstSuggestionExpansionMode.value === 'mobile-bounce-desktop-auto') {
+      firstSuggestionBounceActiveId.value = null;
+      firstSuggestionBounceDoneId.value = suggestionId;
+    }
+  }
+);
 
 // Watch for changes in isEditMode to realign
 watch(isEditMode, (newValue) => {
@@ -9102,6 +9258,52 @@ function markArticleEdited() {
   transition-duration: 100ms;
 }
 
+.suggestion-card--bounce {
+  animation: suggestion-card-bounce 3.2s ease-in-out 0s infinite;
+}
+
+.minerva-suggestion-trigger--bounce {
+  animation: suggestion-icon-bounce 3.2s ease-in-out 0s infinite;
+}
+
+@keyframes suggestion-card-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  12% {
+    transform: translateY(-6px);
+  }
+  24% {
+    transform: translateY(0);
+  }
+  36% {
+    transform: translateY(-3px);
+  }
+  48% {
+    transform: translateY(0);
+  }
+}
+
+@keyframes suggestion-icon-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  12% {
+    transform: translateY(-6px);
+  }
+  24% {
+    transform: translateY(0);
+  }
+  36% {
+    transform: translateY(-3px);
+  }
+  48% {
+    transform: translateY(0);
+  }
+}
+
 .edit-mode.suggestion-glow-active .suggestion-card {
   filter: drop-shadow(0 0 10px rgba(51, 102, 204, 0.25));
 }
@@ -9111,86 +9313,37 @@ function markArticleEdited() {
 }
 
 
-.prototype-dialog-backdrop {
-  position: fixed;
-  inset: 0;
-  background: rgba(32, 33, 36, 0.48);
+.prototype-dialog-content {
   display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 200;
+  flex-direction: column;
+  gap: 16px;
 }
 
-.prototype-dialog {
-  width: 420px;
-  max-width: calc(100% - 32px);
-  background: #ffffff;
-  border-radius: 10px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
-  padding: 20px;
-  font-family: 'Inter', sans-serif;
-  font-size: 14px;
-}
-
-.prototype-dialog-header {
+.prototype-dialog-content :deep(.cdx-message) {
+  padding: 12px;
   margin-bottom: 16px;
-}
-
-.prototype-dialog-title {
-  margin: 0;
-  font-size: 18px;
-  font-weight: 600;
-  color: #202122;
+  hyphens: none;
+  word-break: normal;
+  overflow-wrap: normal;
 }
 
 .prototype-dialog-options {
-  margin: 0 0 20px;
   display: flex;
   flex-direction: column;
   gap: 8px;
 }
 
-.prototype-dialog-radio-group {
-  border: 0;
-  padding: 0;
-  margin: 0;
-  display: grid;
-  gap: 12px;
+.vector-skin :deep(.cdx-dialog__body) {
+  font-size: 14px;
 }
 
-.prototype-radio {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  color: #202122;
-}
-
-.minerva-skin .prototype-dialog {
+.minerva-skin :deep(.cdx-dialog__body) {
   font-size: 16px;
 }
 
-.prototype-radio input {
-  accent-color: #36c;
-}
-
-.prototype-dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-}
-
-.prototype-dialog-btn {
-  background: #36c;
-  color: #ffffff;
-  border: none;
-  border-radius: 6px;
-  padding: 10px 16px;
-  font-size: 14px;
-  font-weight: 600;
-  cursor: pointer;
-}
-
-.prototype-dialog-btn:hover {
-  background: #2a4b8d;
+.minerva-skin :deep(.cdx-dialog__body) {
+  padding-left: 16px !important;
+  padding-right: 16px !important;
 }
 
 .link-dialog-backdrop {
