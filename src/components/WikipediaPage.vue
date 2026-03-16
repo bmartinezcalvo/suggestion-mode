@@ -4,7 +4,8 @@
     :class="[
       isEditMode ? 'edit-mode' : 'read-mode',
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
-      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && minervaTogglePlacement !== 'rail' ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && minervaTogglePlacement === 'rail' ? 'minerva-suggestions-on--rail' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -1137,8 +1138,8 @@
                         <span>Source editing</span>
                       </button>
                     </li>
-                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
-                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-item" role="none">
+                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
+                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-item" role="none">
                       <button
                         type="button"
                         class="minerva-edit-menu-button"
@@ -1229,8 +1230,8 @@
                         <span>Source editing</span>
                       </button>
                     </li>
-                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
-                    <li v-if="!minervaToolbarToggleEnabled" class="minerva-edit-menu-item" role="none">
+                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
+                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-item" role="none">
                       <button
                         type="button"
                         class="minerva-edit-menu-button"
@@ -2371,33 +2372,37 @@
           </div>
         </aside>
 
-        <cdx-toggle-button
-          v-if="isMinervaSkin && isEditMode && activePrototype !== 'option-1' && !isArrowOnceMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
-          v-model="showSuggestions"
-          quiet
-          aria-label="Toggle suggestions"
-          class="minerva-suggestions-toggle"
-          :class="{ 'minerva-suggestions-toggle--active': showSuggestions }"
-          :style="{ bottom: minervaToggleBottom }"
+        <div
+          v-if="minervaTogglePlacement === 'rail' && isMinervaSkin && isEditMode"
+          class="minerva-suggestions-rail"
         >
-          <span class="lightbulb-icon-wrapper">
-            <span v-if="showSuggestions" class="bulb-rays">
-              <span class="ray ray-1"></span>
-              <span class="ray ray-2"></span>
-              <span class="ray ray-3"></span>
-              <span class="ray ray-4"></span>
-              <span class="ray ray-5"></span>
+          <cdx-toggle-button
+            v-if="activePrototype !== 'option-1' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+            v-model="showSuggestions"
+            quiet
+            aria-label="Toggle suggestions"
+            class="minerva-suggestions-rail-toggle"
+            :class="{ 'minerva-suggestions-rail-toggle--active': showSuggestions }"
+          >
+            <span class="lightbulb-icon-wrapper">
+              <span v-if="showSuggestions" class="bulb-rays">
+                <span class="ray ray-1"></span>
+                <span class="ray ray-2"></span>
+                <span class="ray ray-3"></span>
+                <span class="ray ray-4"></span>
+                <span class="ray ray-5"></span>
+              </span>
+              <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              <span
+                v-if="showToggleBadge"
+                class="suggestions-badge"
+                :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+              >
+                {{ toggleBadgeCount }}
+              </span>
             </span>
-            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-            <span
-              v-if="showToggleBadge"
-              class="suggestions-badge"
-              :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
-            >
-              {{ toggleBadgeCount }}
-            </span>
-          </span>
-        </cdx-toggle-button>
+          </cdx-toggle-button>
+        </div>
 
           <div
             v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && (availableSuggestionCount > 0 || isToneCheckMode)"
@@ -2652,13 +2657,38 @@
                   </cdx-radio>
                 </div>
               </cdx-field>
+              <cdx-field v-if="isMinervaSkin">
+                <template #label>
+                  Mobile ToggleButton (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
+                </template>
+                <div class="cdx-radio-group" role="radiogroup">
+                  <cdx-radio
+                    v-model="minervaTogglePlacement"
+                    name="minerva-toggle-placement"
+                    input-value="toolbar"
+                  >
+                    Within the toolbar
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="minervaTogglePlacement"
+                    name="minerva-toggle-placement"
+                    input-value="menu"
+                  >
+                    Within the edit handle menu
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="minervaTogglePlacement"
+                    name="minerva-toggle-placement"
+                    input-value="rail"
+                  >
+                    Within the rail
+                  </cdx-radio>
+                </div>
+              </cdx-field>
               <cdx-field>
                 <template #label>Others</template>
                 <cdx-checkbox v-model="toastsEnabled">
                   Enable contextual Toasts (<a href="https://phabricator.wikimedia.org/T417827" target="_blank" rel="noopener">T417827</a>)
-                </cdx-checkbox>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="minervaToolbarToggleEnabled">
-                  Enable ToggleButton on mobile (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
                 </cdx-checkbox>
               </cdx-field>
             </div>
@@ -2858,7 +2888,9 @@ const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
-const minervaToolbarToggleEnabled = ref(true);
+const minervaTogglePlacement = ref('toolbar');
+const minervaToolbarToggleEnabled = computed(() => minervaTogglePlacement.value === 'toolbar');
+const minervaMenuToggleEnabled = computed(() => minervaTogglePlacement.value === 'menu');
 const linkDialogTab = ref('wikipedia');
 const linkDialogText = ref('');
 const linkDialogQuery = ref('');
@@ -5648,6 +5680,10 @@ function markArticleEdited() {
   padding-right: 0;
 }
 
+.minerva-suggestions-on--rail .main-content-area {
+  padding-right: 0;
+}
+
 .minerva-skin .toc-sidebar,
 .minerva-skin .tools-sidebar {
   display: none;
@@ -6896,7 +6932,7 @@ function markArticleEdited() {
 .editor-toolbar--minerva .toolbar-btn-primary {
   margin-left: 0;
   width: 44px;
-  height: 42px;
+  height: 44px;
   padding: 0;
   border-radius: 0;
 }
@@ -7774,6 +7810,10 @@ function markArticleEdited() {
   z-index: 3;
 }
 
+.minerva-suggestions-on--rail .minerva-suggestion-target {
+  z-index: 20;
+}
+
 .minerva-suggestion-target .highlighted-text-rail {
   display: none;
 }
@@ -7787,6 +7827,10 @@ function markArticleEdited() {
   background-color: #36c;
   border-radius: 2px;
   z-index: 4;
+}
+
+.minerva-suggestions-on--rail .minerva-highlight-rail {
+  z-index: 21;
 }
 
 .minerva-suggestion-trigger {
@@ -7825,15 +7869,25 @@ function markArticleEdited() {
   background: var(--background-color-base, #ffffff);
 }
 
-.minerva-suggestions-on .minerva-suggestion-target {
+.minerva-suggestions-on--rail .article-content-edit {
+  --minerva-suggestion-gutter: 44px;
+  padding-right: calc(var(--minerva-suggestion-gutter) + 16px);
+  position: relative;
+  background: var(--background-color-base, #ffffff);
+}
+
+.minerva-suggestions-on .minerva-suggestion-target,
+.minerva-suggestions-on--rail .minerva-suggestion-target {
   padding-right: 0;
 }
 
-.minerva-suggestions-on {
+.minerva-suggestions-on,
+.minerva-suggestions-on--rail {
   background-color: var(--background-color-base, #ffffff);
 }
 
-.minerva-suggestions-on .article-content-edit::after {
+.minerva-suggestions-on .article-content-edit::after,
+.minerva-suggestions-on--rail .article-content-edit::after {
   content: '';
   position: absolute;
   top: 0;
@@ -7841,7 +7895,12 @@ function markArticleEdited() {
   width: var(--minerva-suggestion-gutter);
   height: 100%;
   background-color: var(--background-color-neutral-subtle, #f8f9fa);
+  border-left: 1px solid var(--border-color-muted, #DADDE3);
   pointer-events: none;
+}
+
+.minerva-suggestions-on--rail .article-content-edit::after {
+  display: none;
 }
 
 
@@ -7858,6 +7917,54 @@ function markArticleEdited() {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   z-index: 70;
   background: var(--color-base, #ffffff);
+}
+
+.minerva-suggestions-rail-toggle {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 0;
+  border: 0;
+  z-index: 70;
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+  margin-top: 2px;
+}
+
+.minerva-suggestions-rail {
+  position: fixed;
+  top: 42px;
+  right: 0;
+  width: 44px;
+  height: calc(100% - 42px);
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+  border-left: 1px solid var(--border-color-muted, #DADDE3);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 1px;
+  z-index: 1;
+}
+
+.minerva-suggestions-rail-toggle :deep(button) {
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  position: relative;
+  background: transparent;
+}
+
+.minerva-suggestions-rail-toggle :deep(.cdx-icon) {
+  color: var(--color-base, #202122);
+}
+
+.minerva-suggestions-rail-toggle--active {
+  background: transparent;
+  border: 0;
+}
+
+.minerva-suggestions-rail-toggle--active :deep(.cdx-icon) {
+  color: var(--color-progressive, #36c);
 }
 
 .minerva-toast {
