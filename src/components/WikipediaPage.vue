@@ -350,17 +350,18 @@
                 </div>
                 </div>
               <div class="suggestions-banner-actions">
-                <cdx-icon
-                  class="suggestions-banner-close-icon"
-                  :icon="cdxIconClose"
-                  size="small"
-                  role="button"
-                  tabindex="0"
-                  aria-label="Dismiss suggestions"
-                  @click.stop="handleBannerClose()"
-                  @keydown.enter.prevent="handleBannerClose()"
-                  @keydown.space.prevent="handleBannerClose()"
-                />
+                <span class="suggestions-banner-close-icon-container">
+                  <cdx-button
+                    class="suggestions-banner-close-btn"
+                    size="small"
+                    action="progressive"
+                    weight="quiet"
+                    aria-label="Dismiss suggestions"
+                    @click.stop="handleBannerClose()"
+                  >
+                    <cdx-icon class="suggestions-banner-close-icon" :icon="cdxIconClose" size="small" />
+                  </cdx-button>
+                </span>
               </div>
             </div>
           </transition>
@@ -2269,17 +2270,18 @@
                   </div>
                 </div>
                 <div class="suggestions-banner-actions">
-                  <cdx-icon
-                    class="suggestions-banner-close-icon"
-                    :icon="cdxIconClose"
-                    size="small"
-                    role="button"
-                    tabindex="0"
-                    aria-label="Dismiss suggestions"
-                    @click.stop="handleBannerClose()"
-                    @keydown.enter.prevent="handleBannerClose()"
-                    @keydown.space.prevent="handleBannerClose()"
-                  />
+                  <span class="suggestions-banner-close-icon-container">
+                    <cdx-button
+                      class="suggestions-banner-close-btn"
+                      size="small"
+                      action="progressive"
+                      weight="quiet"
+                      aria-label="Dismiss suggestions"
+                      @click.stop="handleBannerClose()"
+                    >
+                      <cdx-icon class="suggestions-banner-close-icon" :icon="cdxIconClose" size="small" />
+                    </cdx-button>
+                  </span>
                 </div>
               </div>
             </transition>
@@ -8093,25 +8095,104 @@ function markArticleEdited() {
   position: static;
   display: inline-flex;
   align-items: center;
-  margin-left: 7px;
+  justify-content: center;
   z-index: 1;
 }
 
-.suggestions-banner-close-icon {
+.suggestions-banner-close-icon-container {
   width: 16px;
   height: 16px;
   min-width: 16px;
   min-height: 16px;
+  position: relative;
+  display: inline-block;
+  overflow: visible;
   cursor: pointer;
   color: var(--color-progressive, #36c);
+}
+
+.suggestions-banner-close-btn {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+  border-radius: 9999px;
+}
+
+.suggestions-banner-close-btn :deep(button) {
+  border-radius: 9999px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+}
+
+.suggestions-banner-close-btn.cdx-button--action-progressive.cdx-button--weight-quiet.cdx-button--size-small.cdx-button--icon-only :deep(button) {
+  border-radius: 9999px;
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+}
+
+.suggestions-banner-close-btn :deep(.cdx-button__button) {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  padding: 0 !important;
+  border-radius: 9999px !important;
+}
+
+.suggestions-banner-close-btn :deep(.cdx-button) {
+  width: 24px !important;
+  height: 24px !important;
+  min-width: 24px !important;
+  min-height: 24px !important;
+  border-radius: 9999px !important;
+}
+
+.minerva-skin .suggestions-banner-close-btn :deep(button) {
+  border-radius: 9999px;
+  width: 24px;
+  height: 24px;
+  min-width: 24px;
+  min-height: 24px;
+}
+
+.suggestions-banner-close-icon {
+  display: block;
+}
+
+.minerva-skin .suggestions-banner-close-icon {
+  margin: 0 auto;
+  width: 16px;
+  height: 16px;
+}
+
+.minerva-skin .suggestions-banner-close-icon :deep(svg) {
+  width: 16px;
+  height: 16px;
 }
 
 .suggestions-banner-close-icon :deep(svg) {
   fill: currentColor;
 }
 
-.minerva-skin .suggestions-banner-close-icon {
+.minerva-skin .suggestions-banner-close-icon-container {
   color: var(--color-progressive, #36c);
+}
+
+.minerva-skin .suggestions-banner-close-btn :deep(button) {
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-skin .suggestions-banner-close-btn :deep(svg) {
+  fill: var(--color-progressive, #36c);
 }
 
 .suggestions-banner-close-icon :deep(svg) {
