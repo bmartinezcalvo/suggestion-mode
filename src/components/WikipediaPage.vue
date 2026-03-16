@@ -7899,9 +7899,6 @@ function markArticleEdited() {
   pointer-events: none;
 }
 
-.minerva-suggestions-on--rail .article-content-edit::after {
-  display: none;
-}
 
 
 .minerva-suggestions-toggle {
@@ -7937,13 +7934,13 @@ function markArticleEdited() {
   right: 0;
   width: 44px;
   height: calc(100% - 42px);
-  background: var(--background-color-neutral-subtle, #f8f9fa);
+  background: transparent;
   border-left: 1px solid var(--border-color-muted, #DADDE3);
   display: flex;
   justify-content: center;
   align-items: flex-start;
   padding-top: 1px;
-  z-index: 1;
+  z-index: 0;
 }
 
 .minerva-suggestions-rail-toggle :deep(button) {
