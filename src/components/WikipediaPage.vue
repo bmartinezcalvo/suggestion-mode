@@ -45,6 +45,7 @@
     >
       0 suggestions available for now
     </div>
+    
     <!-- Page Container -->
     <div class="page-container">
       
@@ -1431,7 +1432,7 @@
                   ref="articleFirstSectionRef"
                 >
                   <div class="article-text-block">
-                    <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" class="article-text-editable">
+                    <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                       <p>
                         <strong>Audre Lorde</strong> (<a href="#">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="#">feminist</a>, <a href="#">womanist</a>, <a href="#">librarian</a>, and <a href="#">civil rights</a> incredible amazing activist. She was a self-described "black, lesbian, mother, warrior, poet," who "dedicated both her life and her creative talent to confronting and addressing injustices of <a href="#">racism</a>, <a href="#">sexism</a>, <a href="#">classism</a>, and <a href="#">homophobia</a>.
                       </p>
@@ -1525,7 +1526,7 @@
                     <div class="heading-divider"></div>
                   </div>
                   
-                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" class="article-text-editable">
+                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                     <p>
                       Lorde was born in New York City, the best city in the world. Her father, Frederick Byron Lorde, (known as Byron) hailed from Barbados and her mother, Linda Gertrude Belmar Lorde, was Grenadian and had been born in the amazing island of <a href="#">Carriacou</a>.
                     </p>
@@ -1581,7 +1582,7 @@
                     <div class="heading-divider"></div>
                   </div>
                   
-                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" class="article-text-editable">
+                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                   <p>
                     In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
                   </p>
@@ -1729,7 +1730,7 @@
                     <div class="heading-divider"></div>
                   </div>
 
-                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" class="article-text-editable">
+                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                   <p>
                     Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
                   </p>
@@ -1886,7 +1887,7 @@
                     <div class="heading-divider"></div>
                   </div>
                   
-                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" class="article-text-editable">
+                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                   <p>
                     The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                   </p>
@@ -2065,9 +2066,7 @@
             </button>
             
             <div v-if="isCardExpanded" class="suggestion-content">
-              <p class="suggestion-description">
-                Help readers understand where this information is coming from by adding a citation.
-              </p>
+              <p class="suggestion-description">Help readers understand where this information is coming from by adding a citation.</p>
               <div class="suggestion-actions">
                 <button 
                   class="suggestion-btn" 
@@ -2151,9 +2150,7 @@
             </button>
             
             <div v-if="isCardExpanded2" class="suggestion-content">
-              <p class="suggestion-description">
-                Help readers understand where this information is coming from by adding a citation.
-              </p>
+              <p class="suggestion-description">Help readers understand where this information is coming from by adding a citation.</p>
               <div class="suggestion-actions">
                 <button 
                   class="suggestion-btn" 
@@ -2237,9 +2234,7 @@
             </button>
             
             <div v-if="isCardExpanded3" class="suggestion-content">
-              <p class="suggestion-description">
-                Help readers understand where this information is coming from by adding a citation.
-              </p>
+              <p class="suggestion-description">Help readers understand where this information is coming from by adding a citation.</p>
               <div class="suggestion-actions">
                 <button 
                   class="suggestion-btn" 
@@ -2349,24 +2344,50 @@
             </transition>
           </div>
           <div
-            v-if="isToneCheckMode"
-            ref="toneCheckSidebarRef"
+            v-if="isEditCheckMode"
+            ref="editCheckSidebarRef"
             class="suggestion-card suggestion-card-positioned tone-check-card"
-            :style="{ top: `${toneCheckTopOffset}px` }"
+            :class="{
+              'suggestion-card--collapsed': !isEditCheckExpandedDisplay,
+              'suggestion-card--expanded': isEditCheckExpandedDisplay,
+              'suggestion-card--hover': isEditCheckHovered
+            }"
+            :style="{ top: `${editCheckTopOffset}px` }"
+            @mouseenter="isEditCheckHovered = true"
+            @mouseleave="isEditCheckHovered = false"
           >
-            <button class="suggestion-header suggestion-header--expanded tone-check-header">
+            <button
+              class="suggestion-header"
+              :class="{ 'suggestion-header--expanded': isEditCheckExpandedDisplay }"
+              @click="toggleEditCheckExpand"
+            >
               <div class="suggestion-icon tone-check-icon">
                 <cdx-icon :icon="cdxIconAlert" size="medium" />
               </div>
-              <div class="suggestion-title">Revise tone</div>
+              <div class="suggestion-title">{{ editCheckTitle }}</div>
             </button>
-            <div class="suggestion-content">
-              <p class="suggestion-description">
-                Other editors often revise this kind of wording to have a more balanced tone. Learn more
-              </p>
-              <div class="suggestion-actions">
+            <div v-if="isEditCheckExpandedDisplay" class="suggestion-content">
+              <p v-if="activeEditCheckType === 'tone'" class="suggestion-description">Other editors often revise this kind of wording to have a more balanced tone. Learn more</p>
+              <p v-else class="suggestion-description">Please avoid copying text from other sources, even if rephrased or cited. This could be
+                considered
+                <a
+                  href="https://en.wikipedia.org/wiki/Wikipedia:Copyright_violations"
+                  target="_blank"
+                  rel="noopener"
+                >
+                  copyright violation or plagiarism
+                </a>
+                and may result in your content being removed or your account being blocked.</p>
+              <div v-if="activeEditCheckType === 'tone'" class="suggestion-actions">
                 <button class="suggestion-btn" @click="handleToneCheckRevise">Revise</button>
                 <button class="suggestion-btn suggestion-btn-secondary" @click="handleToneCheckDecline">Decline</button>
+              </div>
+              <div v-else class="suggestion-actions">
+                <p class="suggestion-description suggestion-description--question">Did you write this text?</p>
+                <div class="paste-check-buttons">
+                  <button class="suggestion-btn" @click="handlePasteCheckKeep">Yes, keep it</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePasteCheckRemove">No, remove it</button>
+                </div>
               </div>
             </div>
           </div>
@@ -2405,11 +2426,11 @@
         </div>
 
           <div
-            v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && (availableSuggestionCount > 0 || isToneCheckMode)"
+            v-if="isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet)"
             class="minerva-bottom-sheet"
             :class="{
               'suggestion-dismiss-right': dismissedSuggestionId === activeMinervaSuggestion,
-              'minerva-bottom-sheet--tone-check': isToneCheckMode
+              'minerva-bottom-sheet--edit-check': isEditCheckSheet
             }"
             role="dialog"
             aria-label="Suggestion"
@@ -2417,15 +2438,27 @@
           >
             <div
               class="minerva-sheet-header"
-              :class="{ 'minerva-sheet-header--empty': shouldShowEmptyState && !isToneCheckMode }"
+              :class="{ 'minerva-sheet-header--empty': shouldShowEmptyState && !isEditCheckSheet }"
             >
-              <cdx-icon :icon="isToneCheckMode ? cdxIconAlert : cdxIconLightbulb" size="medium" />
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : cdxIconLightbulb" size="medium" />
               <div class="minerva-sheet-title">
-                {{ isToneCheckMode ? 'Revise tone' : minervaSheetTitle }}
+                {{ isEditCheckSheet ? editCheckTitle : minervaSheetTitle }}
               </div>
             </div>
-          <p v-if="isToneCheckMode" class="minerva-sheet-description">
+          <p v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-description">
             Other editors often revise this kind of wording to have a more balanced tone. Learn more
+          </p>
+          <p v-else-if="isEditCheckSheet && activeEditCheckType === 'paste'" class="minerva-sheet-description">
+            Please avoid copying text from other sources, even if rephrased or cited. This could be
+            considered
+            <a
+              href="https://en.wikipedia.org/wiki/Wikipedia:Copyright_violations"
+              target="_blank"
+              rel="noopener"
+            >
+              copyright violation or plagiarism
+            </a>
+            and may result in your content being removed or your account being blocked.
           </p>
           <p v-else-if="shouldShowEmptyState && !showSuggestionNotification" class="minerva-empty-sheet-text">
             There are no suggestions to improve this article yet.
@@ -2433,7 +2466,7 @@
           <p v-else class="minerva-sheet-description">
             Help readers understand where this information is coming from by adding a citation.
           </p>
-            <div v-if="isToneCheckMode" class="minerva-sheet-actions">
+            <div v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-actions">
             <cdx-button
               class="minerva-sheet-btn"
               action="default"
@@ -2449,6 +2482,24 @@
               @click="handleToneCheckDecline"
             >
               Decline
+            </cdx-button>
+          </div>
+            <div v-else-if="isEditCheckSheet && activeEditCheckType === 'paste'" class="minerva-sheet-actions">
+            <cdx-button
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handlePasteCheckKeep"
+            >
+              Yes, keep it
+            </cdx-button>
+            <cdx-button
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              @click="handlePasteCheckRemove"
+            >
+              No, remove it
             </cdx-button>
           </div>
             <div v-else-if="!shouldShowEmptyState" class="minerva-sheet-actions">
@@ -3009,6 +3060,16 @@ const toneCheckHighlightRef = ref(null);
 const toneCheckSidebarRef = ref(null);
 const toneCheckTopOffset = ref(0);
 const toneCheckEnterArmed = ref(false);
+const toneCheckTriggeredByAmazing = ref(false);
+const pasteCheckActive = ref(false);
+const pasteCheckDismissed = ref(false);
+const pasteCheckHighlightRef = ref(null);
+const pasteCheckSidebarRef = ref(null);
+const pasteCheckTopOffset = ref(0);
+const editCheckSidebarRef = ref(null);
+const isEditCheckExpanded = ref(true);
+const isEditCheckHovered = ref(false);
+const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const selectedPrototype = ref('option-2');
 const toastsEnabled = ref(true);
@@ -3223,8 +3284,31 @@ const showMinervaSuccessMessage = computed(() => (
 const showSuggestionInfo = computed(() => (
   activePrototype.value === 'option-1' && showSuggestionInfoPreference.value
 ));
-const isToneCheckMode = computed(() => (
-  activePrototype.value === 'option-1' && toneCheckActive.value
+const isToneCheckMode = computed(() => toneCheckActive.value);
+const isPasteCheckMode = computed(() => pasteCheckActive.value);
+const activeEditCheckType = computed(() => {
+  if (isPasteCheckMode.value) return 'paste';
+  if (isToneCheckMode.value) return 'tone';
+  return null;
+});
+const isEditCheckMode = computed(() => Boolean(activeEditCheckType.value));
+const isEditCheckSheet = computed(() => (
+  isMinervaSkin.value ? minervaSheetMode.value === 'edit-check' : isEditCheckMode.value
+));
+const editCheckTitle = computed(() => (
+  activeEditCheckType.value === 'paste' ? 'Pasted content' : 'Revise tone'
+));
+const editCheckTopOffset = computed(() => (
+  activeEditCheckType.value === 'paste' ? pasteCheckTopOffset.value : toneCheckTopOffset.value
+));
+const isEditCheckExpandedDisplay = computed(() => (
+  isMinervaSkin.value ? true : isEditCheckExpanded.value
+));
+const isEditCheckSheetExpanded = computed(() => (
+  isMinervaSkin.value ? (isMinervaSheetOpen.value && minervaSheetMode.value === 'edit-check') : isEditCheckExpanded.value
+));
+const isSuggestionSheetMode = computed(() => (
+  showSuggestionsDisplay.value && !isEditCheckSheet.value
 ));
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
@@ -3325,6 +3409,14 @@ function resetSuggestionState() {
   toneCheckActive.value = false;
   toneCheckDismissed.value = false;
   toneCheckHighlightRef.value = null;
+  toneCheckTriggeredByAmazing.value = false;
+  pasteCheckActive.value = false;
+  pasteCheckDismissed.value = false;
+  if (pasteCheckHighlightRef.value) {
+    unwrapCheckHighlight(pasteCheckHighlightRef.value);
+  }
+  pasteCheckHighlightRef.value = null;
+  isEditCheckExpanded.value = false;
   closeMinervaSuggestion();
 }
 
@@ -3447,12 +3539,20 @@ function removeToneCheckHighlights(node) {
   });
 }
 
-function insertToneCheckHighlight(node) {
+function removePasteCheckHighlights(node) {
+  if (!node) return;
+  const highlights = node.querySelectorAll('.paste-check-highlight');
+  highlights.forEach((span) => {
+    span.replaceWith(document.createTextNode(span.textContent || ''));
+  });
+}
+
+function insertToneCheckHighlight(node, phrase = 'amazing') {
   if (!node) return null;
-  const phrase = 'Audre Lorde was amazing';
+  const lowerPhrase = phrase.toLowerCase();
   const walker = document.createTreeWalker(node, NodeFilter.SHOW_TEXT, {
     acceptNode(text) {
-      if (!text.nodeValue || !text.nodeValue.includes(phrase)) {
+      if (!text.nodeValue || !text.nodeValue.toLowerCase().includes(lowerPhrase)) {
         return NodeFilter.FILTER_REJECT;
       }
       return NodeFilter.FILTER_ACCEPT;
@@ -3461,9 +3561,11 @@ function insertToneCheckHighlight(node) {
   const textNode = walker.nextNode();
   if (!textNode) return null;
 
-  const startIndex = textNode.nodeValue.indexOf(phrase);
+  const match = textNode.nodeValue.match(new RegExp(phrase, 'i'));
+  const startIndex = match ? match.index : -1;
   if (startIndex === -1) return null;
-  const endIndex = startIndex + phrase.length;
+  const matchedText = match ? match[0] : phrase;
+  const endIndex = startIndex + matchedText.length;
 
   const before = textNode.nodeValue.slice(0, startIndex);
   const matched = textNode.nodeValue.slice(startIndex, endIndex);
@@ -3475,8 +3577,21 @@ function insertToneCheckHighlight(node) {
   }
   const highlightSpan = document.createElement('span');
   highlightSpan.className = 'tone-check-highlight highlighted-text-wrapper';
+  if (!isEditCheckSheetExpanded.value) {
+    highlightSpan.classList.add('edit-check-highlight--collapsed');
+  }
+  if (isMinervaSkin.value) {
+    highlightSpan.classList.add('minerva-suggestion-target');
+  }
   const railSpan = document.createElement('span');
   railSpan.className = 'highlighted-text-rail';
+  if (isMinervaSkin.value) {
+    const minervaRail = document.createElement('span');
+    minervaRail.className = 'minerva-highlight-rail';
+    highlightSpan.appendChild(minervaRail);
+    const triggerButton = createEditCheckTriggerButton();
+    highlightSpan.appendChild(triggerButton);
+  }
   const contentSpan = document.createElement('span');
   contentSpan.className = 'highlighted-text-content';
   contentSpan.textContent = matched;
@@ -3488,18 +3603,75 @@ function insertToneCheckHighlight(node) {
   }
 
   textNode.parentNode.replaceChild(fragment, textNode);
-  return highlightSpan;
+  const parent = textNode.parentNode;
+  if (!parent) return highlightSpan;
+  return parent.querySelector('.tone-check-highlight') || highlightSpan;
+}
+
+function insertPasteCheckHighlight(range, pastedText) {
+  if (!range) return null;
+  const highlightSpan = document.createElement('span');
+  highlightSpan.className = 'paste-check-highlight highlighted-text-wrapper';
+  if (!isEditCheckSheetExpanded.value) {
+    highlightSpan.classList.add('edit-check-highlight--collapsed');
+  }
+  if (isMinervaSkin.value) {
+    highlightSpan.classList.add('minerva-suggestion-target');
+  }
+  const railSpan = document.createElement('span');
+  railSpan.className = 'highlighted-text-rail';
+  if (isMinervaSkin.value) {
+    const minervaRail = document.createElement('span');
+    minervaRail.className = 'minerva-highlight-rail';
+    highlightSpan.appendChild(minervaRail);
+    const triggerButton = createEditCheckTriggerButton();
+    highlightSpan.appendChild(triggerButton);
+  }
+  const contentSpan = document.createElement('span');
+  contentSpan.className = 'highlighted-text-content';
+  contentSpan.textContent = pastedText;
+  highlightSpan.appendChild(railSpan);
+  highlightSpan.appendChild(contentSpan);
+  range.insertNode(highlightSpan);
+  const highlightNode = highlightSpan;
+  return highlightNode;
+}
+
+function createEditCheckTriggerButton() {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.className = 'minerva-suggestion-trigger edit-check-trigger';
+  button.innerHTML = `<svg viewBox="0 0 20 20" aria-hidden="true">${cdxIconAlert}</svg>`;
+  button.addEventListener('click', (event) => {
+    event.stopPropagation();
+    minervaSheetMode.value = 'edit-check';
+    isMinervaSheetOpen.value = true;
+  });
+  return button;
+}
+
+function createSuggestionTriggerHandler(id) {
+  return (event) => {
+    event.stopPropagation();
+    if (!showSuggestions.value) return;
+    activeMinervaSuggestion.value = id;
+    isMinervaSheetOpen.value = true;
+  };
 }
 
 function updateToneCheckFromContent() {
   if (!pageRoot.value) return;
   const nodes = pageRoot.value.querySelectorAll('.article-text-editable');
   let hasAmazing = false;
+
+  if (toneCheckActive.value && !toneCheckDismissed.value) {
+    return;
+  }
   toneCheckHighlightRef.value = null;
 
   nodes.forEach((node) => {
     removeToneCheckHighlights(node);
-    if (node.textContent && node.textContent.includes('Audre Lorde was amazing')) {
+    if (node.textContent && node.textContent.toLowerCase().includes('amazing')) {
       hasAmazing = true;
     }
   });
@@ -3508,10 +3680,11 @@ function updateToneCheckFromContent() {
     toneCheckDismissed.value = false;
     toneCheckActive.value = false;
     toneCheckEnterArmed.value = false;
+    toneCheckTriggeredByAmazing.value = false;
     return;
   }
 
-  if (!isEditMode.value || !showSuggestions.value || activePrototype.value !== 'option-1') {
+  if (!isEditMode.value) {
     toneCheckActive.value = false;
     toneCheckEnterArmed.value = false;
     return;
@@ -3520,33 +3693,101 @@ function updateToneCheckFromContent() {
   if (toneCheckDismissed.value) {
     toneCheckActive.value = false;
     toneCheckEnterArmed.value = false;
+    toneCheckTriggeredByAmazing.value = false;
     return;
   }
 
-  if (!toneCheckEnterArmed.value) {
+  if (!toneCheckEnterArmed.value || !toneCheckTriggeredByAmazing.value) {
     toneCheckActive.value = false;
+    toneCheckEnterArmed.value = false;
+    toneCheckTriggeredByAmazing.value = false;
     return;
   }
 
   let highlightNode = null;
   nodes.forEach((node) => {
     if (!highlightNode) {
-      highlightNode = insertToneCheckHighlight(node);
+      highlightNode = insertToneCheckHighlight(node, 'amazing');
     }
   });
   toneCheckHighlightRef.value = highlightNode;
   toneCheckActive.value = Boolean(highlightNode);
   toneCheckEnterArmed.value = false;
+  toneCheckTriggeredByAmazing.value = false;
+  isEditCheckExpanded.value = true;
+  minervaSheetMode.value = 'edit-check';
   nextTick(() => {
     alignToneCheckCard();
     updateSuggestionVisibility();
+    if (toneCheckHighlightRef.value) {
+      toneCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
+    }
   });
 }
 
 function handleToneCheckKeydown(event) {
   if (event.key === 'Enter') {
-    toneCheckEnterArmed.value = true;
+    const word = getWordBeforeCursor(event.target);
+    if (word && word.toLowerCase() === 'amazing') {
+      toneCheckEnterArmed.value = true;
+      toneCheckTriggeredByAmazing.value = true;
+      updateToneCheckFromContent();
+    } else {
+      toneCheckEnterArmed.value = false;
+      toneCheckTriggeredByAmazing.value = false;
+    }
   }
+}
+
+function handlePaste(event) {
+  if (!isEditMode.value) return;
+  const pastedText = event?.clipboardData?.getData('text/plain');
+  if (!pastedText) return;
+  event.preventDefault();
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return;
+  const range = selection.getRangeAt(0);
+  range.deleteContents();
+  const highlightNode = insertPasteCheckHighlight(range, pastedText);
+  if (!highlightNode) return;
+  range.setStartAfter(highlightNode);
+  range.collapse(true);
+  selection.removeAllRanges();
+  selection.addRange(range);
+  pasteCheckHighlightRef.value = highlightNode;
+  pasteCheckActive.value = true;
+  pasteCheckDismissed.value = false;
+  isEditCheckExpanded.value = true;
+  minervaSheetMode.value = 'edit-check';
+  nextTick(() => {
+    alignPasteCheckCard();
+    updateSuggestionVisibility();
+    if (pasteCheckHighlightRef.value) {
+      pasteCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
+    }
+    if (isMinervaSkin.value) {
+      isMinervaSheetOpen.value = true;
+    }
+  });
+}
+
+function getWordBeforeCursor(target) {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return '';
+  const range = selection.getRangeAt(0);
+  let node = range.startContainer;
+  let offset = range.startOffset;
+  if (target && !target.contains(node)) return '';
+  if (node.nodeType !== Node.TEXT_NODE) {
+    const fallback = node.childNodes[Math.max(0, offset - 1)];
+    if (!fallback || fallback.nodeType !== Node.TEXT_NODE) return '';
+    node = fallback;
+    offset = fallback.textContent ? fallback.textContent.length : 0;
+  }
+  const text = node.textContent || '';
+  const before = text.slice(0, offset);
+  const match = before.match(/([A-Za-z]+)$/);
+  return match ? match[1] : '';
 }
 
 function alignToneCheckCard() {
@@ -3561,15 +3802,75 @@ function alignToneCheckCard() {
   });
 }
 
+function alignPasteCheckCard() {
+  if (!pasteCheckHighlightRef.value) return;
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    const textRect = pasteCheckHighlightRef.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    const offset = textRect.top - containerRect.top - suggestionsTopOffset.value;
+    pasteCheckTopOffset.value = offset;
+  });
+}
+
+function unwrapCheckHighlight(highlightNode) {
+  if (!highlightNode) return;
+  const text = highlightNode.textContent || '';
+  highlightNode.replaceWith(document.createTextNode(text));
+}
+
+function removeCheckHighlight(highlightNode) {
+  if (!highlightNode) return;
+  highlightNode.remove();
+}
+
+function handlePasteCheckKeep() {
+  unwrapCheckHighlight(pasteCheckHighlightRef.value);
+  pasteCheckHighlightRef.value = null;
+  pasteCheckActive.value = false;
+  isEditCheckExpanded.value = false;
+  updateSuggestionVisibility();
+}
+
+function handlePasteCheckRemove() {
+  removeCheckHighlight(pasteCheckHighlightRef.value);
+  pasteCheckHighlightRef.value = null;
+  pasteCheckActive.value = false;
+  isEditCheckExpanded.value = false;
+  updateSuggestionVisibility();
+}
+
+function toggleEditCheckExpand() {
+  if (isMinervaSkin.value) return;
+  isEditCheckExpanded.value = !isEditCheckExpanded.value;
+  if (pasteCheckHighlightRef.value) {
+    if (isEditCheckSheetExpanded.value) {
+      pasteCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
+    } else {
+      pasteCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
+    }
+  }
+  if (toneCheckHighlightRef.value) {
+    if (isEditCheckSheetExpanded.value) {
+      toneCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
+    } else {
+      toneCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
+    }
+  }
+}
+
 function handleToneCheckRevise() {
   toneCheckDismissed.value = true;
   toneCheckActive.value = false;
+  isEditCheckExpanded.value = false;
   updateToneCheckFromContent();
 }
 
 function handleToneCheckDecline() {
   toneCheckDismissed.value = true;
   toneCheckActive.value = false;
+  isEditCheckExpanded.value = false;
   updateToneCheckFromContent();
 }
 
@@ -4103,7 +4404,8 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef.value) ||
     isVisible(highlightedTextRef2.value) ||
     isVisible(highlightedTextRef3.value) ||
-    isVisible(toneCheckHighlightRef.value);
+    isVisible(toneCheckHighlightRef.value) ||
+    isVisible(pasteCheckHighlightRef.value);
   const pendingIds = getPendingSuggestionIdsForContext();
   const getRefForId = (id) => getSuggestionRefById(id);
   const fullyVisible = pendingIds
@@ -4669,8 +4971,34 @@ watch(
   }
 );
 
+watch(isEditCheckMode, (isActive) => {
+  if (isActive && isMinervaSkin.value) {
+    isMinervaSheetOpen.value = true;
+    minervaSheetMode.value = 'edit-check';
+  }
+});
+
 watch(isMinervaSheetOpen, () => {
   updateMinervaSheetHeight();
+});
+
+watch([isMinervaSheetOpen, minervaSheetMode], () => {
+  if (!isMinervaSkin.value) return;
+  const isExpanded = isEditCheckSheetExpanded.value;
+  if (pasteCheckHighlightRef.value) {
+    if (isExpanded) {
+      pasteCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
+    } else {
+      pasteCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
+    }
+  }
+  if (toneCheckHighlightRef.value) {
+    if (isExpanded) {
+      toneCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
+    } else {
+      toneCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
+    }
+  }
 });
 
 watch(
@@ -5309,6 +5637,7 @@ function openMinervaSuggestion(suggestionId) {
     closeMinervaSuggestion();
     return;
   }
+  minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = suggestionId;
   isMinervaSheetOpen.value = true;
   if (suggestionId === 1) {
@@ -5324,6 +5653,13 @@ function openMinervaSuggestion(suggestionId) {
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
   }
+  updateMinervaSheetHeight();
+}
+
+function openMinervaSuggestionSheet(suggestionId) {
+  minervaSheetMode.value = 'suggestion';
+  activeMinervaSuggestion.value = suggestionId;
+  isMinervaSheetOpen.value = true;
   updateMinervaSheetHeight();
 }
 
@@ -7734,6 +8070,14 @@ function markArticleEdited() {
   margin: 0;
 }
 
+/* Dynamic highlights inserted via JS (Edit Checks) */
+:deep(.highlighted-text-wrapper) {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  margin: 0;
+}
+
 /* Rail - vertical blue line that covers full height */
 .highlighted-text-rail {
   display: inline-block;
@@ -7741,6 +8085,14 @@ function markArticleEdited() {
   background-color: #36c;
   flex-shrink: 0;
   align-self: stretch; /* Stretches to match content height */
+}
+
+:deep(.highlighted-text-rail) {
+  display: inline-block;
+  width: 2px;
+  background-color: #36c;
+  flex-shrink: 0;
+  align-self: stretch;
 }
 
 /* Text content with per-line backgrounds */
@@ -7810,7 +8162,17 @@ function markArticleEdited() {
   z-index: 3;
 }
 
+.minerva-skin :deep(.minerva-suggestion-target) {
+  padding-right: 0;
+  position: relative;
+  z-index: 3;
+}
+
 .minerva-suggestions-on--rail .minerva-suggestion-target {
+  z-index: 20;
+}
+
+.minerva-suggestions-on--rail :deep(.minerva-suggestion-target) {
   z-index: 20;
 }
 
@@ -7829,7 +8191,31 @@ function markArticleEdited() {
   z-index: 4;
 }
 
+:deep(.minerva-suggestion-target .highlighted-text-rail) {
+  display: none;
+}
+
+:deep(.minerva-highlight-rail) {
+  position: absolute;
+  right: calc(var(--minerva-suggestion-gutter, 44px) - 61px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: #36c;
+  border-radius: 2px;
+  z-index: 4;
+}
+
+:deep(.tone-check-highlight .minerva-highlight-rail),
+:deep(.paste-check-highlight .minerva-highlight-rail) {
+  background-color: var(--color-icon-warning, #AB7F2A);
+}
+
 .minerva-suggestions-on--rail .minerva-highlight-rail {
+  z-index: 21;
+}
+
+.minerva-suggestions-on--rail :deep(.minerva-highlight-rail) {
   z-index: 21;
 }
 
@@ -7852,10 +8238,33 @@ function markArticleEdited() {
   z-index: 5;
 }
 
+.minerva-skin :deep(.minerva-suggestion-trigger) {
+  position: absolute;
+  right: calc(-1 * (var(--minerva-suggestion-gutter, 44px) + 16px) + 12px);
+  top: 0;
+  transform: none;
+  width: 20px;
+  height: 20px;
+  border-radius: 0;
+  border: none;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  box-shadow: none;
+  z-index: 5;
+}
+
 .minerva-suggestion-trigger :deep(.cdx-icon),
 .minerva-suggestion-trigger :deep(svg) {
   color: var(--color-progressive, #36c);
   fill: var(--color-progressive, #36c);
+}
+
+.minerva-skin :deep(.minerva-suggestion-trigger svg) {
+  color: currentColor;
+  fill: currentColor;
 }
 
 .minerva-suggestion-trigger:active {
@@ -8082,7 +8491,7 @@ function markArticleEdited() {
   position: fixed;
   inset: 0;
   background: transparent;
-  z-index: 79;
+  z-index: 0;
 }
 
 
@@ -8260,44 +8669,101 @@ function markArticleEdited() {
   border: 1px solid #233566;
 }
 
-/* ===== TONE CHECK ===== */
-.tone-check-highlight.highlighted-text-wrapper {
+/* ===== EDIT CHECKS ===== */
+:deep(.tone-check-highlight.highlighted-text-wrapper),
+:deep(.paste-check-highlight.highlighted-text-wrapper) {
   display: inline-flex;
   align-items: flex-start;
   gap: 6px;
   margin: 0;
 }
 
-.tone-check-highlight .highlighted-text-rail {
-  background: var(--color-icon-warning, #f59d1a);
+:deep(.tone-check-highlight .highlighted-text-rail),
+:deep(.paste-check-highlight .highlighted-text-rail) {
+  background: var(--color-icon-warning, #AB7F2A);
 }
 
-.tone-check-highlight .highlighted-text-content {
-  background-color: var(--background-color-warning-subtle, #fef6e7);
+:deep(.tone-check-highlight .highlighted-text-content),
+:deep(.paste-check-highlight .highlighted-text-content) {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
 }
 
-.minerva-skin .tone-check-highlight .highlighted-text-content {
-  background-image: linear-gradient(var(--background-color-warning-subtle, #fef6e7), var(--background-color-warning-subtle, #fef6e7));
+:deep(.tone-check-highlight.edit-check-highlight--collapsed .highlighted-text-content),
+:deep(.paste-check-highlight.edit-check-highlight--collapsed .highlighted-text-content) {
+  background-color: var(--background-color-interactive-subtle, #eaecf0);
+}
+
+.minerva-skin :deep(.tone-check-highlight .highlighted-text-content),
+.minerva-skin :deep(.paste-check-highlight .highlighted-text-content) {
+  background-color: transparent;
+  background-image: linear-gradient(var(--background-color-warning-subtle, #FDF2D5), var(--background-color-warning-subtle, #FDF2D5));
 }
 
 .tone-check-card {
-  border: 1px solid var(--border-color-warning, #f6c343);
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  background-color: var(--background-color-base, #ffffff);
+}
+
+.tone-check-card.suggestion-card--expanded {
+  border-color: var(--color-icon-warning, #AB7F2A);
+  box-shadow:
+    0 4px 8px 0 var(--Decision-Tokens-shadow-large, rgba(0, 0, 0, 0.06)),
+    0 0 16px 0 var(--Decision-Tokens-shadow-large, rgba(0, 0, 0, 0.06));
+}
+
+.tone-check-card.suggestion-card--expanded.suggestion-card--hover {
+  border-color: var(--color-warning-hover, #735421);
+}
+
+.tone-check-card.suggestion-card--expanded .suggestion-header:active {
+  border-color: var(--color-warning-active, #453217);
+}
+
+.tone-check-card.suggestion-card--collapsed {
+  background-color: var(--background-color-base, #ffffff);
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
+.tone-check-card.suggestion-card--collapsed.suggestion-card--hover {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
+  border-color: var(--color-warning-hover, #735421);
+}
+
+.tone-check-card.suggestion-card--collapsed.suggestion-card--hover .suggestion-header {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
+}
+
+.tone-check-card.suggestion-card--collapsed:active {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
+  border-color: var(--color-warning-active, #453217);
+}
+
+.tone-check-card.suggestion-card--collapsed:active .suggestion-header {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
 }
 
 .tone-check-card .suggestion-header {
-  background: var(--background-color-warning-subtle, #fef6e7);
+  background: var(--background-color-warning-subtle, #FDF2D5);
 }
 
 .tone-check-card .suggestion-header--expanded {
-  background: var(--background-color-warning-subtle, #fef6e7);
+  background: var(--background-color-warning-subtle, #FDF2D5);
+}
+
+.tone-check-card .suggestion-title {
+  font-weight: 700;
 }
 
 .tone-check-card .suggestion-icon :deep(.cdx-icon) {
-  color: var(--color-icon-warning, #f59d1a);
+  color: var(--color-icon-warning, #AB7F2A);
 }
 
-.minerva-bottom-sheet--tone-check .minerva-sheet-header :deep(.cdx-icon) {
-  color: var(--color-icon-warning, #f59d1a);
+.minerva-bottom-sheet--edit-check .minerva-sheet-header :deep(.cdx-icon) {
+  color: var(--color-icon-warning, #AB7F2A);
+}
+
+:deep(.edit-check-trigger) {
+  color: var(--color-icon-warning, #AB7F2A);
 }
 
 /* ===== SUGGESTION HEADER ===== */
@@ -8387,6 +8853,19 @@ function markArticleEdited() {
 }
 
 .suggestion-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.suggestion-description--question {
+  margin: 0 0 6px 0;
+  font-weight: 600;
+  flex-basis: 100%;
+}
+
+.paste-check-buttons {
   display: flex;
   align-items: center;
   gap: 8px;
