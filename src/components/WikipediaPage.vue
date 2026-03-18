@@ -466,11 +466,10 @@
                 <div class="article-text">
                   <div class="intro-text">
                     <p>
-                      <strong>Audre Lorde</strong> (<a href="#">/ˈɔːdri ˈlɔːrd/</a> <em>AW-dree LORD</em>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, professor, philosopher, intersectional <a href="#">feminist</a>, <a href="#">poet</a> and <a href="#">civil rights activist</a>. She was a self-described "Black, lesbian, feminist, socialist, mother, warrior, poet" who dedicated her life and talents to confronting different forms of injustice, as she believed there could be "no hierarchy of oppressions" among "those who share the goals of liberation and a workable future for our children".
+                      <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a> <em>AW-dree LORD</em>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, intersectional <a href="https://en.wikipedia.org/wiki/Feminism" target="_blank" rel="noopener">feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights activist</a>.<sup class="citation-marker">[1]</sup> She described herself as a "Black, lesbian, feminist, socialist, mother, warrior, poet" and wrote across poetry, essays, and speeches about racism, sexism, classism, and homophobia.<sup class="citation-marker">[2]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      As a poet, she is well known for technical mastery and emotional expression, as well as her poems that express anger and outrage at civil and social injustices she observed throughout her life. She was the recipient of national and international awards and the founding member of <em>Kitchen Table: Women of Color Press</em>. As a <a href="#">spoken word</a> artist, her delivery has been called powerful, melodic, and intense by the Poetry Foundation. Her poems and prose largely deal with issues related to civil rights, feminism, lesbianism, illness, disability, and the exploration of Black female identity.
+                      Lorde argued that there could be no hierarchy of oppressions among people committed to liberation, a position that became central to her public work and writing.<sup class="citation-marker">[3]</sup> As a poet, she is known for technical precision and emotional force, and her work frequently addresses civil rights, feminism, lesbian identity, illness, disability, and Black womanhood.<sup class="citation-marker">[4]</sup><sup class="citation-marker">[5]</sup> She also co-founded <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a>.<sup class="citation-marker">[6]</sup>
                     </p>
                   </div>
 
@@ -487,19 +486,16 @@
 
                   <div class="body-text">
                     <p>
-                      Audre Lorde was born on February 18, 1934, in <a href="#">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde. Her father, Frederick Byron Lorde (Byron), was born on April 20, 1898, in <a href="#">Barbados</a>. Her mother, Linda Gertrude Belmar Lorde, was born in 1902 on the island <a href="#">Carriacou</a> in <a href="#">Grenada</a>. Lorde's mother was a light-skinned Black woman but sometimes passed as Spanish, for employment opportunities. Lorde's father was darker than the Belmar family liked, and they only allowed the couple to marry because of Byron's charm, ambition, and persistence. After their immigration, the new family settled in <a href="#">Harlem</a>, a diverse neighborhood in upper Manhattan, New York. Lorde was the youngest of three daughters. Lorde was nearsighted to the point of being legally blind. At the age of four she learned to read at the same time she learned to talk, with the help of Augusta Braxton Baker, then children's librarian at the 135th Street Branch of the New York Public Library. Her mother taught her to write at around the same time.
+                      Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      Born Audrey Geraldine Lorde, she chose to drop the "y" from her first name while still a child, explaining in <em><a href="#">Zami: A New Spelling of My Name</a></em> that she was more interested in the artistic symmetry of the "e"-endings in the two side-by-side names "Audre Lorde" than in spelling her name the way her parents had intended.
+                      The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      Lorde's relationship with her parents was difficult from a young age. She spent very little time with her father and mother, who were both busy maintaining their property management business in the tumultuous economy after <a href="#">the Great Depression</a>. When she did see them, they were often cold or emotionally distant. In particular, Lorde's relationship with her mother, who was deeply suspicious of people with darker skin than hers (which Lorde had) and the outside world in general, was characterized by "tough love" and strict adherence to family rules. Lorde's difficult relationship with her mother figured prominently in her later poems, such as <em>Coal</em>'s "Story Books on a Kitchen Table"
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      As a child, Lorde struggled with communication, and came to appreciate the power of poetry as a form of expression. She even described herself as thinking in poetry, stating that she would always "see things in terms of poetry". She explains that it was a way for her to understand and articulate her feelings. She went on to state that it was her way of "birthing myself into a world that I could bring into myself".
+                      Lorde later wrote that poetry became an essential way to understand and articulate her feelings, and she described herself as someone who thought in poetry from childhood onward.<sup class="citation-marker">[16]</sup>
                     </p>
                   </div>
                 </div>
@@ -576,32 +572,25 @@
               <p>
                 In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Lorde taught in the Education Department at <a href="#">Lehman College</a> from 1969 to 1970, then as a professor of English at <a href="#">John Jay College of Criminal Justice</a> (both part of the <a href="#">City University of New York</a>, CUNY) from 1970 to 1981. There, she fought for the creation of a <a href="#">black studies</a> department. In 1981, she went on to teach at her alma mater, <a href="#">Hunter College</a> (also CUNY), as the distinguished Thomas Hunter chair. As a queer Black woman, she was an outsider in a <a href="#">white male</a> dominated field and her experiences in this environment deeply influenced her work. New fields such as <a href="#">African American studies</a> and <a href="#">women's studies</a> advanced the topics that scholars were addressing and garnered attention to groups that had previously been rarely discussed. With this newfound <a href="#">academic</a> environment, Lorde was inspired to not only write poetry but also essays and articles about queer, feminist, and African American studies.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
               </p>
             </div>
@@ -621,44 +610,33 @@
               <p>
                 Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
               </p>
-              <p>&nbsp;</p>
-              <p><strong>Early works</strong></p>
-              <p>&nbsp;</p>
-              <p>
+                            <p><strong>Early works</strong></p>
+                            <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Nominated for the National Book Award for poetry in 1974, From a Land Where Other People Live (Broadside Press) shows Lorde's personal struggles with identity and anger at social injustice. The volume deals with themes of anger, loneliness, and injustice, as well as what it means to be a black woman, mother, friend, and lover.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
               </p>
-              <p>&nbsp;</p>
-              <p><strong>Wider recognition</strong></p>
-              <p>&nbsp;</p>
-              <p>
+                            <p><strong>Wider recognition</strong></p>
+                            <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
               </p>
             </div>
@@ -678,38 +656,29 @@
               <p>
                 The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
               </p>
-              <p>&nbsp;</p>
-              <p><strong>Sister Outsider</strong></p>
-              <p>&nbsp;</p>
-              <p>
+                            <p><strong>Sister Outsider</strong></p>
+                            <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Her most famous essay, "The Master's Tools Will Never Dismantle the Master's House", is included in Sister Outsider. Lorde questions the scope and ability for change to be instigated when examining problems through a racist, patriarchal lens. She insists that women see differences between other women not as something to be tolerated, but something that is necessary to generate power and to actively "be" in the world. This will create a community that embraces differences, which will ultimately lead to liberation. Lorde elucidates, "Divide and conquer, in our world, must become define and empower." Also, people must educate themselves about the oppression of others because expecting a marginalized group to educate the oppressors is the continuation of racist, patriarchal thought. She explains that this is a major tool utilized by oppressors to keep the oppressed occupied with the master's concerns. She concludes that to bring about real change, we cannot work within the racist, patriarchal framework because change brought about in that will not remain.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Also in Sister Outsider is the essay, "The Transformation of Silence into Language and Action". Lorde discusses the importance of speaking, even when afraid, because otherwise silence immobilizes and chokes us. Many people fear to speak the truth because of the real risks of retaliation, but Lorde warns, "Your silence does not protect you." Lorde emphasizes that "the transformation of silence into language and action is a self-revelation, and that always seems fraught with danger." People are afraid of others' reactions for speaking, but mostly for demanding visibility, which is essential to live. Lorde adds, "We can sit in our corners mute forever while our sisters and ourselves are wasted, while our children are distorted and destroyed, while our earth is poisoned; we can sit in our safe corners mute as bottles, and we will still be no less afraid." "People are taught to respect their fear of speaking more than silence, but ultimately, the silence will choke us anyway, so we might as well speak the truth." Lorde writes that we can learn to speak even when we are afraid.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In "Age, Race, Class, and Sex: Women Redefining Difference", Lorde emphasizes the importance of educating others. However, she stresses that in order to educate others, one must first be educated. Empowering people who are doing the work does not mean using privilege to overstep and overpower such groups; but rather, privilege must be used to hold door open for other allies. Lorde describes the inherent problems within society by saying, "racism, the belief in the inherent superiority of one race over all others and thereby the right to dominance. Sexism, the belief in the inherent superiority of one sex over the other and thereby the right to dominance. Ageism. Heterosexism. Elitism. Classism." Lorde finds herself among some of these "deviant" groups in society, which set the tone for the status quo and what "not to be" in society. Lorde argues that women feel pressure to conform to their "oneness" before recognizing the separation among them due to their "manyness", or aspects of their identity. She stresses that this behavior is exactly what "explains feminists' inability to forge the kind of alliances necessary to create a better world".
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 In relation to non-intersectional feminism in the United States, Lorde famously said:
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
               </p>
-              <p>&nbsp;</p>
-              <p>
+                            <p>
                 — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
               </p>
             </div>
@@ -719,11 +688,10 @@
             <div class="minerva-first-section">
               <div class="minerva-intro">
                 <p>
-                  <strong>Audre Lorde</strong> (<a href="#">/ˈɔːdri ˈlɔːrd/</a> <em>AW-dree LORD</em>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, professor, philosopher, intersectional <a href="#">feminist</a>, <a href="#">poet</a> and <a href="#">civil rights activist</a>. She was a self-described "Black, lesbian, feminist, socialist, mother, warrior, poet" who dedicated her life and talents to confronting different forms of injustice, as she believed there could be "no hierarchy of oppressions" among "those who share the goals of liberation and a workable future for our children".
+                  <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a> <em>AW-dree LORD</em>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, intersectional <a href="https://en.wikipedia.org/wiki/Feminism" target="_blank" rel="noopener">feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights activist</a>.<sup class="citation-marker">[1]</sup> She described herself as a "Black, lesbian, feminist, socialist, mother, warrior, poet" and wrote across poetry, essays, and speeches about racism, sexism, classism, and homophobia.<sup class="citation-marker">[2]</sup>
                 </p>
-                <p>&nbsp;</p>
                 <p>
-                  As a poet, she is well known for technical mastery and emotional expression, as well as her poems that express anger and outrage at civil and social injustices she observed throughout her life. She was the recipient of national and international awards and the founding member of <em>Kitchen Table: Women of Color Press</em>. As a <a href="#">spoken word</a> artist, her delivery has been called powerful, melodic, and intense by the Poetry Foundation. Her poems and prose largely deal with issues related to civil rights, feminism, lesbianism, illness, disability, and the exploration of Black female identity.
+                  Lorde argued that there could be no hierarchy of oppressions among people committed to liberation, a position that became central to her public work and writing.<sup class="citation-marker">[3]</sup> As a poet, she is known for technical precision and emotional force, and her work frequently addresses civil rights, feminism, lesbian identity, illness, disability, and Black womanhood.<sup class="citation-marker">[4]</sup><sup class="citation-marker">[5]</sup> She also co-founded <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a>.<sup class="citation-marker">[6]</sup>
                 </p>
               </div>
 
@@ -796,19 +764,16 @@
                 <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
                   <div class="body-text">
                     <p>
-                      Audre Lorde was born on February 18, 1934, in <a href="#">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde. Her father, Frederick Byron Lorde (Byron), was born on April 20, 1898, in <a href="#">Barbados</a>. Her mother, Linda Gertrude Belmar Lorde, was born in 1902 on the island <a href="#">Carriacou</a> in <a href="#">Grenada</a>. Lorde's mother was a light-skinned Black woman but sometimes passed as Spanish, for employment opportunities. Lorde's father was darker than the Belmar family liked, and they only allowed the couple to marry because of Byron's charm, ambition, and persistence. After their immigration, the new family settled in <a href="#">Harlem</a>, a diverse neighborhood in upper Manhattan, New York. Lorde was the youngest of three daughters. Lorde was nearsighted to the point of being legally blind. At the age of four she learned to read at the same time she learned to talk, with the help of Augusta Braxton Baker, then children's librarian at the 135th Street Branch of the New York Public Library. Her mother taught her to write at around the same time.
+                      Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      Born Audrey Geraldine Lorde, she chose to drop the "y" from her first name while still a child, explaining in <em><a href="#">Zami: A New Spelling of My Name</a></em> that she was more interested in the artistic symmetry of the "e"-endings in the two side-by-side names "Audre Lorde" than in spelling her name the way her parents had intended.
+                      The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      Lorde's relationship with her parents was difficult from a young age. She spent very little time with her father and mother, who were both busy maintaining their property management business in the tumultuous economy after <a href="#">the Great Depression</a>. When she did see them, they were often cold or emotionally distant. In particular, Lorde's relationship with her mother, who was deeply suspicious of people with darker skin than hers (which Lorde had) and the outside world in general, was characterized by "tough love" and strict adherence to family rules. Lorde's difficult relationship with her mother figured prominently in her later poems, such as <em>Coal</em>'s "Story Books on a Kitchen Table"
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      As a child, Lorde struggled with communication, and came to appreciate the power of poetry as a form of expression. She even described herself as thinking in poetry, stating that she would always "see things in terms of poetry". She explains that it was a way for her to understand and articulate her feelings. She went on to state that it was her way of "birthing myself into a world that I could bring into myself".
+                      Lorde later wrote that poetry became an essential way to understand and articulate her feelings, and she described herself as someone who thought in poetry from childhood onward.<sup class="citation-marker">[16]</sup>
                     </p>
                   </div>
                 </div>
@@ -829,32 +794,25 @@
                     <p>
                       In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Lorde taught in the Education Department at <a href="#">Lehman College</a> from 1969 to 1970, then as a professor of English at <a href="#">John Jay College of Criminal Justice</a> (both part of the <a href="#">City University of New York</a>, CUNY) from 1970 to 1981. There, she fought for the creation of a <a href="#">black studies</a> department. In 1981, she went on to teach at her alma mater, <a href="#">Hunter College</a> (also CUNY), as the distinguished Thomas Hunter chair. As a queer Black woman, she was an outsider in a <a href="#">white male</a> dominated field and her experiences in this environment deeply influenced her work. New fields such as <a href="#">African American studies</a> and <a href="#">women's studies</a> advanced the topics that scholars were addressing and garnered attention to groups that had previously been rarely discussed. With this newfound <a href="#">academic</a> environment, Lorde was inspired to not only write poetry but also essays and articles about queer, feminist, and African American studies.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
                     </p>
                   </div>
@@ -876,44 +834,33 @@
                     <p>
                       Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
                     </p>
-                    <p>&nbsp;</p>
-                    <p><strong>Early works</strong></p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p><strong>Early works</strong></p>
+                                        <p>
                       Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Nominated for the National Book Award for poetry in 1974, From a Land Where Other People Live (Broadside Press) shows Lorde's personal struggles with identity and anger at social injustice. The volume deals with themes of anger, loneliness, and injustice, as well as what it means to be a black woman, mother, friend, and lover.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
                     </p>
-                    <p>&nbsp;</p>
-                    <p><strong>Wider recognition</strong></p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p><strong>Wider recognition</strong></p>
+                                        <p>
                       Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
                     </p>
                   </div>
@@ -935,38 +882,29 @@
                     <p>
                       The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
                     </p>
-                    <p>&nbsp;</p>
-                    <p><strong>Sister Outsider</strong></p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p><strong>Sister Outsider</strong></p>
+                                        <p>
                       In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Her most famous essay, "The Master's Tools Will Never Dismantle the Master's House", is included in Sister Outsider. Lorde questions the scope and ability for change to be instigated when examining problems through a racist, patriarchal lens. She insists that women see differences between other women not as something to be tolerated, but something that is necessary to generate power and to actively "be" in the world. This will create a community that embraces differences, which will ultimately lead to liberation. Lorde elucidates, "Divide and conquer, in our world, must become define and empower." Also, people must educate themselves about the oppression of others because expecting a marginalized group to educate the oppressors is the continuation of racist, patriarchal thought. She explains that this is a major tool utilized by oppressors to keep the oppressed occupied with the master's concerns. She concludes that to bring about real change, we cannot work within the racist, patriarchal framework because change brought about in that will not remain.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Also in Sister Outsider is the essay, "The Transformation of Silence into Language and Action". Lorde discusses the importance of speaking, even when afraid, because otherwise silence immobilizes and chokes us. Many people fear to speak the truth because of the real risks of retaliation, but Lorde warns, "Your silence does not protect you." Lorde emphasizes that "the transformation of silence into language and action is a self-revelation, and that always seems fraught with danger." People are afraid of others' reactions for speaking, but mostly for demanding visibility, which is essential to live. Lorde adds, "We can sit in our corners mute forever while our sisters and ourselves are wasted, while our children are distorted and destroyed, while our earth is poisoned; we can sit in our safe corners mute as bottles, and we will still be no less afraid." "People are taught to respect their fear of speaking more than silence, but ultimately, the silence will choke us anyway, so we might as well speak the truth." Lorde writes that we can learn to speak even when we are afraid.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In "Age, Race, Class, and Sex: Women Redefining Difference", Lorde emphasizes the importance of educating others. However, she stresses that in order to educate others, one must first be educated. Empowering people who are doing the work does not mean using privilege to overstep and overpower such groups; but rather, privilege must be used to hold door open for other allies. Lorde describes the inherent problems within society by saying, "racism, the belief in the inherent superiority of one race over all others and thereby the right to dominance. Sexism, the belief in the inherent superiority of one sex over the other and thereby the right to dominance. Ageism. Heterosexism. Elitism. Classism." Lorde finds herself among some of these "deviant" groups in society, which set the tone for the status quo and what "not to be" in society. Lorde argues that women feel pressure to conform to their "oneness" before recognizing the separation among them due to their "manyness", or aspects of their identity. She stresses that this behavior is exactly what "explains feminists' inability to forge the kind of alliances necessary to create a better world".
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       In relation to non-intersectional feminism in the United States, Lorde famously said:
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
                     </p>
-                    <p>&nbsp;</p>
-                    <p>
+                                        <p>
                       — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
                     </p>
                   </div>
@@ -1434,15 +1372,13 @@
                   <div class="article-text-block">
                     <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                       <p>
-                        <strong>Audre Lorde</strong> (<a href="#">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="#">feminist</a>, <a href="#">womanist</a>, <a href="#">librarian</a>, and <a href="#">civil rights</a> incredible amazing activist. She was a self-described "black, lesbian, mother, warrior, poet," who "dedicated both her life and her creative talent to confronting and addressing injustices of <a href="#">racism</a>, <a href="#">sexism</a>, <a href="#">classism</a>, and <a href="#">homophobia</a>.
+                        <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a “Black, lesbian, feminist, socialist, mother, warrior, poet” and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
                       </p>
-                      <p>&nbsp;</p>
                       <p>
-                        As a poet, she is best known for technical mastery and emotional expression, as well as her poems that express anger and outrage at civil and social injustices she observed throughout her life.
+                        Lorde argued that there could be no hierarchy of oppressions among people working toward liberation, and she returned to that idea across her essays, speeches, and poems.<sup class="citation-marker">[3]</sup> As a poet, she is especially known for combining technical control with emotional force and for writing directly about anger, solidarity, and structural inequality.<sup class="citation-marker">[4]</sup>
                       </p>
-                      <p>&nbsp;</p>
                       <p>
-                        As a <a href="#">spoken word</a> artist, her delivery has been called powerful, melodic, and intense by the Poetry Foundation. Her poems and prose largely deal with issues related to civil rights, feminism, lesbianism, illness and disability, and the exploration of black female identity.
+                        She also received national and international recognition and helped found <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a>.<sup class="citation-marker">[5]</sup> As a <a href="https://en.wikipedia.org/wiki/Spoken_word" target="_blank" rel="noopener">spoken word</a> artist, her delivery has been described by the <a href="https://www.poetryfoundation.org/" target="_blank" rel="noopener">Poetry Foundation</a> as powerful, melodic, and intense, while her poetry and prose frequently address civil rights, feminism, lesbian identity, illness, disability, and Black womanhood.<sup class="citation-marker">[6]</sup><sup class="citation-marker">[7]</sup><sup class="citation-marker">[8]</sup>
                       </p>
                     </div>
                   </div>
@@ -1528,15 +1464,13 @@
                   
                   <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                     <p>
-                      Lorde was born in New York City, the best city in the world. Her father, Frederick Byron Lorde, (known as Byron) hailed from Barbados and her mother, Linda Gertrude Belmar Lorde, was Grenadian and had been born in the amazing island of <a href="#">Carriacou</a>.
+                      Lorde was born in New York City. Her father, Byron Lorde, was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother, Linda Gertrude Belmar Lorde, was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[9]</sup> Her mother was a light-skinned Black woman who at times passed as Spanish for employment opportunities, while Byron Lorde was darker than the Belmar family preferred.<sup class="citation-marker">[10]</sup><sup class="citation-marker">[11]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      Lorde's mother was of mixed ancestry but could "<a href="#">pass</a>" for '<a href="#">Spanish</a>',which was a source of pride for her family. Lorde's father was darker than the Belmar family liked, and they only allowed the couple to marry because of Byron Lorde's charm, ambition, and persistence.
+                      After immigrating, the family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[12]</sup> At age four she learned to read at the same time that she learned to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon afterward.<sup class="citation-marker">[13]</sup>
                     </p>
-                    <p>&nbsp;</p>
                     <p>
-                      The family settled in <a href="#">Harlem</a>. Lord was <a href="#">nearsighted</a> to the point of <a href="#">being legally</a> blind and the youngest of three daughters (her two older sisters were named Phyllis and Helen), Lorde grew up hearing her mother's stories about the <a href="#">West Indies</a>. At the age of four, she learned to talk while she learned to read, and her mother taught her to write at around the same time. She wrote her first poem when she was in eighth grade.
+                      Born Audrey Geraldine Lorde, she dropped the “y” from her first name while still a child because she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup> She later wrote about a difficult relationship with her parents, discovered poetry as a crucial form of expression, attended Catholic schools and then <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[16]</sup><sup class="citation-marker">[17]</sup><sup class="citation-marker">[18]</sup><sup class="citation-marker">[19]</sup><sup class="citation-marker">[20]</sup><sup class="citation-marker">[21]</sup>
                     </p>
                   </div>
                   <div class="edit-full-page-btn-wrapper">
@@ -1586,8 +1520,7 @@
                   <p>
                     In 1954, she spent a pivotal year as a student at the <a href="#">National Autonomous University of Mexico</a>, a period she described as a time of affirmation and renewal. During this time, she confirmed her identity on personal and artistic levels as both a lesbian and a poet. On her return to New York, Lorde attended <a href="#">Hunter College</a>, and graduated in the class of 1959. While there, she worked as a librarian, continued writing, and became an active participant in the <a href="#">gay culture</a> of <a href="#">Greenwich Village</a>. She furthered her education at the <a href="#">Columbia University School of Library Service</a>, earning a master's degree in <a href="#">library science</a> in 1961. During this period, she worked as a public librarian in nearby <a href="#">Mount Vernon, New York</a>.
                   </p>
-                  <p>&nbsp;</p>
-                  <!-- Highlighted Text with interactive states -->
+                                    <!-- Highlighted Text with interactive states -->
                   <p 
                     v-if="showSuggestionsDisplay && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
                     ref="highlightedTextRef"
@@ -1664,28 +1597,22 @@
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
                     <sup v-if="citationNumber1" class="citation-marker">[{{ citationNumber1 }}]</sup>
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Lorde taught in the Education Department at <a href="#">Lehman College</a> from 1969 to 1970, then as a professor of English at <a href="#">John Jay College of Criminal Justice</a> (both part of the <a href="#">City University of New York</a>, CUNY) from 1970 to 1981. There, she fought for the creation of a <a href="#">black studies</a> department. In 1981, she went on to teach at her alma mater, <a href="#">Hunter College</a> (also CUNY), as the distinguished Thomas Hunter chair. As a queer Black woman, she was an outsider in a <a href="#">white male</a> dominated field and her experiences in this environment deeply influenced her work. New fields such as <a href="#">African American studies</a> and <a href="#">women's studies</a> advanced the topics that scholars were addressing and garnered attention to groups that had previously been rarely discussed. With this newfound <a href="#">academic</a> environment, Lorde was inspired to not only write poetry but also essays and articles about queer, feminist, and African American studies.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In 1980, together with <a href="#">Barbara Smith</a> and <a href="#">Cherríe Moraga</a>, she co-founded <a href="#">Kitchen Table: Women of Color Press</a>, the first U.S. publisher for women of color.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In 1981, Lorde was among the founders of the Women's Coalition of St. Croix, an organization dedicated to assisting women who have survived sexual abuse and <a href="#">intimate partner violence</a>. In the late 1980s, she also helped establish Sisterhood in Support of Sisters (SISA) in South Africa to benefit black women who were affected by <a href="#">apartheid</a> and other forms of injustice.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In 1985, Audre Lorde was a part of a delegation of <a href="#">black women</a> writers who had been invited to <a href="#">Cuba</a>. The trip was sponsored by <em>The Black Scholar</em> and the Union of Cuban Writers. She embraced the shared sisterhood as black women writers. They visited Cuban poets <a href="#">Nancy Morejón</a> and <a href="#">Nicolas Guillén</a>. They discussed whether the Cuban revolution had truly changed racism and the status of lesbians and gays there.
                   </p>
                 </div>
@@ -1736,40 +1663,30 @@
                   <p>
                     Lorde focused her discussion of difference not only on differences between groups of women but between conflicting differences within the individual. "I am defined as other in every group I'm part of," she declared. "Yet without community," Lorde wrote, "there is certainly no liberation, no future, only the most vulnerable and temporary armistice between me and my oppression". She described herself both as a part of a "continuum of women" and a "concert of voices" within herself.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
                   </p>
-                  <p>&nbsp;</p>
-                  <p><strong class="subsection-title">Early works</strong></p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p><strong class="subsection-title">Early works</strong></p>
+                                    <p>
                     Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Nominated for the National Book Award for poetry in 1974, From a Land Where Other People Live (Broadside Press) shows Lorde's personal struggles with identity and anger at social injustice. The volume deals with themes of anger, loneliness, and injustice, as well as what it means to be a black woman, mother, friend, and lover.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
                   </p>
-                  <p>&nbsp;</p>
-                  <p><strong class="subsection-title">Wider recognition</strong></p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p><strong class="subsection-title">Wider recognition</strong></p>
+                                    <p>
                     Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
                   </p>
-                  <p>&nbsp;</p>
-                  <p
+                                    <p
                     v-if="showSuggestionsDisplay && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
                     ref="highlightedTextRef2"
                     :class="{ 
@@ -1843,8 +1760,7 @@
                       </div>
                     </div>
                   </div>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Lorde's poetry became more open and personal as she grew older and became more confident in her sexuality. In Sister Outsider: Essays and Speeches, Lorde states, "Poetry is the way we help give name to the nameless so it can be thought... As they become known to and accepted by us, our feelings and the honest exploration of them become sanctuaries and spawning grounds for the most radical and daring ideas." Sister Outsider also elaborates Lorde's challenge to European-American traditions.
                   </p>
                 </div>
@@ -1895,38 +1811,29 @@
                   <p>
                     The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
                   </p>
-                  <p>&nbsp;</p>
-                  <p><strong class="subsection-title">Sister Outsider</strong></p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p><strong class="subsection-title">Sister Outsider</strong></p>
+                                    <p>
                     In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Her most famous essay, "The Master's Tools Will Never Dismantle the Master's House", is included in Sister Outsider. Lorde questions the scope and ability for change to be instigated when examining problems through a racist, patriarchal lens. She insists that women see differences between other women not as something to be tolerated, but something that is necessary to generate power and to actively "be" in the world. This will create a community that embraces differences, which will ultimately lead to liberation. Lorde elucidates, "Divide and conquer, in our world, must become define and empower." Also, people must educate themselves about the oppression of others because expecting a marginalized group to educate the oppressors is the continuation of racist, patriarchal thought. She explains that this is a major tool utilized by oppressors to keep the oppressed occupied with the master's concerns. She concludes that to bring about real change, we cannot work within the racist, patriarchal framework because change brought about in that will not remain.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Also in Sister Outsider is the essay, "The Transformation of Silence into Language and Action". Lorde discusses the importance of speaking, even when afraid, because otherwise silence immobilizes and chokes us. Many people fear to speak the truth because of the real risks of retaliation, but Lorde warns, "Your silence does not protect you." Lorde emphasizes that "the transformation of silence into language and action is a self-revelation, and that always seems fraught with danger." People are afraid of others' reactions for speaking, but mostly for demanding visibility, which is essential to live. Lorde adds, "We can sit in our corners mute forever while our sisters and ourselves are wasted, while our children are distorted and destroyed, while our earth is poisoned; we can sit in our safe corners mute as bottles, and we will still be no less afraid." "People are taught to respect their fear of speaking more than silence, but ultimately, the silence will choke us anyway, so we might as well speak the truth." Lorde writes that we can learn to speak even when we are afraid.
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In "Age, Race, Class, and Sex: Women Redefining Difference", Lorde emphasizes the importance of educating others. However, she stresses that in order to educate others, one must first be educated. Empowering people who are doing the work does not mean using privilege to overstep and overpower such groups; but rather, privilege must be used to hold door open for other allies. Lorde describes the inherent problems within society by saying, "racism, the belief in the inherent superiority of one race over all others and thereby the right to dominance. Sexism, the belief in the inherent superiority of one sex over the other and thereby the right to dominance. Ageism. Heterosexism. Elitism. Classism." Lorde finds herself among some of these "deviant" groups in society, which set the tone for the status quo and what "not to be" in society. Lorde argues that women feel pressure to conform to their "oneness" before recognizing the separation among them due to their "manyness", or aspects of their identity. She stresses that this behavior is exactly what "explains feminists' inability to forge the kind of alliances necessary to create a better world".
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     In relation to non-intersectional feminism in the United States, Lorde famously said:
                   </p>
-                  <p>&nbsp;</p>
-                  <p>
+                                    <p>
                     Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
                   </p>
-                  <p>&nbsp;</p>
-                  <p
+                                    <p
                     v-if="showSuggestionsDisplay && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
                     ref="highlightedTextRef3"
                     :class="{ 
@@ -6946,8 +6853,10 @@ function markArticleEdited() {
 }
 
 .subsection-title {
+  display: block;
   font-size: 18px;
   font-weight: 600;
+  margin: 16px 0 0;
 }
 
 .minerva-skin .subsection-title {
@@ -7951,7 +7860,7 @@ function markArticleEdited() {
 }
 
 .article-text-editable p {
-  margin: 0 0 8px 0;
+  margin: 0;
 }
 
 .article-text-editable a {
@@ -8274,6 +8183,8 @@ function markArticleEdited() {
   background-color: rgba(234, 236, 240, 0.65);
   border-radius: 0;
   padding: 0;
+  font-size: 16px;
+  font-weight: 400;
   line-height: 24px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
