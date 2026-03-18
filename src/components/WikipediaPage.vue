@@ -1605,7 +1605,9 @@
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
+                      <span class="highlighted-text-annotation">
                       In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.<sup v-if="showCitationPopup1 || citationNumber1" class="citation-marker" ref="citationMarker1">[{{ citationNumber1 || '...' }}]</sup>
+                      </span>
                     </span>
                     <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
                     <button
@@ -1784,7 +1786,9 @@
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
+                      <span class="highlighted-text-annotation">
                       In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker">[{{ citationNumber2 || '...' }}]</sup>
+                      </span>
                     </span>
                     <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
                     <button
@@ -1939,7 +1943,9 @@
                   >
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
+                      <span class="highlighted-text-annotation">
                       — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)<sup v-if="showCitationPopup3 || citationNumber3" class="citation-marker">[{{ citationNumber3 || '...' }}]</sup>
+                      </span>
                     </span>
                     <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
                     <button
@@ -2346,15 +2352,15 @@
           <div
             v-if="isEditCheckMode"
             ref="editCheckSidebarRef"
-            class="suggestion-card suggestion-card-positioned tone-check-card"
+            class="suggestion-card suggestion-card-positioned feedback-card feedback-card--warning"
             :class="{
               'suggestion-card--collapsed': !isEditCheckExpandedDisplay,
               'suggestion-card--expanded': isEditCheckExpandedDisplay,
               'suggestion-card--hover': isEditCheckHovered
             }"
             :style="{ top: `${editCheckTopOffset}px` }"
-            @mouseenter="isEditCheckHovered = true"
-            @mouseleave="isEditCheckHovered = false"
+            @mouseenter="isEditCheckHovered = true; syncEditCheckHoverState()"
+            @mouseleave="isEditCheckHovered = false; syncEditCheckHoverState()"
           >
             <button
               class="suggestion-header"
@@ -3069,6 +3075,7 @@ const pasteCheckTopOffset = ref(0);
 const editCheckSidebarRef = ref(null);
 const isEditCheckExpanded = ref(true);
 const isEditCheckHovered = ref(false);
+const isEditCheckTextHovered = ref(false);
 const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const selectedPrototype = ref('option-2');
@@ -3293,11 +3300,13 @@ const activeEditCheckType = computed(() => {
 });
 const isEditCheckMode = computed(() => Boolean(activeEditCheckType.value));
 const isEditCheckSheet = computed(() => (
-  isMinervaSkin.value ? minervaSheetMode.value === 'edit-check' : isEditCheckMode.value
+  isMinervaSkin.value ? (minervaSheetMode.value === 'edit-check' && isEditCheckMode.value) : isEditCheckMode.value
 ));
-const editCheckTitle = computed(() => (
-  activeEditCheckType.value === 'paste' ? 'Pasted content' : 'Revise tone'
-));
+const editCheckTitle = computed(() => {
+  if (activeEditCheckType.value === 'paste') return 'Pasted content';
+  if (activeEditCheckType.value === 'tone') return 'Revise tone';
+  return '';
+});
 const editCheckTopOffset = computed(() => (
   activeEditCheckType.value === 'paste' ? pasteCheckTopOffset.value : toneCheckTopOffset.value
 ));
@@ -3306,6 +3315,9 @@ const isEditCheckExpandedDisplay = computed(() => (
 ));
 const isEditCheckSheetExpanded = computed(() => (
   isMinervaSkin.value ? (isMinervaSheetOpen.value && minervaSheetMode.value === 'edit-check') : isEditCheckExpanded.value
+));
+const isEditCheckHighlightHovered = computed(() => (
+  isEditCheckHovered.value || isEditCheckTextHovered.value
 ));
 const isSuggestionSheetMode = computed(() => (
   showSuggestionsDisplay.value && !isEditCheckSheet.value
@@ -3537,6 +3549,7 @@ function removeToneCheckHighlights(node) {
   highlights.forEach((span) => {
     span.replaceWith(document.createTextNode(span.textContent || ''));
   });
+  removeEditCheckMinervaMarkers(node);
 }
 
 function removePasteCheckHighlights(node) {
@@ -3545,6 +3558,77 @@ function removePasteCheckHighlights(node) {
   highlights.forEach((span) => {
     span.replaceWith(document.createTextNode(span.textContent || ''));
   });
+  removeEditCheckMinervaMarkers(node);
+}
+
+function getEditCheckMinervaAnchor(node) {
+  if (!node || !isMinervaSkin.value) return null;
+  if (node.nodeType === Node.TEXT_NODE) {
+    return node.parentElement?.closest('p');
+  }
+  return node.closest?.('p') || null;
+}
+
+function removeEditCheckMinervaMarkers(node) {
+  if (!node) return;
+  const anchors = node.matches?.('p') ? [node] : Array.from(node.querySelectorAll('p'));
+  anchors.forEach((anchor) => {
+    anchor.querySelectorAll('.edit-check-minerva-marker').forEach((marker) => marker.remove());
+    anchor.classList.remove('edit-check-minerva-target');
+  });
+}
+
+function attachEditCheckMinervaMarkers(anchor) {
+  if (!anchor || !isMinervaSkin.value) return;
+  anchor.classList.add('edit-check-minerva-target');
+  anchor.querySelectorAll('.edit-check-minerva-marker').forEach((marker) => marker.remove());
+
+  const minervaRail = document.createElement('span');
+  minervaRail.className = 'minerva-highlight-rail edit-check-minerva-marker';
+  anchor.appendChild(minervaRail);
+
+  const triggerButton = createEditCheckTriggerButton();
+  triggerButton.classList.add('edit-check-minerva-marker');
+  anchor.appendChild(triggerButton);
+}
+
+function syncEditCheckHoverState() {
+  const isHovered = isEditCheckHighlightHovered.value;
+  [ pasteCheckHighlightRef.value, toneCheckHighlightRef.value ].forEach((highlightNode) => {
+    if (!highlightNode) return;
+    if (isHovered) {
+      highlightNode.classList.add('highlighted-text-wrapper--hover');
+    } else {
+      highlightNode.classList.remove('highlighted-text-wrapper--hover');
+    }
+  });
+}
+
+function createEditCheckHighlightSpan(matchedText, highlightClass) {
+  const highlightSpan = document.createElement('span');
+  highlightSpan.className = `${highlightClass} feedback-highlight feedback-highlight--warning highlighted-text-wrapper`;
+  if (!isEditCheckSheetExpanded.value) {
+    highlightSpan.classList.add('edit-check-highlight--collapsed');
+  }
+  const railSpan = document.createElement('span');
+  railSpan.className = 'highlighted-text-rail';
+  const contentSpan = document.createElement('span');
+  contentSpan.className = 'highlighted-text-content';
+  const annotationSpan = document.createElement('span');
+  annotationSpan.className = 'highlighted-text-annotation';
+  annotationSpan.textContent = matchedText;
+  highlightSpan.addEventListener('mouseenter', () => {
+    isEditCheckTextHovered.value = true;
+    syncEditCheckHoverState();
+  });
+  highlightSpan.addEventListener('mouseleave', () => {
+    isEditCheckTextHovered.value = false;
+    syncEditCheckHoverState();
+  });
+  contentSpan.appendChild(annotationSpan);
+  highlightSpan.appendChild(railSpan);
+  highlightSpan.appendChild(contentSpan);
+  return highlightSpan;
 }
 
 function insertToneCheckHighlight(node, phrase = 'amazing') {
@@ -3568,35 +3652,13 @@ function insertToneCheckHighlight(node, phrase = 'amazing') {
   const endIndex = startIndex + matchedText.length;
 
   const before = textNode.nodeValue.slice(0, startIndex);
-  const matched = textNode.nodeValue.slice(startIndex, endIndex);
   const after = textNode.nodeValue.slice(endIndex);
 
   const fragment = document.createDocumentFragment();
   if (before) {
     fragment.appendChild(document.createTextNode(before));
   }
-  const highlightSpan = document.createElement('span');
-  highlightSpan.className = 'tone-check-highlight highlighted-text-wrapper';
-  if (!isEditCheckSheetExpanded.value) {
-    highlightSpan.classList.add('edit-check-highlight--collapsed');
-  }
-  if (isMinervaSkin.value) {
-    highlightSpan.classList.add('minerva-suggestion-target');
-  }
-  const railSpan = document.createElement('span');
-  railSpan.className = 'highlighted-text-rail';
-  if (isMinervaSkin.value) {
-    const minervaRail = document.createElement('span');
-    minervaRail.className = 'minerva-highlight-rail';
-    highlightSpan.appendChild(minervaRail);
-    const triggerButton = createEditCheckTriggerButton();
-    highlightSpan.appendChild(triggerButton);
-  }
-  const contentSpan = document.createElement('span');
-  contentSpan.className = 'highlighted-text-content';
-  contentSpan.textContent = matched;
-  highlightSpan.appendChild(railSpan);
-  highlightSpan.appendChild(contentSpan);
+  const highlightSpan = createEditCheckHighlightSpan(matchedText, 'tone-check-highlight');
   fragment.appendChild(highlightSpan);
   if (after) {
     fragment.appendChild(document.createTextNode(after));
@@ -3604,35 +3666,18 @@ function insertToneCheckHighlight(node, phrase = 'amazing') {
 
   textNode.parentNode.replaceChild(fragment, textNode);
   const parent = textNode.parentNode;
+  const anchor = getEditCheckMinervaAnchor(parent);
+  attachEditCheckMinervaMarkers(anchor);
   if (!parent) return highlightSpan;
   return parent.querySelector('.tone-check-highlight') || highlightSpan;
 }
 
 function insertPasteCheckHighlight(range, pastedText) {
   if (!range) return null;
-  const highlightSpan = document.createElement('span');
-  highlightSpan.className = 'paste-check-highlight highlighted-text-wrapper';
-  if (!isEditCheckSheetExpanded.value) {
-    highlightSpan.classList.add('edit-check-highlight--collapsed');
-  }
-  if (isMinervaSkin.value) {
-    highlightSpan.classList.add('minerva-suggestion-target');
-  }
-  const railSpan = document.createElement('span');
-  railSpan.className = 'highlighted-text-rail';
-  if (isMinervaSkin.value) {
-    const minervaRail = document.createElement('span');
-    minervaRail.className = 'minerva-highlight-rail';
-    highlightSpan.appendChild(minervaRail);
-    const triggerButton = createEditCheckTriggerButton();
-    highlightSpan.appendChild(triggerButton);
-  }
-  const contentSpan = document.createElement('span');
-  contentSpan.className = 'highlighted-text-content';
-  contentSpan.textContent = pastedText;
-  highlightSpan.appendChild(railSpan);
-  highlightSpan.appendChild(contentSpan);
+  const highlightSpan = createEditCheckHighlightSpan(pastedText, 'paste-check-highlight');
   range.insertNode(highlightSpan);
+  const anchor = getEditCheckMinervaAnchor(highlightSpan);
+  attachEditCheckMinervaMarkers(anchor);
   const highlightNode = highlightSpan;
   return highlightNode;
 }
@@ -3640,12 +3685,17 @@ function insertPasteCheckHighlight(range, pastedText) {
 function createEditCheckTriggerButton() {
   const button = document.createElement('button');
   button.type = 'button';
-  button.className = 'minerva-suggestion-trigger edit-check-trigger';
+  button.className = 'minerva-suggestion-trigger feedback-trigger--warning edit-check-trigger';
   button.innerHTML = `<svg viewBox="0 0 20 20" aria-hidden="true">${cdxIconAlert}</svg>`;
   button.addEventListener('click', (event) => {
     event.stopPropagation();
+    if (isMinervaSheetOpen.value && minervaSheetMode.value === 'edit-check') {
+      closeMinervaSuggestion();
+      return;
+    }
     minervaSheetMode.value = 'edit-check';
     isMinervaSheetOpen.value = true;
+    updateMinervaSheetHeight();
   });
   return button;
 }
@@ -3665,7 +3715,11 @@ function updateToneCheckFromContent() {
   let hasAmazing = false;
 
   if (toneCheckActive.value && !toneCheckDismissed.value) {
-    return;
+    const highlightText = toneCheckHighlightRef.value?.textContent?.trim().toLowerCase();
+    if (toneCheckHighlightRef.value?.isConnected && highlightText === 'amazing') {
+      return;
+    }
+    clearToneCheck(false, false);
   }
   toneCheckHighlightRef.value = null;
 
@@ -3714,29 +3768,52 @@ function updateToneCheckFromContent() {
   toneCheckActive.value = Boolean(highlightNode);
   toneCheckEnterArmed.value = false;
   toneCheckTriggeredByAmazing.value = false;
-  isEditCheckExpanded.value = true;
-  minervaSheetMode.value = 'edit-check';
+  isEditCheckExpanded.value = false;
   nextTick(() => {
     alignToneCheckCard();
     updateSuggestionVisibility();
-    if (toneCheckHighlightRef.value) {
-      toneCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
-    }
+    syncEditCheckHighlightState();
   });
 }
 
 function handleToneCheckKeydown(event) {
   if (event.key === 'Enter') {
-    const word = getWordBeforeCursor(event.target);
-    if (word && word.toLowerCase() === 'amazing') {
+    const wordRange = getWordRangeBeforeCursor(event.currentTarget, 'amazing');
+    if (wordRange) {
+      event.preventDefault();
+      toneCheckDismissed.value = false;
       toneCheckEnterArmed.value = true;
       toneCheckTriggeredByAmazing.value = true;
-      updateToneCheckFromContent();
+      toneCheckHighlightRef.value = insertToneCheckHighlightFromRange(wordRange);
+      toneCheckActive.value = Boolean(toneCheckHighlightRef.value);
+      toneCheckEnterArmed.value = false;
+      toneCheckTriggeredByAmazing.value = false;
+      isEditCheckExpanded.value = false;
+      nextTick(() => {
+        syncEditCheckHighlightState();
+        alignToneCheckCard();
+        updateSuggestionVisibility();
+        document.execCommand('insertParagraph');
+      });
     } else {
       toneCheckEnterArmed.value = false;
       toneCheckTriggeredByAmazing.value = false;
     }
   }
+}
+
+function getLastTextNode(node) {
+  if (!node) return null;
+  if (node.nodeType === Node.TEXT_NODE) {
+    return node;
+  }
+  for (let index = node.childNodes.length - 1; index >= 0; index -= 1) {
+    const textNode = getLastTextNode(node.childNodes[index]);
+    if (textNode) {
+      return textNode;
+    }
+  }
+  return null;
 }
 
 function handlePaste(event) {
@@ -3757,17 +3834,11 @@ function handlePaste(event) {
   pasteCheckHighlightRef.value = highlightNode;
   pasteCheckActive.value = true;
   pasteCheckDismissed.value = false;
-  isEditCheckExpanded.value = true;
-  minervaSheetMode.value = 'edit-check';
+  isEditCheckExpanded.value = false;
   nextTick(() => {
     alignPasteCheckCard();
     updateSuggestionVisibility();
-    if (pasteCheckHighlightRef.value) {
-      pasteCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
-    }
-    if (isMinervaSkin.value) {
-      isMinervaSheetOpen.value = true;
-    }
+    syncEditCheckHighlightState();
   });
 }
 
@@ -3775,19 +3846,57 @@ function getWordBeforeCursor(target) {
   const selection = window.getSelection();
   if (!selection || selection.rangeCount === 0) return '';
   const range = selection.getRangeAt(0);
+  const node = range.startContainer;
+  if (target && !target.contains(node)) return '';
+  const textRange = range.cloneRange();
+  if (target) {
+    textRange.selectNodeContents(target);
+  }
+  textRange.setEnd(range.startContainer, range.startOffset);
+  const before = textRange.toString();
+  const match = before.match(/([A-Za-z]+)$/);
+  return match ? match[1] : '';
+}
+
+function getWordRangeBeforeCursor(target, expectedWord) {
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return null;
+  const range = selection.getRangeAt(0);
   let node = range.startContainer;
   let offset = range.startOffset;
-  if (target && !target.contains(node)) return '';
+  if (target && !target.contains(node)) return null;
   if (node.nodeType !== Node.TEXT_NODE) {
-    const fallback = node.childNodes[Math.max(0, offset - 1)];
-    if (!fallback || fallback.nodeType !== Node.TEXT_NODE) return '';
-    node = fallback;
-    offset = fallback.textContent ? fallback.textContent.length : 0;
+    const fallback = node.childNodes[Math.max(0, offset - 1)] || node.childNodes[node.childNodes.length - 1];
+    const textNode = getLastTextNode(fallback);
+    if (!textNode) return null;
+    node = textNode;
+    offset = textNode.textContent ? textNode.textContent.length : 0;
   }
   const text = node.textContent || '';
   const before = text.slice(0, offset);
-  const match = before.match(/([A-Za-z]+)$/);
-  return match ? match[1] : '';
+  if (!before.toLowerCase().endsWith(expectedWord.toLowerCase())) return null;
+  const wordRange = document.createRange();
+  wordRange.setStart(node, offset - expectedWord.length);
+  wordRange.setEnd(node, offset);
+  return wordRange;
+}
+
+function insertToneCheckHighlightFromRange(range) {
+  if (!range) return null;
+  const matchedText = range.toString();
+  if (!matchedText) return null;
+  range.deleteContents();
+  const highlightSpan = createEditCheckHighlightSpan(matchedText, 'tone-check-highlight');
+  range.insertNode(highlightSpan);
+  const anchor = getEditCheckMinervaAnchor(highlightSpan);
+  attachEditCheckMinervaMarkers(anchor);
+  const selection = window.getSelection();
+  const afterRange = document.createRange();
+  afterRange.setStartAfter(highlightSpan);
+  afterRange.collapse(true);
+  selection?.removeAllRanges();
+  selection?.addRange(afterRange);
+  return highlightSpan;
 }
 
 function alignToneCheckCard() {
@@ -3816,62 +3925,103 @@ function alignPasteCheckCard() {
 
 function unwrapCheckHighlight(highlightNode) {
   if (!highlightNode) return;
+  const anchor = getEditCheckMinervaAnchor(highlightNode);
+  removeEditCheckMinervaMarkers(anchor);
   const text = highlightNode.textContent || '';
   highlightNode.replaceWith(document.createTextNode(text));
 }
 
 function removeCheckHighlight(highlightNode) {
   if (!highlightNode) return;
+  const anchor = getEditCheckMinervaAnchor(highlightNode);
+  removeEditCheckMinervaMarkers(anchor);
   highlightNode.remove();
 }
 
-function handlePasteCheckKeep() {
-  unwrapCheckHighlight(pasteCheckHighlightRef.value);
+function clearToneCheck(removeHighlight = false, dismiss = false) {
+  if (toneCheckHighlightRef.value) {
+    if (removeHighlight) {
+      removeCheckHighlight(toneCheckHighlightRef.value);
+    } else {
+      unwrapCheckHighlight(toneCheckHighlightRef.value);
+    }
+  }
+  toneCheckHighlightRef.value = null;
+  toneCheckActive.value = false;
+  toneCheckDismissed.value = dismiss;
+  toneCheckEnterArmed.value = false;
+  toneCheckTriggeredByAmazing.value = false;
+  if (isMinervaSkin.value && minervaSheetMode.value === 'edit-check' && !pasteCheckActive.value) {
+    closeMinervaSuggestion();
+  }
+}
+
+function clearPasteCheck(removeHighlight = false) {
+  if (pasteCheckHighlightRef.value) {
+    if (removeHighlight) {
+      removeCheckHighlight(pasteCheckHighlightRef.value);
+    } else {
+      unwrapCheckHighlight(pasteCheckHighlightRef.value);
+    }
+  }
   pasteCheckHighlightRef.value = null;
   pasteCheckActive.value = false;
+  pasteCheckDismissed.value = false;
+  if (isMinervaSkin.value && minervaSheetMode.value === 'edit-check' && !toneCheckActive.value) {
+    closeMinervaSuggestion();
+  }
+}
+
+function syncEditCheckHighlightState() {
+  const isExpanded = isEditCheckSheetExpanded.value;
+  [ pasteCheckHighlightRef.value, toneCheckHighlightRef.value ].forEach((highlightNode) => {
+    if (!highlightNode) return;
+    if (isExpanded) {
+      highlightNode.classList.remove('edit-check-highlight--collapsed');
+    } else {
+      highlightNode.classList.add('edit-check-highlight--collapsed');
+    }
+  });
+}
+
+watch(isEditCheckHighlightHovered, () => {
+  syncEditCheckHoverState();
+});
+
+function handlePasteCheckKeep() {
+  clearPasteCheck(false);
+  clearToneCheck(false, true);
   isEditCheckExpanded.value = false;
+  isEditCheckTextHovered.value = false;
   updateSuggestionVisibility();
 }
 
 function handlePasteCheckRemove() {
-  removeCheckHighlight(pasteCheckHighlightRef.value);
-  pasteCheckHighlightRef.value = null;
-  pasteCheckActive.value = false;
+  clearPasteCheck(true);
+  clearToneCheck(false, true);
   isEditCheckExpanded.value = false;
+  isEditCheckTextHovered.value = false;
   updateSuggestionVisibility();
 }
 
 function toggleEditCheckExpand() {
   if (isMinervaSkin.value) return;
   isEditCheckExpanded.value = !isEditCheckExpanded.value;
-  if (pasteCheckHighlightRef.value) {
-    if (isEditCheckSheetExpanded.value) {
-      pasteCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
-    } else {
-      pasteCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
-    }
-  }
-  if (toneCheckHighlightRef.value) {
-    if (isEditCheckSheetExpanded.value) {
-      toneCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
-    } else {
-      toneCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
-    }
-  }
+  syncEditCheckHighlightState();
 }
 
 function handleToneCheckRevise() {
-  toneCheckDismissed.value = true;
-  toneCheckActive.value = false;
+  clearToneCheck(false, true);
+  clearPasteCheck(false);
   isEditCheckExpanded.value = false;
-  updateToneCheckFromContent();
+  isEditCheckTextHovered.value = false;
 }
 
 function handleToneCheckDecline() {
-  toneCheckDismissed.value = true;
-  toneCheckActive.value = false;
+  clearToneCheck(false, true);
+  clearPasteCheck(false);
   isEditCheckExpanded.value = false;
-  updateToneCheckFromContent();
+  isEditCheckTextHovered.value = false;
 }
 
 function handleHideSuggestionsBanner() {
@@ -4972,9 +5122,8 @@ watch(
 );
 
 watch(isEditCheckMode, (isActive) => {
-  if (isActive && isMinervaSkin.value) {
-    isMinervaSheetOpen.value = true;
-    minervaSheetMode.value = 'edit-check';
+  if (!isActive) {
+    syncEditCheckHighlightState();
   }
 });
 
@@ -4984,21 +5133,7 @@ watch(isMinervaSheetOpen, () => {
 
 watch([isMinervaSheetOpen, minervaSheetMode], () => {
   if (!isMinervaSkin.value) return;
-  const isExpanded = isEditCheckSheetExpanded.value;
-  if (pasteCheckHighlightRef.value) {
-    if (isExpanded) {
-      pasteCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
-    } else {
-      pasteCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
-    }
-  }
-  if (toneCheckHighlightRef.value) {
-    if (isExpanded) {
-      toneCheckHighlightRef.value.classList.remove('edit-check-highlight--collapsed');
-    } else {
-      toneCheckHighlightRef.value.classList.add('edit-check-highlight--collapsed');
-    }
-  }
+  syncEditCheckHighlightState();
 });
 
 watch(
@@ -8097,7 +8232,9 @@ function markArticleEdited() {
 
 /* Text content with per-line backgrounds */
 .highlighted-text-content {
-  flex: 1;
+  flex: 1 1 auto;
+  min-width: 0;
+  width: 100%;
   margin: 0;
   font-family: 'Inter', sans-serif;
   font-size: 14px;
@@ -8106,15 +8243,17 @@ function markArticleEdited() {
   color: #202122;
   position: relative;
   z-index: 2;
-  /* Make background apply per-line */
+}
+
+.highlighted-text-annotation {
   display: inline;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
 }
 
 /* Default state - subtle gray per line */
-.highlighted-text-wrapper .highlighted-text-content {
-  background-color: #f8f9fa;
+.highlighted-text-wrapper .highlighted-text-annotation {
+  background-color: rgba(234, 236, 240, 0.65);
   border-radius: 2px;
   padding: 0 2px;
   box-decoration-break: clone;
@@ -8122,28 +8261,27 @@ function markArticleEdited() {
 }
 
 /* Hover state - blue background per line */
-.highlighted-text-wrapper--hover .highlighted-text-content {
+.highlighted-text-wrapper--hover .highlighted-text-annotation {
   background-color: #e8eeff;
 }
 
 /* Selected state - blue background per line */
-.highlighted-text-wrapper--selected .highlighted-text-content {
+.highlighted-text-wrapper--selected .highlighted-text-annotation {
   background-color: #e8eeff;
 }
 
-.minerva-skin .highlighted-text-wrapper .highlighted-text-content {
-  background-color: transparent;
+.minerva-skin .highlighted-text-wrapper .highlighted-text-annotation {
+  background-color: rgba(234, 236, 240, 0.65);
   border-radius: 0;
   padding: 0;
   line-height: 24px;
-  background-image: linear-gradient(var(--background-color-neutral-subtle, #f8f9fa), var(--background-color-neutral-subtle, #f8f9fa));
-  background-size: 100% 24px;
-  background-repeat: repeat-y;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
 }
 
-.minerva-skin .highlighted-text-wrapper--hover .highlighted-text-content,
-.minerva-skin .highlighted-text-wrapper--selected .highlighted-text-content {
-  background-image: linear-gradient(var(--background-color-progressive-subtle, #e8eeff), var(--background-color-progressive-subtle, #e8eeff));
+.minerva-skin .highlighted-text-wrapper--hover .highlighted-text-annotation,
+.minerva-skin .highlighted-text-wrapper--selected .highlighted-text-annotation {
+  background-color: var(--background-color-progressive-subtle, #e8eeff);
 }
 
 /* Links inside highlighted text */
@@ -8168,6 +8306,12 @@ function markArticleEdited() {
   z-index: 3;
 }
 
+.minerva-skin :deep(.edit-check-minerva-target) {
+  padding-right: 0;
+  position: relative;
+  z-index: 3;
+}
+
 .minerva-suggestions-on--rail .minerva-suggestion-target {
   z-index: 20;
 }
@@ -8176,7 +8320,15 @@ function markArticleEdited() {
   z-index: 20;
 }
 
+.minerva-suggestions-on--rail :deep(.edit-check-minerva-target) {
+  z-index: 20;
+}
+
 .minerva-suggestion-target .highlighted-text-rail {
+  display: none;
+}
+
+.minerva-skin :deep(.feedback-highlight--warning .highlighted-text-rail) {
   display: none;
 }
 
@@ -8206,8 +8358,11 @@ function markArticleEdited() {
   z-index: 4;
 }
 
-:deep(.tone-check-highlight .minerva-highlight-rail),
-:deep(.paste-check-highlight .minerva-highlight-rail) {
+:deep(.feedback-highlight--warning .minerva-highlight-rail) {
+  background-color: var(--color-icon-warning, #AB7F2A);
+}
+
+.minerva-skin :deep(.edit-check-minerva-target .minerva-highlight-rail) {
   background-color: var(--color-icon-warning, #AB7F2A);
 }
 
@@ -8265,6 +8420,10 @@ function markArticleEdited() {
 .minerva-skin :deep(.minerva-suggestion-trigger svg) {
   color: currentColor;
   fill: currentColor;
+}
+
+.minerva-skin :deep(.feedback-trigger--warning) {
+  color: var(--color-icon-warning, #AB7F2A);
 }
 
 .minerva-suggestion-trigger:active {
@@ -8607,6 +8766,16 @@ function markArticleEdited() {
 /* ===== SUGGESTION CARD STATES ===== */
 .suggestion-card {
   width: 100%; /* Full width of container (325px) */
+  --feedback-border-default: #dadde3;
+  --feedback-border-hover: #3056a9;
+  --feedback-border-active: #233566;
+  --feedback-border-selected: #6485d1;
+  --feedback-highlight-selected: var(--background-color-progressive-subtle, #e8eeff);
+  --feedback-highlight-unselected: rgba(234, 236, 240, 0.65);
+  --feedback-header-collapsed-default: var(--background-color-base, #ffffff);
+  --feedback-header-collapsed-hover: var(--background-color-progressive-subtle, #e8eeff);
+  --feedback-header-expanded: var(--background-color-progressive-subtle, #e8eeff);
+  --feedback-icon-color: var(--color-progressive, #36c);
   background-color: white;
   border-radius: 2px;
   overflow: hidden;
@@ -8619,26 +8788,26 @@ function markArticleEdited() {
 
 /* Collapsed state - default */
 .suggestion-card--collapsed {
-  border: 1px solid #dadde3;
+  border: 1px solid var(--feedback-border-default);
   box-shadow: none;
 }
 
 /* Collapsed state - hover */
 .suggestion-card--collapsed.suggestion-card--hover {
-  border: 1px solid #3056a9;
+  border: 1px solid var(--feedback-border-hover);
 }
 
 .suggestion-card--collapsed.suggestion-card--hover .suggestion-header {
-  background-color: #e8eeff;
+  background-color: var(--feedback-header-collapsed-hover);
 }
 
 /* Collapsed state - active (press) */
 .suggestion-card--collapsed:active {
-  border: 1px solid #233566;
+  border: 1px solid var(--feedback-border-active);
 }
 
 .suggestion-card--collapsed:active .suggestion-header {
-  background-color: #e8eeff;
+  background-color: var(--feedback-header-collapsed-hover);
 }
 
 /* Collapsed state - focus */
@@ -8649,7 +8818,7 @@ function markArticleEdited() {
 
 /* Expanded state - default */
 .suggestion-card--expanded {
-  border: 1px solid #6485d1;
+  border: 1px solid var(--feedback-border-selected);
   box-shadow: 
     0px 4px 8px 0px rgba(0, 0, 0, 0.06),
     0px 0px 16px 0px rgba(0, 0, 0, 0.06);
@@ -8661,108 +8830,96 @@ function markArticleEdited() {
 }
 
 .suggestion-card--expanded.suggestion-card--hover {
-  border: 1px solid #3056a9;
+  border: 1px solid var(--feedback-border-hover);
 }
 
 /* Expanded state - active */
 .suggestion-card--expanded .suggestion-header:active {
-  border: 1px solid #233566;
+  border: 1px solid var(--feedback-border-active);
 }
 
-/* ===== EDIT CHECKS ===== */
-:deep(.tone-check-highlight.highlighted-text-wrapper),
-:deep(.paste-check-highlight.highlighted-text-wrapper) {
+:deep(.feedback-highlight.highlighted-text-wrapper) {
   display: inline-flex;
   align-items: flex-start;
   gap: 6px;
   margin: 0;
 }
 
-:deep(.tone-check-highlight .highlighted-text-rail),
-:deep(.paste-check-highlight .highlighted-text-rail) {
+:deep(.feedback-highlight--warning .highlighted-text-rail) {
   background: var(--color-icon-warning, #AB7F2A);
 }
 
-:deep(.tone-check-highlight .highlighted-text-content),
-:deep(.paste-check-highlight .highlighted-text-content) {
+:deep(.feedback-highlight--warning .highlighted-text-annotation) {
   background-color: var(--background-color-warning-subtle, #FDF2D5);
 }
 
-:deep(.tone-check-highlight.edit-check-highlight--collapsed .highlighted-text-content),
-:deep(.paste-check-highlight.edit-check-highlight--collapsed .highlighted-text-content) {
-  background-color: var(--background-color-interactive-subtle, #eaecf0);
+:deep(.feedback-highlight--warning.edit-check-highlight--collapsed .highlighted-text-annotation) {
+  background-color: rgba(234, 236, 240, 0.65);
 }
 
-.minerva-skin :deep(.tone-check-highlight .highlighted-text-content),
-.minerva-skin :deep(.paste-check-highlight .highlighted-text-content) {
-  background-color: transparent;
-  background-image: linear-gradient(var(--background-color-warning-subtle, #FDF2D5), var(--background-color-warning-subtle, #FDF2D5));
+:deep(.feedback-highlight--warning.edit-check-highlight--collapsed.highlighted-text-wrapper--hover .highlighted-text-annotation) {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
 }
 
-.tone-check-card {
-  border: 1px solid var(--border-color-base, #a2a9b1);
-  background-color: var(--background-color-base, #ffffff);
+.minerva-skin :deep(.feedback-highlight--warning .highlighted-text-annotation) {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
 }
 
-.tone-check-card.suggestion-card--expanded {
-  border-color: var(--color-icon-warning, #AB7F2A);
+.minerva-skin :deep(.feedback-highlight--warning.edit-check-highlight--collapsed .highlighted-text-annotation) {
+  background-color: rgba(234, 236, 240, 0.65);
+}
+
+.minerva-skin :deep(.feedback-highlight--warning.edit-check-highlight--collapsed.highlighted-text-wrapper--hover .highlighted-text-annotation) {
+  background-color: var(--background-color-warning-subtle, #FDF2D5);
+}
+
+.feedback-card--warning {
+  --feedback-border-default: var(--border-color-base, #a2a9b1);
+  --feedback-border-hover: var(--color-warning-hover, #735421);
+  --feedback-border-active: var(--color-warning-active, #453217);
+  --feedback-border-selected: var(--color-icon-warning, #AB7F2A);
+  --feedback-header-collapsed-default: var(--background-color-base, #ffffff);
+  --feedback-header-collapsed-hover: var(--background-color-warning-subtle, #FDF2D5);
+  --feedback-header-expanded: var(--background-color-warning-subtle, #FDF2D5);
+  --feedback-icon-color: var(--color-icon-warning, #AB7F2A);
+}
+
+.feedback-card--warning.suggestion-card--expanded {
   box-shadow:
     0 4px 8px 0 var(--Decision-Tokens-shadow-large, rgba(0, 0, 0, 0.06)),
     0 0 16px 0 var(--Decision-Tokens-shadow-large, rgba(0, 0, 0, 0.06));
 }
 
-.tone-check-card.suggestion-card--expanded.suggestion-card--hover {
-  border-color: var(--color-warning-hover, #735421);
-}
-
-.tone-check-card.suggestion-card--expanded .suggestion-header:active {
-  border-color: var(--color-warning-active, #453217);
-}
-
-.tone-check-card.suggestion-card--collapsed {
+.feedback-card--warning.suggestion-card--collapsed {
   background-color: var(--background-color-base, #ffffff);
   border-color: var(--border-color-base, #a2a9b1);
 }
 
-.tone-check-card.suggestion-card--collapsed.suggestion-card--hover {
-  background-color: var(--background-color-warning-subtle, #FDF2D5);
-  border-color: var(--color-warning-hover, #735421);
+.feedback-card--warning.suggestion-card--collapsed .suggestion-header {
+  background-color: var(--background-color-base, #ffffff);
 }
 
-.tone-check-card.suggestion-card--collapsed.suggestion-card--hover .suggestion-header {
-  background-color: var(--background-color-warning-subtle, #FDF2D5);
+.feedback-card--warning .suggestion-header {
+  background: var(--feedback-header-expanded);
 }
 
-.tone-check-card.suggestion-card--collapsed:active {
-  background-color: var(--background-color-warning-subtle, #FDF2D5);
-  border-color: var(--color-warning-active, #453217);
+.feedback-card--warning .suggestion-header--expanded {
+  background: var(--feedback-header-expanded);
 }
 
-.tone-check-card.suggestion-card--collapsed:active .suggestion-header {
-  background-color: var(--background-color-warning-subtle, #FDF2D5);
-}
-
-.tone-check-card .suggestion-header {
-  background: var(--background-color-warning-subtle, #FDF2D5);
-}
-
-.tone-check-card .suggestion-header--expanded {
-  background: var(--background-color-warning-subtle, #FDF2D5);
-}
-
-.tone-check-card .suggestion-title {
+.feedback-card--warning .suggestion-title {
   font-weight: 700;
 }
 
-.tone-check-card .suggestion-icon :deep(.cdx-icon) {
-  color: var(--color-icon-warning, #AB7F2A);
+.feedback-card--warning .suggestion-icon :deep(.cdx-icon) {
+  color: var(--feedback-icon-color);
 }
 
 .minerva-bottom-sheet--edit-check .minerva-sheet-header :deep(.cdx-icon) {
   color: var(--color-icon-warning, #AB7F2A);
 }
 
-:deep(.edit-check-trigger) {
+:deep(.feedback-trigger--warning) {
   color: var(--color-icon-warning, #AB7F2A);
 }
 
