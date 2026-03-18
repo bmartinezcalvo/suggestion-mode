@@ -12,6 +12,7 @@
       isSuggestionsFadingOut ? 'suggestion-markers-hiding' : '',
       isSuggestionGlowActive ? 'suggestion-glow-active' : ''
     ]"
+    :style="suggestionColorStyles"
   >
     <div
       v-if="shouldShowToasts && showMinervaToggleOffToast"
@@ -2575,6 +2576,25 @@
             </cdx-message>
             <div class="prototype-dialog-options">
               <cdx-field>
+                <template #label>Color of suggestions</template>
+                <div class="cdx-radio-group" role="radiogroup">
+                  <cdx-radio
+                    v-model="suggestionColorMode"
+                    name="suggestion-color"
+                    input-value="progressive"
+                  >
+                    Progressive
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="suggestionColorMode"
+                    name="suggestion-color"
+                    input-value="new-color"
+                  >
+                    New color
+                  </cdx-radio>
+                </div>
+              </cdx-field>
+              <cdx-field>
                 <template #label>
                   Suggestions discoverability (<a href="https://phabricator.wikimedia.org/T414518" target="_blank" rel="noopener">T414518</a>)
                 </template>
@@ -2985,6 +3005,7 @@ const isEditCheckHovered = ref(false);
 const isEditCheckTextHovered = ref(false);
 const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
+const suggestionColorMode = ref('progressive');
 const selectedPrototype = ref('option-2');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
@@ -3226,6 +3247,28 @@ const isEditCheckSheetExpanded = computed(() => (
 const isEditCheckHighlightHovered = computed(() => (
   isEditCheckHovered.value || isEditCheckTextHovered.value
 ));
+const suggestionColorStyles = computed(() => {
+  if (suggestionColorMode.value === 'new-color') {
+    return {
+      '--suggestion-color': '#A70EEB',
+      '--suggestion-color-subtle': '#F7E5FF',
+      '--suggestion-color-subtle-hover': '#F7E5FF',
+      '--suggestion-color-subtle-active': '#F7E5FF',
+      '--suggestion-border-hover': '#A70EEB',
+      '--suggestion-border-active': '#A70EEB',
+      '--suggestion-border-selected': '#A70EEB'
+    };
+  }
+  return {
+    '--suggestion-color': '#36C',
+    '--suggestion-color-subtle': '#E8EEFF',
+    '--suggestion-color-subtle-hover': '#DBE8FF',
+    '--suggestion-color-subtle-active': '#C5D7FF',
+    '--suggestion-border-hover': '#3056A9',
+    '--suggestion-border-active': '#233566',
+    '--suggestion-border-selected': '#6485D1'
+  };
+});
 const isSuggestionSheetMode = computed(() => (
   showSuggestionsDisplay.value && !isEditCheckSheet.value
 ));
@@ -7524,15 +7567,28 @@ function markArticleEdited() {
 }
 
 .minerva-edit-menu-button--active {
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  color: var(--suggestion-color, var(--color-progressive, #36c));
+}
+
+.minerva-edit-menu-button--active :deep(.cdx-icon) {
+  color: var(--suggestion-color, var(--color-progressive, #36c));
+}
+
+.minerva-edit-menu-button--active :deep(svg) {
+  fill: var(--suggestion-color, var(--color-progressive, #36c));
+}
+
+.minerva-edit-menu-button--active:not([aria-pressed="true"]) {
   background: var(--background-color-progressive-subtle, #e8eeff);
   color: var(--color-progressive, #36c);
 }
 
-.minerva-edit-menu-button--active :deep(.cdx-icon) {
+.minerva-edit-menu-button--active:not([aria-pressed="true"]) :deep(.cdx-icon) {
   color: var(--color-progressive, #36c);
 }
 
-.minerva-edit-menu-button--active :deep(svg) {
+.minerva-edit-menu-button--active:not([aria-pressed="true"]) :deep(svg) {
   fill: var(--color-progressive, #36c);
 }
 
@@ -7552,8 +7608,8 @@ function markArticleEdited() {
   padding: 0 6px;
   border-radius: 2px;
   background: transparent;
-  border: 1px solid var(--border-color-progressive, #36c);
-  color: var(--color-progressive, #36c);
+  border: 1px solid var(--suggestion-color, var(--border-color-progressive, #36c));
+  color: var(--suggestion-color, var(--color-progressive, #36c));
   font-weight: 700;
   line-height: 20px;
   text-align: center;
@@ -7581,15 +7637,21 @@ function markArticleEdited() {
 }
 
 .minerva-toolbar-toggle--active :deep(button) {
-  background: var(--background-color-progressive-subtle, #e8eeff);
+  background: #F7E5FF !important;
+  background-color: #F7E5FF !important;
+}
+
+.minerva-toolbar-toggle--active :deep(button[aria-pressed="true"]) {
+  background: #F7E5FF !important;
+  background-color: #F7E5FF !important;
 }
 
 .minerva-toolbar-toggle--active :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-toolbar-toggle--active :deep(svg) {
-  fill: var(--color-progressive, #36c);
+  fill: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-suggestions-toggle :deep(button) {
@@ -7605,15 +7667,21 @@ function markArticleEdited() {
 }
 
 .minerva-suggestions-toggle--active :deep(button) {
-  background: var(--background-color-progressive-subtle, #e8eeff);
+  background: #F7E5FF !important;
+  background-color: #F7E5FF !important;
+}
+
+.minerva-suggestions-toggle--active :deep(button[aria-pressed="true"]) {
+  background: #F7E5FF !important;
+  background-color: #F7E5FF !important;
 }
 
 .minerva-suggestions-toggle--active :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-suggestions-toggle--active :deep(svg) {
-  fill: var(--color-progressive, #36c);
+  fill: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .toolbar-btn-disabled {
@@ -8013,7 +8081,7 @@ function markArticleEdited() {
   position: absolute;
   width: 2px;
   height: 3px;
-  background-color: var(--color-progressive, #36c);
+  background-color: var(--suggestion-color, var(--color-progressive, #36c));
   border-radius: 0.5px;
   opacity: 0;
   animation: rayFadeIn 0.3s ease-out forwards;
@@ -8069,12 +8137,22 @@ function markArticleEdited() {
 
 /* Icon color when active */
 .suggestions-toggle-btn--active :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
   animation: iconGlow 0.4s ease-out;
 }
 
+.suggestions-toggle-btn--active :deep(button) {
+  background: #F7E5FF !important;
+  background-color: #F7E5FF !important;
+}
+
+.suggestions-toggle-btn--active :deep(button[aria-pressed="true"]) {
+  background: #F7E5FF !important;
+  background-color: #F7E5FF !important;
+}
+
 .suggestions-toggle-btn--active :deep(svg) {
-  fill: var(--color-progressive, #36c);
+  fill: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 /* Icon glow animation */
@@ -8126,7 +8204,7 @@ function markArticleEdited() {
 .highlighted-text-rail {
   display: inline-block;
   width: 2px;
-  background-color: #36c;
+  background-color: var(--suggestion-color, #36c);
   flex-shrink: 0;
   align-self: stretch; /* Stretches to match content height */
 }
@@ -8134,7 +8212,7 @@ function markArticleEdited() {
 :deep(.highlighted-text-rail) {
   display: inline-block;
   width: 2px;
-  background-color: #36c;
+  background-color: var(--suggestion-color, #36c);
   flex-shrink: 0;
   align-self: stretch;
 }
@@ -8171,12 +8249,12 @@ function markArticleEdited() {
 
 /* Hover state - blue background per line */
 .highlighted-text-wrapper--hover .highlighted-text-annotation {
-  background-color: #e8eeff;
+  background-color: var(--suggestion-color-subtle, #e8eeff);
 }
 
 /* Selected state - blue background per line */
 .highlighted-text-wrapper--selected .highlighted-text-annotation {
-  background-color: #e8eeff;
+  background-color: var(--suggestion-color-subtle, #e8eeff);
 }
 
 .minerva-skin .highlighted-text-wrapper .highlighted-text-annotation {
@@ -8192,12 +8270,12 @@ function markArticleEdited() {
 
 .minerva-skin .highlighted-text-wrapper--hover .highlighted-text-annotation,
 .minerva-skin .highlighted-text-wrapper--selected .highlighted-text-annotation {
-  background-color: var(--background-color-progressive-subtle, #e8eeff);
+  background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
 }
 
 /* Links inside highlighted text */
 .highlighted-text-content a {
-  color: #36c;
+  color: var(--color-progressive, #36c);
   text-decoration: none;
 }
 
@@ -8249,7 +8327,7 @@ function markArticleEdited() {
   top: 0;
   bottom: 0;
   width: 2px;
-  background-color: #36c;
+  background-color: var(--suggestion-color, #36c);
   border-radius: 2px;
   z-index: 4;
 }
@@ -8264,7 +8342,7 @@ function markArticleEdited() {
   top: 0;
   bottom: 0;
   width: 2px;
-  background-color: #36c;
+  background-color: var(--suggestion-color, #36c);
   border-radius: 2px;
   z-index: 4;
 }
@@ -8298,7 +8376,7 @@ function markArticleEdited() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
   cursor: pointer;
   box-shadow: none;
   z-index: 5;
@@ -8324,8 +8402,8 @@ function markArticleEdited() {
 
 .minerva-suggestion-trigger :deep(.cdx-icon),
 .minerva-suggestion-trigger :deep(svg) {
-  color: var(--color-progressive, #36c);
-  fill: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
+  fill: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-skin :deep(.minerva-suggestion-trigger svg) {
@@ -8435,12 +8513,23 @@ function markArticleEdited() {
 }
 
 .minerva-suggestions-rail-toggle--active {
-  background: transparent;
+  background: var(--suggestion-color-subtle, #E8EEFF) !important;
+  background-color: var(--suggestion-color-subtle, #E8EEFF) !important;
   border: 0;
 }
 
+.minerva-suggestions-rail-toggle--active :deep(button) {
+  background: var(--suggestion-color-subtle, #E8EEFF) !important;
+  background-color: var(--suggestion-color-subtle, #E8EEFF) !important;
+}
+
+.minerva-suggestions-rail-toggle--active :deep(button[aria-pressed="true"]) {
+  background: var(--suggestion-color-subtle, #E8EEFF) !important;
+  background-color: var(--suggestion-color-subtle, #E8EEFF) !important;
+}
+
 .minerva-suggestions-rail-toggle--active :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-toast {
@@ -8473,12 +8562,12 @@ function markArticleEdited() {
 }
 
 .minerva-suggestions-toggle--active {
-  background: var(--color-progressive-subtle, #e8eeff);
-  border-color: var(--color-progressive, #36c);
+  background: #F7E5FF !important;
+  border-color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-suggestions-toggle--active :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-suggestions-toggle :deep(button) {
@@ -8554,7 +8643,7 @@ function markArticleEdited() {
 }
 
 .minerva-sheet-header :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-sheet-backdrop {
@@ -8678,15 +8767,15 @@ function markArticleEdited() {
 .suggestion-card {
   width: 100%; /* Full width of container (325px) */
   --feedback-border-default: #dadde3;
-  --feedback-border-hover: #3056a9;
-  --feedback-border-active: #233566;
-  --feedback-border-selected: #6485d1;
-  --feedback-highlight-selected: var(--background-color-progressive-subtle, #e8eeff);
+  --feedback-border-hover: var(--suggestion-border-hover, #3056a9);
+  --feedback-border-active: var(--suggestion-border-active, #233566);
+  --feedback-border-selected: var(--suggestion-border-selected, #6485d1);
+  --feedback-highlight-selected: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
   --feedback-highlight-unselected: rgba(234, 236, 240, 0.65);
   --feedback-header-collapsed-default: var(--background-color-base, #ffffff);
-  --feedback-header-collapsed-hover: var(--background-color-progressive-subtle, #e8eeff);
-  --feedback-header-expanded: var(--background-color-progressive-subtle, #e8eeff);
-  --feedback-icon-color: var(--color-progressive, #36c);
+  --feedback-header-collapsed-hover: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  --feedback-header-expanded: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  --feedback-icon-color: var(--suggestion-color, var(--color-progressive, #36c));
   background-color: white;
   border-radius: 2px;
   overflow: hidden;
@@ -8723,7 +8812,7 @@ function markArticleEdited() {
 
 /* Collapsed state - focus */
 .suggestion-card--collapsed:focus-within {
-  border: 2px solid #36c;
+  border: 2px solid var(--suggestion-color, #36c);
   background-color: white;
 }
 
@@ -8858,7 +8947,7 @@ function markArticleEdited() {
 
 .suggestion-header--expanded {
   cursor: pointer;
-  background-color: #e8eeff;
+  background-color: var(--suggestion-color-subtle, #e8eeff);
 }
 
 .suggestion-header:focus {
@@ -8875,7 +8964,7 @@ function markArticleEdited() {
 }
 
 .suggestion-icon .cdx-icon {
-  color: #36c;
+  color: var(--suggestion-color, #36c);
 }
 
 .suggestion-title {
@@ -9306,10 +9395,10 @@ function markArticleEdited() {
   height: 44px;
   padding: 0 12px;
   border: 1px solid var(--border-color-muted, #c8ccd1);
-  background: var(--background-color-progressive-subtle, #eaf3ff);
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #eaf3ff));
   border-radius: 2px;
   font-family: 'Inter', sans-serif;
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
   font-size: 14px;
   box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   position: sticky;
@@ -9342,11 +9431,11 @@ function markArticleEdited() {
 }
 
 .suggestions-banner--clickable:not(.suggestions-banner--empty):hover {
-  background: var(--background-color-progressive-subtle--hover, #dbe8ff);
+  background: var(--suggestion-color-subtle-hover, var(--background-color-progressive-subtle--hover, #dbe8ff));
 }
 
 .suggestions-banner--clickable:not(.suggestions-banner--empty):active {
-  background: var(--background-color-progressive-subtle--active, #c5d7ff);
+  background: var(--suggestion-color-subtle-active, var(--background-color-progressive-subtle--active, #c5d7ff));
 }
 
 .suggestions-banner--closing {
@@ -9452,7 +9541,7 @@ function markArticleEdited() {
 }
 
 .help-button :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .vector-help-button {
@@ -9477,7 +9566,7 @@ function markArticleEdited() {
 }
 
 .suggestions-banner-text :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .suggestions-banner-text .suggestions-banner-icon--up :deep(svg) {
@@ -9506,7 +9595,7 @@ function markArticleEdited() {
 
 .suggestions-banner-arrow-btn :deep(.cdx-icon),
 .suggestions-banner-arrow-btn :deep(svg) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .suggestions-banner-arrow-buttons--bounce :deep(.cdx-icon),
@@ -9575,21 +9664,21 @@ function markArticleEdited() {
 
 .suggestions-banner--option-2 {
   border-radius: 9999px;
-  background: var(--background-color-progressive--subtle, #e8eeff);
+  background: var(--suggestion-color-subtle, var(--background-color-progressive--subtle, #e8eeff));
   box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   border-color: var(--border-color-muted, #dadde3);
 }
 
 .suggestions-banner--option-2 .suggestions-banner-text {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .suggestions-banner--option-2 .suggestions-banner-text :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .suggestions-banner--single-use {
-  border-color: var(--border-color-progressive, #36c);
+  border-color: var(--suggestion-color, var(--border-color-progressive, #36c));
   border-radius: 9999px;
 }
 
@@ -9661,7 +9750,7 @@ function markArticleEdited() {
 }
 
 .suggestions-info-icon {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
   width: var(--icon-size-medium, 20px);
   height: var(--icon-size-medium, 20px);
 }
@@ -9671,7 +9760,7 @@ function markArticleEdited() {
 }
 
 .suggestions-banner-bulb {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
   cursor: pointer;
 }
 
@@ -9688,7 +9777,7 @@ function markArticleEdited() {
 }
 
 .suggestions-info-header :deep(.cdx-icon) {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .minerva-info-sheet .suggestions-info-header :deep(.cdx-icon) {
@@ -9696,7 +9785,7 @@ function markArticleEdited() {
 }
 
 .minerva-skin .suggestions-banner .suggestions-info-icon {
-  color: var(--color-progressive, #36c);
+  color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
 .suggestions-info-title {
@@ -9739,7 +9828,7 @@ function markArticleEdited() {
   height: 16px;
   padding: 0;
   border-radius: 2px;
-  background: var(--background-color-progressive, #36c);
+  background: var(--suggestion-color, var(--background-color-progressive, #36c));
   color: #ffffff;
   border: 1px solid var(--border-color-inverted, #ffffff);
   font-size: 12px;
@@ -9768,6 +9857,14 @@ function markArticleEdited() {
   animation: badge-pulse 240ms ease;
 }
 
+.suggestions-toggle-btn:not(.suggestions-toggle-btn--active) .suggestions-badge,
+.minerva-toolbar-toggle:not(.minerva-toolbar-toggle--active) .suggestions-badge,
+.minerva-suggestions-toggle:not(.minerva-suggestions-toggle--active) .suggestions-badge {
+  background: var(--background-color-progressive, #36c);
+  border-color: var(--border-color-inverted, #ffffff);
+  color: #ffffff;
+}
+
 @keyframes badge-pulse {
   0% {
     transform: translate(50%, 50%) scale(1);
@@ -9783,17 +9880,17 @@ function markArticleEdited() {
 .suggestions-toggle-btn--active .suggestions-badge,
 .minerva-toolbar-toggle--active .suggestions-badge,
 .minerva-suggestions-toggle--active .suggestions-badge {
-  background: var(--background-color-progressive-subtle, #e8eeff);
-  color: var(--color-progressive, #36c);
-  border-color: var(--border-color-progressive, #36c);
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  color: var(--suggestion-color, var(--color-progressive, #36c));
+  border-color: var(--suggestion-color, var(--border-color-progressive, #36c));
 }
 
 .suggestions-toggle-btn--active .suggestions-badge--zero,
 .minerva-toolbar-toggle--active .suggestions-badge--zero,
 .minerva-suggestions-toggle--active .suggestions-badge--zero {
-  background: var(--background-color-progressive-subtle, #e8eeff);
-  color: var(--color-progressive, #36c);
-  border-color: var(--border-color-progressive, #36c);
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  color: var(--suggestion-color, var(--color-progressive, #36c));
+  border-color: var(--suggestion-color, var(--border-color-progressive, #36c));
 }
 
 
