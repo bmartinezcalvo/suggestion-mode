@@ -1527,6 +1527,7 @@
                     ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isHovered && showSuggestions && !isCardExpanded,
                       'highlighted-text-wrapper--selected': isCardExpanded && showSuggestions,
                       'minerva-suggestion-target': isMinervaSkin,
@@ -1692,6 +1693,7 @@
                     ref="highlightedTextRef2"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isHovered2 && showSuggestions && !isCardExpanded2,
                       'highlighted-text-wrapper--selected': isCardExpanded2 && showSuggestions,
                       'minerva-suggestion-target': isMinervaSkin,
@@ -1705,7 +1707,28 @@
                     <span class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       <span class="highlighted-text-annotation">
-                      In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker">[{{ citationNumber2 || '...' }}]</sup>
+                      In Lorde's volume
+                      <span
+                        v-if="!isSuggestionResolved4 && !isSuggestionDeclined4"
+                        ref="highlightedTextRef4"
+                        class="suggestion-target suggestion-target--inline"
+                        :class="{
+                          [nonSelectedHighlightClass]: showSuggestions,
+                          'highlighted-text-wrapper--hover': isHovered4 && showSuggestions && !isCardExpanded4,
+                          'highlighted-text-wrapper--selected': isCardExpanded4 && showSuggestions
+                        }"
+                        @mouseenter.stop="isTextHovered4 = true"
+                        @mouseleave.stop="isTextHovered4 = false"
+                        @click.stop="isMinervaSkin ? openMinervaSuggestion(4) : (isCardExpanded4 = true)"
+                      >
+                        <span class="highlighted-text-content">
+                          <span class="highlighted-text-annotation">
+                            <a href="https://example.org/the-black-unicorn" target="_blank" rel="noopener">The Black Unicorn</a>
+                          </span>
+                        </span>
+                      </span>
+                      <template v-else>The Black Unicorn</template>
+                      (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker">[{{ citationNumber2 || '...' }}]</sup>
                       </span>
                     </span>
                     <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
@@ -1720,10 +1743,31 @@
                       @click.stop="openMinervaSuggestion(2)"
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      <span v-if="isSuggestion2Pending && isSuggestion4Pending" class="minerva-suggestion-trigger-badge">2</span>
                     </button>
                   </p>
                   <p v-else>
-                    In Lorde's volume The Black Unicorn (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
+                    In Lorde's volume
+                    <span
+                      v-if="!isSuggestionResolved4 && !isSuggestionDeclined4"
+                      ref="highlightedTextRef4"
+                      class="suggestion-target suggestion-target--inline"
+                      :class="{
+                        'highlighted-text-wrapper--hover': isHovered4 && showSuggestions && !isCardExpanded4,
+                        'highlighted-text-wrapper--selected': isCardExpanded4 && showSuggestions
+                      }"
+                      @mouseenter.stop="isTextHovered4 = true"
+                      @mouseleave.stop="isTextHovered4 = false"
+                      @click.stop="isMinervaSkin ? openMinervaSuggestion(4) : (isCardExpanded4 = true)"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          <a href="https://example.org/the-black-unicorn" target="_blank" rel="noopener">The Black Unicorn</a>
+                        </span>
+                      </span>
+                    </span>
+                    <template v-else>The Black Unicorn</template>
+                    (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
                     <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
                   </p>
                   <!-- Citation Popup 2 -->
@@ -1839,6 +1883,7 @@
                     ref="highlightedTextRef3"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isHovered3 && showSuggestions && !isCardExpanded3,
                       'highlighted-text-wrapper--selected': isCardExpanded3 && showSuggestions,
                       'minerva-suggestion-target': isMinervaSkin,
@@ -1980,7 +2025,7 @@
             </button>
             
             <div v-if="isCardExpanded" class="suggestion-content">
-              <p class="suggestion-description">Help readers understand where this information is coming from by adding a citation.</p>
+              <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.</p>
               <div class="suggestion-actions">
                 <button 
                   class="suggestion-btn" 
@@ -2064,7 +2109,7 @@
             </button>
             
             <div v-if="isCardExpanded2" class="suggestion-content">
-              <p class="suggestion-description">Help readers understand where this information is coming from by adding a citation.</p>
+              <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.</p>
               <div class="suggestion-actions">
                 <button 
                   class="suggestion-btn" 
@@ -2148,7 +2193,7 @@
             </button>
             
             <div v-if="isCardExpanded3" class="suggestion-content">
-              <p class="suggestion-description">Help readers understand where this information is coming from by adding a citation.</p>
+              <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.</p>
               <div class="suggestion-actions">
                 <button 
                   class="suggestion-btn" 
@@ -2162,6 +2207,61 @@
                   :disabled="showCitationPopup3"
                   @click="handleNoSuggestion3"
                 >
+                  Dismiss
+                </button>
+                <cdx-button
+                  class="suggestion-more-actions"
+                  action="default"
+                  weight="quiet"
+                  aria-label="More actions"
+                >
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && !showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4"
+            ref="suggestionsSidebarRef4"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded4,
+              'suggestion-card--expanded': isCardExpanded4,
+              'suggestion-card--hover': isHovered4
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset4}px` }"
+            @mouseenter="isCardHovered4 = true"
+            @mouseleave="isCardHovered4 = false"
+          >
+            <button
+              v-if="!isCardExpanded4"
+              class="suggestion-header suggestion-header--collapsed"
+              @click="isCardExpanded4 = true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Remove external link</div>
+            </button>
+            <button
+              v-if="isCardExpanded4"
+              class="suggestion-header suggestion-header--expanded"
+              @click="isCardExpanded4 = false"
+              aria-expanded="true"
+            >
+              <div class="suggestion-icon">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              </div>
+              <div class="suggestion-title">Remove external link</div>
+            </button>
+            <div v-if="isCardExpanded4" class="suggestion-content">
+              <p class="suggestion-description">This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the <a href="https://en.wikipedia.org/wiki/Wikipedia:External_links" target="_blank" rel="noopener">External links</a> section, or converting it into a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a> if appropriate.</p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn" @click="handleYesSuggestion4">
+                  Remove link
+                </button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="handleNoSuggestion4">
                   Dismiss
                 </button>
                 <cdx-button
@@ -2377,8 +2477,16 @@
           <p v-else-if="shouldShowEmptyState && !showSuggestionNotification" class="minerva-empty-sheet-text">
             There are no suggestions to improve this article yet.
           </p>
+          <p v-else-if="activeMinervaSuggestion === 4" class="minerva-sheet-description">
+            This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:External_links" target="_blank" rel="noopener">External links</a>
+            section, or converting it into a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>
+            if appropriate.
+          </p>
           <p v-else class="minerva-sheet-description">
-            Help readers understand where this information is coming from by adding a citation.
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
           </p>
             <div v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-actions">
             <cdx-button
@@ -2474,6 +2582,24 @@
               weight="normal"
               :disabled="showCitationPopup3"
               @click="handleNoSuggestion3"
+            >
+              Dismiss
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 4"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handleYesSuggestion4"
+            >
+              Remove link
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 4"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              @click="handleNoSuggestion4"
             >
               Dismiss
             </cdx-button>
@@ -2576,25 +2702,6 @@
             </cdx-message>
             <div class="prototype-dialog-options">
               <cdx-field>
-                <template #label>Color of suggestions</template>
-                <div class="cdx-radio-group" role="radiogroup">
-                  <cdx-radio
-                    v-model="suggestionColorMode"
-                    name="suggestion-color"
-                    input-value="progressive"
-                  >
-                    Progressive
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="suggestionColorMode"
-                    name="suggestion-color"
-                    input-value="new-color"
-                  >
-                    New color
-                  </cdx-radio>
-                </div>
-              </cdx-field>
-              <cdx-field>
                 <template #label>
                   Suggestions discoverability (<a href="https://phabricator.wikimedia.org/T414518" target="_blank" rel="noopener">T414518</a>)
                 </template>
@@ -2673,6 +2780,12 @@
                 <template #label>Others</template>
                 <cdx-checkbox v-model="toastsEnabled">
                   Enable contextual Toasts (<a href="https://phabricator.wikimedia.org/T417827" target="_blank" rel="noopener">T417827</a>)
+                </cdx-checkbox>
+                <cdx-checkbox v-model="newSuggestionColorEnabled">
+                  New color of suggestions
+                </cdx-checkbox>
+                <cdx-checkbox v-model="nonSelectedHighlightUnderlineEnabled">
+                  Highlighted text is underlined when non selected
                 </cdx-checkbox>
               </cdx-field>
             </div>
@@ -2961,14 +3074,21 @@ const isHovered2 = computed(() => isCardHovered2.value || isTextHovered2.value);
 const isCardExpanded3 = ref(false);
 const isCardHovered3 = ref(false);
 const isTextHovered3 = ref(false);
+const isCardExpanded4 = ref(false);
+const isCardHovered4 = ref(false);
+const isTextHovered4 = ref(false);
 
 // Refs for alignment (third suggestion)
 const highlightedTextRef3 = ref(null);
 const suggestionsSidebarRef3 = ref(null);
 const sidebarTopOffset3 = ref(0);
+const highlightedTextRef4 = ref(null);
+const suggestionsSidebarRef4 = ref(null);
+const sidebarTopOffset4 = ref(0);
 
 // Computed: sincronizar hover entre texto y card (third suggestion)
 const isHovered3 = computed(() => isCardHovered3.value || isTextHovered3.value);
+const isHovered4 = computed(() => isCardHovered4.value || isTextHovered4.value);
 
 // Citation flow states
 const showCitationPopup1 = ref(false);
@@ -2984,9 +3104,12 @@ const citationCounter = ref(0); // Global counter for citations
 const showSuccessMessage1 = ref(false); // Show success message after citation is created
 const showSuccessMessage2 = ref(false);
 const showSuccessMessage3 = ref(false);
+const showSuccessMessage4 = ref(false);
 const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
 const isSuggestionDeclined2 = ref(false);
 const isSuggestionDeclined3 = ref(false);
+const isSuggestionDeclined4 = ref(false);
+const isSuggestionResolved4 = ref(false);
 const toneCheckActive = ref(false);
 const toneCheckDismissed = ref(false);
 const toneCheckHighlightRef = ref(null);
@@ -3005,7 +3128,8 @@ const isEditCheckHovered = ref(false);
 const isEditCheckTextHovered = ref(false);
 const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
-const suggestionColorMode = ref('progressive');
+const newSuggestionColorEnabled = ref(false);
+const nonSelectedHighlightUnderlineEnabled = ref(false);
 const selectedPrototype = ref('option-2');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
@@ -3063,7 +3187,8 @@ const allSuggestionsHandled = computed(() => {
   const suggestion1Handled = citationNumber1.value !== null || isSuggestionDeclined1.value;
   const suggestion2Handled = citationNumber2.value !== null || isSuggestionDeclined2.value;
   const suggestion3Handled = citationNumber3.value !== null || isSuggestionDeclined3.value;
-  return suggestion1Handled && suggestion2Handled && suggestion3Handled;
+  const suggestion4Handled = isSuggestionResolved4.value || isSuggestionDeclined4.value;
+  return suggestion1Handled && suggestion2Handled && suggestion3Handled && suggestion4Handled;
 });
 
 // Computed property to check if all suggestions are completed or declined (show empty state)
@@ -3071,7 +3196,8 @@ const showEmptyState = computed(() => {
   const suggestion1Done = citationNumber1.value !== null || isSuggestionDeclined1.value;
   const suggestion2Done = citationNumber2.value !== null || isSuggestionDeclined2.value;
   const suggestion3Done = citationNumber3.value !== null || isSuggestionDeclined3.value;
-  return suggestion1Done && suggestion2Done && suggestion3Done;
+  const suggestion4Done = isSuggestionResolved4.value || isSuggestionDeclined4.value;
+  return suggestion1Done && suggestion2Done && suggestion3Done && suggestion4Done;
 });
 const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
 const isSuggestion1Pending = computed(() => (
@@ -3083,10 +3209,14 @@ const isSuggestion2Pending = computed(() => (
 const isSuggestion3Pending = computed(() => (
   citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value
 ));
+const isSuggestion4Pending = computed(() => (
+  !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value
+));
 const availableSuggestionCount = computed(() => (
   (isSuggestion1Pending.value ? 1 : 0) +
   (isSuggestion2Pending.value ? 1 : 0) +
-  (isSuggestion3Pending.value ? 1 : 0)
+  (isSuggestion3Pending.value ? 1 : 0) +
+  (isSuggestion4Pending.value ? 1 : 0)
 ));
 const sectionSuggestionCount = computed(() => {
   if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
@@ -3096,7 +3226,7 @@ const sectionSuggestionCount = computed(() => {
     return isSuggestion1Pending.value ? 1 : 0;
   }
   if (minervaEditSectionOnly.value === 'poetry') {
-    return isSuggestion2Pending.value ? 1 : 0;
+    return (isSuggestion2Pending.value ? 1 : 0) + (isSuggestion4Pending.value ? 1 : 0);
   }
   if (minervaEditSectionOnly.value === 'prose') {
     return isSuggestion3Pending.value ? 1 : 0;
@@ -3157,6 +3287,7 @@ const showToggleBadgeZero = computed(() => (
 ));
 const minervaSheetTitle = computed(() => {
   if (shouldShowEmptyState.value) return 'No suggestions';
+  if (activeMinervaSuggestion.value === 4) return 'Remove external link';
   return 'Add a citation';
 });
 const minervaToggleBottom = computed(() => {
@@ -3248,7 +3379,7 @@ const isEditCheckHighlightHovered = computed(() => (
   isEditCheckHovered.value || isEditCheckTextHovered.value
 ));
 const suggestionColorStyles = computed(() => {
-  if (suggestionColorMode.value === 'new-color') {
+  if (newSuggestionColorEnabled.value) {
     return {
       '--suggestion-color': '#A70EEB',
       '--suggestion-color-subtle': '#F7E5FF',
@@ -3269,6 +3400,9 @@ const suggestionColorStyles = computed(() => {
     '--suggestion-border-selected': '#6485D1'
   };
 });
+const nonSelectedHighlightClass = computed(() => (
+  nonSelectedHighlightUnderlineEnabled.value ? 'feedback-underlined-unselected' : ''
+));
 const isSuggestionSheetMode = computed(() => (
   showSuggestionsDisplay.value && !isEditCheckSheet.value
 ));
@@ -3318,14 +3452,23 @@ const minervaPaginationIds = computed(() => {
   if (citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value) {
     ids.push(2);
   }
+  if (!isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value) {
+    ids.push(4);
+  }
   if (citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value) {
     ids.push(3);
   }
   return ids;
 });
-const minervaPaginationTotal = computed(() => minervaPaginationIds.value.length);
+const minervaPaginationIdsForActiveSuggestion = computed(() => {
+  if (activeMinervaSuggestion.value === 2 || activeMinervaSuggestion.value === 4) {
+    return minervaPaginationIds.value.filter((id) => id === 2 || id === 4);
+  }
+  return [];
+});
+const minervaPaginationTotal = computed(() => minervaPaginationIdsForActiveSuggestion.value.length);
 const minervaPaginationIndex = computed(() => {
-  const index = minervaPaginationIds.value.indexOf(activeMinervaSuggestion.value);
+  const index = minervaPaginationIdsForActiveSuggestion.value.indexOf(activeMinervaSuggestion.value);
   return index >= 0 ? index : 0;
 });
 const minervaPaginationLabel = computed(() => (
@@ -3336,7 +3479,7 @@ const isMinervaPaginationNextDisabled = computed(() => (
   minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
 ));
 const showMinervaPagination = computed(() => {
-  return false;
+  return minervaPaginationTotal.value > 1;
 });
 
 function resetSuggestionState() {
@@ -3351,8 +3494,15 @@ function resetSuggestionState() {
   showSuccessMessage2.value = false;
   isSuggestionDeclined1.value = false;
   isSuggestionDeclined2.value = false;
+  showSuccessMessage3.value = false;
+  showSuccessMessage4.value = false;
+  isSuggestionDeclined3.value = false;
+  isSuggestionDeclined4.value = false;
+  isSuggestionResolved4.value = false;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
+  isCardExpanded3.value = false;
+  isCardExpanded4.value = false;
   isCardHovered.value = false;
   isCardHovered2.value = false;
   isTextHovered.value = false;
@@ -4210,12 +4360,13 @@ function getSuggestionRefById(suggestionId) {
   if (suggestionId === 1) return highlightedTextRef;
   if (suggestionId === 2) return highlightedTextRef2;
   if (suggestionId === 3) return highlightedTextRef3;
+  if (suggestionId === 4) return highlightedTextRef4;
   return null;
 }
 
 function handleMinervaPaginationPrev() {
   if (isMinervaPaginationPrevDisabled.value) return;
-  const nextId = minervaPaginationIds.value[minervaPaginationIndex.value - 1];
+  const nextId = minervaPaginationIdsForActiveSuggestion.value[minervaPaginationIndex.value - 1];
   const targetRef = getSuggestionRefById(nextId);
   if (targetRef) {
     openSuggestionAtTarget(nextId, targetRef, true);
@@ -4224,7 +4375,7 @@ function handleMinervaPaginationPrev() {
 
 function handleMinervaPaginationNext() {
   if (isMinervaPaginationNextDisabled.value) return;
-  const nextId = minervaPaginationIds.value[minervaPaginationIndex.value + 1];
+  const nextId = minervaPaginationIdsForActiveSuggestion.value[minervaPaginationIndex.value + 1];
   const targetRef = getSuggestionRefById(nextId);
   if (targetRef) {
     openSuggestionAtTarget(nextId, targetRef, true);
@@ -4242,7 +4393,9 @@ function triggerMinervaDismiss(suggestionId) {
 
 function advanceMinervaSuggestion(currentId) {
   nextTick(() => {
-    const ids = minervaPaginationIds.value;
+    const ids = (currentId === 2 || currentId === 4)
+      ? minervaPaginationIds.value.filter((id) => id === 2 || id === 4)
+      : minervaPaginationIds.value;
     if (!ids.length) {
       closeMinervaSuggestion();
       return;
@@ -4358,11 +4511,13 @@ function getPendingSuggestionIdsForContext() {
   if (isMinervaSkin.value && minervaEditSectionOnly.value) {
     if (minervaEditSectionOnly.value === 'career' && isSuggestion1Pending.value) ids.push(1);
     if (minervaEditSectionOnly.value === 'poetry' && isSuggestion2Pending.value) ids.push(2);
+    if (minervaEditSectionOnly.value === 'poetry' && isSuggestion4Pending.value) ids.push(4);
     if (minervaEditSectionOnly.value === 'prose' && isSuggestion3Pending.value) ids.push(3);
     return ids;
   }
   if (isSuggestion1Pending.value) ids.push(1);
   if (isSuggestion2Pending.value) ids.push(2);
+  if (isSuggestion4Pending.value) ids.push(4);
   if (isSuggestion3Pending.value) ids.push(3);
   return ids;
 }
@@ -4503,6 +4658,7 @@ function updateSuggestionVisibility() {
     successVisible ||
     isVisible(highlightedTextRef.value) ||
     isVisible(highlightedTextRef2.value) ||
+    isVisible(highlightedTextRef4.value) ||
     isVisible(highlightedTextRef3.value) ||
     isVisible(toneCheckHighlightRef.value) ||
     isVisible(pasteCheckHighlightRef.value);
@@ -4530,6 +4686,7 @@ function updateSuggestionVisibility() {
     } else {
       isCardExpanded.value = firstFullyVisibleId === 1;
       isCardExpanded2.value = firstFullyVisibleId === 2;
+      isCardExpanded4.value = firstFullyVisibleId === 4;
       isCardExpanded3.value = firstFullyVisibleId === 3;
     }
   }
@@ -4629,6 +4786,46 @@ function handleNoSuggestion3() {
   scheduleBannerReappear();
 }
 
+function handleYesSuggestion4() {
+  isSuggestionResolved4.value = true;
+  isCardExpanded4.value = false;
+  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
+    triggerMinervaDismiss(4);
+    setTimeout(() => {
+      if (showMinervaPagination.value) {
+        advanceMinervaSuggestion(4);
+      } else {
+        closeMinervaSuggestion();
+      }
+    }, 260);
+  } else {
+    closeMinervaSuggestion();
+  }
+  nextTick(() => {
+    alignSidebarWithText4();
+    updateSuggestionVisibility();
+    scheduleBannerReappear();
+  });
+}
+
+function handleNoSuggestion4() {
+  isSuggestionDeclined4.value = true;
+  isCardExpanded4.value = false;
+  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
+    triggerMinervaDismiss(4);
+    setTimeout(() => {
+      if (showMinervaPagination.value) {
+        advanceMinervaSuggestion(4);
+      } else {
+        closeMinervaSuggestion();
+      }
+    }, 260);
+  } else {
+    closeMinervaSuggestion();
+  }
+  scheduleBannerReappear();
+}
+
 // Function to create citation for suggestion 1
 function createCitation1() {
   if (citationUrl1.value.trim()) {
@@ -4718,6 +4915,7 @@ watch(isCardExpanded, (newValue) => {
   if (newValue) {
     isCardExpanded2.value = false;
     isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
   }
 });
 
@@ -4725,6 +4923,7 @@ watch(isCardExpanded2, (newValue) => {
   if (newValue) {
     isCardExpanded.value = false;
     isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
   }
 });
 
@@ -4732,6 +4931,15 @@ watch(isCardExpanded3, (newValue) => {
   if (newValue) {
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
+    isCardExpanded4.value = false;
+  }
+});
+
+watch(isCardExpanded4, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
   }
 });
 
@@ -4801,6 +5009,17 @@ watch(
   }
 );
 
+watch(
+  () => [isSuggestionResolved4.value, isSuggestionDeclined4.value, showSuccessMessage4.value],
+  () => {
+    if (isSuggestionResolved4.value || isSuggestionDeclined4.value || showSuccessMessage4.value) {
+      if (firstSuggestionAutoExpandedId.value === 4) firstSuggestionAutoExpandedId.value = null;
+      if (firstSuggestionBounceDoneId.value === 4) firstSuggestionBounceDoneId.value = null;
+      if (firstSuggestionBounceActiveId.value === 4) firstSuggestionBounceActiveId.value = null;
+    }
+  }
+);
+
 watch(isCardExpanded, (expanded) => {
   if (expanded && firstSuggestionExpansionMode.value === 'mobile-bounce-desktop-auto') {
     firstSuggestionBounceActiveId.value = null;
@@ -4813,6 +5032,9 @@ watch(isCardExpanded2, (expanded) => {
     firstSuggestionBounceActiveId.value = null;
     firstSuggestionBounceDoneId.value = 2;
   }
+  nextTick(() => {
+    alignSidebarWithText4();
+  });
 });
 
 watch(isCardExpanded3, (expanded) => {
@@ -4820,6 +5042,12 @@ watch(isCardExpanded3, (expanded) => {
     firstSuggestionBounceActiveId.value = null;
     firstSuggestionBounceDoneId.value = 3;
   }
+});
+
+watch(isCardExpanded4, () => {
+  nextTick(() => {
+    alignSidebarWithText4();
+  });
 });
 
 watch(
@@ -4911,6 +5139,23 @@ function alignSidebarWithText3() {
   });
 }
 
+function alignSidebarWithText4() {
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    const containerRect = mainContentArea.getBoundingClientRect();
+    if (suggestionsSidebarRef2.value) {
+      const secondCardRect = suggestionsSidebarRef2.value.getBoundingClientRect();
+      sidebarTopOffset4.value = secondCardRect.bottom - containerRect.top - suggestionsTopOffset.value + 8;
+      return;
+    }
+    if (highlightedTextRef4.value) {
+      const textRect = highlightedTextRef4.value.getBoundingClientRect();
+      sidebarTopOffset4.value = textRect.top - containerRect.top - suggestionsTopOffset.value;
+    }
+  });
+}
+
 function alignSuggestionsContainer() {
   if (!articleFirstSectionRef.value) return;
 
@@ -4931,6 +5176,7 @@ function alignBothSuggestions() {
   alignSidebarWithText();
   alignSidebarWithText2();
   alignSidebarWithText3();
+  alignSidebarWithText4();
   alignToneCheckCard();
 }
 
@@ -4973,6 +5219,7 @@ watch(showSuggestions, (newValue) => {
     sidebarTopOffset.value = 0;
     sidebarTopOffset2.value = 0;
     sidebarTopOffset3.value = 0;
+    sidebarTopOffset4.value = 0;
     suggestionsTopOffset.value = 0;
     closeMinervaSuggestion();
   }
@@ -5258,14 +5505,22 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false) {
       isCardExpanded.value = true;
       isCardExpanded2.value = false;
       isCardExpanded3.value = false;
+      isCardExpanded4.value = false;
     } else if (suggestionId === 2) {
       isCardExpanded2.value = true;
       isCardExpanded.value = false;
       isCardExpanded3.value = false;
-    } else {
+      isCardExpanded4.value = false;
+    } else if (suggestionId === 3) {
       isCardExpanded.value = false;
       isCardExpanded2.value = false;
       isCardExpanded3.value = true;
+      isCardExpanded4.value = false;
+    } else {
+      isCardExpanded.value = false;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = false;
+      isCardExpanded4.value = true;
     }
   };
 
@@ -5292,6 +5547,9 @@ function getPendingSuggestionTargets() {
   }
   if (citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value && highlightedTextRef2.value) {
     targets.push({ id: 2, ref: highlightedTextRef2 });
+  }
+  if (!isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value && highlightedTextRef4.value) {
+    targets.push({ id: 4, ref: highlightedTextRef4 });
   }
   if (citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value && highlightedTextRef3.value) {
     targets.push({ id: 3, ref: highlightedTextRef3 });
@@ -5401,11 +5659,14 @@ function openFirstPendingSuggestion(expandAfterScroll = false) {
   const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
   const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
+  const suggestion4Pending = !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value;
 
   if (suggestion1Pending) {
     openSuggestionAtTarget(1, highlightedTextRef, expandAfterScroll);
   } else if (suggestion2Pending) {
     openSuggestionAtTarget(2, highlightedTextRef2, expandAfterScroll);
+  } else if (suggestion4Pending) {
+    openSuggestionAtTarget(4, highlightedTextRef4, expandAfterScroll);
   } else if (suggestion3Pending) {
     openSuggestionAtTarget(3, highlightedTextRef3, expandAfterScroll);
   }
@@ -5729,14 +5990,22 @@ function openMinervaSuggestion(suggestionId) {
     isCardExpanded.value = true;
     isCardExpanded2.value = false;
     isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
   } else if (suggestionId === 2) {
     isCardExpanded2.value = true;
     isCardExpanded.value = false;
     isCardExpanded3.value = false;
-  } else {
+    isCardExpanded4.value = false;
+  } else if (suggestionId === 3) {
     isCardExpanded3.value = true;
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
+    isCardExpanded4.value = false;
+  } else {
+    isCardExpanded4.value = true;
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
   }
   updateMinervaSheetHeight();
 }
@@ -5753,6 +6022,7 @@ function closeMinervaSuggestion() {
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
   isCardExpanded3.value = false;
+  isCardExpanded4.value = false;
   minervaSheetHeight.value = 0;
 }
 
@@ -8184,6 +8454,16 @@ function markArticleEdited() {
   cursor: pointer;
 }
 
+.suggestion-target--inline {
+  display: inline;
+  cursor: pointer;
+}
+
+.suggestion-target--inline .highlighted-text-content {
+  display: inline;
+  width: auto;
+}
+
 /* Wrapper with rail (vertical line) - p element with flex */
 .highlighted-text-wrapper {
   display: flex;
@@ -8245,6 +8525,27 @@ function markArticleEdited() {
   padding: 0 2px;
   box-decoration-break: clone;
   -webkit-box-decoration-break: clone;
+}
+
+.feedback-underlined-unselected .highlighted-text-annotation {
+  text-decoration: underline;
+  text-decoration-color: var(--border-color-subtle, #C8CCD1);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+.minerva-skin .feedback-underlined-unselected .highlighted-text-annotation {
+  background-color: transparent !important;
+}
+
+.minerva-skin .feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation,
+.minerva-skin .feedback-underlined-unselected.highlighted-text-wrapper--hover .highlighted-text-annotation {
+  background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff)) !important;
+}
+
+.feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation,
+.feedback-underlined-unselected.highlighted-text-wrapper--hover .highlighted-text-annotation {
+  text-decoration: none;
 }
 
 /* Hover state - blue background per line */
@@ -8380,6 +8681,25 @@ function markArticleEdited() {
   cursor: pointer;
   box-shadow: none;
   z-index: 5;
+}
+
+.minerva-suggestion-trigger-badge {
+  position: absolute;
+  right: -4px;
+  bottom: -6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 14px;
+  height: 14px;
+  padding: 0 3px;
+  border-radius: 2px;
+  background: var(--suggestion-color, var(--background-color-progressive, #36c));
+  border: 1px solid var(--border-color-inverted, #ffffff);
+  color: #ffffff;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
 }
 
 .minerva-skin :deep(.minerva-suggestion-trigger) {
@@ -9007,6 +9327,19 @@ function markArticleEdited() {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
+}
+
+.suggestion-description a,
+.minerva-sheet-description a {
+  color: var(--color-progressive, #36c);
+  text-decoration: none;
+}
+
+.suggestion-description a:hover,
+.suggestion-description a:active,
+.minerva-sheet-description a:hover,
+.minerva-sheet-description a:active {
+  text-decoration: underline;
 }
 
 .suggestion-actions {
