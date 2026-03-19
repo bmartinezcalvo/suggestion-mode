@@ -1576,7 +1576,7 @@
                       <button class="citation-tab">Re-use</button>
                     </div>
                     <div class="citation-popup-content">
-                      <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+                      <p class="citation-popup-description">Enter a link or reference code (ISBN, DOI or other) to create a citation</p>
                       <div class="citation-input-group">
                         <input 
                           v-model="citationUrl1" 
@@ -1787,7 +1787,7 @@
                       <button class="citation-tab">Re-use</button>
                     </div>
                     <div class="citation-popup-content">
-                      <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+                      <p class="citation-popup-description">Enter a link or reference code (ISBN, DOI or other) to create a citation</p>
                       <div class="citation-input-group">
                         <input 
                           v-model="citationUrl2" 
@@ -1935,7 +1935,7 @@
                       <button class="citation-tab">Re-use</button>
                     </div>
                     <div class="citation-popup-content">
-                      <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+                      <p class="citation-popup-description">Enter a link or reference code (ISBN, DOI or other) to create a citation</p>
                       <div class="citation-input-group">
                         <input 
                           v-model="citationUrl3" 
@@ -2880,7 +2880,7 @@
             <button class="citation-tab">Re-use</button>
           </div>
           <div class="citation-popup-content">
-            <p class="citation-popup-description">This is a text component which can be replaced with any component.</p>
+            <p class="citation-popup-description">Enter a link or reference code (ISBN, DOI or other) to create a citation</p>
             <div class="citation-input-group">
               <input
                 v-model="citationDialogUrl"
@@ -3707,6 +3707,9 @@ function syncEditCheckHoverState() {
 function createEditCheckHighlightSpan(matchedText, highlightClass) {
   const highlightSpan = document.createElement('span');
   highlightSpan.className = `${highlightClass} feedback-highlight feedback-highlight--warning highlighted-text-wrapper`;
+  if (nonSelectedHighlightUnderlineEnabled.value) {
+    highlightSpan.classList.add('feedback-underlined-unselected');
+  }
   if (!isEditCheckSheetExpanded.value) {
     highlightSpan.classList.add('edit-check-highlight--collapsed');
   }
@@ -8546,6 +8549,22 @@ function markArticleEdited() {
 .feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation,
 .feedback-underlined-unselected.highlighted-text-wrapper--hover .highlighted-text-annotation {
   text-decoration: none;
+}
+
+:deep(.feedback-highlight--warning.feedback-underlined-unselected.edit-check-highlight--collapsed .highlighted-text-annotation) {
+  background-color: transparent !important;
+  text-decoration: underline;
+  text-decoration-color: var(--border-color-subtle, #C8CCD1);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 2px;
+}
+
+:deep(.feedback-highlight--warning.feedback-underlined-unselected.edit-check-highlight--collapsed.highlighted-text-wrapper--hover .highlighted-text-annotation) {
+  text-decoration: none;
+}
+
+.minerva-skin :deep(.feedback-highlight--warning.feedback-underlined-unselected.edit-check-highlight--collapsed .highlighted-text-annotation) {
+  background-color: transparent !important;
 }
 
 /* Hover state - blue background per line */
