@@ -4335,6 +4335,27 @@ function handleToolbarClick() {
   });
 }
 
+function openEditCheckFromSelection(selectionContainer) {
+  const toneHighlight = toneCheckHighlightRef.value;
+  const pasteHighlight = pasteCheckHighlightRef.value;
+  const isInToneCheck = toneHighlight && toneHighlight.contains(selectionContainer);
+  const isInPasteCheck = pasteHighlight && pasteHighlight.contains(selectionContainer);
+
+  if (!isInToneCheck && !isInPasteCheck) {
+    return false;
+  }
+
+  if (isMinervaSkin.value) {
+    minervaSheetMode.value = 'edit-check';
+    isMinervaSheetOpen.value = true;
+    updateMinervaSheetHeight();
+  } else {
+    isEditCheckExpanded.value = true;
+  }
+  syncEditCheckHighlightState();
+  return true;
+}
+
 function handleSelectionChange() {
   if (typeof window === 'undefined') return;
   const selection = window.getSelection();
@@ -4342,6 +4363,9 @@ function handleSelectionChange() {
   const range = selection.getRangeAt(0);
   const container = range.commonAncestorContainer;
   const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (element && openEditCheckFromSelection(element)) {
+    return;
+  }
   if (!element || !element.closest('.article-text-editable')) return;
   if (element.closest('a')) return;
   savedArticleSelectionRange = range.cloneRange();
