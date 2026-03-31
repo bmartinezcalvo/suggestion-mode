@@ -969,11 +969,11 @@
               @click="handleToolbarClick"
               @touchend="handleToolbarClick"
             >
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
+              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
               <button
-                class="toolbar-btn toolbar-btn-icon-only"
+                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                 :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
                 :disabled="!hasUnsavedChanges"
                 aria-label="Undo"
@@ -981,11 +981,53 @@
               >
                 <cdx-icon :icon="cdxIconUndo" size="medium" />
               </button>
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Text styles">
-                <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+              <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                <button
+                  class="text-style-menu-trigger"
+                  :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
+                  aria-label="Text styles"
+                  ref="textStyleMenuTriggerRef"
+                  @click.stop="toggleTextStyleMenu"
+                >
+                  <cdx-icon :icon="cdxIconTextStyle" size="medium" />
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                </button>
+                <div
+                  v-if="isTextStyleMenuOpen"
+                  ref="textStyleMenuPanelRef"
+                  class="text-style-menu-panel text-style-menu-panel--minerva"
+                >
+                  <ul class="text-style-menu-list" role="menu">
+                    <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
+                      <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
+                      <li v-else class="text-style-menu-item" role="none">
+                        <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                        </button>
+                      </li>
+                    </template>
+                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
+                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-item" role="none">
+                      <button type="button" class="text-style-menu-button text-style-menu-button--toggle" role="menuitem" @click="toggleTextStyleMenuExpanded">
+                        <cdx-icon :icon="isTextStyleMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
+                        <span>{{ isTextStyleMenuExpanded ? 'Fewer' : 'More' }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                <cdx-icon :icon="cdxIconLink" size="medium" />
               </button>
-              <div v-if="minervaToolbarToggleEnabled" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu">
+              <button
+                v-if="showMinervaTopLevelCite"
+                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                aria-label="Cite"
+              >
+                <cdx-icon :icon="cdxIconQuotes" size="medium" />
+              </button>
+              <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
                 <button
                   class="minerva-add-menu-trigger"
                   :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
@@ -1015,20 +1057,12 @@
                   </ul>
                 </div>
               </div>
-              <template v-if="!minervaToolbarToggleEnabled">
-                <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Cite">
-                  <cdx-icon :icon="cdxIconQuotes" size="medium" />
-                </button>
-                <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Link">
-                  <cdx-icon :icon="cdxIconLink" size="medium" />
-                </button>
-              </template>
               <cdx-toggle-button
                 v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
                 v-model="showSuggestions"
                 quiet
                 aria-label="Toggle suggestions"
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle"
+                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
                 :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
               >
                 <span class="lightbulb-icon-wrapper">
@@ -1049,16 +1083,19 @@
                   </span>
                 </span>
               </cdx-toggle-button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu">
+              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
                 <button
                   class="minerva-edit-menu-trigger"
-                  :class="{ 'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen }"
+                  :class="{
+                    'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen,
+                    'minerva-edit-menu-trigger--overflow': usesMinervaOverflowHandle
+                  }"
                   aria-label="Edit options"
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <cdx-icon :icon="cdxIconEdit" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon :icon="minervaEditHandleIcon" size="medium" />
+                  <cdx-icon v-if="!usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isMinervaEditMenuOpen"
@@ -1102,7 +1139,7 @@
                 </div>
               </div>
               <button
-                class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
+                class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary minerva-toolbar-fixed"
                 :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
                 :disabled="!hasUnsavedChanges"
                 aria-label="Publish"
@@ -1119,11 +1156,11 @@
               @click="handleToolbarClick"
               @touchend="handleToolbarClick"
             >
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
+              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
               <button
-                class="toolbar-btn toolbar-btn-icon-only"
+                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                 :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
                 :disabled="!hasUnsavedChanges"
                 aria-label="Undo"
@@ -1131,26 +1168,121 @@
               >
                 <cdx-icon :icon="cdxIconUndo" size="medium" />
               </button>
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Text styles">
-                <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-              </button>
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Cite">
-                <cdx-icon :icon="cdxIconQuotes" size="medium" />
-              </button>
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Link">
+              <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                <button
+                  class="text-style-menu-trigger"
+                  :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
+                  aria-label="Text styles"
+                  ref="textStyleMenuTriggerRef"
+                  @click.stop="toggleTextStyleMenu"
+                >
+                  <cdx-icon :icon="cdxIconTextStyle" size="medium" />
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                </button>
+                <div
+                  v-if="isTextStyleMenuOpen"
+                  ref="textStyleMenuPanelRef"
+                  class="text-style-menu-panel text-style-menu-panel--minerva"
+                >
+                  <ul class="text-style-menu-list" role="menu">
+                    <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
+                      <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
+                      <li v-else class="text-style-menu-item" role="none">
+                        <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                        </button>
+                      </li>
+                    </template>
+                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
+                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-item" role="none">
+                      <button type="button" class="text-style-menu-button text-style-menu-button--toggle" role="menuitem" @click="toggleTextStyleMenuExpanded">
+                        <cdx-icon :icon="isTextStyleMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
+                        <span>{{ isTextStyleMenuExpanded ? 'Fewer' : 'More' }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
                 <cdx-icon :icon="cdxIconLink" size="medium" />
               </button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu">
+              <button
+                v-if="showMinervaTopLevelCite"
+                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                aria-label="Cite"
+              >
+                <cdx-icon :icon="cdxIconQuotes" size="medium" />
+              </button>
+              <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
+                <button
+                  class="minerva-add-menu-trigger"
+                  :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
+                  aria-label="Add"
+                  ref="minervaAddMenuTriggerRef"
+                  @click.stop="toggleMinervaAddMenu"
+                >
+                  <cdx-icon :icon="cdxIconAdd" size="medium" />
+                </button>
+                <div
+                  v-if="isMinervaAddMenuOpen"
+                  ref="minervaAddMenuPanelRef"
+                  class="minerva-add-menu-panel"
+                >
+                  <ul class="minerva-add-menu-list" role="menu">
+                    <li
+                      v-for="item in minervaAddMenuItems"
+                      :key="item.value"
+                      class="minerva-add-menu-item"
+                      role="none"
+                    >
+                      <button type="button" class="minerva-add-menu-button" role="menuitem" @click="handleMinervaAddItem(item.value)">
+                        <cdx-icon :icon="item.icon" size="medium" />
+                        <span>{{ item.label }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+              <cdx-toggle-button
+                v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                v-model="showSuggestions"
+                quiet
+                aria-label="Toggle suggestions"
+                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
+                :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
+              >
+                <span class="lightbulb-icon-wrapper">
+                  <span v-if="showSuggestions" class="bulb-rays">
+                    <span class="ray ray-1"></span>
+                    <span class="ray ray-2"></span>
+                    <span class="ray ray-3"></span>
+                    <span class="ray ray-4"></span>
+                    <span class="ray ray-5"></span>
+                  </span>
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  <span
+                    v-if="showToggleBadge"
+                    class="suggestions-badge"
+                    :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                  >
+                    {{ toggleBadgeCount }}
+                  </span>
+                </span>
+              </cdx-toggle-button>
+              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
                 <button
                   class="minerva-edit-menu-trigger"
-                  :class="{ 'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen }"
+                  :class="{
+                    'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen,
+                    'minerva-edit-menu-trigger--overflow': usesMinervaOverflowHandle
+                  }"
                   aria-label="Edit options"
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <cdx-icon :icon="cdxIconEdit" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon :icon="minervaEditHandleIcon" size="medium" />
+                  <cdx-icon v-if="!usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isMinervaEditMenuOpen"
@@ -1194,7 +1326,7 @@
                 </div>
               </div>
               <button
-                class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
+                class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary minerva-toolbar-fixed"
                 :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
                 :disabled="!hasUnsavedChanges"
                 aria-label="Publish"
@@ -1227,10 +1359,42 @@
                   <span class="toolbar-btn-text">Paragraph</span>
                   <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
-                <button class="toolbar-btn toolbar-btn-dropdown">
-                  <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-                </button>
+                <div class="toolbar-btn toolbar-btn-dropdown text-style-menu">
+                  <button
+                    class="text-style-menu-trigger"
+                    :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
+                    aria-label="Text styles"
+                    ref="textStyleMenuTriggerRef"
+                    @click.stop="toggleTextStyleMenu"
+                  >
+                    <cdx-icon :icon="cdxIconTextStyle" size="medium" />
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                  <div
+                    v-if="isTextStyleMenuOpen"
+                    ref="textStyleMenuPanelRef"
+                    class="text-style-menu-panel"
+                  >
+                    <ul class="text-style-menu-list" role="menu">
+                      <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
+                        <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
+                        <li v-else class="text-style-menu-item" role="none">
+                          <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span>{{ item.label }}</span>
+                          </button>
+                        </li>
+                      </template>
+                      <li v-if="showTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
+                      <li v-if="showTextStyleMenuToggle" class="text-style-menu-item" role="none">
+                        <button type="button" class="text-style-menu-button text-style-menu-button--toggle" role="menuitem" @click="toggleTextStyleMenuExpanded">
+                          <cdx-icon :icon="isTextStyleMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
+                          <span>{{ isTextStyleMenuExpanded ? 'Fewer' : 'More' }}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 <button class="toolbar-btn toolbar-btn-icon-only">
                   <cdx-icon :icon="cdxIconLink" size="medium" />
                 </button>
@@ -1238,17 +1402,68 @@
                   <cdx-icon :icon="cdxIconQuotes" size="medium" />
                   <span class="toolbar-btn-text">Cite</span>
                 </button>
-                <button class="toolbar-btn toolbar-btn-dropdown">
-                  <cdx-icon :icon="cdxIconListBullet" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-                </button>
-                <button class="toolbar-btn toolbar-btn-dropdown">
-                  <span class="toolbar-btn-text">Insert</span>
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-                </button>
-                <button class="toolbar-btn toolbar-btn-icon-only">
-                  <cdx-icon :icon="cdxIconSpecialCharacter" size="medium" />
-                </button>
+                <div class="toolbar-btn toolbar-btn-dropdown text-structure-menu">
+                  <button
+                    class="text-structure-menu-trigger"
+                    :class="{ 'text-structure-menu-trigger--active': isTextStructureMenuOpen }"
+                    aria-label="Text structure"
+                    ref="textStructureMenuTriggerRef"
+                    @click.stop="toggleTextStructureMenu"
+                  >
+                    <cdx-icon :icon="cdxIconListBullet" size="medium" />
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                  <div
+                    v-if="isTextStructureMenuOpen"
+                    ref="textStructureMenuPanelRef"
+                    class="text-structure-menu-panel"
+                  >
+                    <ul class="text-structure-menu-list" role="menu">
+                      <li v-for="item in textStructureMenuItems" :key="item.value" class="text-structure-menu-item" role="none">
+                        <button type="button" class="text-structure-menu-button" role="menuitem" @click="handleTextStructureItemSelect(item.value)">
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="toolbar-btn toolbar-btn-dropdown insert-menu">
+                  <button
+                    class="insert-menu-trigger"
+                    :class="{ 'insert-menu-trigger--active': isInsertMenuOpen }"
+                    aria-label="Insert"
+                    ref="insertMenuTriggerRef"
+                    @click.stop="toggleInsertMenu"
+                  >
+                    <span class="toolbar-btn-text">Insert</span>
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                  <div
+                    v-if="isInsertMenuOpen"
+                    ref="insertMenuPanelRef"
+                    class="insert-menu-panel"
+                  >
+                    <ul class="insert-menu-list" role="menu">
+                      <template v-for="item in visibleInsertMenuItems" :key="item.value">
+                        <li v-if="item.type === 'divider'" class="insert-menu-divider" role="separator"></li>
+                        <li v-else class="insert-menu-item" role="none">
+                          <button type="button" class="insert-menu-button" role="menuitem" @click="handleInsertItemSelect(item.value)">
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span>{{ item.label }}</span>
+                          </button>
+                        </li>
+                      </template>
+                      <li v-if="showInsertMenuToggle" class="insert-menu-divider" role="separator"></li>
+                      <li v-if="showInsertMenuToggle" class="insert-menu-item" role="none">
+                        <button type="button" class="insert-menu-button insert-menu-button--toggle" role="menuitem" @click="toggleInsertMenuExpanded">
+                          <cdx-icon :icon="isInsertMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
+                          <span>{{ isInsertMenuExpanded ? 'Fewer' : 'More' }}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
               </div>
               <div class="editor-toolbar-right">
                 <cdx-toggle-button 
@@ -2694,57 +2909,30 @@
           @primary="startPrototype"
         >
           <div class="prototype-dialog-content">
-            <cdx-message type="notice">
-              See the validated version of Suggestion Mode in
-              <a href="https://bmartinezcalvo.github.io/suggestion-mode/preview/" target="_blank" rel="noopener">
-                this prototype
-              </a>.
-            </cdx-message>
             <div class="prototype-dialog-options">
-              <cdx-field>
-                <template #label>
-                  Suggestions discoverability (<a href="https://phabricator.wikimedia.org/T414518" target="_blank" rel="noopener">T414518</a>)
-                </template>
+              <cdx-field v-if="isMinervaSkin && minervaToolbarToggleEnabled">
+                <template #label>Edit toolbar explorations</template>
                 <div class="cdx-radio-group" role="radiogroup">
                   <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-1"
+                    v-model="minervaToolbarMode"
+                    name="minerva-toolbar-mode"
+                    input-value="first-iteration"
                   >
-                    Op.1: Persistent banner
+                    1st iteration
                   </cdx-radio>
                   <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-3"
+                    v-model="minervaToolbarMode"
+                    name="minerva-toolbar-mode"
+                    input-value="second-iteration"
                   >
-                    Op.2: Persistent arrows
+                    2n iteration
                   </cdx-radio>
                   <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-2"
+                    v-model="minervaToolbarMode"
+                    name="minerva-toolbar-mode"
+                    input-value="third-iteration"
                   >
-                    Op.3: Single-use "View suggestions" button
-                  </cdx-radio>
-                </div>
-              </cdx-field>
-              <cdx-field>
-                <template #label>When reaching 1st suggestion</template>
-                <div class="cdx-radio-group" role="radiogroup">
-                  <cdx-radio
-                    v-model="firstSuggestionExpansionMode"
-                    name="first-suggestion-expansion"
-                    input-value="auto-expand"
-                  >
-                    Auto-expand the first suggestion when reached (desktop + mobile)
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="firstSuggestionExpansionMode"
-                    name="first-suggestion-expansion"
-                    input-value="mobile-bounce-desktop-auto"
-                  >
-                    Bouncing icon on mobile + auto-expand card on desktop
+                    3rd iteration
                   </cdx-radio>
                 </div>
               </cdx-field>
@@ -2775,18 +2963,6 @@
                     Within the rail
                   </cdx-radio>
                 </div>
-              </cdx-field>
-              <cdx-field>
-                <template #label>Others</template>
-                <cdx-checkbox v-model="toastsEnabled">
-                  Enable contextual Toasts (<a href="https://phabricator.wikimedia.org/T417827" target="_blank" rel="noopener">T417827</a>)
-                </cdx-checkbox>
-                <cdx-checkbox v-model="newSuggestionColorEnabled">
-                  New color of suggestions
-                </cdx-checkbox>
-                <cdx-checkbox v-model="nonSelectedHighlightUnderlineEnabled">
-                  Highlighted text is underlined when non selected
-                </cdx-checkbox>
               </cdx-field>
             </div>
           </div>
@@ -2933,13 +3109,33 @@ import {
   cdxIconHistory,
   cdxIconSearch,
   cdxIconListBullet,
+  cdxIconListNumbered,
   cdxIconUndo,
   cdxIconRedo,
   cdxIconTextStyle,
+  cdxIconBold,
+  cdxIconItalic,
+  cdxIconStrikethrough,
+  cdxIconUnderline,
+  cdxIconBigger,
+  cdxIconSmaller,
+  cdxIconSuperscript,
+  cdxIconSubscript,
   cdxIconLink,
   cdxIconQuotes,
   cdxIconAdd,
   cdxIconSpecialCharacter,
+  cdxIconCode,
+  cdxIconImage,
+  cdxIconTemplateAdd,
+  cdxIconTable,
+  cdxIconMusicalScore,
+  cdxIconImageGallery,
+  cdxIconChart,
+  cdxIconSpeechBubble,
+  cdxIconHieroglyph,
+  cdxIconLabFlask,
+  cdxIconMathematics,
   cdxIconHelp,
   cdxIconAlert,
   cdxIconEdit,
@@ -2951,7 +3147,13 @@ import {
   cdxIconClose,
   cdxIconSuccess,
   cdxIconInfo,
-  cdxIconWikiText
+  cdxIconMap,
+  cdxIconSignature,
+  cdxIconReferences,
+  cdxIconOutdent,
+  cdxIconIndent,
+  cdxIconWikiText,
+  resolveIcon
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
 
@@ -2981,11 +3183,17 @@ const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
 const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
+const isTextStyleMenuOpen = ref(false);
+const isTextStyleMenuExpanded = ref(false);
+const isTextStructureMenuOpen = ref(false);
+const isInsertMenuOpen = ref(false);
+const isInsertMenuExpanded = ref(false);
 const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
 const minervaTogglePlacement = ref('toolbar');
+const minervaToolbarMode = ref('first-iteration');
 const minervaToolbarToggleEnabled = computed(() => minervaTogglePlacement.value === 'toolbar');
 const minervaMenuToggleEnabled = computed(() => minervaTogglePlacement.value === 'menu');
 const linkDialogTab = ref('wikipedia');
@@ -3130,7 +3338,6 @@ const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
-const selectedPrototype = ref('option-2');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
@@ -3265,6 +3472,12 @@ const minervaAddMenuTriggerRef = ref(null);
 const minervaAddMenuPanelRef = ref(null);
 const minervaEditMenuTriggerRef = ref(null);
 const minervaEditMenuPanelRef = ref(null);
+const textStyleMenuTriggerRef = ref(null);
+const textStyleMenuPanelRef = ref(null);
+const textStructureMenuTriggerRef = ref(null);
+const textStructureMenuPanelRef = ref(null);
+const insertMenuTriggerRef = ref(null);
+const insertMenuPanelRef = ref(null);
 const firstSuggestionAutoExpandedId = ref(null);
 const firstSuggestionBounceActiveId = ref(null);
 const firstSuggestionBounceDoneId = ref(null);
@@ -3440,10 +3653,80 @@ const showMinervaHelpButton = computed(() => (
   isEditMode.value &&
   activePrototype.value !== 'option-1' && !isArrowOnceMode.value
 ));
+const isMinervaToolbarFirstIteration = computed(() => minervaToolbarMode.value === 'first-iteration');
+const usesMinervaOverflowHandle = computed(() => (
+  minervaToolbarMode.value === 'second-iteration' || minervaToolbarMode.value === 'third-iteration'
+));
+const showMinervaTopLevelCite = computed(() => (
+  !minervaToolbarToggleEnabled.value || isMinervaToolbarFirstIteration.value
+));
+const showMinervaAddMenuButton = computed(() => (
+  minervaToolbarToggleEnabled.value && !isMinervaToolbarFirstIteration.value
+));
+const minervaEditHandleIcon = computed(() => (
+  usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEdit
+));
+const cdxIconBoldEn = resolveIcon(cdxIconBold, 'en');
+const cdxIconStrikethroughEn = resolveIcon(cdxIconStrikethrough, 'en');
+const cdxIconUnderlineEn = resolveIcon(cdxIconUnderline, 'en');
 const minervaAddMenuItems = computed(() => ([
   { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
-  { value: 'link', label: 'Link', icon: cdxIconLink }
+  { value: 'other-tools', label: 'Other tools', icon: cdxIconPuzzle }
 ]));
+const textStyleMenuItems = [
+  { value: 'bold', label: 'Bold', icon: cdxIconBoldEn },
+  { value: 'italic', label: 'Italic', icon: cdxIconItalic },
+  { value: 'strikethrough', label: 'Strikethrough', icon: cdxIconStrikethroughEn },
+  { value: 'underline', label: 'Underline', icon: cdxIconUnderlineEn },
+  { type: 'divider', value: 'text-style-divider-1' },
+  { value: 'big', label: 'Big', icon: cdxIconBigger },
+  { value: 'small', label: 'Small', icon: cdxIconSmaller },
+  { type: 'divider', value: 'text-style-divider-2' },
+  { value: 'superscript', label: 'Superscript', icon: cdxIconSuperscript },
+  { value: 'subscript', label: 'Subscript', icon: cdxIconSubscript },
+  { value: 'computer-code', label: 'Computer code', icon: cdxIconCode }
+];
+const textStructureMenuItems = [
+  { value: 'bullet-list', label: 'Bullet list', icon: cdxIconListBullet },
+  { value: 'numbered-list', label: 'Numbered list', icon: cdxIconListNumbered },
+  { value: 'decrease-indentation', label: 'Decrease indentation', icon: cdxIconOutdent },
+  { value: 'increase-indentation', label: 'Increase indentation', icon: cdxIconIndent }
+];
+const insertMenuItems = [
+  { value: 'images-media', label: 'Images and media', icon: cdxIconImage },
+  { value: 'template', label: 'Template', icon: cdxIconTemplateAdd },
+  { value: 'table', label: 'Table', icon: cdxIconTable },
+  { value: 'music-notation', label: 'Music notation', icon: cdxIconMusicalScore },
+  { value: 'gallery', label: 'Gallery', icon: cdxIconImageGallery },
+  { value: 'chart', label: 'Chart', icon: cdxIconChart },
+  { type: 'divider', value: 'insert-divider-1' },
+  { value: 'invisible-comment', label: 'Invisible comment', icon: cdxIconSpeechBubble },
+  { type: 'divider', value: 'insert-divider-2' },
+  { value: 'special-characters', label: 'Special characters', icon: cdxIconSpecialCharacter },
+  { value: 'hieroglyphs', label: 'Hieroglyphs', icon: cdxIconHieroglyph },
+  { value: 'code-block', label: 'Code block', icon: cdxIconCode },
+  { value: 'chemical-formula', label: 'Chemical formula', icon: cdxIconLabFlask },
+  { value: 'math-formula', label: 'Math formula', icon: cdxIconMathematics },
+  { value: 'language', label: 'Language', icon: cdxIconLanguage },
+  { type: 'divider', value: 'insert-divider-3' },
+  { value: 'map', label: 'Map', icon: cdxIconMap },
+  { value: 'your-signature', label: 'Your signature', icon: cdxIconSignature },
+  { value: 'references-list', label: 'References list', icon: cdxIconReferences }
+];
+const visibleTextStyleMenuItems = computed(() => {
+  if (textStyleMenuItems.length <= 4 || isTextStyleMenuExpanded.value) {
+    return textStyleMenuItems;
+  }
+  return textStyleMenuItems.slice(0, 3);
+});
+const showTextStyleMenuToggle = computed(() => textStyleMenuItems.length > 4);
+const visibleInsertMenuItems = computed(() => {
+  if (insertMenuItems.length <= 4 || isInsertMenuExpanded.value) {
+    return insertMenuItems;
+  }
+  return insertMenuItems.slice(0, 3);
+});
+const showInsertMenuToggle = computed(() => insertMenuItems.length > 4);
 const minervaPaginationIds = computed(() => {
   const ids = [];
   if (citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value) {
@@ -3552,6 +3835,11 @@ function applyPrototypeMode(mode) {
 
 function openPrototypeDialog(fromSection = false) {
   if (isEditMode.value) return;
+  if (!isMinervaSkin.value) {
+    applyPrototypeMode('option-2');
+    enterEditMode();
+    return;
+  }
   if (!fromSection) {
     minervaEditSectionOnly.value = null;
   }
@@ -3563,7 +3851,7 @@ function closePrototypeDialog() {
 }
 
 function startPrototype() {
-  applyPrototypeMode(selectedPrototype.value);
+  applyPrototypeMode('option-2');
   closePrototypeDialog();
   enterEditMode();
 }
@@ -4143,8 +4431,80 @@ function dismissSuggestionInfo() {
   }
 }
 
+function toggleTextStyleMenu() {
+  isTextStyleMenuOpen.value = !isTextStyleMenuOpen.value;
+  if (isTextStyleMenuOpen.value) {
+    isTextStyleMenuExpanded.value = false;
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeTextStyleMenu() {
+  isTextStyleMenuOpen.value = false;
+  isTextStyleMenuExpanded.value = false;
+}
+
+function handleTextStyleItemSelect() {
+  closeTextStyleMenu();
+}
+
+function toggleTextStyleMenuExpanded() {
+  isTextStyleMenuExpanded.value = !isTextStyleMenuExpanded.value;
+}
+
+function toggleTextStructureMenu() {
+  isTextStructureMenuOpen.value = !isTextStructureMenuOpen.value;
+  if (isTextStructureMenuOpen.value) {
+    closeTextStyleMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeTextStructureMenu() {
+  isTextStructureMenuOpen.value = false;
+}
+
+function handleTextStructureItemSelect() {
+  closeTextStructureMenu();
+}
+
+function toggleInsertMenu() {
+  isInsertMenuOpen.value = !isInsertMenuOpen.value;
+  if (isInsertMenuOpen.value) {
+    isInsertMenuExpanded.value = false;
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeInsertMenu() {
+  isInsertMenuOpen.value = false;
+  isInsertMenuExpanded.value = false;
+}
+
+function handleInsertItemSelect() {
+  closeInsertMenu();
+}
+
+function toggleInsertMenuExpanded() {
+  isInsertMenuExpanded.value = !isInsertMenuExpanded.value;
+}
+
 function toggleMinervaAddMenu() {
   isMinervaAddMenuOpen.value = !isMinervaAddMenuOpen.value;
+  if (isMinervaAddMenuOpen.value) {
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaEditMenu();
+  }
 }
 
 function closeMinervaAddMenu() {
@@ -4153,6 +4513,12 @@ function closeMinervaAddMenu() {
 
 function toggleMinervaEditMenu() {
   isMinervaEditMenuOpen.value = !isMinervaEditMenuOpen.value;
+  if (isMinervaEditMenuOpen.value) {
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+  }
 }
 
 function closeMinervaEditMenu() {
@@ -4373,12 +4739,21 @@ function handleSelectionChange() {
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value) return;
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value) return;
   const target = event.target;
+  if (textStyleMenuPanelRef.value?.contains(target)) return;
+  if (textStyleMenuTriggerRef.value?.contains(target)) return;
+  if (textStructureMenuPanelRef.value?.contains(target)) return;
+  if (textStructureMenuTriggerRef.value?.contains(target)) return;
+  if (insertMenuPanelRef.value?.contains(target)) return;
+  if (insertMenuTriggerRef.value?.contains(target)) return;
   if (minervaAddMenuPanelRef.value?.contains(target)) return;
   if (minervaAddMenuTriggerRef.value?.contains(target)) return;
   if (minervaEditMenuPanelRef.value?.contains(target)) return;
   if (minervaEditMenuTriggerRef.value?.contains(target)) return;
+  closeTextStyleMenu();
+  closeTextStructureMenu();
+  closeInsertMenu();
   closeMinervaAddMenu();
   closeMinervaEditMenu();
 }
@@ -7643,6 +8018,8 @@ function markArticleEdited() {
 .editor-toolbar--minerva {
   justify-content: space-between;
   gap: 0;
+  flex-wrap: nowrap;
+  min-height: 48px;
 }
 
 .editor-toolbar--minerva-spaced {
@@ -7652,7 +8029,7 @@ function markArticleEdited() {
 .editor-toolbar--minerva .toolbar-btn-primary {
   margin-left: 0;
   width: 44px;
-  height: 44px;
+  height: 48px;
   padding: 0;
   border-radius: 0;
 }
@@ -7661,8 +8038,35 @@ function markArticleEdited() {
   border-right: 1px solid var(--border-color-muted, #c8ccd1);
 }
 
+.editor-toolbar--minerva > .minerva-toolbar-fixed {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 48px;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-fill {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  max-width: none;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-fill.toolbar-btn-icon-only {
+  padding: 0;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-fill.toolbar-btn,
+.editor-toolbar--minerva > .minerva-toolbar-fill.minerva-add-menu,
+.editor-toolbar--minerva > .minerva-toolbar-fill.minerva-edit-menu,
+.editor-toolbar--minerva > .minerva-toolbar-fill.minerva-toolbar-toggle,
+.editor-toolbar--minerva > .minerva-toolbar-fill.text-style-menu {
+  height: 48px;
+}
+
 .minerva-skin.edit-mode .edit-mode-content {
-  padding-top: 42px;
+  padding-top: 48px;
 }
 
 .minerva-skin.edit-mode .editor-toolbar {
@@ -7715,12 +8119,152 @@ function markArticleEdited() {
   padding: 0;
 }
 
+.text-style-menu,
+.text-structure-menu,
+.insert-menu {
+  position: relative;
+  padding: 0;
+}
+
+.text-style-menu-trigger,
+.text-structure-menu-trigger,
+.insert-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-base, #202122);
+  cursor: pointer;
+}
+
+.text-style-menu-trigger--active,
+.text-structure-menu-trigger--active,
+.insert-menu-trigger--active {
+  background: var(--background-color-interactive-subtle, #eaecf0);
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
+.text-style-menu-panel,
+.text-structure-menu-panel,
+.insert-menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  background: #ffffff;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+  z-index: 90;
+  max-height: calc(100vh - 32px);
+  overflow-y: auto;
+}
+
+.text-style-menu-panel {
+  width: 224px;
+}
+
+.text-structure-menu-panel {
+  width: 240px;
+}
+
+.insert-menu-panel {
+  width: 240px;
+}
+
+.text-style-menu-panel--minerva {
+  position: fixed;
+  top: 48px;
+  left: auto;
+  right: 88px;
+  width: min(224px, calc(100vw - 16px));
+  max-height: calc(100vh - 64px);
+}
+
+.text-style-menu-list,
+.text-structure-menu-list,
+.insert-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.text-style-menu-item,
+.text-structure-menu-item,
+.insert-menu-item {
+  display: flex;
+}
+
+.text-style-menu-divider,
+.insert-menu-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--border-color-subtle, #c8ccd1);
+}
+
+.text-style-menu-button,
+.text-structure-menu-button,
+.insert-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-base, #202122);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vector-skin .text-style-menu-button,
+.vector-skin .text-structure-menu-button,
+.vector-skin .insert-menu-button {
+  font-size: 14px;
+}
+
+.minerva-skin .text-style-menu-button,
+.minerva-skin .text-structure-menu-button,
+.minerva-skin .insert-menu-button {
+  font-size: 16px;
+}
+
+.text-style-menu-button:hover,
+.text-structure-menu-button:hover,
+.insert-menu-button:hover {
+  background: #f8f9fa;
+}
+
+
+.text-style-menu-button :deep(.cdx-icon),
+.text-structure-menu-button :deep(.cdx-icon),
+.insert-menu-button :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+}
+
+.text-style-menu-button :deep(svg),
+.text-structure-menu-button :deep(svg),
+.insert-menu-button :deep(svg) {
+  width: 20px;
+  height: 20px;
+}
+
 .minerva-add-menu-trigger {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 42px;
+  width: 100%;
+  height: 48px;
   padding: 0;
   border: 1px solid transparent;
   background: transparent;
@@ -7734,7 +8278,7 @@ function markArticleEdited() {
 
 .minerva-add-menu-panel {
   position: fixed;
-  top: 42px;
+  top: 48px;
   right: 0;
   left: auto;
   width: min(256px, 100vw);
@@ -7797,8 +8341,8 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 44px;
-  height: 42px;
+  width: 100%;
+  height: 48px;
   padding: 0;
   border: 1px solid transparent;
   background: transparent;
@@ -7810,9 +8354,14 @@ function markArticleEdited() {
   border-color: var(--border-color-base, #a2a9b1);
 }
 
+.minerva-edit-menu-trigger--overflow :deep(.cdx-icon),
+.minerva-edit-menu-trigger--overflow :deep(svg) {
+  transform: rotate(90deg);
+}
+
 .minerva-edit-menu-panel {
   position: fixed;
-  top: 42px;
+  top: 48px;
   right: 0;
   left: auto;
   width: min(256px, 100vw);
@@ -7913,14 +8462,14 @@ function markArticleEdited() {
 }
 
 .minerva-toolbar-toggle {
-  width: 44px;
-  height: 42px;
+  width: 100%;
+  height: 48px;
   padding: 0;
 }
 
 .minerva-toolbar-toggle :deep(button) {
-  width: 44px;
-  height: 42px;
+  width: 100%;
+  height: 48px;
   padding: 0;
   background: var(--background-color-base, #ffffff);
 }
