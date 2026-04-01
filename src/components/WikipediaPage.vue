@@ -995,7 +995,11 @@
                 <div
                   v-if="isTextStyleMenuOpen"
                   ref="textStyleMenuPanelRef"
-                  class="text-style-menu-panel text-style-menu-panel--minerva"
+                  :class="[
+                    'text-style-menu-panel',
+                    'text-style-menu-panel--minerva',
+                    { 'text-style-menu-panel--expanded': isTextStyleMenuExpanded }
+                  ]"
                 >
                   <ul class="text-style-menu-list" role="menu">
                     <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
@@ -1182,7 +1186,11 @@
                 <div
                   v-if="isTextStyleMenuOpen"
                   ref="textStyleMenuPanelRef"
-                  class="text-style-menu-panel text-style-menu-panel--minerva"
+                  :class="[
+                    'text-style-menu-panel',
+                    'text-style-menu-panel--minerva',
+                    { 'text-style-menu-panel--expanded': isTextStyleMenuExpanded }
+                  ]"
                 >
                   <ul class="text-style-menu-list" role="menu">
                     <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
@@ -1355,10 +1363,12 @@
                 <button class="toolbar-btn toolbar-btn-icon-only toolbar-btn-disabled" disabled>
                   <cdx-icon :icon="cdxIconRedo" size="medium" />
                 </button>
+                <div class="toolbar-divider toolbar-divider--vertical"></div>
                 <button class="toolbar-btn toolbar-btn-dropdown">
                   <span class="toolbar-btn-text">Paragraph</span>
                   <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
+                <div class="toolbar-divider toolbar-divider--vertical"></div>
                 <div class="toolbar-btn toolbar-btn-dropdown text-style-menu">
                   <button
                     class="text-style-menu-trigger"
@@ -1373,7 +1383,10 @@
                   <div
                     v-if="isTextStyleMenuOpen"
                     ref="textStyleMenuPanelRef"
-                    class="text-style-menu-panel"
+                    :class="[
+                      'text-style-menu-panel',
+                      { 'text-style-menu-panel--expanded': isTextStyleMenuExpanded }
+                    ]"
                   >
                     <ul class="text-style-menu-list" role="menu">
                       <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
@@ -1398,9 +1411,8 @@
                 <button class="toolbar-btn toolbar-btn-icon-only">
                   <cdx-icon :icon="cdxIconLink" size="medium" />
                 </button>
-                <button class="toolbar-btn">
+                <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Cite">
                   <cdx-icon :icon="cdxIconQuotes" size="medium" />
-                  <span class="toolbar-btn-text">Cite</span>
                 </button>
                 <div class="toolbar-btn toolbar-btn-dropdown text-structure-menu">
                   <button
@@ -1442,7 +1454,10 @@
                   <div
                     v-if="isInsertMenuOpen"
                     ref="insertMenuPanelRef"
-                    class="insert-menu-panel"
+                    :class="[
+                      'insert-menu-panel',
+                      { 'insert-menu-panel--expanded': isInsertMenuExpanded }
+                    ]"
                   >
                     <ul class="insert-menu-list" role="menu">
                       <template v-for="item in visibleInsertMenuItems" :key="item.value">
@@ -1492,21 +1507,122 @@
                     </span>
                   </span>
                 </cdx-toggle-button>
-                <button class="toolbar-btn toolbar-btn-icon-only">
-                  <cdx-icon :icon="cdxIconHelp" size="medium" />
-                </button>
-                <button class="toolbar-btn toolbar-btn-icon-only">
+                <div class="toolbar-btn toolbar-btn-dropdown vector-help-menu">
+                  <button
+                    class="vector-help-menu-trigger"
+                    :class="{ 'vector-help-menu-trigger--active': isVectorHelpMenuOpen }"
+                    aria-label="Help"
+                    ref="vectorHelpMenuTriggerRef"
+                    @click.stop="toggleVectorHelpMenu"
+                  >
+                    <cdx-icon :icon="cdxIconHelp" size="medium" />
+                  </button>
+                  <div
+                    v-if="isVectorHelpMenuOpen"
+                    ref="vectorHelpMenuPanelRef"
+                    class="vector-help-menu-panel"
+                  >
+                    <ul class="vector-help-menu-list" role="menu">
+                      <template v-for="item in vectorHelpMenuItems" :key="item.value">
+                        <li v-if="item.type === 'divider'" class="vector-help-menu-divider" role="separator"></li>
+                        <li v-else-if="item.type === 'version'" class="vector-help-menu-version" role="presentation">
+                          <span>{{ item.label }}</span>
+                        </li>
+                        <li v-else class="vector-help-menu-item" role="none">
+                          <button type="button" class="vector-help-menu-button" role="menuitem" @click="handleVectorHelpMenuItemSelect(item.value)">
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span>{{ item.label }}</span>
+                          </button>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
+                <div class="toolbar-btn toolbar-btn-dropdown vector-menu">
+                  <button
+                    class="vector-menu-trigger"
+                    :class="{ 'vector-menu-trigger--active': isVectorMenuOpen }"
+                    aria-label="Menu"
+                    ref="vectorMenuTriggerRef"
+                    @click.stop="toggleVectorMenu"
+                  >
+                    <span class="vector-menu-ellipsis-wrapper">
+                      <cdx-icon :icon="cdxIconEllipsis" size="medium" class="vector-menu-ellipsis-icon" :style="{ transform: 'rotate(90deg)' }" />
+                    </span>
+                  </button>
+                  <div
+                    v-if="isVectorMenuOpen"
+                    ref="vectorMenuPanelRef"
+                    :class="[
+                      'vector-menu-panel',
+                      { 'vector-menu-panel--expanded': isVectorMenuExpanded }
+                    ]"
+                  >
+                    <ul class="vector-menu-list" role="menu">
+                      <template v-for="item in visibleVectorMenuItems" :key="item.value">
+                        <li v-if="item.type === 'divider'" class="vector-menu-divider" role="separator"></li>
+                        <li v-else-if="item.type === 'label'" class="vector-menu-label" role="presentation">
+                          <span>{{ item.label }}</span>
+                        </li>
+                        <li v-else-if="item.type === 'version'" class="vector-menu-version" role="presentation">
+                          <span>{{ item.label }}</span>
+                        </li>
+                        <li v-else class="vector-menu-item" role="none">
+                          <button type="button" class="vector-menu-button" role="menuitem" @click="handleVectorMenuItemSelect(item.value)">
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span>{{ item.label }}</span>
+                          </button>
+                        </li>
+                      </template>
+                      <li v-if="showVectorMenuToggle" class="vector-menu-divider" role="separator"></li>
+                      <li v-if="showVectorMenuToggle" class="vector-menu-item" role="none">
+                        <button type="button" class="vector-menu-button vector-menu-button--toggle" role="menuitem" @click="toggleVectorMenuExpanded">
+                          <cdx-icon :icon="isVectorMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
+                          <span>{{ isVectorMenuExpanded ? 'Fewer' : 'More' }}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <div class="toolbar-divider toolbar-divider--vertical"></div>
+                <button v-if="showVectorWarningButton" class="toolbar-btn toolbar-btn-icon-only">
                   <cdx-icon :icon="cdxIconAlert" size="medium" />
                 </button>
-                <button class="toolbar-btn toolbar-btn-icon-only">
-                  <cdx-icon :icon="cdxIconMenu" size="medium" />
-                </button>
-                <button class="toolbar-btn toolbar-btn-dropdown">
-                  <cdx-icon :icon="cdxIconEdit" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-                </button>
-                <button class="toolbar-btn-primary" :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }" :disabled="!hasUnsavedChanges">
-                  Publish changes...
+                <div v-if="showVectorWarningButton" class="toolbar-divider toolbar-divider--vertical"></div>
+                <div class="toolbar-btn toolbar-btn-dropdown vector-edit-menu">
+                  <button
+                    class="vector-edit-menu-trigger"
+                    :class="{ 'vector-edit-menu-trigger--active': isVectorEditMenuOpen }"
+                    aria-label="Edit options"
+                    ref="vectorEditMenuTriggerRef"
+                    @click.stop="toggleVectorEditMenu"
+                  >
+                    <cdx-icon :icon="activeVectorEditOption.icon" size="medium" />
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                  <div
+                    v-if="isVectorEditMenuOpen"
+                    ref="vectorEditMenuPanelRef"
+                    class="vector-edit-menu-panel"
+                  >
+                    <ul class="vector-edit-menu-list" role="menu">
+                      <li class="vector-edit-menu-item" role="none">
+                        <button type="button" class="vector-edit-menu-button" :class="{ 'vector-edit-menu-button--active': activeVectorEditMode === 'visual' }" role="menuitem" @click="handleVectorEditMenuItem('visual')">
+                          <cdx-icon :icon="cdxIconEye" size="medium" />
+                          <span>Visual editor</span>
+                        </button>
+                      </li>
+                      <li class="vector-edit-menu-item" role="none">
+                        <button type="button" class="vector-edit-menu-button" :class="{ 'vector-edit-menu-button--active': activeVectorEditMode === 'source' }" role="menuitem" @click="handleVectorEditMenuItem('source')">
+                          <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                          <span>Source editor</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <button class="toolbar-btn-primary vector-toolbar-publish" :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }" :disabled="!hasUnsavedChanges">
+                  Publish changes
                 </button>
               </div>
             </div>
@@ -3152,6 +3268,14 @@ import {
   cdxIconReferences,
   cdxIconOutdent,
   cdxIconIndent,
+  cdxIconTag,
+  cdxIconPageSettings,
+  cdxIconSettings,
+  cdxIconHighlight,
+  cdxIconTextDirRTL,
+  cdxIconKeyboard,
+  cdxIconFeedback,
+  cdxIconWindow,
   cdxIconWikiText,
   resolveIcon
 } from '@wikimedia/codex-icons';
@@ -3468,6 +3592,11 @@ const showBannerPrimaryArrowUp = ref(false);
 const hasUsedOption4Button = ref(false);
 const isAutoScrollActive = ref(false);
 const showMinervaArrowOnly = ref(false);
+const isVectorMenuOpen = ref(false);
+const isVectorMenuExpanded = ref(false);
+const isVectorHelpMenuOpen = ref(false);
+const isVectorEditMenuOpen = ref(false);
+const activeVectorEditMode = ref('visual');
 const minervaAddMenuTriggerRef = ref(null);
 const minervaAddMenuPanelRef = ref(null);
 const minervaEditMenuTriggerRef = ref(null);
@@ -3478,6 +3607,12 @@ const textStructureMenuTriggerRef = ref(null);
 const textStructureMenuPanelRef = ref(null);
 const insertMenuTriggerRef = ref(null);
 const insertMenuPanelRef = ref(null);
+const vectorMenuTriggerRef = ref(null);
+const vectorMenuPanelRef = ref(null);
+const vectorHelpMenuTriggerRef = ref(null);
+const vectorHelpMenuPanelRef = ref(null);
+const vectorEditMenuTriggerRef = ref(null);
+const vectorEditMenuPanelRef = ref(null);
 const firstSuggestionAutoExpandedId = ref(null);
 const firstSuggestionBounceActiveId = ref(null);
 const firstSuggestionBounceDoneId = ref(null);
@@ -3648,6 +3783,7 @@ const showVectorHelpButton = computed(() => (
   isEditMode.value &&
   activePrototype.value !== 'option-1' && !isArrowOnceMode.value
 ));
+const showVectorWarningButton = computed(() => false);
 const showMinervaHelpButton = computed(() => (
   isMinervaSkin.value &&
   isEditMode.value &&
@@ -3694,7 +3830,7 @@ const textStructureMenuItems = [
 ];
 const insertMenuItems = [
   { value: 'images-media', label: 'Images and media', icon: cdxIconImage },
-  { value: 'template', label: 'Template', icon: cdxIconTemplateAdd },
+  { value: 'template', label: 'Template', icon: cdxIconPuzzle },
   { value: 'table', label: 'Table', icon: cdxIconTable },
   { value: 'music-notation', label: 'Music notation', icon: cdxIconMusicalScore },
   { value: 'gallery', label: 'Gallery', icon: cdxIconImageGallery },
@@ -3713,20 +3849,75 @@ const insertMenuItems = [
   { value: 'your-signature', label: 'Your signature', icon: cdxIconSignature },
   { value: 'references-list', label: 'References list', icon: cdxIconReferences }
 ];
+const vectorMenuItems = [
+  { type: 'action', value: 'options', label: 'Options', icon: cdxIconWindow },
+  { type: 'divider', value: 'vector-menu-divider-1' },
+  { type: 'action', value: 'categories', label: 'Categories', icon: cdxIconTag },
+  { type: 'action', value: 'page-settings', label: 'Page settings', icon: cdxIconPageSettings },
+  { type: 'action', value: 'advanced-settings', label: 'Advanced settings', icon: cdxIconSettings },
+  { type: 'action', value: 'languages', label: 'Languages', icon: cdxIconLanguage },
+  { type: 'action', value: 'templates-used', label: 'Templates used', icon: cdxIconPuzzle },
+  { type: 'divider', value: 'vector-menu-divider-2' },
+  { type: 'action', value: 'syntax-highlighting', label: 'Syntax highlighting', icon: cdxIconHighlight },
+  { type: 'action', value: 'view-as-right-to-left', label: 'View as right-to-left', icon: cdxIconTextDirRTL },
+  { type: 'action', value: 'find-and-replace', label: 'Find and replace', icon: cdxIconSearch }
+];
+const vectorHelpMenuItems = [
+  { type: 'action', value: 'read-the-user-guide', label: 'Read the user guide', icon: cdxIconHelp },
+  { type: 'action', value: 'keyboard-shortcuts', label: 'Keyboard shortcuts', icon: cdxIconKeyboard },
+  { type: 'action', value: 'toolbar-search', label: 'Toolbar search', icon: cdxIconSearch },
+  { type: 'action', value: 'leave-feedback', label: 'Leave feedback', icon: cdxIconFeedback },
+  { type: 'divider', value: 'vector-help-menu-divider-1' },
+  { type: 'version', value: 'vector-help-menu-version', label: 'Version “Version 786f856”\n2026-03-23, 23:46:52' }
+];
+
+function getCollapsedMenuItems(items, visibleActionCount = 3) {
+  const visibleItems = [];
+  let actionCount = 0;
+
+  for (const item of items) {
+    visibleItems.push(item);
+    if (item.type === 'action' || !item.type) {
+      actionCount += 1;
+      if (actionCount >= visibleActionCount) {
+        break;
+      }
+    }
+  }
+
+  while (visibleItems.length > 0 && visibleItems[visibleItems.length - 1].type === 'divider') {
+    visibleItems.pop();
+  }
+
+  return visibleItems;
+}
+
 const visibleTextStyleMenuItems = computed(() => {
-  if (textStyleMenuItems.length <= 4 || isTextStyleMenuExpanded.value) {
+  if (textStyleMenuItems.length <= 10 || isTextStyleMenuExpanded.value) {
     return textStyleMenuItems;
   }
   return textStyleMenuItems.slice(0, 3);
 });
-const showTextStyleMenuToggle = computed(() => textStyleMenuItems.length > 4);
+const showTextStyleMenuToggle = computed(() => textStyleMenuItems.length > 10);
 const visibleInsertMenuItems = computed(() => {
-  if (insertMenuItems.length <= 4 || isInsertMenuExpanded.value) {
+  if (insertMenuItems.length <= 10 || isInsertMenuExpanded.value) {
     return insertMenuItems;
   }
   return insertMenuItems.slice(0, 3);
 });
-const showInsertMenuToggle = computed(() => insertMenuItems.length > 4);
+const showInsertMenuToggle = computed(() => insertMenuItems.length > 10);
+const visibleVectorMenuItems = computed(() => {
+  if (vectorMenuItems.filter((item) => item.type === 'action').length <= 10 || isVectorMenuExpanded.value) {
+    return vectorMenuItems;
+  }
+  return getCollapsedMenuItems(vectorMenuItems, 3);
+});
+const showVectorMenuToggle = computed(() => vectorMenuItems.filter((item) => item.type === 'action').length > 10);
+const activeVectorEditOption = computed(() => (
+  activeVectorEditMode.value === 'source'
+    ? { label: 'Source editor', icon: cdxIconWikiText }
+    : { label: 'Visual editor', icon: cdxIconEye }
+));
 const minervaPaginationIds = computed(() => {
   const ids = [];
   if (citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value) {
@@ -4435,6 +4626,9 @@ function toggleTextStyleMenu() {
   isTextStyleMenuOpen.value = !isTextStyleMenuOpen.value;
   if (isTextStyleMenuOpen.value) {
     isTextStyleMenuExpanded.value = false;
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
     closeTextStructureMenu();
     closeInsertMenu();
     closeMinervaAddMenu();
@@ -4458,6 +4652,9 @@ function toggleTextStyleMenuExpanded() {
 function toggleTextStructureMenu() {
   isTextStructureMenuOpen.value = !isTextStructureMenuOpen.value;
   if (isTextStructureMenuOpen.value) {
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
     closeTextStyleMenu();
     closeInsertMenu();
     closeMinervaAddMenu();
@@ -4477,6 +4674,9 @@ function toggleInsertMenu() {
   isInsertMenuOpen.value = !isInsertMenuOpen.value;
   if (isInsertMenuOpen.value) {
     isInsertMenuExpanded.value = false;
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
     closeTextStyleMenu();
     closeTextStructureMenu();
     closeMinervaAddMenu();
@@ -4497,9 +4697,82 @@ function toggleInsertMenuExpanded() {
   isInsertMenuExpanded.value = !isInsertMenuExpanded.value;
 }
 
+function toggleVectorMenu() {
+  isVectorMenuOpen.value = !isVectorMenuOpen.value;
+  if (isVectorMenuOpen.value) {
+    isVectorMenuExpanded.value = false;
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeVectorMenu() {
+  isVectorMenuOpen.value = false;
+  isVectorMenuExpanded.value = false;
+}
+
+function handleVectorMenuItemSelect() {
+  closeVectorMenu();
+}
+
+function toggleVectorMenuExpanded() {
+  isVectorMenuExpanded.value = !isVectorMenuExpanded.value;
+}
+
+function toggleVectorHelpMenu() {
+  isVectorHelpMenuOpen.value = !isVectorHelpMenuOpen.value;
+  if (isVectorHelpMenuOpen.value) {
+    closeVectorMenu();
+    closeVectorEditMenu();
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeVectorHelpMenu() {
+  isVectorHelpMenuOpen.value = false;
+}
+
+function handleVectorHelpMenuItemSelect() {
+  closeVectorHelpMenu();
+}
+
+function toggleVectorEditMenu() {
+  isVectorEditMenuOpen.value = !isVectorEditMenuOpen.value;
+  if (isVectorEditMenuOpen.value) {
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeVectorEditMenu() {
+  isVectorEditMenuOpen.value = false;
+}
+
+function handleVectorEditMenuItem(mode) {
+  activeVectorEditMode.value = mode;
+  closeVectorEditMenu();
+}
+
 function toggleMinervaAddMenu() {
   isMinervaAddMenuOpen.value = !isMinervaAddMenuOpen.value;
   if (isMinervaAddMenuOpen.value) {
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
     closeTextStyleMenu();
     closeTextStructureMenu();
     closeInsertMenu();
@@ -4514,6 +4787,9 @@ function closeMinervaAddMenu() {
 function toggleMinervaEditMenu() {
   isMinervaEditMenuOpen.value = !isMinervaEditMenuOpen.value;
   if (isMinervaEditMenuOpen.value) {
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
     closeTextStyleMenu();
     closeTextStructureMenu();
     closeInsertMenu();
@@ -4739,7 +5015,7 @@ function handleSelectionChange() {
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value) return;
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value) return;
   const target = event.target;
   if (textStyleMenuPanelRef.value?.contains(target)) return;
   if (textStyleMenuTriggerRef.value?.contains(target)) return;
@@ -4747,6 +5023,12 @@ function handleDocumentClick(event) {
   if (textStructureMenuTriggerRef.value?.contains(target)) return;
   if (insertMenuPanelRef.value?.contains(target)) return;
   if (insertMenuTriggerRef.value?.contains(target)) return;
+  if (vectorMenuPanelRef.value?.contains(target)) return;
+  if (vectorMenuTriggerRef.value?.contains(target)) return;
+  if (vectorHelpMenuPanelRef.value?.contains(target)) return;
+  if (vectorHelpMenuTriggerRef.value?.contains(target)) return;
+  if (vectorEditMenuPanelRef.value?.contains(target)) return;
+  if (vectorEditMenuTriggerRef.value?.contains(target)) return;
   if (minervaAddMenuPanelRef.value?.contains(target)) return;
   if (minervaAddMenuTriggerRef.value?.contains(target)) return;
   if (minervaEditMenuPanelRef.value?.contains(target)) return;
@@ -4754,6 +5036,9 @@ function handleDocumentClick(event) {
   closeTextStyleMenu();
   closeTextStructureMenu();
   closeInsertMenu();
+  closeVectorMenu();
+  closeVectorHelpMenu();
+  closeVectorEditMenu();
   closeMinervaAddMenu();
   closeMinervaEditMenu();
 }
@@ -7235,6 +7520,13 @@ function markArticleEdited() {
   width: 100%;
 }
 
+.toolbar-divider--vertical {
+  width: 1px;
+  height: 24px;
+  flex: 0 0 1px;
+  align-self: center;
+}
+
 .article-tagline {
   font-family: 'Helvetica Neue', sans-serif;
   font-weight: 400;
@@ -8121,14 +8413,16 @@ function markArticleEdited() {
 
 .text-style-menu,
 .text-structure-menu,
-.insert-menu {
+.insert-menu,
+.vector-menu {
   position: relative;
   padding: 0;
 }
 
 .text-style-menu-trigger,
 .text-structure-menu-trigger,
-.insert-menu-trigger {
+.insert-menu-trigger,
+.vector-menu-trigger {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -8144,14 +8438,45 @@ function markArticleEdited() {
 
 .text-style-menu-trigger--active,
 .text-structure-menu-trigger--active,
-.insert-menu-trigger--active {
-  background: var(--background-color-interactive-subtle, #eaecf0);
+.insert-menu-trigger--active,
+.vector-menu-trigger--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
   border-color: var(--border-color-base, #a2a9b1);
+  color: var(--color-progressive, #36c);
+}
+
+.text-style-menu-trigger--active :deep(.cdx-icon),
+.text-structure-menu-trigger--active :deep(.cdx-icon),
+.insert-menu-trigger--active :deep(.cdx-icon),
+.vector-menu-trigger--active :deep(.cdx-icon),
+.text-style-menu-trigger--active :deep(svg),
+.text-structure-menu-trigger--active :deep(svg),
+.insert-menu-trigger--active :deep(svg),
+.vector-menu-trigger--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.vector-menu-ellipsis-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.vector-menu-ellipsis-icon {
+  display: inline-flex;
+  transform-origin: center;
+}
+
+.vector-menu-ellipsis-icon :deep(svg) {
+  display: block;
+  transform-origin: center;
 }
 
 .text-style-menu-panel,
 .text-structure-menu-panel,
-.insert-menu-panel {
+.insert-menu-panel,
+.vector-menu-panel {
   position: absolute;
   top: calc(100% + 4px);
   left: 0;
@@ -8161,6 +8486,7 @@ function markArticleEdited() {
   box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
   padding: 0;
   z-index: 90;
+  max-width: calc(100vw - 16px);
   max-height: calc(100vh - 32px);
   overflow-y: auto;
 }
@@ -8177,6 +8503,18 @@ function markArticleEdited() {
   width: 240px;
 }
 
+.vector-menu-panel {
+  left: auto;
+  right: 0;
+  width: 272px;
+}
+
+.text-style-menu-panel--expanded,
+.insert-menu-panel--expanded,
+.vector-menu-panel--expanded {
+  max-height: calc(100vh - 48px);
+}
+
 .text-style-menu-panel--minerva {
   position: fixed;
   top: 48px;
@@ -8186,9 +8524,14 @@ function markArticleEdited() {
   max-height: calc(100vh - 64px);
 }
 
+.text-style-menu-panel--minerva.text-style-menu-panel--expanded {
+  max-height: calc(100vh - 72px);
+}
+
 .text-style-menu-list,
 .text-structure-menu-list,
-.insert-menu-list {
+.insert-menu-list,
+.vector-menu-list {
   list-style: none;
   margin: 0;
   padding: 0;
@@ -8199,25 +8542,28 @@ function markArticleEdited() {
 
 .text-style-menu-item,
 .text-structure-menu-item,
-.insert-menu-item {
+.insert-menu-item,
+.vector-menu-item {
   display: flex;
 }
 
 .text-style-menu-divider,
-.insert-menu-divider {
+.insert-menu-divider,
+.vector-menu-divider {
   height: 1px;
-  margin: 4px 0;
+  margin: 0;
   background: var(--border-color-subtle, #c8ccd1);
 }
 
 .text-style-menu-button,
 .text-structure-menu-button,
-.insert-menu-button {
+.insert-menu-button,
+.vector-menu-button {
   display: inline-flex;
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 12px;
+  padding: 8px 12px;
   border: 0;
   border-radius: 2px;
   background: transparent;
@@ -8229,32 +8575,253 @@ function markArticleEdited() {
 
 .vector-skin .text-style-menu-button,
 .vector-skin .text-structure-menu-button,
-.vector-skin .insert-menu-button {
+.vector-skin .insert-menu-button,
+.vector-skin .vector-menu-button {
   font-size: 14px;
 }
 
 .minerva-skin .text-style-menu-button,
 .minerva-skin .text-structure-menu-button,
-.minerva-skin .insert-menu-button {
+.minerva-skin .insert-menu-button,
+.minerva-skin .vector-menu-button {
   font-size: 16px;
 }
 
 .text-style-menu-button:hover,
 .text-structure-menu-button:hover,
-.insert-menu-button:hover {
+.insert-menu-button:hover,
+.vector-menu-button:hover {
   background: #f8f9fa;
 }
 
 
 .text-style-menu-button :deep(.cdx-icon),
 .text-structure-menu-button :deep(.cdx-icon),
-.insert-menu-button :deep(.cdx-icon) {
+.insert-menu-button :deep(.cdx-icon),
+.vector-menu-button :deep(.cdx-icon) {
   color: var(--color-subtle, #54595d);
 }
 
 .text-style-menu-button :deep(svg),
 .text-structure-menu-button :deep(svg),
-.insert-menu-button :deep(svg) {
+.insert-menu-button :deep(svg),
+.vector-menu-button :deep(svg) {
+  width: 20px;
+  height: 20px;
+}
+
+.vector-menu-label,
+.vector-menu-version {
+  padding: 12px;
+  color: var(--color-subtle, #54595d);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.vector-menu-label {
+  font-weight: 600;
+}
+
+.vector-menu-version {
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.vector-help-menu {
+  position: relative;
+  padding: 0;
+}
+
+.vector-help-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-base, #202122);
+  cursor: pointer;
+}
+
+.vector-help-menu-trigger--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  border-color: var(--border-color-base, #a2a9b1);
+  color: var(--color-progressive, #36c);
+}
+
+.vector-help-menu-trigger--active :deep(.cdx-icon),
+.vector-help-menu-trigger--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.vector-help-menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  left: auto;
+  width: 248px;
+  background: #ffffff;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+  z-index: 90;
+  max-width: calc(100vw - 16px);
+}
+
+.vector-help-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vector-help-menu-item {
+  display: flex;
+}
+
+.vector-help-menu-divider {
+  height: 1px;
+  margin: 0;
+  background: var(--border-color-subtle, #c8ccd1);
+}
+
+.vector-help-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-base, #202122);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vector-help-menu-button:hover {
+  background: #f8f9fa;
+}
+
+.vector-help-menu-button :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+}
+
+.vector-help-menu-button :deep(svg) {
+  width: 20px;
+  height: 20px;
+}
+
+.vector-help-menu-version {
+  padding: 8px 12px;
+  color: var(--color-subtle, #54595d);
+  font-size: 14px;
+  line-height: 20px;
+  white-space: pre-line;
+  overflow-wrap: anywhere;
+}
+
+.vector-edit-menu {
+  position: relative;
+  padding: 0;
+}
+
+.vector-edit-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-base, #202122);
+  cursor: pointer;
+}
+
+.vector-edit-menu-trigger--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  border-color: var(--border-color-base, #a2a9b1);
+  color: var(--color-progressive, #36c);
+}
+
+.vector-edit-menu-trigger--active :deep(.cdx-icon),
+.vector-edit-menu-trigger--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.vector-edit-menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  right: 0;
+  left: auto;
+  width: 224px;
+  background: #ffffff;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+  z-index: 90;
+  max-width: calc(100vw - 16px);
+}
+
+.vector-edit-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.vector-edit-menu-item {
+  display: flex;
+}
+
+.vector-edit-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 8px 12px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-base, #202122);
+  font-size: 14px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.vector-edit-menu-button:hover {
+  background: #f8f9fa;
+}
+
+.vector-edit-menu-button--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+}
+
+.vector-edit-menu-button--active :deep(.cdx-icon) {
+  color: var(--color-progressive, #36c);
+}
+
+.vector-edit-menu-button--active :deep(svg) {
+  fill: var(--color-progressive, #36c);
+}
+
+.vector-edit-menu-button :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+}
+
+.vector-edit-menu-button :deep(svg) {
   width: 20px;
   height: 20px;
 }
@@ -8272,8 +8839,15 @@ function markArticleEdited() {
 }
 
 .minerva-add-menu-trigger--active {
-  background: var(--background-color-interactive-subtle, #eaecf0);
+  background: var(--background-color-progressive-subtle, #e8eeff);
   border-color: var(--border-color-base, #a2a9b1);
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-add-menu-trigger--active :deep(.cdx-icon),
+.minerva-add-menu-trigger--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 .minerva-add-menu-panel {
@@ -8350,8 +8924,15 @@ function markArticleEdited() {
 }
 
 .minerva-edit-menu-trigger--active {
-  background: var(--background-color-interactive-subtle, #eaecf0);
+  background: var(--background-color-progressive-subtle, #e8eeff);
   border-color: var(--border-color-base, #a2a9b1);
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-edit-menu-trigger--active :deep(.cdx-icon),
+.minerva-edit-menu-trigger--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 .minerva-edit-menu-trigger--overflow :deep(.cdx-icon),
@@ -8389,7 +8970,7 @@ function markArticleEdited() {
 
 .minerva-edit-menu-divider {
   height: 1px;
-  margin: 4px 0;
+  margin: 0;
   background: var(--border-color-subtle, #c8ccd1);
 }
 
@@ -8398,7 +8979,7 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 12px;
+  padding: 8px 12px;
   border: 0;
   border-radius: 2px;
   background: transparent;
@@ -8573,6 +9154,10 @@ function markArticleEdited() {
   color: #ffffff;
 }
 
+.vector-toolbar-publish {
+  border-radius: 0;
+}
+
 .toolbar-btn-primary:hover {
   background: #447ff5;
 }
@@ -8590,6 +9175,11 @@ function markArticleEdited() {
 
 .dropdown-icon {
   margin-left: 2px;
+}
+
+.dropdown-icon :deep(svg) {
+  width: 12px;
+  height: 12px;
 }
 
 /* Loading Overlay - covers entire page */
