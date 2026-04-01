@@ -4681,6 +4681,10 @@ watch(isEditCheckHighlightHovered, () => {
   syncEditCheckHoverState();
 });
 
+watch(minervaToolbarMode, () => {
+  closeTextStyleMenu();
+});
+
 function handlePasteCheckKeep() {
   clearPasteCheck(false);
   clearToneCheck(false, true);
@@ -10343,21 +10347,21 @@ function markArticleEdited() {
   border: 0;
   z-index: 70;
   background: var(--background-color-neutral-subtle, #f8f9fa);
-  margin-top: 2px;
+  margin-top: 0;
 }
 
 .minerva-suggestions-rail {
   position: fixed;
-  top: 42px;
+  top: 48px;
   right: 0;
   width: 44px;
-  height: calc(100% - 42px);
+  height: calc(100% - 48px);
   background: transparent;
   border-left: 1px solid var(--border-color-muted, #DADDE3);
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  padding-top: 1px;
+  padding-top: 0;
   z-index: 0;
 }
 
