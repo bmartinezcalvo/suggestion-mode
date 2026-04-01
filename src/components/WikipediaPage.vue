@@ -1060,7 +1060,7 @@
                 </div>
               </div>
               <cdx-toggle-button
-                v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                v-if="showMinervaToolbarToggleButton"
                 v-model="showSuggestions"
                 quiet
                 aria-label="Toggle suggestions"
@@ -1240,7 +1240,7 @@
                 </div>
               </div>
               <cdx-toggle-button
-                v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                v-if="showMinervaToolbarToggleButton"
                 v-model="showSuggestions"
                 quiet
                 aria-label="Toggle suggestions"
@@ -3037,7 +3037,7 @@
         >
           <div class="prototype-dialog-content">
             <div class="prototype-dialog-options">
-              <cdx-field v-if="isMinervaSkin && minervaToolbarToggleEnabled">
+              <cdx-field v-if="isMinervaSkin">
                 <template #label>Edit toolbar explorations</template>
                 <div class="cdx-radio-group" role="radiogroup">
                   <cdx-radio
@@ -3814,10 +3814,14 @@ const usesMinervaOverflowHandle = computed(() => (
   minervaToolbarMode.value === 'second-iteration' || minervaToolbarMode.value === 'third-iteration'
 ));
 const showMinervaTopLevelCite = computed(() => (
-  !minervaToolbarToggleEnabled.value || isMinervaToolbarFirstIteration.value
+  isMinervaToolbarFirstIteration.value || minervaTogglePlacement.value !== 'toolbar'
 ));
 const showMinervaAddMenuButton = computed(() => (
-  minervaToolbarToggleEnabled.value && !isMinervaToolbarFirstIteration.value
+  !isMinervaToolbarFirstIteration.value
+));
+const showMinervaToolbarToggleButton = computed(() => (
+  minervaTogglePlacement.value === 'toolbar' &&
+  (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
 ));
 const minervaEditHandleIcon = computed(() => (
   usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEdit
@@ -3859,6 +3863,12 @@ const minervaEditMenuItems = computed(() => (
         { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true, trailingIcon: cdxIconCheck },
         { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
         { type: 'divider', value: 'minerva-edit-divider-1' },
+        ...(minervaMenuToggleEnabled.value
+          ? [
+              { value: 'suggestion-mode', label: 'Suggestion mode', icon: cdxIconLightbulb, active: showSuggestions.value, badge: showSuggestions.value && showToggleBadge.value ? toggleBadgeCount.value : null, pressed: true },
+              { type: 'divider', value: 'minerva-edit-divider-suggestions' }
+            ]
+          : []),
         { value: 'categories', label: 'Categories', icon: cdxIconTag },
         { value: 'page-settings', label: 'Page settings', icon: cdxIconPageSettings },
         { value: 'advanced-settings', label: 'Advanced settings', icon: cdxIconSettings },
