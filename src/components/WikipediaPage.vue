@@ -990,7 +990,7 @@
                   @click.stop="toggleTextStyleMenu"
                 >
                   <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon v-if="showMinervaMenuArrows" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isTextStyleMenuOpen"
@@ -1047,17 +1047,15 @@
                   class="minerva-add-menu-panel"
                 >
                   <ul class="minerva-add-menu-list" role="menu">
-                    <li
-                      v-for="item in minervaAddMenuItems"
-                      :key="item.value"
-                      class="minerva-add-menu-item"
-                      role="none"
-                    >
-                      <button type="button" class="minerva-add-menu-button" role="menuitem" @click="handleMinervaAddItem(item.value)">
-                        <cdx-icon :icon="item.icon" size="medium" />
-                        <span>{{ item.label }}</span>
-                      </button>
-                    </li>
+                    <template v-for="item in visibleMinervaAddMenuItems" :key="item.value">
+                      <li v-if="item.type === 'divider'" class="minerva-add-menu-divider" role="separator"></li>
+                      <li v-else class="minerva-add-menu-item" role="none">
+                        <button type="button" class="minerva-add-menu-button" role="menuitem" @click.stop="item.type === 'toggle' ? toggleMinervaAddMenuExpanded(item.value) : handleMinervaAddItem(item.value)">
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                        </button>
+                      </li>
+                    </template>
                   </ul>
                 </div>
               </div>
@@ -1094,12 +1092,15 @@
                     'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen,
                     'minerva-edit-menu-trigger--overflow': usesMinervaOverflowHandle
                   }"
-                  aria-label="Edit options"
+                  :aria-label="minervaEditHandleAriaLabel"
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <cdx-icon :icon="minervaEditHandleIcon" size="medium" />
-                  <cdx-icon v-if="!usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <span v-if="usesMinervaOverflowHandle" class="minerva-edit-menu-ellipsis-wrapper">
+                    <cdx-icon :icon="minervaEditHandleIcon" size="medium" class="minerva-edit-menu-ellipsis-icon" />
+                  </span>
+                  <cdx-icon v-else :icon="minervaEditHandleIcon" size="medium" />
+                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isMinervaEditMenuOpen"
@@ -1107,38 +1108,26 @@
                   class="minerva-edit-menu-panel"
                 >
                   <ul class="minerva-edit-menu-list" role="menu">
-                    <li class="minerva-edit-menu-item" role="none">
-                      <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
-                        <cdx-icon :icon="cdxIconEye" size="medium" />
-                        <span>Visual editing</span>
-                      </button>
-                    </li>
-                    <li class="minerva-edit-menu-item" role="none">
-                      <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                        <cdx-icon :icon="cdxIconWikiText" size="medium" />
-                        <span>Source editing</span>
-                      </button>
-                    </li>
-                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
-                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-item" role="none">
-                      <button
-                        type="button"
-                        class="minerva-edit-menu-button"
-                        :class="{ 'minerva-edit-menu-button--active': showSuggestions }"
-                        role="menuitem"
-                        aria-pressed="showSuggestions"
-                        @click="handleMinervaSuggestionsMenuToggle"
-                      >
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                        <span>Suggestion mode</span>
-                        <span
-                          v-if="showSuggestions && showToggleBadge"
-                          class="minerva-edit-menu-badge"
+                    <template v-for="item in minervaEditMenuItems" :key="item.value">
+                      <li v-if="item.type === 'divider'" class="minerva-edit-menu-divider" role="separator"></li>
+                      <li v-else class="minerva-edit-menu-item" role="none">
+                        <button
+                          type="button"
+                          class="minerva-edit-menu-button"
+                          :class="{ 'minerva-edit-menu-button--active': item.active }"
+                          role="menuitem"
+                          :aria-pressed="item.pressed ? showSuggestions : undefined"
+                          @click="handleMinervaEditMenuItem(item.value)"
                         >
-                          {{ toggleBadgeCount }}
-                        </span>
-                      </button>
-                    </li>
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                          <span v-if="item.badge" class="minerva-edit-menu-badge">
+                            {{ item.badge }}
+                          </span>
+                          <cdx-icon v-else-if="item.trailingIcon" :icon="item.trailingIcon" size="medium" class="minerva-edit-menu-trailing-icon" />
+                        </button>
+                      </li>
+                    </template>
                   </ul>
                 </div>
               </div>
@@ -1148,7 +1137,7 @@
                 :disabled="!hasUnsavedChanges"
                 aria-label="Publish"
               >
-                <cdx-icon :icon="cdxIconNext" size="medium" />
+                <cdx-icon :icon="minervaPublishIcon" size="medium" />
               </button>
             </div>
             <div
@@ -1181,7 +1170,7 @@
                   @click.stop="toggleTextStyleMenu"
                 >
                   <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon v-if="showMinervaMenuArrows" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isTextStyleMenuOpen"
@@ -1238,17 +1227,15 @@
                   class="minerva-add-menu-panel"
                 >
                   <ul class="minerva-add-menu-list" role="menu">
-                    <li
-                      v-for="item in minervaAddMenuItems"
-                      :key="item.value"
-                      class="minerva-add-menu-item"
-                      role="none"
-                    >
-                      <button type="button" class="minerva-add-menu-button" role="menuitem" @click="handleMinervaAddItem(item.value)">
-                        <cdx-icon :icon="item.icon" size="medium" />
-                        <span>{{ item.label }}</span>
-                      </button>
-                    </li>
+                    <template v-for="item in visibleMinervaAddMenuItems" :key="item.value">
+                      <li v-if="item.type === 'divider'" class="minerva-add-menu-divider" role="separator"></li>
+                      <li v-else class="minerva-add-menu-item" role="none">
+                        <button type="button" class="minerva-add-menu-button" role="menuitem" @click.stop="item.type === 'toggle' ? toggleMinervaAddMenuExpanded(item.value) : handleMinervaAddItem(item.value)">
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                        </button>
+                      </li>
+                    </template>
                   </ul>
                 </div>
               </div>
@@ -1285,12 +1272,15 @@
                     'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen,
                     'minerva-edit-menu-trigger--overflow': usesMinervaOverflowHandle
                   }"
-                  aria-label="Edit options"
+                  :aria-label="minervaEditHandleAriaLabel"
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <cdx-icon :icon="minervaEditHandleIcon" size="medium" />
-                  <cdx-icon v-if="!usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <span v-if="usesMinervaOverflowHandle" class="minerva-edit-menu-ellipsis-wrapper">
+                    <cdx-icon :icon="minervaEditHandleIcon" size="medium" class="minerva-edit-menu-ellipsis-icon" />
+                  </span>
+                  <cdx-icon v-else :icon="minervaEditHandleIcon" size="medium" />
+                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isMinervaEditMenuOpen"
@@ -1298,38 +1288,26 @@
                   class="minerva-edit-menu-panel"
                 >
                   <ul class="minerva-edit-menu-list" role="menu">
-                    <li class="minerva-edit-menu-item" role="none">
-                      <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
-                        <cdx-icon :icon="cdxIconEye" size="medium" />
-                        <span>Visual editing</span>
-                      </button>
-                    </li>
-                    <li class="minerva-edit-menu-item" role="none">
-                      <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                        <cdx-icon :icon="cdxIconWikiText" size="medium" />
-                        <span>Source editing</span>
-                      </button>
-                    </li>
-                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-divider" role="separator"></li>
-                    <li v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-item" role="none">
-                      <button
-                        type="button"
-                        class="minerva-edit-menu-button"
-                        :class="{ 'minerva-edit-menu-button--active': showSuggestions }"
-                        role="menuitem"
-                        aria-pressed="showSuggestions"
-                        @click="handleMinervaSuggestionsMenuToggle"
-                      >
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                        <span>Suggestion mode</span>
-                        <span
-                          v-if="showSuggestions && showToggleBadge"
-                          class="minerva-edit-menu-badge"
+                    <template v-for="item in minervaEditMenuItems" :key="item.value">
+                      <li v-if="item.type === 'divider'" class="minerva-edit-menu-divider" role="separator"></li>
+                      <li v-else class="minerva-edit-menu-item" role="none">
+                        <button
+                          type="button"
+                          class="minerva-edit-menu-button"
+                          :class="{ 'minerva-edit-menu-button--active': item.active }"
+                          role="menuitem"
+                          :aria-pressed="item.pressed ? showSuggestions : undefined"
+                          @click="handleMinervaEditMenuItem(item.value)"
                         >
-                          {{ toggleBadgeCount }}
-                        </span>
-                      </button>
-                    </li>
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                          <span v-if="item.badge" class="minerva-edit-menu-badge">
+                            {{ item.badge }}
+                          </span>
+                          <cdx-icon v-else-if="item.trailingIcon" :icon="item.trailingIcon" size="medium" class="minerva-edit-menu-trailing-icon" />
+                        </button>
+                      </li>
+                    </template>
                   </ul>
                 </div>
               </div>
@@ -1339,7 +1317,7 @@
                 :disabled="!hasUnsavedChanges"
                 aria-label="Publish"
               >
-                <cdx-icon :icon="cdxIconNext" size="medium" />
+                <cdx-icon :icon="minervaPublishIcon" size="medium" />
               </button>
             </div>
             <div
@@ -1364,10 +1342,43 @@
                   <cdx-icon :icon="cdxIconRedo" size="medium" />
                 </button>
                 <div class="toolbar-divider toolbar-divider--vertical"></div>
-                <button class="toolbar-btn toolbar-btn-dropdown">
-                  <span class="toolbar-btn-text">Paragraph</span>
-                  <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-                </button>
+                <div class="toolbar-btn toolbar-btn-dropdown paragraph-menu">
+                  <button
+                    class="paragraph-menu-trigger"
+                    :class="{ 'paragraph-menu-trigger--active': isParagraphMenuOpen }"
+                    aria-label="Paragraph"
+                    ref="paragraphMenuTriggerRef"
+                    @click.stop="toggleParagraphMenu"
+                  >
+                    <span class="toolbar-btn-text">Paragraph</span>
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                  <div
+                    v-if="isParagraphMenuOpen"
+                    ref="paragraphMenuPanelRef"
+                    class="paragraph-menu-panel"
+                  >
+                    <ul class="paragraph-menu-list" role="menu">
+                      <li
+                        v-for="item in paragraphMenuItems"
+                        :key="item.value"
+                        class="paragraph-menu-item"
+                        role="none"
+                      >
+                        <button
+                          type="button"
+                          class="paragraph-menu-button"
+                          :class="{ 'paragraph-menu-button--active': item.value === activeParagraphStyle }"
+                          role="menuitem"
+                          @click="handleParagraphMenuItemSelect(item.value)"
+                        >
+                          <span class="paragraph-menu-label" :class="item.className">{{ item.label }}</span>
+                          <span class="paragraph-menu-shortcut">{{ item.shortcut }}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
                 <div class="toolbar-divider toolbar-divider--vertical"></div>
                 <div class="toolbar-btn toolbar-btn-dropdown text-style-menu">
                   <button
@@ -3261,6 +3272,7 @@ import {
   cdxIconClock,
   cdxIconArticle,
   cdxIconClose,
+  cdxIconCheck,
   cdxIconSuccess,
   cdxIconInfo,
   cdxIconMap,
@@ -3460,6 +3472,7 @@ const isEditCheckHovered = ref(false);
 const isEditCheckTextHovered = ref(false);
 const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
+const isMinervaAddMenuExpanded = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
 const toastsEnabled = ref(true);
@@ -3592,6 +3605,7 @@ const showBannerPrimaryArrowUp = ref(false);
 const hasUsedOption4Button = ref(false);
 const isAutoScrollActive = ref(false);
 const showMinervaArrowOnly = ref(false);
+const isParagraphMenuOpen = ref(false);
 const isVectorMenuOpen = ref(false);
 const isVectorMenuExpanded = ref(false);
 const isVectorHelpMenuOpen = ref(false);
@@ -3601,6 +3615,8 @@ const minervaAddMenuTriggerRef = ref(null);
 const minervaAddMenuPanelRef = ref(null);
 const minervaEditMenuTriggerRef = ref(null);
 const minervaEditMenuPanelRef = ref(null);
+const paragraphMenuTriggerRef = ref(null);
+const paragraphMenuPanelRef = ref(null);
 const textStyleMenuTriggerRef = ref(null);
 const textStyleMenuPanelRef = ref(null);
 const textStructureMenuTriggerRef = ref(null);
@@ -3790,6 +3806,10 @@ const showMinervaHelpButton = computed(() => (
   activePrototype.value !== 'option-1' && !isArrowOnceMode.value
 ));
 const isMinervaToolbarFirstIteration = computed(() => minervaToolbarMode.value === 'first-iteration');
+const isMinervaToolbarSecondOrThirdIteration = computed(() => (
+  minervaToolbarMode.value === 'second-iteration' || minervaToolbarMode.value === 'third-iteration'
+));
+const isMinervaToolbarSecondIteration = computed(() => minervaToolbarMode.value === 'second-iteration');
 const usesMinervaOverflowHandle = computed(() => (
   minervaToolbarMode.value === 'second-iteration' || minervaToolbarMode.value === 'third-iteration'
 ));
@@ -3802,13 +3822,73 @@ const showMinervaAddMenuButton = computed(() => (
 const minervaEditHandleIcon = computed(() => (
   usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEdit
 ));
+const minervaEditHandleAriaLabel = computed(() => (
+  isMinervaToolbarSecondOrThirdIteration.value ? 'More options' : 'Edit options'
+));
+const minervaPublishIcon = computed(() => (
+  isMinervaToolbarSecondOrThirdIteration.value ? cdxIconCheck : cdxIconNext
+));
+const showMinervaMenuArrows = computed(() => !isMinervaToolbarSecondOrThirdIteration.value);
 const cdxIconBoldEn = resolveIcon(cdxIconBold, 'en');
 const cdxIconStrikethroughEn = resolveIcon(cdxIconStrikethrough, 'en');
 const cdxIconUnderlineEn = resolveIcon(cdxIconUnderline, 'en');
+const activeParagraphStyle = ref('paragraph');
 const minervaAddMenuItems = computed(() => ([
-  { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
-  { value: 'other-tools', label: 'Other tools', icon: cdxIconPuzzle }
+  ...(isMinervaToolbarSecondOrThirdIteration.value
+    ? [
+        { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
+        { type: 'divider', value: 'minerva-add-divider-1' },
+        { value: 'images-media', label: 'Images and media', icon: cdxIconImage },
+        { value: 'table', label: 'Table', icon: cdxIconTable },
+        { type: 'divider', value: 'minerva-add-divider-2' },
+        { value: 'invisible-comment', label: 'Invisible comment', icon: cdxIconSpeechBubble },
+        { type: 'divider', value: 'minerva-add-divider-3' },
+        { value: 'special-characters', label: 'Special characters', icon: cdxIconSpecialCharacter },
+        { value: 'hieroglyphs', label: 'Hieroglyphs', icon: cdxIconHieroglyph },
+        { value: 'code-block', label: 'Code block', icon: cdxIconCode },
+        { value: 'language', label: 'Language', icon: cdxIconLanguage }
+      ]
+    : [
+        { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
+        { value: 'other-tools', label: 'Other tools', icon: cdxIconPuzzle }
+      ])
 ]));
+const minervaEditMenuItems = computed(() => (
+  isMinervaToolbarSecondOrThirdIteration.value
+    ? [
+        { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true, trailingIcon: cdxIconCheck },
+        { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
+        { type: 'divider', value: 'minerva-edit-divider-1' },
+        { value: 'categories', label: 'Categories', icon: cdxIconTag },
+        { value: 'page-settings', label: 'Page settings', icon: cdxIconPageSettings },
+        { value: 'advanced-settings', label: 'Advanced settings', icon: cdxIconSettings },
+        { value: 'languages', label: 'Languages', icon: cdxIconLanguage },
+        { value: 'view-as-right-to-left', label: 'View as right-to-left', icon: cdxIconTextDirRTL },
+        { type: 'divider', value: 'minerva-edit-divider-2' },
+        { value: 'read-the-user-guide', label: 'Read the user guide', icon: cdxIconHelp }
+      ]
+    : [
+        { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true },
+        { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
+        ...(minervaMenuToggleEnabled.value
+          ? [
+              { type: 'divider', value: 'minerva-edit-divider-suggestions' },
+              { value: 'suggestion-mode', label: 'Suggestion mode', icon: cdxIconLightbulb, active: showSuggestions.value, badge: showSuggestions.value && showToggleBadge.value ? toggleBadgeCount.value : null, pressed: true }
+            ]
+          : [])
+      ]
+));
+const paragraphMenuItems = [
+  { value: 'paragraph', label: 'Paragraph', shortcut: '^0', className: 'paragraph-menu-label--paragraph' },
+  { value: 'heading', label: 'Heading', shortcut: '^2', className: 'paragraph-menu-label--heading' },
+  { value: 'sub-heading-1', label: 'Sub-heading 1', shortcut: '^3', className: 'paragraph-menu-label--subheading' },
+  { value: 'sub-heading-2', label: 'Sub-heading 2', shortcut: '^4', className: 'paragraph-menu-label--subheading' },
+  { value: 'sub-heading-3', label: 'Sub-heading 3', shortcut: '^5', className: 'paragraph-menu-label--subheading' },
+  { value: 'sub-heading-4', label: 'Sub-heading 4', shortcut: '^6', className: 'paragraph-menu-label--subheading' },
+  { value: 'preformatted', label: 'Preformatted', shortcut: '^7', className: 'paragraph-menu-label--preformatted' },
+  { value: 'blockquote', label: 'Block quote', shortcut: '^8', className: 'paragraph-menu-label--blockquote' },
+  { value: 'page-title', label: 'Page title', shortcut: '^1', className: 'paragraph-menu-label--page-title' }
+];
 const textStyleMenuItems = [
   { value: 'bold', label: 'Bold', icon: cdxIconBoldEn },
   { value: 'italic', label: 'Italic', icon: cdxIconItalic },
@@ -3896,21 +3976,42 @@ const visibleTextStyleMenuItems = computed(() => {
   if (textStyleMenuItems.length <= 10 || isTextStyleMenuExpanded.value) {
     return textStyleMenuItems;
   }
-  return textStyleMenuItems.slice(0, 3);
+  return textStyleMenuItems.slice(0, 4);
 });
 const showTextStyleMenuToggle = computed(() => textStyleMenuItems.length > 10);
 const visibleInsertMenuItems = computed(() => {
   if (insertMenuItems.length <= 10 || isInsertMenuExpanded.value) {
     return insertMenuItems;
   }
-  return insertMenuItems.slice(0, 3);
+  return insertMenuItems.slice(0, 4);
 });
 const showInsertMenuToggle = computed(() => insertMenuItems.length > 10);
+const visibleMinervaAddMenuItems = computed(() => {
+  if (!isMinervaToolbarSecondOrThirdIteration.value || !showMinervaAddMenuToggle.value) {
+    return minervaAddMenuItems.value;
+  }
+  if (isMinervaAddMenuExpanded.value) {
+    return [
+      ...minervaAddMenuItems.value,
+      { type: 'divider', value: 'minerva-add-toggle-divider' },
+      { type: 'toggle', value: 'fewer', label: 'Fewer', icon: cdxIconCollapse }
+    ];
+  }
+  return [
+    ...getCollapsedMenuItems(minervaAddMenuItems.value, 4),
+    { type: 'divider', value: 'minerva-add-toggle-divider' },
+    { type: 'toggle', value: 'more', label: 'More', icon: cdxIconExpand }
+  ];
+});
+const showMinervaAddMenuToggle = computed(() => (
+  isMinervaToolbarSecondOrThirdIteration.value &&
+  minervaAddMenuItems.value.filter((item) => item.type !== 'divider').length > 4
+));
 const visibleVectorMenuItems = computed(() => {
   if (vectorMenuItems.filter((item) => item.type === 'action').length <= 10 || isVectorMenuExpanded.value) {
     return vectorMenuItems;
   }
-  return getCollapsedMenuItems(vectorMenuItems, 3);
+  return getCollapsedMenuItems(vectorMenuItems, 4);
 });
 const showVectorMenuToggle = computed(() => vectorMenuItems.filter((item) => item.type === 'action').length > 10);
 const activeVectorEditOption = computed(() => (
@@ -4622,10 +4723,34 @@ function dismissSuggestionInfo() {
   }
 }
 
+function toggleParagraphMenu() {
+  isParagraphMenuOpen.value = !isParagraphMenuOpen.value;
+  if (isParagraphMenuOpen.value) {
+    closeVectorMenu();
+    closeVectorHelpMenu();
+    closeVectorEditMenu();
+    closeTextStyleMenu();
+    closeTextStructureMenu();
+    closeInsertMenu();
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+  }
+}
+
+function closeParagraphMenu() {
+  isParagraphMenuOpen.value = false;
+}
+
+function handleParagraphMenuItemSelect(value) {
+  activeParagraphStyle.value = value;
+  closeParagraphMenu();
+}
+
 function toggleTextStyleMenu() {
   isTextStyleMenuOpen.value = !isTextStyleMenuOpen.value;
   if (isTextStyleMenuOpen.value) {
     isTextStyleMenuExpanded.value = false;
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
@@ -4652,6 +4777,7 @@ function toggleTextStyleMenuExpanded() {
 function toggleTextStructureMenu() {
   isTextStructureMenuOpen.value = !isTextStructureMenuOpen.value;
   if (isTextStructureMenuOpen.value) {
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
@@ -4674,6 +4800,7 @@ function toggleInsertMenu() {
   isInsertMenuOpen.value = !isInsertMenuOpen.value;
   if (isInsertMenuOpen.value) {
     isInsertMenuExpanded.value = false;
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
@@ -4701,6 +4828,7 @@ function toggleVectorMenu() {
   isVectorMenuOpen.value = !isVectorMenuOpen.value;
   if (isVectorMenuOpen.value) {
     isVectorMenuExpanded.value = false;
+    closeParagraphMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
     closeTextStyleMenu();
@@ -4727,6 +4855,7 @@ function toggleVectorMenuExpanded() {
 function toggleVectorHelpMenu() {
   isVectorHelpMenuOpen.value = !isVectorHelpMenuOpen.value;
   if (isVectorHelpMenuOpen.value) {
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorEditMenu();
     closeTextStyleMenu();
@@ -4748,6 +4877,7 @@ function handleVectorHelpMenuItemSelect() {
 function toggleVectorEditMenu() {
   isVectorEditMenuOpen.value = !isVectorEditMenuOpen.value;
   if (isVectorEditMenuOpen.value) {
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
     closeTextStyleMenu();
@@ -4770,6 +4900,8 @@ function handleVectorEditMenuItem(mode) {
 function toggleMinervaAddMenu() {
   isMinervaAddMenuOpen.value = !isMinervaAddMenuOpen.value;
   if (isMinervaAddMenuOpen.value) {
+    isMinervaAddMenuExpanded.value = false;
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
@@ -4782,11 +4914,13 @@ function toggleMinervaAddMenu() {
 
 function closeMinervaAddMenu() {
   isMinervaAddMenuOpen.value = false;
+  isMinervaAddMenuExpanded.value = false;
 }
 
 function toggleMinervaEditMenu() {
   isMinervaEditMenuOpen.value = !isMinervaEditMenuOpen.value;
   if (isMinervaEditMenuOpen.value) {
+    closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
@@ -4802,6 +4936,10 @@ function closeMinervaEditMenu() {
 }
 
 function handleMinervaEditMenuItem() {
+  if (arguments[0] === 'suggestion-mode') {
+    handleMinervaSuggestionsMenuToggle();
+    return;
+  }
   closeMinervaEditMenu();
 }
 
@@ -4822,6 +4960,16 @@ function handleMinervaAddItem(value) {
     return;
   }
   closeMinervaAddMenu();
+}
+
+function toggleMinervaAddMenuExpanded(value) {
+  if (value === 'more') {
+    isMinervaAddMenuExpanded.value = true;
+    return;
+  }
+  if (value === 'fewer') {
+    isMinervaAddMenuExpanded.value = false;
+  }
 }
 
 function getLinkableSelectionText(rangeOverride = null) {
@@ -5015,8 +5163,10 @@ function handleSelectionChange() {
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value) return;
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isParagraphMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value) return;
   const target = event.target;
+  if (paragraphMenuPanelRef.value?.contains(target)) return;
+  if (paragraphMenuTriggerRef.value?.contains(target)) return;
   if (textStyleMenuPanelRef.value?.contains(target)) return;
   if (textStyleMenuTriggerRef.value?.contains(target)) return;
   if (textStructureMenuPanelRef.value?.contains(target)) return;
@@ -5033,6 +5183,7 @@ function handleDocumentClick(event) {
   if (minervaAddMenuTriggerRef.value?.contains(target)) return;
   if (minervaEditMenuPanelRef.value?.contains(target)) return;
   if (minervaEditMenuTriggerRef.value?.contains(target)) return;
+  closeParagraphMenu();
   closeTextStyleMenu();
   closeTextStructureMenu();
   closeInsertMenu();
@@ -8411,6 +8562,138 @@ function markArticleEdited() {
   padding: 0;
 }
 
+.paragraph-menu {
+  position: relative;
+  padding: 0;
+}
+
+.paragraph-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  color: var(--color-base, #202122);
+  cursor: pointer;
+}
+
+.paragraph-menu-trigger--active {
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
+}
+
+.paragraph-menu-trigger--active :deep(.cdx-icon),
+.paragraph-menu-trigger--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.paragraph-menu-panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  width: 222px;
+  max-width: calc(100vw - 16px);
+  background: #ffffff;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+  z-index: 90;
+}
+
+.paragraph-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.paragraph-menu-item {
+  display: flex;
+}
+
+.paragraph-menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  background: transparent;
+  color: var(--color-base, #202122);
+  text-align: left;
+  cursor: pointer;
+}
+
+.paragraph-menu-button:hover {
+  background: #f8f9fa;
+}
+
+.paragraph-menu-button--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+}
+
+.paragraph-menu-label {
+  min-width: 0;
+}
+
+.paragraph-menu-label--paragraph {
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.paragraph-menu-label--heading {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 28px;
+  line-height: 1.15;
+  font-weight: 400;
+}
+
+.paragraph-menu-label--subheading {
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 700;
+}
+
+.paragraph-menu-label--preformatted {
+  font-family: 'Courier New', monospace;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+}
+
+.paragraph-menu-label--blockquote {
+  padding-left: 42px;
+  font-size: 14px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+.paragraph-menu-label--page-title {
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 34px;
+  line-height: 1.05;
+  font-weight: 400;
+}
+
+.paragraph-menu-shortcut {
+  flex: 0 0 auto;
+  color: #54595d;
+  font-size: 14px;
+  line-height: 1;
+}
+
 .text-style-menu,
 .text-structure-menu,
 .insert-menu,
@@ -8440,9 +8723,9 @@ function markArticleEdited() {
 .text-structure-menu-trigger--active,
 .insert-menu-trigger--active,
 .vector-menu-trigger--active {
-  background: var(--background-color-progressive-subtle, #e8eeff);
-  border-color: var(--border-color-base, #a2a9b1);
-  color: var(--color-progressive, #36c);
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
 }
 
 .text-style-menu-trigger--active :deep(.cdx-icon),
@@ -8646,9 +8929,9 @@ function markArticleEdited() {
 }
 
 .vector-help-menu-trigger--active {
-  background: var(--background-color-progressive-subtle, #e8eeff);
-  border-color: var(--border-color-base, #a2a9b1);
-  color: var(--color-progressive, #36c);
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
 }
 
 .vector-help-menu-trigger--active :deep(.cdx-icon),
@@ -8747,9 +9030,9 @@ function markArticleEdited() {
 }
 
 .vector-edit-menu-trigger--active {
-  background: var(--background-color-progressive-subtle, #e8eeff);
-  border-color: var(--border-color-base, #a2a9b1);
-  color: var(--color-progressive, #36c);
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
 }
 
 .vector-edit-menu-trigger--active :deep(.cdx-icon),
@@ -8839,9 +9122,9 @@ function markArticleEdited() {
 }
 
 .minerva-add-menu-trigger--active {
-  background: var(--background-color-progressive-subtle, #e8eeff);
-  border-color: var(--border-color-base, #a2a9b1);
-  color: var(--color-progressive, #36c);
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
 }
 
 .minerva-add-menu-trigger--active :deep(.cdx-icon),
@@ -8871,11 +9154,17 @@ function markArticleEdited() {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 0;
 }
 
 .minerva-add-menu-item {
   display: flex;
+}
+
+.minerva-add-menu-divider {
+  height: 1px;
+  margin: 0;
+  background: var(--border-color-subtle, #c8ccd1);
 }
 
 .minerva-add-menu-button {
@@ -8924,9 +9213,44 @@ function markArticleEdited() {
 }
 
 .minerva-edit-menu-trigger--active {
+  background: transparent;
+  border-color: transparent;
+  color: inherit;
+}
+
+.toolbar-btn.paragraph-menu:has(> .paragraph-menu-trigger--active),
+.toolbar-btn.text-style-menu:has(> .text-style-menu-trigger--active),
+.toolbar-btn.text-structure-menu:has(> .text-structure-menu-trigger--active),
+.toolbar-btn.insert-menu:has(> .insert-menu-trigger--active),
+.toolbar-btn.vector-menu:has(> .vector-menu-trigger--active),
+.toolbar-btn.vector-help-menu:has(> .vector-help-menu-trigger--active),
+.toolbar-btn.vector-edit-menu:has(> .vector-edit-menu-trigger--active),
+.toolbar-btn.minerva-add-menu:has(> .minerva-add-menu-trigger--active),
+.toolbar-btn.minerva-edit-menu:has(> .minerva-edit-menu-trigger--active) {
   background: var(--background-color-progressive-subtle, #e8eeff);
-  border-color: var(--border-color-base, #a2a9b1);
   color: var(--color-progressive, #36c);
+}
+
+.toolbar-btn.paragraph-menu:has(> .paragraph-menu-trigger--active) > .paragraph-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.text-style-menu:has(> .text-style-menu-trigger--active) > .text-style-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.text-structure-menu:has(> .text-structure-menu-trigger--active) > .text-structure-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.insert-menu:has(> .insert-menu-trigger--active) > .insert-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.vector-menu:has(> .vector-menu-trigger--active) > .vector-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.vector-help-menu:has(> .vector-help-menu-trigger--active) > .vector-help-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.vector-edit-menu:has(> .vector-edit-menu-trigger--active) > .vector-edit-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.minerva-add-menu:has(> .minerva-add-menu-trigger--active) > .minerva-add-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.minerva-edit-menu:has(> .minerva-edit-menu-trigger--active) > .minerva-edit-menu-trigger :deep(.cdx-icon),
+.toolbar-btn.paragraph-menu:has(> .paragraph-menu-trigger--active) > .paragraph-menu-trigger :deep(svg),
+.toolbar-btn.text-style-menu:has(> .text-style-menu-trigger--active) > .text-style-menu-trigger :deep(svg),
+.toolbar-btn.text-structure-menu:has(> .text-structure-menu-trigger--active) > .text-structure-menu-trigger :deep(svg),
+.toolbar-btn.insert-menu:has(> .insert-menu-trigger--active) > .insert-menu-trigger :deep(svg),
+.toolbar-btn.vector-menu:has(> .vector-menu-trigger--active) > .vector-menu-trigger :deep(svg),
+.toolbar-btn.vector-help-menu:has(> .vector-help-menu-trigger--active) > .vector-help-menu-trigger :deep(svg),
+.toolbar-btn.vector-edit-menu:has(> .vector-edit-menu-trigger--active) > .vector-edit-menu-trigger :deep(svg),
+.toolbar-btn.minerva-add-menu:has(> .minerva-add-menu-trigger--active) > .minerva-add-menu-trigger :deep(svg),
+.toolbar-btn.minerva-edit-menu:has(> .minerva-edit-menu-trigger--active) > .minerva-edit-menu-trigger :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 .minerva-edit-menu-trigger--active :deep(.cdx-icon),
@@ -8938,6 +9262,22 @@ function markArticleEdited() {
 .minerva-edit-menu-trigger--overflow :deep(.cdx-icon),
 .minerva-edit-menu-trigger--overflow :deep(svg) {
   transform: rotate(90deg);
+}
+
+.minerva-edit-menu-ellipsis-wrapper {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transform: rotate(90deg);
+  transform-origin: center;
+}
+
+.minerva-edit-menu-ellipsis-icon {
+  display: inline-flex;
+}
+
+.minerva-edit-menu-ellipsis-icon :deep(svg) {
+  display: block;
 }
 
 .minerva-edit-menu-panel {
@@ -8999,11 +9339,11 @@ function markArticleEdited() {
 }
 
 .minerva-edit-menu-button--active :deep(.cdx-icon) {
-  color: var(--suggestion-color, var(--color-progressive, #36c));
+  color: var(--color-progressive, #36c);
 }
 
 .minerva-edit-menu-button--active :deep(svg) {
-  fill: var(--suggestion-color, var(--color-progressive, #36c));
+  fill: var(--color-progressive, #36c);
 }
 
 .minerva-edit-menu-button--active:not([aria-pressed="true"]) {
@@ -9040,6 +9380,10 @@ function markArticleEdited() {
   font-weight: 700;
   line-height: 20px;
   text-align: center;
+}
+
+.minerva-edit-menu-trailing-icon {
+  margin-left: auto;
 }
 
 .minerva-toolbar-toggle {
@@ -9144,7 +9488,7 @@ function markArticleEdited() {
   height: 42px;
   padding: 5px 13px;
   background: #36c;
-  border: 1px solid #6485d1;
+  border: 1px solid transparent;
   border-radius: 2px;
   cursor: pointer;
   font-family: 'Inter', sans-serif;
@@ -9180,6 +9524,11 @@ function markArticleEdited() {
 .dropdown-icon :deep(svg) {
   width: 12px;
   height: 12px;
+}
+
+.minerva-skin .dropdown-icon :deep(svg) {
+  width: 10px;
+  height: 10px;
 }
 
 /* Loading Overlay - covers entire page */
