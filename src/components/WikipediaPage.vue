@@ -972,16 +972,28 @@
               <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
-              <button
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
-                :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
-                :disabled="!hasUnsavedChanges"
-                aria-label="Undo"
-                @click="undoEdits"
+              <div
+                class="minerva-toolbar-scroll-area"
+                :class="{ 'minerva-toolbar-scroll-area--overflowing': showMinervaRedoButton }"
               >
-                <cdx-icon :icon="cdxIconUndo" size="medium" />
-              </button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                <button
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                  :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
+                  :disabled="!hasUnsavedChanges"
+                  aria-label="Undo"
+                  @click="undoEdits"
+                >
+                  <cdx-icon :icon="cdxIconUndo" size="medium" />
+                </button>
+                <button
+                  v-if="showMinervaRedoButton"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill minerva-redo-button"
+                  aria-label="Redo"
+                  @click="handleMinervaRedo"
+                >
+                  <cdx-icon :icon="cdxIconRedo" size="medium" />
+                </button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
                 <button
                   class="text-style-menu-trigger"
                   :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
@@ -1020,18 +1032,18 @@
                     </li>
                   </ul>
                 </div>
-              </div>
-              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
-                <cdx-icon :icon="cdxIconLink" size="medium" />
-              </button>
-              <button
-                v-if="showMinervaTopLevelCite"
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
-                aria-label="Cite"
-              >
-                <cdx-icon :icon="cdxIconQuotes" size="medium" />
-              </button>
-              <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
+                </div>
+                <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                  <cdx-icon :icon="cdxIconLink" size="medium" />
+                </button>
+                <button
+                  v-if="showMinervaTopLevelCite"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                  aria-label="Cite"
+                >
+                  <cdx-icon :icon="cdxIconQuotes" size="medium" />
+                </button>
+                <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
                 <button
                   class="minerva-add-menu-trigger"
                   :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
@@ -1058,34 +1070,34 @@
                     </template>
                   </ul>
                 </div>
-              </div>
-              <cdx-toggle-button
-                v-if="showMinervaToolbarToggleButton"
-                v-model="showSuggestions"
-                quiet
-                aria-label="Toggle suggestions"
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
-                :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
-              >
-                <span class="lightbulb-icon-wrapper">
-                  <span v-if="showSuggestions" class="bulb-rays">
-                    <span class="ray ray-1"></span>
-                    <span class="ray ray-2"></span>
-                    <span class="ray ray-3"></span>
-                    <span class="ray ray-4"></span>
-                    <span class="ray ray-5"></span>
+                </div>
+                <cdx-toggle-button
+                  v-if="showMinervaToolbarToggleButton"
+                  v-model="showSuggestions"
+                  quiet
+                  aria-label="Toggle suggestions"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
+                  :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
+                >
+                  <span class="lightbulb-icon-wrapper">
+                    <span v-if="showSuggestions" class="bulb-rays">
+                      <span class="ray ray-1"></span>
+                      <span class="ray ray-2"></span>
+                      <span class="ray ray-3"></span>
+                      <span class="ray ray-4"></span>
+                      <span class="ray ray-5"></span>
+                    </span>
+                    <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    <span
+                      v-if="showToggleBadge"
+                      class="suggestions-badge"
+                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                    >
+                      {{ toggleBadgeCount }}
+                    </span>
                   </span>
-                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                  <span
-                    v-if="showToggleBadge"
-                    class="suggestions-badge"
-                    :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
-                  >
-                    {{ toggleBadgeCount }}
-                  </span>
-                </span>
-              </cdx-toggle-button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
+                </cdx-toggle-button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
                 <button
                   class="minerva-edit-menu-trigger"
                   :class="{
@@ -1129,6 +1141,7 @@
                       </li>
                     </template>
                   </ul>
+                </div>
                 </div>
               </div>
               <button
@@ -1152,16 +1165,28 @@
               <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
-              <button
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
-                :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
-                :disabled="!hasUnsavedChanges"
-                aria-label="Undo"
-                @click="undoEdits"
+              <div
+                class="minerva-toolbar-scroll-area"
+                :class="{ 'minerva-toolbar-scroll-area--overflowing': showMinervaRedoButton }"
               >
-                <cdx-icon :icon="cdxIconUndo" size="medium" />
-              </button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                <button
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                  :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
+                  :disabled="!hasUnsavedChanges"
+                  aria-label="Undo"
+                  @click="undoEdits"
+                >
+                  <cdx-icon :icon="cdxIconUndo" size="medium" />
+                </button>
+                <button
+                  v-if="showMinervaRedoButton"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill minerva-redo-button"
+                  aria-label="Redo"
+                  @click="handleMinervaRedo"
+                >
+                  <cdx-icon :icon="cdxIconRedo" size="medium" />
+                </button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
                 <button
                   class="text-style-menu-trigger"
                   :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
@@ -1200,18 +1225,18 @@
                     </li>
                   </ul>
                 </div>
-              </div>
-              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
-                <cdx-icon :icon="cdxIconLink" size="medium" />
-              </button>
-              <button
-                v-if="showMinervaTopLevelCite"
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
-                aria-label="Cite"
-              >
-                <cdx-icon :icon="cdxIconQuotes" size="medium" />
-              </button>
-              <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
+                </div>
+                <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                  <cdx-icon :icon="cdxIconLink" size="medium" />
+                </button>
+                <button
+                  v-if="showMinervaTopLevelCite"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                  aria-label="Cite"
+                >
+                  <cdx-icon :icon="cdxIconQuotes" size="medium" />
+                </button>
+                <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
                 <button
                   class="minerva-add-menu-trigger"
                   :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
@@ -1238,34 +1263,34 @@
                     </template>
                   </ul>
                 </div>
-              </div>
-              <cdx-toggle-button
-                v-if="showMinervaToolbarToggleButton"
-                v-model="showSuggestions"
-                quiet
-                aria-label="Toggle suggestions"
-                class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
-                :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
-              >
-                <span class="lightbulb-icon-wrapper">
-                  <span v-if="showSuggestions" class="bulb-rays">
-                    <span class="ray ray-1"></span>
-                    <span class="ray ray-2"></span>
-                    <span class="ray ray-3"></span>
-                    <span class="ray ray-4"></span>
-                    <span class="ray ray-5"></span>
+                </div>
+                <cdx-toggle-button
+                  v-if="showMinervaToolbarToggleButton"
+                  v-model="showSuggestions"
+                  quiet
+                  aria-label="Toggle suggestions"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
+                  :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
+                >
+                  <span class="lightbulb-icon-wrapper">
+                    <span v-if="showSuggestions" class="bulb-rays">
+                      <span class="ray ray-1"></span>
+                      <span class="ray ray-2"></span>
+                      <span class="ray ray-3"></span>
+                      <span class="ray ray-4"></span>
+                      <span class="ray ray-5"></span>
+                    </span>
+                    <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    <span
+                      v-if="showToggleBadge"
+                      class="suggestions-badge"
+                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                    >
+                      {{ toggleBadgeCount }}
+                    </span>
                   </span>
-                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                  <span
-                    v-if="showToggleBadge"
-                    class="suggestions-badge"
-                    :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
-                  >
-                    {{ toggleBadgeCount }}
-                  </span>
-                </span>
-              </cdx-toggle-button>
-              <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
+                </cdx-toggle-button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
                 <button
                   class="minerva-edit-menu-trigger"
                   :class="{
@@ -1309,6 +1334,7 @@
                       </li>
                     </template>
                   </ul>
+                </div>
                 </div>
               </div>
               <button
@@ -3054,13 +3080,6 @@
                   >
                     2n iteration
                   </cdx-radio>
-                  <cdx-radio
-                    v-model="minervaToolbarMode"
-                    name="minerva-toolbar-mode"
-                    input-value="third-iteration"
-                  >
-                    3rd iteration
-                  </cdx-radio>
                 </div>
               </cdx-field>
               <cdx-field v-if="isMinervaSkin">
@@ -3090,6 +3109,12 @@
                     Within the rail
                   </cdx-radio>
                 </div>
+              </cdx-field>
+              <cdx-field v-if="isMinervaSkin">
+                <template #label>Redo button</template>
+                <cdx-checkbox v-model="minervaRedoButtonEnabled">
+                  Enable Redo button
+                </cdx-checkbox>
               </cdx-field>
             </div>
           </div>
@@ -3330,6 +3355,8 @@ const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
 const minervaTogglePlacement = ref('toolbar');
 const minervaToolbarMode = ref('first-iteration');
+const minervaRedoButtonEnabled = ref(false);
+const showMinervaRedoButton = ref(false);
 const minervaToolbarToggleEnabled = computed(() => minervaTogglePlacement.value === 'toolbar');
 const minervaMenuToggleEnabled = computed(() => minervaTogglePlacement.value === 'menu');
 const linkDialogTab = ref('wikipedia');
@@ -3369,6 +3396,7 @@ let minervaMoreSuggestionsToastTimer = null;
 let minervaZeroSuggestionsToastTimer = null;
 let scrollReappearTimer = null;
 let autoScrollTimer = null;
+let minervaRedoTimer = null;
 let savedArticleSelectionRange = null;
 let lastArticleEditableElement = null;
 const isSkinMenuOpen = ref(false);
@@ -3806,13 +3834,8 @@ const showMinervaHelpButton = computed(() => (
   activePrototype.value !== 'option-1' && !isArrowOnceMode.value
 ));
 const isMinervaToolbarFirstIteration = computed(() => minervaToolbarMode.value === 'first-iteration');
-const isMinervaToolbarSecondOrThirdIteration = computed(() => (
-  minervaToolbarMode.value === 'second-iteration' || minervaToolbarMode.value === 'third-iteration'
-));
 const isMinervaToolbarSecondIteration = computed(() => minervaToolbarMode.value === 'second-iteration');
-const usesMinervaOverflowHandle = computed(() => (
-  minervaToolbarMode.value === 'second-iteration' || minervaToolbarMode.value === 'third-iteration'
-));
+const usesMinervaOverflowHandle = computed(() => isMinervaToolbarSecondIteration.value);
 const showMinervaTopLevelCite = computed(() => (
   isMinervaToolbarFirstIteration.value || minervaTogglePlacement.value !== 'toolbar'
 ));
@@ -3827,18 +3850,18 @@ const minervaEditHandleIcon = computed(() => (
   usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEdit
 ));
 const minervaEditHandleAriaLabel = computed(() => (
-  isMinervaToolbarSecondOrThirdIteration.value ? 'More options' : 'Edit options'
+  isMinervaToolbarSecondIteration.value ? 'More options' : 'Edit options'
 ));
 const minervaPublishIcon = computed(() => (
-  isMinervaToolbarSecondOrThirdIteration.value ? cdxIconCheck : cdxIconNext
+  isMinervaToolbarSecondIteration.value ? cdxIconCheck : cdxIconNext
 ));
-const showMinervaMenuArrows = computed(() => !isMinervaToolbarSecondOrThirdIteration.value);
+const showMinervaMenuArrows = computed(() => !isMinervaToolbarSecondIteration.value);
 const cdxIconBoldEn = resolveIcon(cdxIconBold, 'en');
 const cdxIconStrikethroughEn = resolveIcon(cdxIconStrikethrough, 'en');
 const cdxIconUnderlineEn = resolveIcon(cdxIconUnderline, 'en');
 const activeParagraphStyle = ref('paragraph');
 const minervaAddMenuItems = computed(() => ([
-  ...(isMinervaToolbarSecondOrThirdIteration.value
+  ...(isMinervaToolbarSecondIteration.value
     ? [
         { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
         { type: 'divider', value: 'minerva-add-divider-1' },
@@ -3858,7 +3881,7 @@ const minervaAddMenuItems = computed(() => ([
       ])
 ]));
 const minervaEditMenuItems = computed(() => (
-  isMinervaToolbarSecondOrThirdIteration.value
+  isMinervaToolbarSecondIteration.value
     ? [
         { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true, trailingIcon: cdxIconCheck },
         { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
@@ -3997,7 +4020,7 @@ const visibleInsertMenuItems = computed(() => {
 });
 const showInsertMenuToggle = computed(() => insertMenuItems.length > 10);
 const visibleMinervaAddMenuItems = computed(() => {
-  if (!isMinervaToolbarSecondOrThirdIteration.value || !showMinervaAddMenuToggle.value) {
+  if (!isMinervaToolbarSecondIteration.value || !showMinervaAddMenuToggle.value) {
     return minervaAddMenuItems.value;
   }
   if (isMinervaAddMenuExpanded.value) {
@@ -4014,7 +4037,7 @@ const visibleMinervaAddMenuItems = computed(() => {
   ];
 });
 const showMinervaAddMenuToggle = computed(() => (
-  isMinervaToolbarSecondOrThirdIteration.value &&
+  isMinervaToolbarSecondIteration.value &&
   minervaAddMenuItems.value.filter((item) => item.type !== 'divider').length > 4
 ));
 const visibleVectorMenuItems = computed(() => {
@@ -4683,6 +4706,15 @@ watch(isEditCheckHighlightHovered, () => {
 
 watch(minervaToolbarMode, () => {
   closeTextStyleMenu();
+});
+
+watch(minervaRedoButtonEnabled, (enabled) => {
+  if (enabled) return;
+  showMinervaRedoButton.value = false;
+  if (minervaRedoTimer) {
+    clearTimeout(minervaRedoTimer);
+    minervaRedoTimer = null;
+  }
 });
 
 function handlePasteCheckKeep() {
@@ -6663,6 +6695,10 @@ onBeforeUnmount(() => {
     clearTimeout(autoScrollTimer);
     autoScrollTimer = null;
   }
+  if (minervaRedoTimer) {
+    clearTimeout(minervaRedoTimer);
+    minervaRedoTimer = null;
+  }
 });
 
 // Handle search input
@@ -6916,6 +6952,26 @@ function restoreEditSnapshot() {
 function undoEdits() {
   restoreEditSnapshot();
   hasUnsavedChanges.value = false;
+  if (!isMinervaSkin.value || !minervaRedoButtonEnabled.value) {
+    return;
+  }
+  showMinervaRedoButton.value = true;
+  if (minervaRedoTimer) {
+    clearTimeout(minervaRedoTimer);
+  }
+  minervaRedoTimer = setTimeout(() => {
+    showMinervaRedoButton.value = false;
+    minervaRedoTimer = null;
+  }, 4000);
+}
+
+function handleMinervaRedo() {
+  hasUnsavedChanges.value = true;
+  showMinervaRedoButton.value = false;
+  if (minervaRedoTimer) {
+    clearTimeout(minervaRedoTimer);
+    minervaRedoTimer = null;
+  }
 }
 
 // Mark article as edited
@@ -8503,23 +8559,71 @@ function markArticleEdited() {
   height: 48px;
 }
 
-.editor-toolbar--minerva > .minerva-toolbar-fill {
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 48px;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill {
   flex: 1 1 0;
   width: 0;
   min-width: 0;
   max-width: none;
 }
 
-.editor-toolbar--minerva > .minerva-toolbar-fill.toolbar-btn-icon-only {
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill.toolbar-btn-icon-only {
   padding: 0;
+  border-left: 0;
+  border-right: 0;
 }
 
-.editor-toolbar--minerva > .minerva-toolbar-fill.toolbar-btn,
-.editor-toolbar--minerva > .minerva-toolbar-fill.minerva-add-menu,
-.editor-toolbar--minerva > .minerva-toolbar-fill.minerva-edit-menu,
-.editor-toolbar--minerva > .minerva-toolbar-fill.minerva-toolbar-toggle,
-.editor-toolbar--minerva > .minerva-toolbar-fill.text-style-menu {
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill.toolbar-btn,
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill.minerva-add-menu,
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill.minerva-edit-menu,
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill.minerva-toolbar-toggle,
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .minerva-toolbar-fill.text-style-menu {
   height: 48px;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area > .text-style-menu > .text-style-menu-trigger {
+  border-left: 0;
+  border-right: 0;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area--overflowing {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area--overflowing::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 48px;
+  margin-left: -16px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 85%);
+  pointer-events: none;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area--overflowing > .minerva-toolbar-fill {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+}
+
+.editor-toolbar--minerva > .minerva-toolbar-scroll-area--overflowing::-webkit-scrollbar {
+  display: none;
 }
 
 .minerva-skin.edit-mode .edit-mode-content {
