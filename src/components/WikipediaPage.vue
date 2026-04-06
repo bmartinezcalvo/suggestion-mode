@@ -972,11 +972,15 @@
               <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
-              <div
+              <transition-group
+                tag="div"
+                name="minerva-toolbar"
                 class="minerva-toolbar-scroll-area"
                 :class="{ 'minerva-toolbar-scroll-area--overflowing': showMinervaRedoButton }"
               >
                 <button
+                  v-if="minervaUndoButtonEnabled"
+                  key="minerva-undo"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                   :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
                   :disabled="!hasUnsavedChanges"
@@ -987,25 +991,26 @@
                 </button>
                 <button
                   v-if="showMinervaRedoButton"
+                  key="minerva-redo"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill minerva-redo-button"
                   aria-label="Redo"
                   @click="handleMinervaRedo"
                 >
                   <cdx-icon :icon="cdxIconRedo" size="medium" />
                 </button>
-                <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                <div key="minerva-text-styles" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
                 <button
                   class="text-style-menu-trigger"
-                  :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
+                  :class="{ 'text-style-menu-trigger--active': usesMinervaTextStylesDrawer ? isMinervaTextStylesDrawerOpen : isTextStyleMenuOpen }"
                   aria-label="Text styles"
                   ref="textStyleMenuTriggerRef"
                   @click.stop="toggleTextStyleMenu"
                 >
                   <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                  <cdx-icon v-if="showMinervaMenuArrows" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaTextStylesDrawer" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
-                  v-if="isTextStyleMenuOpen"
+                  v-if="!usesMinervaTextStylesDrawer && isTextStyleMenuOpen"
                   ref="textStyleMenuPanelRef"
                   :class="[
                     'text-style-menu-panel',
@@ -1033,17 +1038,18 @@
                   </ul>
                 </div>
                 </div>
-                <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                <button key="minerva-link" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
                   <cdx-icon :icon="cdxIconLink" size="medium" />
                 </button>
                 <button
                   v-if="showMinervaTopLevelCite"
+                  key="minerva-cite"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                   aria-label="Cite"
                 >
                   <cdx-icon :icon="cdxIconQuotes" size="medium" />
                 </button>
-                <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
+                <div v-if="showMinervaAddMenuButton" key="minerva-add" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
                 <button
                   class="minerva-add-menu-trigger"
                   :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
@@ -1073,6 +1079,7 @@
                 </div>
                 <cdx-toggle-button
                   v-if="showMinervaToolbarToggleButton"
+                  key="minerva-suggestions-toggle"
                   v-model="showSuggestions"
                   quiet
                   aria-label="Toggle suggestions"
@@ -1097,7 +1104,7 @@
                     </span>
                   </span>
                 </cdx-toggle-button>
-                <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
+                <div key="minerva-edit-menu" class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
                 <button
                   class="minerva-edit-menu-trigger"
                   :class="{
@@ -1143,7 +1150,7 @@
                   </ul>
                 </div>
                 </div>
-              </div>
+              </transition-group>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary minerva-toolbar-fixed"
                 :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
@@ -1152,6 +1159,90 @@
               >
                 <cdx-icon :icon="minervaPublishIcon" size="medium" />
               </button>
+              <div
+                v-if="usesMinervaTextStylesDrawer && isMinervaTextStylesDrawerOpen"
+                ref="minervaTextStylesDrawerRef"
+                class="minerva-text-styles-drawer"
+              >
+                <div class="minerva-text-styles-drawer-scroll">
+                <div class="minerva-text-styles-drawer-track">
+                <div class="paragraph-menu minerva-text-styles-drawer-paragraph-menu">
+                  <button
+                    type="button"
+                    class="minerva-text-styles-drawer-button minerva-text-styles-drawer-button--paragraph paragraph-menu-trigger"
+                    :class="{ 'paragraph-menu-trigger--active': isParagraphMenuOpen }"
+                    aria-label="Paragraph"
+                    ref="paragraphMenuTriggerRef"
+                    @click.stop="toggleParagraphMenu"
+                  >
+                    <span>Paragraph</span>
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                </div>
+                <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold">
+                  <cdx-icon :icon="cdxIconBoldEn" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic">
+                  <cdx-icon :icon="cdxIconItalic" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough">
+                  <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline">
+                  <cdx-icon :icon="cdxIconUnderlineEn" size="medium" />
+                </button>
+                <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bullet list">
+                  <cdx-icon :icon="cdxIconListBullet" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Numbered list">
+                  <cdx-icon :icon="cdxIconListNumbered" size="medium" />
+                </button>
+                <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Big">
+                  <cdx-icon :icon="cdxIconBigger" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Small">
+                  <cdx-icon :icon="cdxIconSmaller" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Superscript">
+                  <cdx-icon :icon="cdxIconSuperscript" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Subscript">
+                  <cdx-icon :icon="cdxIconSubscript" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Computer code">
+                  <cdx-icon :icon="cdxIconCode" size="medium" />
+                </button>
+                </div>
+                </div>
+                <div
+                  v-if="isParagraphMenuOpen"
+                  ref="paragraphMenuPanelRef"
+                  class="paragraph-menu-panel paragraph-menu-panel--minerva-drawer"
+                >
+                  <ul class="paragraph-menu-list" role="menu">
+                    <li
+                      v-for="item in paragraphMenuItems"
+                      :key="item.value"
+                      class="paragraph-menu-item"
+                      role="none"
+                    >
+                      <button
+                        type="button"
+                        class="paragraph-menu-button"
+                        :class="{ 'paragraph-menu-button--active': item.value === activeParagraphStyle }"
+                        role="menuitem"
+                        @click="handleParagraphMenuItemSelect(item.value)"
+                      >
+                        <span class="paragraph-menu-label" :class="item.className">{{ item.label }}</span>
+                        <span class="paragraph-menu-shortcut">{{ item.shortcut }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div
               v-else-if="isMinervaSkin"
@@ -1165,11 +1256,15 @@
               <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
-              <div
+              <transition-group
+                tag="div"
+                name="minerva-toolbar"
                 class="minerva-toolbar-scroll-area"
                 :class="{ 'minerva-toolbar-scroll-area--overflowing': showMinervaRedoButton }"
               >
                 <button
+                  v-if="minervaUndoButtonEnabled"
+                  key="minerva-undo"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                   :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
                   :disabled="!hasUnsavedChanges"
@@ -1180,25 +1275,26 @@
                 </button>
                 <button
                   v-if="showMinervaRedoButton"
+                  key="minerva-redo"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill minerva-redo-button"
                   aria-label="Redo"
                   @click="handleMinervaRedo"
                 >
                   <cdx-icon :icon="cdxIconRedo" size="medium" />
                 </button>
-                <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                <div key="minerva-text-styles" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
                 <button
                   class="text-style-menu-trigger"
-                  :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
+                  :class="{ 'text-style-menu-trigger--active': usesMinervaTextStylesDrawer ? isMinervaTextStylesDrawerOpen : isTextStyleMenuOpen }"
                   aria-label="Text styles"
                   ref="textStyleMenuTriggerRef"
                   @click.stop="toggleTextStyleMenu"
                 >
                   <cdx-icon :icon="cdxIconTextStyle" size="medium" />
-                  <cdx-icon v-if="showMinervaMenuArrows" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaTextStylesDrawer" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
-                  v-if="isTextStyleMenuOpen"
+                  v-if="!usesMinervaTextStylesDrawer && isTextStyleMenuOpen"
                   ref="textStyleMenuPanelRef"
                   :class="[
                     'text-style-menu-panel',
@@ -1226,17 +1322,18 @@
                   </ul>
                 </div>
                 </div>
-                <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                <button key="minerva-link" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
                   <cdx-icon :icon="cdxIconLink" size="medium" />
                 </button>
                 <button
                   v-if="showMinervaTopLevelCite"
+                  key="minerva-cite"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                   aria-label="Cite"
                 >
                   <cdx-icon :icon="cdxIconQuotes" size="medium" />
                 </button>
-                <div v-if="showMinervaAddMenuButton" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
+                <div v-if="showMinervaAddMenuButton" key="minerva-add" class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
                 <button
                   class="minerva-add-menu-trigger"
                   :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
@@ -1266,6 +1363,7 @@
                 </div>
                 <cdx-toggle-button
                   v-if="showMinervaToolbarToggleButton"
+                  key="minerva-suggestions-toggle"
                   v-model="showSuggestions"
                   quiet
                   aria-label="Toggle suggestions"
@@ -1290,7 +1388,7 @@
                     </span>
                   </span>
                 </cdx-toggle-button>
-                <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
+                <div key="minerva-edit-menu" class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
                 <button
                   class="minerva-edit-menu-trigger"
                   :class="{
@@ -1336,7 +1434,7 @@
                   </ul>
                 </div>
                 </div>
-              </div>
+              </transition-group>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary minerva-toolbar-fixed"
                 :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
@@ -1345,6 +1443,90 @@
               >
                 <cdx-icon :icon="minervaPublishIcon" size="medium" />
               </button>
+              <div
+                v-if="usesMinervaTextStylesDrawer && isMinervaTextStylesDrawerOpen"
+                ref="minervaTextStylesDrawerRef"
+                class="minerva-text-styles-drawer"
+              >
+                <div class="minerva-text-styles-drawer-scroll">
+                <div class="minerva-text-styles-drawer-track">
+                <div class="paragraph-menu minerva-text-styles-drawer-paragraph-menu">
+                  <button
+                    type="button"
+                    class="minerva-text-styles-drawer-button minerva-text-styles-drawer-button--paragraph paragraph-menu-trigger"
+                    :class="{ 'paragraph-menu-trigger--active': isParagraphMenuOpen }"
+                    aria-label="Paragraph"
+                    ref="paragraphMenuTriggerRef"
+                    @click.stop="toggleParagraphMenu"
+                  >
+                    <span>Paragraph</span>
+                    <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  </button>
+                </div>
+                <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold">
+                  <cdx-icon :icon="cdxIconBoldEn" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic">
+                  <cdx-icon :icon="cdxIconItalic" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough">
+                  <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline">
+                  <cdx-icon :icon="cdxIconUnderlineEn" size="medium" />
+                </button>
+                <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bullet list">
+                  <cdx-icon :icon="cdxIconListBullet" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Numbered list">
+                  <cdx-icon :icon="cdxIconListNumbered" size="medium" />
+                </button>
+                <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Big">
+                  <cdx-icon :icon="cdxIconBigger" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Small">
+                  <cdx-icon :icon="cdxIconSmaller" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Superscript">
+                  <cdx-icon :icon="cdxIconSuperscript" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Subscript">
+                  <cdx-icon :icon="cdxIconSubscript" size="medium" />
+                </button>
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Computer code">
+                  <cdx-icon :icon="cdxIconCode" size="medium" />
+                </button>
+                </div>
+                </div>
+                <div
+                  v-if="isParagraphMenuOpen"
+                  ref="paragraphMenuPanelRef"
+                  class="paragraph-menu-panel paragraph-menu-panel--minerva-drawer"
+                >
+                  <ul class="paragraph-menu-list" role="menu">
+                    <li
+                      v-for="item in paragraphMenuItems"
+                      :key="item.value"
+                      class="paragraph-menu-item"
+                      role="none"
+                    >
+                      <button
+                        type="button"
+                        class="paragraph-menu-button"
+                        :class="{ 'paragraph-menu-button--active': item.value === activeParagraphStyle }"
+                        role="menuitem"
+                        @click="handleParagraphMenuItemSelect(item.value)"
+                      >
+                        <span class="paragraph-menu-label" :class="item.className">{{ item.label }}</span>
+                        <span class="paragraph-menu-shortcut">{{ item.shortcut }}</span>
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
             </div>
             <div
               v-else
@@ -3064,27 +3246,27 @@
           <div class="prototype-dialog-content">
             <div class="prototype-dialog-options">
               <cdx-field v-if="isMinervaSkin">
-                <template #label>Edit toolbar explorations</template>
+                <template #label>Edit toolbar iterations</template>
                 <div class="cdx-radio-group" role="radiogroup">
                   <cdx-radio
                     v-model="minervaToolbarMode"
                     name="minerva-toolbar-mode"
                     input-value="first-iteration"
                   >
-                    1st iteration
+                    1st iteration: Add Suggestions ToggleButton
                   </cdx-radio>
                   <cdx-radio
                     v-model="minervaToolbarMode"
                     name="minerva-toolbar-mode"
                     input-value="second-iteration"
                   >
-                    2n iteration
+                    2nd iteration: "Add +" button to include more tools
                   </cdx-radio>
                 </div>
               </cdx-field>
               <cdx-field v-if="isMinervaSkin">
                 <template #label>
-                  Mobile ToggleButton (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
+                  Suggestions ToggleButton position (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
                 </template>
                 <div class="cdx-radio-group" role="radiogroup">
                   <cdx-radio
@@ -3111,9 +3293,18 @@
                 </div>
               </cdx-field>
               <cdx-field v-if="isMinervaSkin">
-                <template #label>Redo button</template>
+                <template #label>Undo/Redo buttons</template>
+                <cdx-checkbox v-model="minervaUndoButtonEnabled">
+                  Enable Undo
+                </cdx-checkbox>
                 <cdx-checkbox v-model="minervaRedoButtonEnabled">
-                  Enable Redo button
+                  Enable Redo
+                </cdx-checkbox>
+              </cdx-field>
+              <cdx-field v-if="isMinervaSkin">
+                <template #label>Text styles button</template>
+                <cdx-checkbox v-model="minervaTextStylesDrawerEnabled">
+                  Enable text styles drawer
                 </cdx-checkbox>
               </cdx-field>
             </div>
@@ -3346,6 +3537,7 @@ const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
 const isTextStyleMenuOpen = ref(false);
 const isTextStyleMenuExpanded = ref(false);
+const isMinervaTextStylesDrawerOpen = ref(false);
 const isTextStructureMenuOpen = ref(false);
 const isInsertMenuOpen = ref(false);
 const isInsertMenuExpanded = ref(false);
@@ -3355,8 +3547,12 @@ const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
 const minervaTogglePlacement = ref('toolbar');
 const minervaToolbarMode = ref('first-iteration');
+const minervaUndoButtonEnabled = ref(true);
 const minervaRedoButtonEnabled = ref(false);
+const minervaTextStylesDrawerEnabled = ref(false);
 const showMinervaRedoButton = ref(false);
+const editUndoStack = ref([]);
+const editRedoStack = ref([]);
 const minervaToolbarToggleEnabled = computed(() => minervaTogglePlacement.value === 'toolbar');
 const minervaMenuToggleEnabled = computed(() => minervaTogglePlacement.value === 'menu');
 const linkDialogTab = ref('wikipedia');
@@ -3396,7 +3592,6 @@ let minervaMoreSuggestionsToastTimer = null;
 let minervaZeroSuggestionsToastTimer = null;
 let scrollReappearTimer = null;
 let autoScrollTimer = null;
-let minervaRedoTimer = null;
 let savedArticleSelectionRange = null;
 let lastArticleEditableElement = null;
 const isSkinMenuOpen = ref(false);
@@ -3647,6 +3842,7 @@ const paragraphMenuTriggerRef = ref(null);
 const paragraphMenuPanelRef = ref(null);
 const textStyleMenuTriggerRef = ref(null);
 const textStyleMenuPanelRef = ref(null);
+const minervaTextStylesDrawerRef = ref(null);
 const textStructureMenuTriggerRef = ref(null);
 const textStructureMenuPanelRef = ref(null);
 const insertMenuTriggerRef = ref(null);
@@ -3845,6 +4041,9 @@ const showMinervaAddMenuButton = computed(() => (
 const showMinervaToolbarToggleButton = computed(() => (
   minervaTogglePlacement.value === 'toolbar' &&
   (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
+));
+const usesMinervaTextStylesDrawer = computed(() => (
+  isMinervaSkin.value && minervaTextStylesDrawerEnabled.value
 ));
 const minervaEditHandleIcon = computed(() => (
   usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEdit
@@ -4706,15 +4905,28 @@ watch(isEditCheckHighlightHovered, () => {
 
 watch(minervaToolbarMode, () => {
   closeTextStyleMenu();
+  isMinervaTextStylesDrawerOpen.value = false;
 });
 
 watch(minervaRedoButtonEnabled, (enabled) => {
-  if (enabled) return;
-  showMinervaRedoButton.value = false;
-  if (minervaRedoTimer) {
-    clearTimeout(minervaRedoTimer);
-    minervaRedoTimer = null;
+  if (enabled) {
+    syncMinervaRedoButtonVisibility();
+    return;
   }
+  showMinervaRedoButton.value = false;
+});
+
+watch(minervaUndoButtonEnabled, (enabled) => {
+  if (enabled) {
+    syncMinervaRedoButtonVisibility();
+    return;
+  }
+  showMinervaRedoButton.value = false;
+});
+
+watch(minervaTextStylesDrawerEnabled, (enabled) => {
+  if (enabled) return;
+  isMinervaTextStylesDrawerOpen.value = false;
 });
 
 function handlePasteCheckKeep() {
@@ -4793,6 +5005,23 @@ function handleParagraphMenuItemSelect(value) {
 }
 
 function toggleTextStyleMenu() {
+  if (usesMinervaTextStylesDrawer.value) {
+    isMinervaTextStylesDrawerOpen.value = !isMinervaTextStylesDrawerOpen.value;
+    if (isMinervaTextStylesDrawerOpen.value) {
+      closeParagraphMenu();
+      closeVectorMenu();
+      closeVectorHelpMenu();
+      closeVectorEditMenu();
+      closeTextStructureMenu();
+      closeInsertMenu();
+      closeMinervaAddMenu();
+      closeMinervaEditMenu();
+      closeTextStyleMenu();
+    } else {
+      closeParagraphMenu();
+    }
+    return;
+  }
   isTextStyleMenuOpen.value = !isTextStyleMenuOpen.value;
   if (isTextStyleMenuOpen.value) {
     isTextStyleMenuExpanded.value = false;
@@ -4823,6 +5052,7 @@ function toggleTextStyleMenuExpanded() {
 function toggleTextStructureMenu() {
   isTextStructureMenuOpen.value = !isTextStructureMenuOpen.value;
   if (isTextStructureMenuOpen.value) {
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
@@ -4846,6 +5076,7 @@ function toggleInsertMenu() {
   isInsertMenuOpen.value = !isInsertMenuOpen.value;
   if (isInsertMenuOpen.value) {
     isInsertMenuExpanded.value = false;
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
@@ -4874,6 +5105,7 @@ function toggleVectorMenu() {
   isVectorMenuOpen.value = !isVectorMenuOpen.value;
   if (isVectorMenuOpen.value) {
     isVectorMenuExpanded.value = false;
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorHelpMenu();
     closeVectorEditMenu();
@@ -4901,6 +5133,7 @@ function toggleVectorMenuExpanded() {
 function toggleVectorHelpMenu() {
   isVectorHelpMenuOpen.value = !isVectorHelpMenuOpen.value;
   if (isVectorHelpMenuOpen.value) {
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorMenu();
     closeVectorEditMenu();
@@ -4923,6 +5156,7 @@ function handleVectorHelpMenuItemSelect() {
 function toggleVectorEditMenu() {
   isVectorEditMenuOpen.value = !isVectorEditMenuOpen.value;
   if (isVectorEditMenuOpen.value) {
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
@@ -4947,6 +5181,7 @@ function toggleMinervaAddMenu() {
   isMinervaAddMenuOpen.value = !isMinervaAddMenuOpen.value;
   if (isMinervaAddMenuOpen.value) {
     isMinervaAddMenuExpanded.value = false;
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
@@ -4966,6 +5201,7 @@ function closeMinervaAddMenu() {
 function toggleMinervaEditMenu() {
   isMinervaEditMenuOpen.value = !isMinervaEditMenuOpen.value;
   if (isMinervaEditMenuOpen.value) {
+    isMinervaTextStylesDrawerOpen.value = false;
     closeParagraphMenu();
     closeVectorMenu();
     closeVectorHelpMenu();
@@ -5209,12 +5445,13 @@ function handleSelectionChange() {
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isParagraphMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value) return;
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isParagraphMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value && !isMinervaTextStylesDrawerOpen.value) return;
   const target = event.target;
   if (paragraphMenuPanelRef.value?.contains(target)) return;
   if (paragraphMenuTriggerRef.value?.contains(target)) return;
   if (textStyleMenuPanelRef.value?.contains(target)) return;
   if (textStyleMenuTriggerRef.value?.contains(target)) return;
+  if (minervaTextStylesDrawerRef.value?.contains(target)) return;
   if (textStructureMenuPanelRef.value?.contains(target)) return;
   if (textStructureMenuTriggerRef.value?.contains(target)) return;
   if (insertMenuPanelRef.value?.contains(target)) return;
@@ -5231,6 +5468,7 @@ function handleDocumentClick(event) {
   if (minervaEditMenuTriggerRef.value?.contains(target)) return;
   closeParagraphMenu();
   closeTextStyleMenu();
+  isMinervaTextStylesDrawerOpen.value = false;
   closeTextStructureMenu();
   closeInsertMenu();
   closeVectorMenu();
@@ -6695,10 +6933,6 @@ onBeforeUnmount(() => {
     clearTimeout(autoScrollTimer);
     autoScrollTimer = null;
   }
-  if (minervaRedoTimer) {
-    clearTimeout(minervaRedoTimer);
-    minervaRedoTimer = null;
-  }
 });
 
 // Handle search input
@@ -6808,7 +7042,10 @@ function enterEditMode() {
   isLoading.value = true;
   hasUnsavedChanges.value = false;
   nextTick(() => {
-    captureEditSnapshot();
+    const snapshot = captureEditSnapshot();
+    editUndoStack.value = snapshot.length ? [ cloneEditSnapshot( snapshot ) ] : [];
+    editRedoStack.value = [];
+    syncMinervaRedoButtonVisibility();
   });
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
@@ -6824,6 +7061,9 @@ function exitEditMode() {
   // Returning to read mode: no loading
   restoreEditSnapshot();
   hasUnsavedChanges.value = false;
+  editUndoStack.value = [];
+  editRedoStack.value = [];
+  syncMinervaRedoButtonVisibility();
   closeMinervaSuggestion();
   isEditMode.value = false;
   isBannerDelayReady.value = false;
@@ -6927,56 +7167,101 @@ function updateMinervaSheetHeight() {
   });
 }
 
-function captureEditSnapshot() {
+function cloneEditSnapshot(snapshot) {
+  return snapshot.map(({ node, html }) => ({ node, html }));
+}
+
+function getCurrentEditSnapshot() {
   if (!pageRoot.value) {
-    return;
+    return [];
   }
   const nodes = pageRoot.value.querySelectorAll('.article-text-editable');
-  editSnapshot.value = Array.from(nodes).map((node) => ({
+  return Array.from(nodes).map((node) => ({
     node,
     html: node.innerHTML
   }));
 }
 
-function restoreEditSnapshot() {
-  if (!editSnapshot.value.length) {
+function captureEditSnapshot() {
+  editSnapshot.value = getCurrentEditSnapshot();
+  return editSnapshot.value;
+}
+
+function applyEditSnapshot(snapshot) {
+  if (!snapshot.length) {
     return;
   }
-  editSnapshot.value.forEach(({ node, html }) => {
+  snapshot.forEach(({ node, html }) => {
     if (node) {
       node.innerHTML = html;
     }
   });
 }
 
-function undoEdits() {
-  restoreEditSnapshot();
-  hasUnsavedChanges.value = false;
-  if (!isMinervaSkin.value || !minervaRedoButtonEnabled.value) {
+function areSnapshotsEqual(firstSnapshot, secondSnapshot) {
+  if (firstSnapshot.length !== secondSnapshot.length) {
+    return false;
+  }
+  return firstSnapshot.every((entry, index) => entry.html === secondSnapshot[index]?.html);
+}
+
+function syncMinervaRedoButtonVisibility() {
+  showMinervaRedoButton.value = (
+    isMinervaSkin.value &&
+    minervaUndoButtonEnabled.value &&
+    minervaRedoButtonEnabled.value &&
+    editRedoStack.value.length > 0
+  );
+}
+
+function restoreEditSnapshot() {
+  if (!editSnapshot.value.length) {
     return;
   }
-  showMinervaRedoButton.value = true;
-  if (minervaRedoTimer) {
-    clearTimeout(minervaRedoTimer);
+  applyEditSnapshot(editSnapshot.value);
+}
+
+function undoEdits() {
+  if (editUndoStack.value.length <= 1) {
+    return;
   }
-  minervaRedoTimer = setTimeout(() => {
-    showMinervaRedoButton.value = false;
-    minervaRedoTimer = null;
-  }, 4000);
+  const currentSnapshot = editUndoStack.value.pop();
+  if (currentSnapshot) {
+    editRedoStack.value.push(cloneEditSnapshot(currentSnapshot));
+  }
+  const previousSnapshot = editUndoStack.value[editUndoStack.value.length - 1];
+  if (previousSnapshot) {
+    applyEditSnapshot(previousSnapshot);
+  }
+  hasUnsavedChanges.value = editUndoStack.value.length > 1;
+  syncMinervaRedoButtonVisibility();
 }
 
 function handleMinervaRedo() {
-  hasUnsavedChanges.value = true;
-  showMinervaRedoButton.value = false;
-  if (minervaRedoTimer) {
-    clearTimeout(minervaRedoTimer);
-    minervaRedoTimer = null;
+  if (!editRedoStack.value.length) {
+    return;
   }
+  const nextSnapshot = editRedoStack.value.pop();
+  if (!nextSnapshot) {
+    syncMinervaRedoButtonVisibility();
+    return;
+  }
+  editUndoStack.value.push(cloneEditSnapshot(nextSnapshot));
+  applyEditSnapshot(nextSnapshot);
+  hasUnsavedChanges.value = editUndoStack.value.length > 1;
+  syncMinervaRedoButtonVisibility();
 }
 
 // Mark article as edited
 function markArticleEdited() {
-  hasUnsavedChanges.value = true;
+  const currentSnapshot = getCurrentEditSnapshot();
+  const lastUndoSnapshot = editUndoStack.value[editUndoStack.value.length - 1] || [];
+  if (!areSnapshotsEqual(currentSnapshot, lastUndoSnapshot)) {
+    editUndoStack.value.push(cloneEditSnapshot(currentSnapshot));
+    editRedoStack.value = [];
+  }
+  hasUnsavedChanges.value = editUndoStack.value.length > 1;
+  syncMinervaRedoButtonVisibility();
   updateToneCheckFromContent();
 }
 </script>
@@ -8626,8 +8911,148 @@ function markArticleEdited() {
   display: none;
 }
 
+.minerva-toolbar-enter-active {
+  transition: opacity 200ms ease-out, transform 200ms ease-out;
+}
+
+.minerva-toolbar-enter-from {
+  opacity: 0;
+  transform: translateX(8px);
+}
+
+.minerva-toolbar-enter-to {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+.minerva-toolbar-leave-active {
+  transition: opacity 150ms ease-out;
+}
+
+.minerva-toolbar-leave-from {
+  opacity: 1;
+}
+
+.minerva-toolbar-leave-to {
+  opacity: 0;
+}
+
+.minerva-toolbar-move {
+  transition: transform 200ms ease-out;
+}
+
 .minerva-skin.edit-mode .edit-mode-content {
   padding-top: 48px;
+}
+
+.minerva-skin.edit-mode.minerva-text-styles-drawer-open .edit-mode-content {
+  padding-top: 112px;
+}
+
+.minerva-text-styles-drawer {
+  position: fixed;
+  top: 48px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 59;
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  max-width: 994px;
+  height: 48px;
+  background: #fff;
+  overflow: visible;
+}
+
+.minerva-text-styles-drawer-scroll {
+  width: 100%;
+  height: 48px;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  white-space: nowrap;
+}
+
+.minerva-text-styles-drawer-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.minerva-text-styles-drawer-track {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  width: max-content;
+  min-width: 100%;
+  height: 48px;
+}
+
+.minerva-text-styles-drawer-track::before,
+.minerva-text-styles-drawer-track::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: var(--border-color-subtle, #c8ccd1);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.minerva-text-styles-drawer-track::before {
+  top: 0;
+}
+
+.minerva-text-styles-drawer-track::after {
+  bottom: 0;
+}
+
+.minerva-text-styles-drawer-button {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  height: 48px;
+  padding: 0;
+  border: 0;
+  background: #fff;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-base, #202122);
+}
+
+.minerva-text-styles-drawer-button--paragraph {
+  flex: 0 0 auto;
+  width: auto;
+  min-width: 0;
+  justify-content: space-between;
+  padding: 0 12px;
+  border-right: 1px solid var(--border-color-muted, #c8ccd1);
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.minerva-text-styles-drawer-button--paragraph.paragraph-menu-trigger {
+  justify-content: space-between;
+  padding: 0 12px;
+}
+
+.minerva-text-styles-drawer-paragraph-menu {
+  flex: 0 0 auto;
+  height: 48px;
+}
+
+.minerva-text-styles-drawer-divider {
+  flex: 0 0 1px;
+  width: 1px;
+  height: 48px;
+  background: var(--border-color-muted, #c8ccd1);
+}
+
+.paragraph-menu-panel--minerva-drawer {
+  left: 0;
+  top: calc(100% + 1px);
+  z-index: 91;
 }
 
 .minerva-skin.edit-mode .editor-toolbar {
@@ -8692,7 +9117,7 @@ function markArticleEdited() {
   gap: 6px;
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 12px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--color-base, #202122);
@@ -8749,6 +9174,11 @@ function markArticleEdited() {
   color: var(--color-base, #202122);
   text-align: left;
   cursor: pointer;
+}
+
+.minerva-skin .paragraph-menu-button {
+  padding-top: 8px;
+  padding-bottom: 8px;
 }
 
 .paragraph-menu-button:hover {
@@ -8830,7 +9260,7 @@ function markArticleEdited() {
   gap: 6px;
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 12px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--color-base, #202122);
@@ -9290,7 +9720,7 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   width: 100%;
-  padding: 12px;
+  padding: 8px 12px;
   border: 0;
   border-radius: 2px;
   background: transparent;
@@ -9324,7 +9754,7 @@ function markArticleEdited() {
   justify-content: center;
   width: 100%;
   height: 48px;
-  padding: 0;
+  padding: 0 12px;
   border: 1px solid transparent;
   background: transparent;
   cursor: pointer;
