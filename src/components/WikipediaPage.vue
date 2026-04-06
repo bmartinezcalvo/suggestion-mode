@@ -1016,6 +1016,7 @@
                     'text-style-menu-panel--minerva',
                     { 'text-style-menu-panel--expanded': isTextStyleMenuExpanded }
                   ]"
+                  :style="minervaTextStyleMenuPanelStyle"
                 >
                   <ul class="text-style-menu-list" role="menu">
                     <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
@@ -1299,6 +1300,7 @@
                     'text-style-menu-panel--minerva',
                     { 'text-style-menu-panel--expanded': isTextStyleMenuExpanded }
                   ]"
+                  :style="minervaTextStyleMenuPanelStyle"
                 >
                   <ul class="text-style-menu-list" role="menu">
                     <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
@@ -4257,6 +4259,22 @@ const visibleTextStyleMenuItems = computed(() => {
   return textStyleMenuItems.slice(0, 4);
 });
 const showTextStyleMenuToggle = computed(() => textStyleMenuItems.length > 10);
+const minervaTextStyleMenuPanelStyle = computed(() => {
+  if (!isMinervaSkin.value || !isTextStyleMenuOpen.value || usesMinervaTextStylesDrawer.value) {
+    return null;
+  }
+  const trigger = textStyleMenuTriggerRef.value;
+  if (!trigger || typeof trigger.getBoundingClientRect !== 'function') {
+    return null;
+  }
+  const triggerRect = trigger.getBoundingClientRect();
+  const panelWidth = Math.min(224, Math.max(0, minervaViewportWidth.value - 16));
+  const left = Math.max(8, Math.min(triggerRect.left, minervaViewportWidth.value - panelWidth - 8));
+  return {
+    left: `${left}px`,
+    right: 'auto'
+  };
+});
 const visibleInsertMenuItems = computed(() => {
   if (insertMenuItems.length <= 10 || isInsertMenuExpanded.value) {
     return insertMenuItems;
@@ -9564,8 +9582,8 @@ function markArticleEdited() {
 .text-style-menu-panel--minerva {
   position: fixed;
   top: 48px;
-  left: auto;
-  right: 88px;
+  left: 0;
+  right: auto;
   width: min(224px, calc(100vw - 16px));
   max-height: calc(100vh - 64px);
 }
