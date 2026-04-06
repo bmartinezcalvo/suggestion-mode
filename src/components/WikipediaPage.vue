@@ -4039,14 +4039,13 @@ const showMinervaAddMenuButton = computed(() => (
   !isMinervaToolbarFirstIteration.value
 ));
 const showMinervaToolbarToggleButton = computed(() => (
-  minervaTogglePlacement.value === 'toolbar' &&
-  (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
+  minervaTogglePlacement.value === 'toolbar'
 ));
 const usesMinervaTextStylesDrawer = computed(() => (
   isMinervaSkin.value && minervaTextStylesDrawerEnabled.value
 ));
 const minervaEditHandleIcon = computed(() => (
-  usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEdit
+  usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEye
 ));
 const minervaEditHandleAriaLabel = computed(() => (
   isMinervaToolbarSecondIteration.value ? 'More options' : 'Edit options'
@@ -9100,6 +9099,11 @@ function markArticleEdited() {
   padding: 5px;
 }
 
+.vector-skin .toolbar-btn-icon-only {
+  width: auto;
+  padding: 5px 12px;
+}
+
 .minerva-add-menu {
   position: relative;
   padding: 0;
@@ -9198,6 +9202,10 @@ function markArticleEdited() {
   font-size: 14px;
   line-height: 1.2;
   font-weight: 400;
+}
+
+.minerva-skin .paragraph-menu-label--paragraph {
+  font-size: 16px;
 }
 
 .paragraph-menu-label--heading {
@@ -9469,7 +9477,7 @@ function markArticleEdited() {
   justify-content: center;
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 12px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--color-base, #202122);
@@ -9570,7 +9578,7 @@ function markArticleEdited() {
   gap: 6px;
   width: 100%;
   height: 100%;
-  padding: 0;
+  padding: 0 12px;
   border: 1px solid transparent;
   background: transparent;
   color: var(--color-base, #202122);
@@ -10029,6 +10037,11 @@ function markArticleEdited() {
   padding-right: 9px;
 }
 
+.vector-skin .toolbar-btn-dropdown {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .toolbar-btn-primary {
   display: flex;
   align-items: center;
@@ -10056,7 +10069,7 @@ function markArticleEdited() {
 
 .toolbar-btn-primary--disabled {
   background: #eaecf0;
-  border-color: #c8ccd1;
+  border-color: transparent;
   color: #a2a9b1;
   cursor: not-allowed;
 }
@@ -10377,6 +10390,12 @@ function markArticleEdited() {
   padding: 5px;
 }
 
+.vector-skin .suggestions-toggle-btn {
+  width: auto;
+  min-width: 0;
+  padding: 5px 12px;
+}
+
 /* Override Codex default padding for icon-only button */
 .suggestions-toggle-btn :deep(button) {
   width: 100%;
@@ -10471,7 +10490,6 @@ function markArticleEdited() {
 /* Icon color when active */
 .suggestions-toggle-btn--active :deep(.cdx-icon) {
   color: var(--suggestion-color, var(--color-progressive, #36c));
-  animation: iconGlow 0.4s ease-out;
 }
 
 .suggestions-toggle-btn--active :deep(button) {
@@ -10486,22 +10504,6 @@ function markArticleEdited() {
 
 .suggestions-toggle-btn--active :deep(svg) {
   fill: var(--suggestion-color, var(--color-progressive, #36c));
-}
-
-/* Icon glow animation */
-@keyframes iconGlow {
-  0% {
-    filter: brightness(1);
-    transform: scale(1);
-  }
-  40% {
-    filter: brightness(1.2);
-    transform: scale(1.08);
-  }
-  100% {
-    filter: brightness(1.1);
-    transform: scale(1);
-  }
 }
 
 /* Suggestion Container - wraps highlighted text and card */
