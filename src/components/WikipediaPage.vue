@@ -1179,16 +1179,16 @@
                   </button>
                 </div>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold" @click="handleTextStyleItemSelect('bold')">
                   <cdx-icon :icon="cdxIconBoldEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic" @click="handleTextStyleItemSelect('italic')">
                   <cdx-icon :icon="cdxIconItalic" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough" @click="handleTextStyleItemSelect('strikethrough')">
                   <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline" @click="handleTextStyleItemSelect('underline')">
                   <cdx-icon :icon="cdxIconUnderlineEn" size="medium" />
                 </button>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
@@ -1462,16 +1462,16 @@
                   </button>
                 </div>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold" @click="handleTextStyleItemSelect('bold')">
                   <cdx-icon :icon="cdxIconBoldEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic" @click="handleTextStyleItemSelect('italic')">
                   <cdx-icon :icon="cdxIconItalic" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough" @click="handleTextStyleItemSelect('strikethrough')">
                   <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline">
+                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline" @click="handleTextStyleItemSelect('underline')">
                   <cdx-icon :icon="cdxIconUnderlineEn" size="medium" />
                 </button>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
@@ -5173,7 +5173,52 @@ function closeTextStyleMenu() {
   isTextStyleMenuExpanded.value = false;
 }
 
-function handleTextStyleItemSelect() {
+function restoreSavedArticleSelection() {
+  if (typeof window === 'undefined' || !savedArticleSelectionRange) return false;
+  const selection = window.getSelection();
+  if (!selection) return false;
+  selection.removeAllRanges();
+  selection.addRange(savedArticleSelectionRange);
+  if (lastArticleEditableElement && typeof lastArticleEditableElement.focus === 'function') {
+    lastArticleEditableElement.focus();
+  }
+  return true;
+}
+
+function applyInlineTextStyle(command) {
+  if (typeof document === 'undefined' || typeof window === 'undefined') return false;
+  if (!restoreSavedArticleSelection()) return false;
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
+    return false;
+  }
+  const range = selection.getRangeAt(0);
+  const container = range.commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (!element || !element.closest('.article-text-editable')) {
+    return false;
+  }
+  const applied = document.execCommand(command, false);
+  if (!applied) {
+    return false;
+  }
+  savedArticleSelectionRange = selection.getRangeAt(0).cloneRange();
+  lastArticleEditableElement = element.closest('.article-text-editable');
+  markArticleEdited();
+  return true;
+}
+
+function handleTextStyleItemSelect(value) {
+  const commandByValue = {
+    bold: 'bold',
+    italic: 'italic',
+    underline: 'underline',
+    strikethrough: 'strikeThrough'
+  };
+  const command = commandByValue[value];
+  if (command) {
+    applyInlineTextStyle(command);
+  }
   closeTextStyleMenu();
 }
 
