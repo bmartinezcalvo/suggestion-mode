@@ -1037,11 +1037,11 @@
                   </ul>
                 </div>
                 </div>
-                <button v-if="showMinervaTopLevelLink" key="minerva-link" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                <button v-if="showMinervaResponsiveTopLevelLink" key="minerva-link" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
                   <cdx-icon :icon="cdxIconLink" size="medium" />
                 </button>
                 <button
-                  v-if="showMinervaTopLevelCite"
+                  v-if="showMinervaResponsiveTopLevelCite"
                   key="minerva-cite"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                   aria-label="Cite"
@@ -1077,7 +1077,7 @@
                 </div>
                 </div>
                 <cdx-toggle-button
-                  v-if="showMinervaToolbarToggleButton"
+                  v-if="showMinervaResponsiveToolbarToggleButton"
                   key="minerva-suggestions-toggle"
                   v-model="showSuggestions"
                   quiet
@@ -1320,11 +1320,11 @@
                   </ul>
                 </div>
                 </div>
-                <button v-if="showMinervaTopLevelLink" key="minerva-link" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                <button v-if="showMinervaResponsiveTopLevelLink" key="minerva-link" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
                   <cdx-icon :icon="cdxIconLink" size="medium" />
                 </button>
                 <button
-                  v-if="showMinervaTopLevelCite"
+                  v-if="showMinervaResponsiveTopLevelCite"
                   key="minerva-cite"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
                   aria-label="Cite"
@@ -1360,7 +1360,7 @@
                 </div>
                 </div>
                 <cdx-toggle-button
-                  v-if="showMinervaToolbarToggleButton"
+                  v-if="showMinervaResponsiveToolbarToggleButton"
                   key="minerva-suggestions-toggle"
                   v-model="showSuggestions"
                   quiet
@@ -3277,12 +3277,6 @@
                 <cdx-checkbox v-model="minervaTextStylesDrawerEnabled">
                   Enable text styles drawer
                 </cdx-checkbox>
-                <cdx-checkbox v-model="minervaLinkFirstLevelEnabled">
-                  Link at 1st level
-                </cdx-checkbox>
-                <cdx-checkbox v-model="minervaCiteFirstLevelEnabled">
-                  Cite at 1st level
-                </cdx-checkbox>
                 <cdx-checkbox v-model="minervaAddButtonEnabled">
                   "Add +" button with more tools
                 </cdx-checkbox>
@@ -3313,7 +3307,7 @@
                   Replace edit handle with "More options" (ellipsis)
                 </cdx-checkbox>
                 <cdx-checkbox v-model="minervaPublishCheckIconEnabled">
-                  Replace "Publish" icon with checkbox (done) icon
+                  Replace "Publish" arrow with check (done) icon
                 </cdx-checkbox>
               </cdx-field>
             </div>
@@ -3558,18 +3552,15 @@ const minervaTogglePlacement = ref('toolbar');
 const minervaToolbarMode = ref('first-iteration');
 const minervaRedoButtonEnabled = ref(false);
 const minervaTextStylesDrawerEnabled = ref(false);
-const minervaLinkFirstLevelEnabled = ref(true);
-const minervaCiteFirstLevelEnabled = ref(true);
 const minervaAddButtonEnabled = ref(false);
 const minervaMoveToggleOutsideToolbarEnabled = ref(false);
 const minervaOverflowHandleEnabled = ref(false);
 const minervaPublishCheckIconEnabled = ref(false);
+const minervaViewportWidth = ref(375);
 const showMinervaRedoButton = ref(false);
 const editUndoStack = ref([]);
 const editRedoStack = ref([]);
 let isApplyingMinervaToolbarPreset = false;
-const minervaToolbarToggleEnabled = computed(() => minervaTogglePlacement.value === 'toolbar');
-const minervaMenuToggleEnabled = computed(() => minervaTogglePlacement.value === 'menu');
 const linkDialogTab = ref('wikipedia');
 const linkDialogText = ref('');
 const linkDialogQuery = ref('');
@@ -4047,16 +4038,49 @@ const showMinervaHelpButton = computed(() => (
 const isMinervaToolbarFirstIteration = computed(() => minervaToolbarMode.value === 'first-iteration');
 const isMinervaToolbarSecondIteration = computed(() => minervaToolbarMode.value === 'second-iteration');
 const usesMinervaOverflowHandle = computed(() => minervaOverflowHandleEnabled.value);
-const showMinervaTopLevelLink = computed(() => minervaLinkFirstLevelEnabled.value);
-const showMinervaTopLevelCite = computed(() => minervaCiteFirstLevelEnabled.value);
+const minervaToolbarSlotCount = computed(() => {
+  const availableWidth = Math.max(0, minervaViewportWidth.value - 88);
+  return Math.floor(availableWidth / 40);
+});
+const showMinervaBaseAddMenuButton = computed(() => (
+  minervaAddButtonEnabled.value
+));
+const minervaCoreActionCount = computed(() => (
+  2 + // Undo + Text styles
+  1 + // Edit handle
+  (showMinervaBaseAddMenuButton.value ? 1 : 0) +
+  (showMinervaRedoButton.value ? 1 : 0)
+));
+const minervaToolbarCanFitToggle = computed(() => (
+  minervaToolbarSlotCount.value >= minervaCoreActionCount.value + 1
+));
+const showMinervaResponsiveTopLevelLink = computed(() => (
+  minervaToolbarCanFitToggle.value &&
+  minervaToolbarSlotCount.value >= minervaCoreActionCount.value + 2
+));
+const showMinervaResponsiveTopLevelCite = computed(() => (
+  minervaToolbarCanFitToggle.value &&
+  showMinervaResponsiveTopLevelLink.value &&
+  minervaToolbarSlotCount.value >= minervaCoreActionCount.value + 3
+));
+const minervaEffectiveTogglePlacement = computed(() => (
+  minervaTogglePlacement.value !== 'toolbar'
+    ? minervaTogglePlacement.value
+    : (minervaToolbarCanFitToggle.value ? 'toolbar' : 'menu')
+));
+const showMinervaResponsiveToolbarToggleButton = computed(() => (
+  minervaEffectiveTogglePlacement.value === 'toolbar'
+));
 const showMinervaAddMenuButton = computed(() => (
-  minervaAddButtonEnabled.value ||
-  !minervaLinkFirstLevelEnabled.value ||
-  !minervaCiteFirstLevelEnabled.value
+  showMinervaBaseAddMenuButton.value ||
+  !showMinervaResponsiveTopLevelLink.value ||
+  !showMinervaResponsiveTopLevelCite.value
 ));
 const showMinervaToolbarToggleButton = computed(() => (
-  minervaTogglePlacement.value === 'toolbar'
+  minervaEffectiveTogglePlacement.value === 'toolbar'
 ));
+const minervaToolbarToggleEnabled = computed(() => minervaEffectiveTogglePlacement.value === 'toolbar');
+const minervaMenuToggleEnabled = computed(() => minervaEffectiveTogglePlacement.value === 'menu');
 const usesMinervaTextStylesDrawer = computed(() => (
   isMinervaSkin.value && minervaTextStylesDrawerEnabled.value
 ));
@@ -4077,13 +4101,13 @@ const activeParagraphStyle = ref('paragraph');
 const minervaAddMenuItems = computed(() => ([
   ...(showMinervaAddMenuButton.value
     ? [
-        ...(!minervaLinkFirstLevelEnabled.value ? [
+        ...(!showMinervaResponsiveTopLevelLink.value ? [
           { value: 'link', label: 'Link', icon: cdxIconLink }
         ] : []),
-        ...(!minervaCiteFirstLevelEnabled.value ? [
+        ...(!showMinervaResponsiveTopLevelCite.value ? [
           { value: 'cite', label: 'Cite', icon: cdxIconQuotes }
         ] : []),
-        ...(!minervaLinkFirstLevelEnabled.value || !minervaCiteFirstLevelEnabled.value ? [
+        ...(!showMinervaResponsiveTopLevelLink.value || !showMinervaResponsiveTopLevelCite.value ? [
           { type: 'divider', value: 'minerva-add-divider-1' }
         ] : []),
         { value: 'images-media', label: 'Images and media', icon: cdxIconImage },
@@ -4315,8 +4339,6 @@ const MINERVA_TOOLBAR_PRESETS = {
   'first-iteration': {
     redo: false,
     textStylesDrawer: false,
-    linkFirstLevel: true,
-    citeFirstLevel: true,
     addButton: false,
     moveToggleOutside: false,
     togglePlacement: 'toolbar',
@@ -4324,10 +4346,8 @@ const MINERVA_TOOLBAR_PRESETS = {
     publishCheckIcon: false
   },
   'second-iteration': {
-    redo: false,
+    redo: true,
     textStylesDrawer: false,
-    linkFirstLevel: true,
-    citeFirstLevel: false,
     addButton: true,
     moveToggleOutside: false,
     togglePlacement: 'toolbar',
@@ -4344,8 +4364,6 @@ function applyMinervaToolbarPreset(mode) {
   isApplyingMinervaToolbarPreset = true;
   minervaRedoButtonEnabled.value = preset.redo;
   minervaTextStylesDrawerEnabled.value = preset.textStylesDrawer;
-  minervaLinkFirstLevelEnabled.value = preset.linkFirstLevel;
-  minervaCiteFirstLevelEnabled.value = preset.citeFirstLevel;
   minervaAddButtonEnabled.value = preset.addButton;
   minervaMoveToggleOutsideToolbarEnabled.value = preset.moveToggleOutside;
   minervaTogglePlacement.value = preset.togglePlacement;
@@ -4362,8 +4380,6 @@ function doesMinervaToolbarMatchPreset(mode) {
   return (
     minervaRedoButtonEnabled.value === preset.redo &&
     minervaTextStylesDrawerEnabled.value === preset.textStylesDrawer &&
-    minervaLinkFirstLevelEnabled.value === preset.linkFirstLevel &&
-    minervaCiteFirstLevelEnabled.value === preset.citeFirstLevel &&
     minervaAddButtonEnabled.value === preset.addButton &&
     minervaMoveToggleOutsideToolbarEnabled.value === preset.moveToggleOutside &&
     minervaTogglePlacement.value === preset.togglePlacement &&
@@ -5025,19 +5041,10 @@ watch(minervaMoveToggleOutsideToolbarEnabled, (enabled) => {
   }
 });
 
-watch([ minervaLinkFirstLevelEnabled, minervaCiteFirstLevelEnabled ], ([ linkEnabled, citeEnabled ]) => {
-  if (linkEnabled && citeEnabled) {
-    return;
-  }
-  minervaAddButtonEnabled.value = true;
-});
-
 watch(
   [
     minervaRedoButtonEnabled,
     minervaTextStylesDrawerEnabled,
-    minervaLinkFirstLevelEnabled,
-    minervaCiteFirstLevelEnabled,
     minervaAddButtonEnabled,
     minervaMoveToggleOutsideToolbarEnabled,
     minervaTogglePlacement,
@@ -6967,6 +6974,7 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     selectedSkin.value = isMobile ? 'minerva' : 'vector22';
+    updateMinervaViewportWidth();
   }
 
   if (isEditMode.value && showSuggestions.value) {
@@ -6981,6 +6989,7 @@ onMounted(() => {
     window.addEventListener('resize', alignBothSuggestions);
     window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
     window.addEventListener('resize', updateMinervaSheetHeight);
+    window.addEventListener('resize', updateMinervaViewportWidth);
     window.addEventListener('scroll', updateSuggestionVisibility, true);
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
@@ -6998,6 +7007,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', alignBothSuggestions);
     window.removeEventListener('scroll', alignBothSuggestions, true);
     window.removeEventListener('resize', updateMinervaSheetHeight);
+    window.removeEventListener('resize', updateMinervaViewportWidth);
     window.removeEventListener('scroll', updateSuggestionVisibility, true);
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
@@ -7290,6 +7300,13 @@ function updateMinervaSheetHeight() {
       minervaSheetHeight.value = sheet.offsetHeight;
     }
   });
+}
+
+function updateMinervaViewportWidth() {
+  if (typeof window === 'undefined') {
+    return;
+  }
+  minervaViewportWidth.value = window.innerWidth || document.documentElement.clientWidth || 375;
 }
 
 function cloneEditSnapshot(snapshot) {
@@ -8896,6 +8913,16 @@ function markArticleEdited() {
 
 .prototype-dialog-subgroup {
   margin-top: 8px;
+  margin-left: 24px;
+  gap: 0;
+}
+
+.prototype-dialog-subgroup :deep(.cdx-radio) {
+  margin-bottom: 0;
+}
+
+.prototype-dialog-subgroup :deep(.cdx-radio:last-child) {
+  margin-bottom: 12px;
 }
 
 /* ===== EDIT MODE STYLES ===== */
@@ -9008,6 +9035,12 @@ function markArticleEdited() {
 .editor-toolbar--minerva > .minerva-toolbar-scroll-area > .text-style-menu > .text-style-menu-trigger {
   border-left: 0;
   border-right: 0;
+}
+
+.minerva-skin .editor-toolbar--minerva .text-style-menu-trigger,
+.minerva-skin .editor-toolbar--minerva .minerva-edit-menu-trigger:not(.minerva-edit-menu-trigger--overflow) {
+  padding-left: 8px;
+  padding-right: 8px;
 }
 
 .editor-toolbar--minerva > .minerva-toolbar-scroll-area--overflowing {
