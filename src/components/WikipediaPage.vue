@@ -1022,7 +1022,14 @@
                     <template v-for="item in visibleMinervaTextStyleMenuItems" :key="item.value">
                       <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
                       <li v-else class="text-style-menu-item" role="none">
-                        <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
+                        <button
+                          type="button"
+                          class="text-style-menu-button"
+                          :class="{ 'text-style-menu-button--selected': isInlineTextStyleActive(item.value) }"
+                          role="menuitem"
+                          :aria-pressed="isTrackedInlineTextStyle(item.value) ? isInlineTextStyleActive(item.value) : undefined"
+                          @click="handleTextStyleItemSelect(item.value)"
+                        >
                           <cdx-icon :icon="item.icon" size="medium" />
                           <span>{{ item.label }}</span>
                         </button>
@@ -1180,16 +1187,44 @@
                   </button>
                 </div>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold" @click="handleTextStyleItemSelect('bold')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('bold') }"
+                  aria-label="Bold"
+                  :aria-pressed="isInlineTextStyleActive('bold')"
+                  @click="handleTextStyleItemSelect('bold')"
+                >
                   <cdx-icon :icon="cdxIconBoldEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic" @click="handleTextStyleItemSelect('italic')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('italic') }"
+                  aria-label="Italic"
+                  :aria-pressed="isInlineTextStyleActive('italic')"
+                  @click="handleTextStyleItemSelect('italic')"
+                >
                   <cdx-icon :icon="cdxIconItalicEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough" @click="handleTextStyleItemSelect('strikethrough')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('strikethrough') }"
+                  aria-label="Strikethrough"
+                  :aria-pressed="isInlineTextStyleActive('strikethrough')"
+                  @click="handleTextStyleItemSelect('strikethrough')"
+                >
                   <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline" @click="handleTextStyleItemSelect('underline')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('underline') }"
+                  aria-label="Underline"
+                  :aria-pressed="isInlineTextStyleActive('underline')"
+                  @click="handleTextStyleItemSelect('underline')"
+                >
                   <cdx-icon :icon="cdxIconUnderlineEn" size="medium" />
                 </button>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
@@ -1306,7 +1341,14 @@
                     <template v-for="item in visibleMinervaTextStyleMenuItems" :key="item.value">
                       <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
                       <li v-else class="text-style-menu-item" role="none">
-                        <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
+                        <button
+                          type="button"
+                          class="text-style-menu-button"
+                          :class="{ 'text-style-menu-button--selected': isInlineTextStyleActive(item.value) }"
+                          role="menuitem"
+                          :aria-pressed="isTrackedInlineTextStyle(item.value) ? isInlineTextStyleActive(item.value) : undefined"
+                          @click="handleTextStyleItemSelect(item.value)"
+                        >
                           <cdx-icon :icon="item.icon" size="medium" />
                           <span>{{ item.label }}</span>
                         </button>
@@ -1464,16 +1506,44 @@
                   </button>
                 </div>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Bold" @click="handleTextStyleItemSelect('bold')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('bold') }"
+                  aria-label="Bold"
+                  :aria-pressed="isInlineTextStyleActive('bold')"
+                  @click="handleTextStyleItemSelect('bold')"
+                >
                   <cdx-icon :icon="cdxIconBoldEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic" @click="handleTextStyleItemSelect('italic')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('italic') }"
+                  aria-label="Italic"
+                  :aria-pressed="isInlineTextStyleActive('italic')"
+                  @click="handleTextStyleItemSelect('italic')"
+                >
                   <cdx-icon :icon="cdxIconItalicEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough" @click="handleTextStyleItemSelect('strikethrough')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('strikethrough') }"
+                  aria-label="Strikethrough"
+                  :aria-pressed="isInlineTextStyleActive('strikethrough')"
+                  @click="handleTextStyleItemSelect('strikethrough')"
+                >
                   <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
                 </button>
-                <button type="button" class="minerva-text-styles-drawer-button" aria-label="Underline" @click="handleTextStyleItemSelect('underline')">
+                <button
+                  type="button"
+                  class="minerva-text-styles-drawer-button"
+                  :class="{ 'minerva-text-styles-drawer-button--active': isInlineTextStyleActive('underline') }"
+                  aria-label="Underline"
+                  :aria-pressed="isInlineTextStyleActive('underline')"
+                  @click="handleTextStyleItemSelect('underline')"
+                >
                   <cdx-icon :icon="cdxIconUnderlineEn" size="medium" />
                 </button>
                 <div class="minerva-text-styles-drawer-divider" aria-hidden="true"></div>
@@ -1611,7 +1681,14 @@
                       <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
                         <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
                         <li v-else class="text-style-menu-item" role="none">
-                          <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
+                          <button
+                            type="button"
+                            class="text-style-menu-button"
+                            :class="{ 'text-style-menu-button--selected': isInlineTextStyleActive(item.value) }"
+                            role="menuitem"
+                            :aria-pressed="isTrackedInlineTextStyle(item.value) ? isInlineTextStyleActive(item.value) : undefined"
+                            @click="handleTextStyleItemSelect(item.value)"
+                          >
                             <cdx-icon :icon="item.icon" size="medium" />
                             <span>{{ item.label }}</span>
                           </button>
@@ -3602,6 +3679,12 @@ let scrollReappearTimer = null;
 let autoScrollTimer = null;
 let savedArticleSelectionRange = null;
 let lastArticleEditableElement = null;
+const trackedInlineTextStyleCommands = {
+  bold: 'bold',
+  italic: 'italic',
+  strikethrough: 'strikeThrough',
+  underline: 'underline'
+};
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
@@ -4297,6 +4380,12 @@ const minervaTextStyleMenuPanelStyle = computed(() => {
     left: `${left}px`,
     right: 'auto'
   };
+});
+const inlineTextStyleState = ref({
+  bold: false,
+  italic: false,
+  strikethrough: false,
+  underline: false
 });
 const visibleInsertMenuItems = computed(() => {
   if (insertMenuItems.length <= 10 || isInsertMenuExpanded.value) {
@@ -5214,6 +5303,36 @@ function closeTextStyleMenu() {
   isTextStyleMenuExpanded.value = false;
 }
 
+function isTrackedInlineTextStyle(value) {
+  return Object.prototype.hasOwnProperty.call(trackedInlineTextStyleCommands, value);
+}
+
+function isInlineTextStyleActive(value) {
+  return Boolean(inlineTextStyleState.value[value]);
+}
+
+function updateInlineTextStyleState() {
+  if (typeof document === 'undefined' || typeof window === 'undefined' || typeof document.queryCommandState !== 'function') {
+    return;
+  }
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) {
+    return;
+  }
+  const range = selection.getRangeAt(0);
+  const container = range.commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (!element || !element.closest('.article-text-editable')) {
+    return;
+  }
+  inlineTextStyleState.value = Object.fromEntries(
+    Object.entries(trackedInlineTextStyleCommands).map(([ value, command ]) => [
+      value,
+      Boolean(document.queryCommandState(command))
+    ])
+  );
+}
+
 function restoreSavedArticleSelection() {
   if (typeof window === 'undefined' || !savedArticleSelectionRange) return false;
   const selection = window.getSelection();
@@ -5245,18 +5364,13 @@ function applyInlineTextStyle(command) {
   }
   savedArticleSelectionRange = selection.getRangeAt(0).cloneRange();
   lastArticleEditableElement = element.closest('.article-text-editable');
+  updateInlineTextStyleState();
   markArticleEdited();
   return true;
 }
 
 function handleTextStyleItemSelect(value) {
-  const commandByValue = {
-    bold: 'bold',
-    italic: 'italic',
-    underline: 'underline',
-    strikethrough: 'strikeThrough'
-  };
-  const command = commandByValue[value];
+  const command = trackedInlineTextStyleCommands[value];
   if (command) {
     applyInlineTextStyle(command);
   }
@@ -5609,6 +5723,7 @@ function handleToolbarMouseDown() {
   if (!element || !element.closest('.article-text-editable')) return;
   savedArticleSelectionRange = selection.getRangeAt(0).cloneRange();
   lastArticleEditableElement = element.closest('.article-text-editable');
+  updateInlineTextStyleState();
 }
 
 function handleToolbarClick() {
@@ -5660,10 +5775,11 @@ function handleSelectionChange() {
   if (element.closest('a')) return;
   savedArticleSelectionRange = range.cloneRange();
   lastArticleEditableElement = element.closest('.article-text-editable');
+  updateInlineTextStyleState();
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isParagraphMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value && !isMinervaTextStylesDrawerOpen.value) return;
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isParagraphMenuOpen.value && !isTextStyleMenuOpen.value && !isTextStructureMenuOpen.value && !isInsertMenuOpen.value && !isVectorMenuOpen.value && !isVectorHelpMenuOpen.value && !isVectorEditMenuOpen.value) return;
   const target = event.target;
   if (paragraphMenuPanelRef.value?.contains(target)) return;
   if (paragraphMenuTriggerRef.value?.contains(target)) return;
@@ -5686,7 +5802,6 @@ function handleDocumentClick(event) {
   if (minervaEditMenuTriggerRef.value?.contains(target)) return;
   closeParagraphMenu();
   closeTextStyleMenu();
-  isMinervaTextStylesDrawerOpen.value = false;
   closeTextStructureMenu();
   closeInsertMenu();
   closeVectorMenu();
@@ -9268,6 +9383,17 @@ function markArticleEdited() {
   color: var(--color-base, #202122);
 }
 
+.minerva-text-styles-drawer-button--active {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-text-styles-drawer-button--active :deep(.cdx-icon),
+.minerva-text-styles-drawer-button--active :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
 .minerva-text-styles-drawer-button--paragraph {
   flex: 0 0 auto;
   width: auto;
@@ -9679,6 +9805,17 @@ function markArticleEdited() {
 .insert-menu-button:hover,
 .vector-menu-button:hover {
   background: #f8f9fa;
+}
+
+.text-style-menu-button--selected {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+}
+
+.text-style-menu-button--selected :deep(.cdx-icon),
+.text-style-menu-button--selected :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 
