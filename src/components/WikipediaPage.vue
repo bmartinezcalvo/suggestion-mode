@@ -3434,23 +3434,14 @@
                 </cdx-checkbox>
                 <div
                   v-if="minervaMoveToggleOutsideToolbarEnabled"
-                  class="cdx-radio-group prototype-dialog-subgroup"
-                  role="radiogroup"
+                  class="prototype-dialog-subgroup"
                 >
-                  <cdx-radio
-                    v-model="minervaTogglePlacement"
-                    name="minerva-toggle-placement"
-                    input-value="menu"
-                  >
-                    Within the edit handle/more options
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="minervaTogglePlacement"
-                    name="minerva-toggle-placement"
-                    input-value="rail"
-                  >
+                  <cdx-checkbox v-model="minervaToggleWithinMenuEnabled">
+                    Within the ellipsis menu
+                  </cdx-checkbox>
+                  <cdx-checkbox v-model="minervaToggleWithinRailEnabled">
                     Within the rail
-                  </cdx-radio>
+                  </cdx-checkbox>
                 </div>
                 <cdx-checkbox v-model="minervaOverflowHandleEnabled">
                   Replace edit handle with "More options" (ellipsis)
@@ -3697,12 +3688,13 @@ const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
-const minervaTogglePlacement = ref('toolbar');
 const minervaToolbarMode = ref('first-iteration');
 const minervaRedoButtonEnabled = ref(false);
 const minervaTextStylesDrawerEnabled = ref(false);
 const minervaAddButtonEnabled = ref(false);
 const minervaMoveToggleOutsideToolbarEnabled = ref(false);
+const minervaToggleWithinMenuEnabled = ref(false);
+const minervaToggleWithinRailEnabled = ref(false);
 const minervaOverflowHandleEnabled = ref(false);
 const minervaPublishCheckIconEnabled = ref(false);
 const minervaViewportWidth = ref(375);
@@ -4218,9 +4210,19 @@ const showMinervaResponsiveTopLevelCite = computed(() => (
   showMinervaResponsiveTopLevelLink.value &&
   minervaToolbarSlotCount.value >= minervaCoreActionCount.value + 3
 ));
+const minervaOutsideToolbarMenuEnabled = computed(() => (
+  minervaMoveToggleOutsideToolbarEnabled.value && minervaToggleWithinMenuEnabled.value
+));
+const minervaOutsideToolbarRailEnabled = computed(() => (
+  minervaMoveToggleOutsideToolbarEnabled.value && minervaToggleWithinRailEnabled.value
+));
 const minervaEffectiveTogglePlacement = computed(() => (
-  minervaTogglePlacement.value !== 'toolbar'
-    ? minervaTogglePlacement.value
+  minervaMoveToggleOutsideToolbarEnabled.value
+    ? (
+        minervaOutsideToolbarMenuEnabled.value
+          ? 'menu'
+          : (minervaOutsideToolbarRailEnabled.value ? 'rail' : 'menu')
+      )
     : (minervaToolbarCanFitToggle.value ? 'toolbar' : 'menu')
 ));
 const showMinervaResponsiveToolbarToggleButton = computed(() => (
@@ -4229,11 +4231,11 @@ const showMinervaResponsiveToolbarToggleButton = computed(() => (
 const showMinervaRailToggle = computed(() => (
   isMinervaSkin.value &&
   isEditMode.value &&
-  (minervaTogglePlacement.value === 'rail' || (minervaTogglePlacement.value === 'menu' && showSuggestions.value))
+  minervaOutsideToolbarRailEnabled.value &&
+  (!minervaOutsideToolbarMenuEnabled.value || showSuggestions.value)
 ));
 const showMinervaRailToggleButton = computed(() => (
-  activePrototype.value !== 'option-1' &&
-  (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value) || (minervaTogglePlacement.value === 'menu' && showSuggestions.value))
+  activePrototype.value !== 'option-1'
 ));
 const showMinervaAddMenuButton = computed(() => (
   showMinervaBaseAddMenuButton.value ||
@@ -4244,7 +4246,11 @@ const showMinervaToolbarToggleButton = computed(() => (
   minervaEffectiveTogglePlacement.value === 'toolbar'
 ));
 const minervaToolbarToggleEnabled = computed(() => minervaEffectiveTogglePlacement.value === 'toolbar');
-const minervaMenuToggleEnabled = computed(() => minervaEffectiveTogglePlacement.value === 'menu');
+const minervaMenuToggleEnabled = computed(() => (
+  minervaMoveToggleOutsideToolbarEnabled.value
+    ? minervaOutsideToolbarMenuEnabled.value
+    : minervaEffectiveTogglePlacement.value === 'menu'
+));
 const usesMinervaEllipsisHandle = computed(() => (
   usesMinervaOverflowHandle.value || minervaMenuToggleEnabled.value
 ));
@@ -4569,7 +4575,8 @@ const MINERVA_TOOLBAR_PRESETS = {
     textStylesDrawer: false,
     addButton: false,
     moveToggleOutside: false,
-    togglePlacement: 'toolbar',
+    toggleWithinMenu: false,
+    toggleWithinRail: false,
     overflowHandle: false,
     publishCheckIcon: false
   },
@@ -4578,7 +4585,8 @@ const MINERVA_TOOLBAR_PRESETS = {
     textStylesDrawer: false,
     addButton: true,
     moveToggleOutside: false,
-    togglePlacement: 'toolbar',
+    toggleWithinMenu: false,
+    toggleWithinRail: false,
     overflowHandle: true,
     publishCheckIcon: true
   }
@@ -4594,7 +4602,8 @@ function applyMinervaToolbarPreset(mode) {
   minervaTextStylesDrawerEnabled.value = preset.textStylesDrawer;
   minervaAddButtonEnabled.value = preset.addButton;
   minervaMoveToggleOutsideToolbarEnabled.value = preset.moveToggleOutside;
-  minervaTogglePlacement.value = preset.togglePlacement;
+  minervaToggleWithinMenuEnabled.value = preset.toggleWithinMenu;
+  minervaToggleWithinRailEnabled.value = preset.toggleWithinRail;
   minervaOverflowHandleEnabled.value = preset.overflowHandle;
   minervaPublishCheckIconEnabled.value = preset.publishCheckIcon;
   isApplyingMinervaToolbarPreset = false;
@@ -4610,7 +4619,8 @@ function doesMinervaToolbarMatchPreset(mode) {
     minervaTextStylesDrawerEnabled.value === preset.textStylesDrawer &&
     minervaAddButtonEnabled.value === preset.addButton &&
     minervaMoveToggleOutsideToolbarEnabled.value === preset.moveToggleOutside &&
-    minervaTogglePlacement.value === preset.togglePlacement &&
+    minervaToggleWithinMenuEnabled.value === preset.toggleWithinMenu &&
+    minervaToggleWithinRailEnabled.value === preset.toggleWithinRail &&
     minervaOverflowHandleEnabled.value === preset.overflowHandle &&
     minervaPublishCheckIconEnabled.value === preset.publishCheckIcon
   );
@@ -5263,11 +5273,28 @@ watch(minervaRedoButtonEnabled, (enabled) => {
 
 watch(minervaMoveToggleOutsideToolbarEnabled, (enabled) => {
   if (!enabled) {
-    minervaTogglePlacement.value = 'toolbar';
-  } else if (minervaTogglePlacement.value === 'toolbar') {
-    minervaTogglePlacement.value = 'menu';
+    minervaToggleWithinMenuEnabled.value = false;
+    minervaToggleWithinRailEnabled.value = false;
+  } else if (!minervaToggleWithinMenuEnabled.value && !minervaToggleWithinRailEnabled.value) {
+    minervaToggleWithinMenuEnabled.value = true;
   }
 });
+
+watch(
+  [
+    minervaToggleWithinMenuEnabled,
+    minervaToggleWithinRailEnabled
+  ],
+  () => {
+    if (
+      minervaMoveToggleOutsideToolbarEnabled.value &&
+      !minervaToggleWithinMenuEnabled.value &&
+      !minervaToggleWithinRailEnabled.value
+    ) {
+      minervaToggleWithinMenuEnabled.value = true;
+    }
+  }
+);
 
 watch(
   [
@@ -5275,7 +5302,8 @@ watch(
     minervaTextStylesDrawerEnabled,
     minervaAddButtonEnabled,
     minervaMoveToggleOutsideToolbarEnabled,
-    minervaTogglePlacement,
+    minervaToggleWithinMenuEnabled,
+    minervaToggleWithinRailEnabled,
     minervaOverflowHandleEnabled,
     minervaPublishCheckIconEnabled
   ],
@@ -9222,11 +9250,13 @@ function markArticleEdited() {
   gap: 0;
 }
 
-.prototype-dialog-subgroup :deep(.cdx-radio) {
+.prototype-dialog-subgroup :deep(.cdx-radio),
+.prototype-dialog-subgroup :deep(.cdx-checkbox) {
   margin-bottom: 0;
 }
 
-.prototype-dialog-subgroup :deep(.cdx-radio:last-child) {
+.prototype-dialog-subgroup :deep(.cdx-radio:last-child),
+.prototype-dialog-subgroup :deep(.cdx-checkbox:last-child) {
   margin-bottom: 12px;
 }
 
