@@ -1019,7 +1019,7 @@
                   :style="minervaTextStyleMenuPanelStyle"
                 >
                   <ul class="text-style-menu-list" role="menu">
-                    <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
+                    <template v-for="item in visibleMinervaTextStyleMenuItems" :key="item.value">
                       <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
                       <li v-else class="text-style-menu-item" role="none">
                         <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
@@ -1028,8 +1028,8 @@
                         </button>
                       </li>
                     </template>
-                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
-                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-item" role="none">
+                    <li v-if="showMinervaTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
+                    <li v-if="showMinervaTextStyleMenuToggle" class="text-style-menu-item" role="none">
                       <button type="button" class="text-style-menu-button text-style-menu-button--toggle" role="menuitem" @click="toggleTextStyleMenuExpanded">
                         <cdx-icon :icon="isTextStyleMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
                         <span>{{ isTextStyleMenuExpanded ? 'Fewer' : 'More' }}</span>
@@ -1184,7 +1184,7 @@
                   <cdx-icon :icon="cdxIconBoldEn" size="medium" />
                 </button>
                 <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic" @click="handleTextStyleItemSelect('italic')">
-                  <cdx-icon :icon="cdxIconItalic" size="medium" />
+                  <cdx-icon :icon="cdxIconItalicEn" size="medium" />
                 </button>
                 <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough" @click="handleTextStyleItemSelect('strikethrough')">
                   <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
@@ -1303,7 +1303,7 @@
                   :style="minervaTextStyleMenuPanelStyle"
                 >
                   <ul class="text-style-menu-list" role="menu">
-                    <template v-for="item in visibleTextStyleMenuItems" :key="item.value">
+                    <template v-for="item in visibleMinervaTextStyleMenuItems" :key="item.value">
                       <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
                       <li v-else class="text-style-menu-item" role="none">
                         <button type="button" class="text-style-menu-button" role="menuitem" @click="handleTextStyleItemSelect(item.value)">
@@ -1312,8 +1312,8 @@
                         </button>
                       </li>
                     </template>
-                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
-                    <li v-if="showTextStyleMenuToggle" class="text-style-menu-item" role="none">
+                    <li v-if="showMinervaTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
+                    <li v-if="showMinervaTextStyleMenuToggle" class="text-style-menu-item" role="none">
                       <button type="button" class="text-style-menu-button text-style-menu-button--toggle" role="menuitem" @click="toggleTextStyleMenuExpanded">
                         <cdx-icon :icon="isTextStyleMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
                         <span>{{ isTextStyleMenuExpanded ? 'Fewer' : 'More' }}</span>
@@ -1468,7 +1468,7 @@
                   <cdx-icon :icon="cdxIconBoldEn" size="medium" />
                 </button>
                 <button type="button" class="minerva-text-styles-drawer-button" aria-label="Italic" @click="handleTextStyleItemSelect('italic')">
-                  <cdx-icon :icon="cdxIconItalic" size="medium" />
+                  <cdx-icon :icon="cdxIconItalicEn" size="medium" />
                 </button>
                 <button type="button" class="minerva-text-styles-drawer-button" aria-label="Strikethrough" @click="handleTextStyleItemSelect('strikethrough')">
                   <cdx-icon :icon="cdxIconStrikethroughEn" size="medium" />
@@ -4097,6 +4097,7 @@ const minervaPublishIcon = computed(() => (
 ));
 const showMinervaMenuArrows = computed(() => !usesMinervaOverflowHandle.value);
 const cdxIconBoldEn = resolveIcon(cdxIconBold, 'en');
+const cdxIconItalicEn = resolveIcon(cdxIconItalic, 'en');
 const cdxIconStrikethroughEn = resolveIcon(cdxIconStrikethrough, 'en');
 const cdxIconUnderlineEn = resolveIcon(cdxIconUnderline, 'en');
 const activeParagraphStyle = ref('paragraph');
@@ -4171,13 +4172,28 @@ const paragraphMenuItems = [
 ];
 const textStyleMenuItems = [
   { value: 'bold', label: 'Bold', icon: cdxIconBoldEn },
-  { value: 'italic', label: 'Italic', icon: cdxIconItalic },
+  { value: 'italic', label: 'Italic', icon: cdxIconItalicEn },
   { value: 'strikethrough', label: 'Strikethrough', icon: cdxIconStrikethroughEn },
   { value: 'underline', label: 'Underline', icon: cdxIconUnderlineEn },
   { type: 'divider', value: 'text-style-divider-1' },
   { value: 'big', label: 'Big', icon: cdxIconBigger },
   { value: 'small', label: 'Small', icon: cdxIconSmaller },
   { type: 'divider', value: 'text-style-divider-2' },
+  { value: 'superscript', label: 'Superscript', icon: cdxIconSuperscript },
+  { value: 'subscript', label: 'Subscript', icon: cdxIconSubscript },
+  { value: 'computer-code', label: 'Computer code', icon: cdxIconCode }
+];
+const minervaTextStyleMenuItems = [
+  { value: 'bold', label: 'Bold', icon: cdxIconBoldEn },
+  { value: 'italic', label: 'Italic', icon: cdxIconItalicEn },
+  { value: 'strikethrough', label: 'Strikethrough', icon: cdxIconStrikethroughEn },
+  { value: 'underline', label: 'Underline', icon: cdxIconUnderlineEn },
+  { type: 'divider', value: 'minerva-text-style-divider-1' },
+  { value: 'bullet-list', label: 'Bullet list', icon: cdxIconListBullet },
+  { value: 'numbered-list', label: 'Numbered list', icon: cdxIconListNumbered },
+  { type: 'divider', value: 'minerva-text-style-divider-2' },
+  { value: 'big', label: 'Big', icon: cdxIconBigger },
+  { value: 'small', label: 'Small', icon: cdxIconSmaller },
   { value: 'superscript', label: 'Superscript', icon: cdxIconSuperscript },
   { value: 'subscript', label: 'Subscript', icon: cdxIconSubscript },
   { value: 'computer-code', label: 'Computer code', icon: cdxIconCode }
@@ -4259,6 +4275,13 @@ const visibleTextStyleMenuItems = computed(() => {
   return textStyleMenuItems.slice(0, 4);
 });
 const showTextStyleMenuToggle = computed(() => textStyleMenuItems.length > 10);
+const visibleMinervaTextStyleMenuItems = computed(() => {
+  if (minervaTextStyleMenuItems.length <= 10 || isTextStyleMenuExpanded.value) {
+    return minervaTextStyleMenuItems;
+  }
+  return minervaTextStyleMenuItems.slice(0, 4);
+});
+const showMinervaTextStyleMenuToggle = computed(() => minervaTextStyleMenuItems.length > 10);
 const minervaTextStyleMenuPanelStyle = computed(() => {
   if (!isMinervaSkin.value || !isTextStyleMenuOpen.value || usesMinervaTextStylesDrawer.value) {
     return null;
