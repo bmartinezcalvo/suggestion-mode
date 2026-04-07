@@ -4,8 +4,8 @@
     :class="[
       isEditMode ? 'edit-mode' : 'read-mode',
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
-      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && minervaTogglePlacement !== 'rail' ? 'minerva-suggestions-on' : '',
-      isMinervaSkin && isEditMode && minervaTogglePlacement === 'rail' ? 'minerva-suggestions-on--rail' : '',
+      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRailToggle ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && showMinervaRailToggle ? 'minerva-suggestions-on--rail' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -1116,17 +1116,18 @@
                   class="minerva-edit-menu-trigger"
                   :class="{
                     'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen,
-                    'minerva-edit-menu-trigger--overflow': usesMinervaOverflowHandle
+                    'minerva-edit-menu-trigger--overflow': usesMinervaEllipsisHandle
                   }"
                   :aria-label="minervaEditHandleAriaLabel"
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <span v-if="usesMinervaOverflowHandle" class="minerva-edit-menu-ellipsis-wrapper">
+                  <span v-if="usesMinervaEllipsisHandle" class="minerva-edit-menu-ellipsis-wrapper">
                     <cdx-icon :icon="minervaEditHandleIcon" size="medium" class="minerva-edit-menu-ellipsis-icon" />
+                    <span v-if="showMinervaEditMenuTriggerDotBadge" class="minerva-edit-menu-trigger-badge-dot"></span>
                   </span>
                   <cdx-icon v-else :icon="minervaEditHandleIcon" size="medium" />
-                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaEllipsisHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isMinervaEditMenuOpen"
@@ -1137,7 +1138,41 @@
                     <template v-for="item in minervaEditMenuItems" :key="item.value">
                       <li v-if="item.type === 'divider'" class="minerva-edit-menu-divider" role="separator"></li>
                       <li v-else class="minerva-edit-menu-item" role="none">
+                        <div
+                          v-if="item.type === 'switch'"
+                          class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
+                        >
+                          <span v-if="item.value === 'suggestion-mode'" class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span
+                              v-if="item.badge"
+                              class="suggestions-badge"
+                            >
+                              {{ item.badge }}
+                            </span>
+                          </span>
+                          <cdx-icon v-else :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                          <button
+                            type="button"
+                            class="minerva-edit-menu-switch"
+                            :class="{
+                              'minerva-edit-menu-switch--checked': item.switchValue,
+                              'minerva-edit-menu-switch--readonly': item.switchDisabled
+                            }"
+                            :aria-label="item.switchAriaLabel || item.label"
+                            role="switch"
+                            :aria-checked="item.switchValue"
+                            :disabled="item.switchDisabled"
+                            @click.stop="handleMinervaEditMenuSwitchChange(item.value, !item.switchValue)"
+                          >
+                            <span class="minerva-edit-menu-switch__track">
+                              <span class="minerva-edit-menu-switch__grip"></span>
+                            </span>
+                          </button>
+                        </div>
                         <button
+                          v-else
                           type="button"
                           class="minerva-edit-menu-button"
                           :class="{ 'minerva-edit-menu-button--active': item.active }"
@@ -1435,17 +1470,18 @@
                   class="minerva-edit-menu-trigger"
                   :class="{
                     'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen,
-                    'minerva-edit-menu-trigger--overflow': usesMinervaOverflowHandle
+                    'minerva-edit-menu-trigger--overflow': usesMinervaEllipsisHandle
                   }"
                   :aria-label="minervaEditHandleAriaLabel"
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <span v-if="usesMinervaOverflowHandle" class="minerva-edit-menu-ellipsis-wrapper">
+                  <span v-if="usesMinervaEllipsisHandle" class="minerva-edit-menu-ellipsis-wrapper">
                     <cdx-icon :icon="minervaEditHandleIcon" size="medium" class="minerva-edit-menu-ellipsis-icon" />
+                    <span v-if="showMinervaEditMenuTriggerDotBadge" class="minerva-edit-menu-trigger-badge-dot"></span>
                   </span>
                   <cdx-icon v-else :icon="minervaEditHandleIcon" size="medium" />
-                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaOverflowHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+                  <cdx-icon v-if="showMinervaMenuArrows && !usesMinervaEllipsisHandle" :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
                 <div
                   v-if="isMinervaEditMenuOpen"
@@ -1456,7 +1492,41 @@
                     <template v-for="item in minervaEditMenuItems" :key="item.value">
                       <li v-if="item.type === 'divider'" class="minerva-edit-menu-divider" role="separator"></li>
                       <li v-else class="minerva-edit-menu-item" role="none">
+                        <div
+                          v-if="item.type === 'switch'"
+                          class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
+                        >
+                          <span v-if="item.value === 'suggestion-mode'" class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span
+                              v-if="item.badge"
+                              class="suggestions-badge"
+                            >
+                              {{ item.badge }}
+                            </span>
+                          </span>
+                          <cdx-icon v-else :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                          <button
+                            type="button"
+                            class="minerva-edit-menu-switch"
+                            :class="{
+                              'minerva-edit-menu-switch--checked': item.switchValue,
+                              'minerva-edit-menu-switch--readonly': item.switchDisabled
+                            }"
+                            :aria-label="item.switchAriaLabel || item.label"
+                            role="switch"
+                            :aria-checked="item.switchValue"
+                            :disabled="item.switchDisabled"
+                            @click.stop="handleMinervaEditMenuSwitchChange(item.value, !item.switchValue)"
+                          >
+                            <span class="minerva-edit-menu-switch__track">
+                              <span class="minerva-edit-menu-switch__grip"></span>
+                            </span>
+                          </button>
+                        </div>
                         <button
+                          v-else
                           type="button"
                           class="minerva-edit-menu-button"
                           :class="{ 'minerva-edit-menu-button--active': item.active }"
@@ -3035,11 +3105,11 @@
         </aside>
 
         <div
-          v-if="minervaTogglePlacement === 'rail' && isMinervaSkin && isEditMode"
+          v-if="showMinervaRailToggle"
           class="minerva-suggestions-rail"
         >
           <cdx-toggle-button
-            v-if="activePrototype !== 'option-1' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+            v-if="showMinervaRailToggleButton"
             v-model="showSuggestions"
             quiet
             aria-label="Toggle suggestions"
@@ -4156,6 +4226,15 @@ const minervaEffectiveTogglePlacement = computed(() => (
 const showMinervaResponsiveToolbarToggleButton = computed(() => (
   minervaEffectiveTogglePlacement.value === 'toolbar'
 ));
+const showMinervaRailToggle = computed(() => (
+  isMinervaSkin.value &&
+  isEditMode.value &&
+  (minervaTogglePlacement.value === 'rail' || (minervaTogglePlacement.value === 'menu' && showSuggestions.value))
+));
+const showMinervaRailToggleButton = computed(() => (
+  activePrototype.value !== 'option-1' &&
+  (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value) || (minervaTogglePlacement.value === 'menu' && showSuggestions.value))
+));
 const showMinervaAddMenuButton = computed(() => (
   showMinervaBaseAddMenuButton.value ||
   !showMinervaResponsiveTopLevelLink.value ||
@@ -4166,19 +4245,27 @@ const showMinervaToolbarToggleButton = computed(() => (
 ));
 const minervaToolbarToggleEnabled = computed(() => minervaEffectiveTogglePlacement.value === 'toolbar');
 const minervaMenuToggleEnabled = computed(() => minervaEffectiveTogglePlacement.value === 'menu');
+const usesMinervaEllipsisHandle = computed(() => (
+  usesMinervaOverflowHandle.value || minervaMenuToggleEnabled.value
+));
 const usesMinervaTextStylesDrawer = computed(() => (
   isMinervaSkin.value && minervaTextStylesDrawerEnabled.value
 ));
 const minervaEditHandleIcon = computed(() => (
-  usesMinervaOverflowHandle.value ? cdxIconEllipsis : cdxIconEye
+  usesMinervaEllipsisHandle.value ? cdxIconEllipsis : cdxIconEye
 ));
 const minervaEditHandleAriaLabel = computed(() => (
-  usesMinervaOverflowHandle.value ? 'More options' : 'Edit options'
+  usesMinervaEllipsisHandle.value ? 'More options' : 'Edit options'
 ));
 const minervaPublishIcon = computed(() => (
   minervaPublishCheckIconEnabled.value ? cdxIconCheck : cdxIconNext
 ));
-const showMinervaMenuArrows = computed(() => !usesMinervaOverflowHandle.value);
+const showMinervaMenuArrows = computed(() => !usesMinervaEllipsisHandle.value);
+const showMinervaEditMenuTriggerDotBadge = computed(() => (
+  minervaMenuToggleEnabled.value &&
+  !showSuggestions.value &&
+  showToggleBadge.value
+));
 const cdxIconBoldEn = resolveIcon(cdxIconBold, 'en');
 const cdxIconItalicEn = resolveIcon(cdxIconItalic, 'en');
 const cdxIconStrikethroughEn = resolveIcon(cdxIconStrikethrough, 'en');
@@ -4214,12 +4301,18 @@ const minervaAddMenuItems = computed(() => ([
 const minervaEditMenuItems = computed(() => (
   usesMinervaOverflowHandle.value
     ? [
-        { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true, trailingIcon: cdxIconCheck },
-        { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
-        { type: 'divider', value: 'minerva-edit-divider-1' },
         ...(minervaMenuToggleEnabled.value
           ? [
-              { value: 'suggestion-mode', label: 'Suggestion mode', icon: cdxIconLightbulb, active: showSuggestions.value, badge: showSuggestions.value && showToggleBadge.value ? toggleBadgeCount.value : null, pressed: true },
+              { value: 'visual', label: 'Visual editing', icon: cdxIconEye, type: 'switch', switchValue: true, switchDisabled: true, switchAriaLabel: 'Visual editing enabled' }
+            ]
+          : [
+              { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true, trailingIcon: cdxIconCheck },
+              { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
+              { type: 'divider', value: 'minerva-edit-divider-1' }
+            ]),
+        ...(minervaMenuToggleEnabled.value
+          ? [
+              { value: 'suggestion-mode', label: 'Suggestions', icon: cdxIconLightbulb, type: 'switch', switchValue: showSuggestions.value, switchAriaLabel: 'Suggestions enabled', badge: toggleBadgeCount.value > 0 ? toggleBadgeCount.value : null },
               { type: 'divider', value: 'minerva-edit-divider-suggestions' }
             ]
           : []),
@@ -4232,12 +4325,17 @@ const minervaEditMenuItems = computed(() => (
         { value: 'read-the-user-guide', label: 'Read the user guide', icon: cdxIconHelp }
       ]
     : [
-        { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true },
-        { value: 'source', label: 'Source editing', icon: cdxIconWikiText },
         ...(minervaMenuToggleEnabled.value
           ? [
-              { type: 'divider', value: 'minerva-edit-divider-suggestions' },
-              { value: 'suggestion-mode', label: 'Suggestion mode', icon: cdxIconLightbulb, active: showSuggestions.value, badge: showSuggestions.value && showToggleBadge.value ? toggleBadgeCount.value : null, pressed: true }
+              { value: 'visual', label: 'Visual editing', icon: cdxIconEye, type: 'switch', switchValue: true, switchDisabled: true, switchAriaLabel: 'Visual editing enabled' }
+            ]
+          : [
+              { value: 'visual', label: 'Visual editing', icon: cdxIconEye, active: true },
+              { value: 'source', label: 'Source editing', icon: cdxIconWikiText }
+            ]),
+        ...(minervaMenuToggleEnabled.value
+          ? [
+              { value: 'suggestion-mode', label: 'Suggestions', icon: cdxIconLightbulb, type: 'switch', switchValue: showSuggestions.value, switchAriaLabel: 'Suggestions enabled', badge: toggleBadgeCount.value > 0 ? toggleBadgeCount.value : null }
             ]
           : [])
       ]
@@ -5555,6 +5653,12 @@ function handleMinervaEditMenuItem() {
     return;
   }
   closeMinervaEditMenu();
+}
+
+function handleMinervaEditMenuSwitchChange(value, nextValue) {
+  if (value === 'suggestion-mode') {
+    showSuggestions.value = nextValue;
+  }
 }
 
 function handleMinervaSuggestionsMenuToggle() {
@@ -10211,6 +10315,7 @@ function markArticleEdited() {
   justify-content: center;
   transform: rotate(90deg);
   transform-origin: center;
+  position: relative;
 }
 
 .minerva-edit-menu-ellipsis-icon {
@@ -10219,6 +10324,16 @@ function markArticleEdited() {
 
 .minerva-edit-menu-ellipsis-icon :deep(svg) {
   display: block;
+}
+
+.minerva-edit-menu-trigger-badge-dot {
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 9999px;
+  background: var(--color-progressive, #36c);
 }
 
 .minerva-edit-menu-panel {
@@ -10268,6 +10383,10 @@ function markArticleEdited() {
   font-size: 16px;
   text-align: left;
   cursor: pointer;
+}
+
+.minerva-edit-menu-button--switch-row {
+  justify-content: flex-start;
 }
 
 .minerva-edit-menu-button:hover {
@@ -10325,6 +10444,68 @@ function markArticleEdited() {
 
 .minerva-edit-menu-trailing-icon {
   margin-left: auto;
+}
+
+.minerva-edit-menu-switch {
+  margin-left: auto;
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  min-width: 32px;
+  height: 22px;
+  min-height: 22px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.minerva-edit-menu-switch--readonly {
+  cursor: default;
+}
+
+.minerva-edit-menu-lightbulb {
+  flex: 0 0 auto;
+}
+
+.minerva-edit-menu-switch__track {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  width: 32px;
+  min-width: 32px;
+  height: 22px;
+  min-height: 22px;
+  border: 1px solid var(--border-color-interactive, #72777d);
+  border-radius: 999px;
+  background: var(--background-color-base, #fff);
+  box-sizing: border-box;
+}
+
+.minerva-edit-menu-switch--checked .minerva-edit-menu-switch__track {
+  background: var(--background-color-progressive, #36c);
+  border-color: transparent;
+}
+
+.minerva-edit-menu-switch__grip {
+  position: absolute;
+  top: 50%;
+  left: 4px;
+  width: 14px;
+  height: 14px;
+  border: 1px solid var(--border-color-interactive, #72777d);
+  border-radius: 50%;
+  background: var(--background-color-base, #fff);
+  box-sizing: border-box;
+  transform: translateY(-50%);
+  transition: transform 0.1s, border-color 0.1s;
+}
+
+.minerva-edit-menu-switch--checked .minerva-edit-menu-switch__grip {
+  border-color: transparent;
+  transform: translate(10px, -50%);
 }
 
 .minerva-toolbar-toggle {
@@ -12678,6 +12859,7 @@ function markArticleEdited() {
 
 .suggestions-toggle-btn--active .suggestions-badge,
 .minerva-toolbar-toggle--active .suggestions-badge,
+.minerva-suggestions-rail-toggle--active .suggestions-badge,
 .minerva-suggestions-toggle--active .suggestions-badge {
   background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
   color: var(--suggestion-color, var(--color-progressive, #36c));
@@ -12686,6 +12868,7 @@ function markArticleEdited() {
 
 .suggestions-toggle-btn--active .suggestions-badge--zero,
 .minerva-toolbar-toggle--active .suggestions-badge--zero,
+.minerva-suggestions-rail-toggle--active .suggestions-badge--zero,
 .minerva-suggestions-toggle--active .suggestions-badge--zero {
   background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
   color: var(--suggestion-color, var(--color-progressive, #36c));
