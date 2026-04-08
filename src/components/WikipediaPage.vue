@@ -14,6 +14,12 @@
     ]"
     :style="suggestionColorStyles"
   >
+    <span
+      v-if="showMinervaRailToMenuBadgeAnimation"
+      class="minerva-rail-to-menu-badge"
+      :style="minervaRailToMenuBadgeStyle"
+      aria-hidden="true"
+    ></span>
     <div
       v-if="shouldShowToasts && showMinervaToggleOffToast"
       class="minerva-toast"
@@ -279,16 +285,15 @@
         >
           <transition name="banner-reveal" appear>
             <div
-              v-if="showMinervaArrowOnly"
+              v-if="showMinervaArrowOnly && !showMinervaRailToggle"
               class="suggestions-banner-arrow-buttons"
-              :class="{ 'suggestions-banner-arrow-buttons--bounce': isArrowBounceActive && !(showBannerArrowUp && showBannerArrowDown) }"
             >
               <cdx-button
-                v-if="showBannerArrowUp"
                 class="suggestions-banner-arrow-btn"
-                :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                action="progressive"
+                action="default"
                 weight="quiet"
+                size="small"
+                :disabled="!showBannerArrowUp"
                 aria-label="View previous suggestions"
                 @click="showSuggestions ? scrollToSuggestionByDirection('up') : null"
                 @keydown="showSuggestions ? handleBannerKeydown($event) : null"
@@ -296,11 +301,11 @@
                 <cdx-icon :icon="cdxIconCollapse" size="medium" />
               </cdx-button>
               <cdx-button
-                v-if="showBannerArrowDown"
                 class="suggestions-banner-arrow-btn"
-                :class="{ 'suggestions-banner-icon-only--bounce': isArrowBounceActive }"
-                action="progressive"
+                action="default"
                 weight="quiet"
+                size="small"
+                :disabled="!showBannerArrowDown"
                 aria-label="View next suggestions"
                 @click="showSuggestions ? scrollToSuggestionByDirection('down') : null"
                 @keydown="showSuggestions ? handleBannerKeydown($event) : null"
@@ -1088,7 +1093,7 @@
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <span v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-ellipsis-wrapper">
+                  <span v-if="minervaMenuToggleEnabled" ref="minervaEditMenuEllipsisRef" class="minerva-edit-menu-ellipsis-wrapper">
                     <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-edit-menu-ellipsis-icon" />
                     <span v-if="showMinervaEditMenuTriggerDotBadge" class="minerva-edit-menu-trigger-badge-dot"></span>
                   </span>
@@ -1223,7 +1228,7 @@
                   ref="minervaEditMenuTriggerRef"
                   @click.stop="toggleMinervaEditMenu"
                 >
-                  <span v-if="minervaMenuToggleEnabled" class="minerva-edit-menu-ellipsis-wrapper">
+                  <span v-if="minervaMenuToggleEnabled" ref="minervaEditMenuEllipsisRef" class="minerva-edit-menu-ellipsis-wrapper">
                     <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-edit-menu-ellipsis-icon" />
                     <span v-if="showMinervaEditMenuTriggerDotBadge" class="minerva-edit-menu-trigger-badge-dot"></span>
                   </span>
@@ -2552,32 +2557,68 @@
           v-if="showMinervaRailToggle"
           class="minerva-suggestions-rail"
         >
-          <cdx-toggle-button
-            v-if="activePrototype !== 'option-1' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
-            v-model="showSuggestions"
-            quiet
-            aria-label="Toggle suggestions"
-            class="minerva-suggestions-rail-toggle"
-            :class="{ 'minerva-suggestions-rail-toggle--active': showSuggestions }"
+          <div
+            class="minerva-suggestions-rail-controls"
+            :class="{ 'minerva-suggestions-rail-controls--bottom': activePrototype === 'option-3' && showSuggestions }"
           >
-            <span class="lightbulb-icon-wrapper">
-              <span v-if="showSuggestions" class="bulb-rays">
-                <span class="ray ray-1"></span>
-                <span class="ray ray-2"></span>
-                <span class="ray ray-3"></span>
-                <span class="ray ray-4"></span>
-                <span class="ray ray-5"></span>
+            <cdx-toggle-button
+              v-if="activePrototype !== 'option-1' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+              ref="minervaRailToggleRef"
+              :model-value="showSuggestions"
+              quiet
+              aria-label="Toggle suggestions"
+              class="minerva-suggestions-rail-toggle"
+              :class="{ 'minerva-suggestions-rail-toggle--active': showSuggestions }"
+              @update:model-value="handleMinervaRailToggleChange"
+            >
+              <span class="lightbulb-icon-wrapper">
+                <span v-if="showSuggestions" class="bulb-rays">
+                  <span class="ray ray-1"></span>
+                  <span class="ray ray-2"></span>
+                  <span class="ray ray-3"></span>
+                  <span class="ray ray-4"></span>
+                  <span class="ray ray-5"></span>
+                </span>
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                <span
+                  v-if="showToggleBadge"
+                  class="suggestions-badge"
+                  :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                >
+                  {{ toggleBadgeCount }}
+                </span>
               </span>
-              <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-              <span
-                v-if="showToggleBadge"
-                class="suggestions-badge"
-                :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+            </cdx-toggle-button>
+            <div
+              v-if="activePrototype === 'option-3' && showSuggestions"
+              class="minerva-suggestions-rail-arrows"
+            >
+              <cdx-button
+                class="suggestions-banner-arrow-btn"
+                action="default"
+                weight="quiet"
+                size="small"
+                :disabled="!showBannerArrowUp"
+                aria-label="View previous suggestions"
+                @click="scrollToSuggestionByDirection('up')"
+                @keydown="handleBannerKeydown($event)"
               >
-                {{ toggleBadgeCount }}
-              </span>
-            </span>
-          </cdx-toggle-button>
+                <cdx-icon :icon="cdxIconCollapse" size="medium" />
+              </cdx-button>
+              <cdx-button
+                class="suggestions-banner-arrow-btn"
+                action="default"
+                weight="quiet"
+                size="small"
+                :disabled="!showBannerArrowDown"
+                aria-label="View next suggestions"
+                @click="scrollToSuggestionByDirection('down')"
+                @keydown="handleBannerKeydown($event)"
+              >
+                <cdx-icon :icon="cdxIconExpand" size="medium" />
+              </cdx-button>
+            </div>
+          </div>
         </div>
 
           <div
@@ -2870,25 +2911,6 @@
                   </cdx-radio>
                 </div>
               </cdx-field>
-              <cdx-field>
-                <template #label>When reaching 1st suggestion</template>
-                <div class="cdx-radio-group" role="radiogroup">
-                  <cdx-radio
-                    v-model="firstSuggestionExpansionMode"
-                    name="first-suggestion-expansion"
-                    input-value="auto-expand"
-                  >
-                    Auto-expand the first suggestion when reached (desktop + mobile)
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="firstSuggestionExpansionMode"
-                    name="first-suggestion-expansion"
-                    input-value="mobile-bounce-desktop-auto"
-                  >
-                    Bouncing icon on mobile + auto-expand card on desktop
-                  </cdx-radio>
-                </div>
-              </cdx-field>
               <cdx-field v-if="isMinervaSkin">
                 <template #label>
                   Mobile ToggleButton (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
@@ -3156,7 +3178,7 @@ const linkSearchResults = ref([]);
 const linkSearchFooterUrl = ref('');
 const linkSearchTerm = ref('');
 const citationDialogUrl = ref('');
-const firstSuggestionExpansionMode = ref('auto-expand');
+const firstSuggestionExpansionMode = ref('none');
 const isSuggestionInfoOpen = ref(false);
 const isMinervaInfoSheetOpen = ref(false);
 const isSuggestionGlowActive = ref(false);
@@ -3425,6 +3447,11 @@ const minervaAddMenuTriggerRef = ref(null);
 const minervaAddMenuPanelRef = ref(null);
 const minervaEditMenuTriggerRef = ref(null);
 const minervaEditMenuPanelRef = ref(null);
+const minervaEditMenuEllipsisRef = ref(null);
+const minervaRailToggleRef = ref(null);
+const showMinervaRailToMenuBadgeAnimation = ref(false);
+const minervaRailToMenuBadgeStyle = ref({});
+let minervaRailToMenuBadgeTimer = null;
 const firstSuggestionAutoExpandedId = ref(null);
 const firstSuggestionBounceActiveId = ref(null);
 const firstSuggestionBounceDoneId = ref(null);
@@ -3435,6 +3462,9 @@ const toggleBadgeCount = computed(() => (
 ));
 const badgePulse = ref(false);
 const showToggleBadge = computed(() => {
+  if (activePrototype.value === 'option-1') {
+    return toggleBadgeCount.value > 0;
+  }
   if (isArrowOnceMode.value) {
     return toggleBadgeCount.value > 0 || showSuggestions.value;
   }
@@ -4332,6 +4362,71 @@ function handleMinervaEditMenuSwitchChange(value, nextValue) {
   }
 }
 
+function getToggleRootElement(toggleRef) {
+  const candidate = toggleRef?.value;
+  if (!candidate) return null;
+  if (candidate.$el instanceof HTMLElement) return candidate.$el;
+  if (candidate instanceof HTMLElement) return candidate;
+  return null;
+}
+
+function animateMinervaRailToggleToMenuBadge() {
+  const railToggle = getToggleRootElement(minervaRailToggleRef);
+  const ellipsis = minervaEditMenuEllipsisRef.value instanceof HTMLElement
+    ? minervaEditMenuEllipsisRef.value
+    : null;
+  if (!railToggle || !ellipsis) return;
+
+  const startRect = railToggle.getBoundingClientRect();
+  const endRect = ellipsis.getBoundingClientRect();
+  const startX = startRect.left + startRect.width / 2 - 4;
+  const startY = startRect.top + startRect.height / 2 - 4;
+  const endX = endRect.right - 7;
+  const endY = endRect.top - 1;
+
+  if (minervaRailToMenuBadgeTimer) {
+    clearTimeout(minervaRailToMenuBadgeTimer);
+    minervaRailToMenuBadgeTimer = null;
+  }
+
+  showMinervaRailToMenuBadgeAnimation.value = true;
+  minervaRailToMenuBadgeStyle.value = {
+    left: `${startX}px`,
+    top: `${startY}px`,
+    opacity: '1'
+  };
+
+  requestAnimationFrame(() => {
+    minervaRailToMenuBadgeStyle.value = {
+      left: `${endX}px`,
+      top: `${endY}px`,
+      opacity: '1'
+    };
+  });
+
+  minervaRailToMenuBadgeTimer = setTimeout(() => {
+    showMinervaRailToMenuBadgeAnimation.value = false;
+    minervaRailToMenuBadgeStyle.value = {};
+    minervaRailToMenuBadgeTimer = null;
+  }, 320);
+}
+
+function handleMinervaRailToggleChange(nextValue) {
+  const shouldAnimateToEllipsis = (
+    showSuggestions.value &&
+    !nextValue &&
+    minervaMenuToggleEnabled.value &&
+    minervaRailToggleEnabled.value &&
+    toggleBadgeCount.value > 0
+  );
+
+  if (shouldAnimateToEllipsis) {
+    animateMinervaRailToggleToMenuBadge();
+  }
+
+  showSuggestions.value = nextValue;
+}
+
 function handleMinervaSuggestionsMenuToggle() {
   showSuggestions.value = !showSuggestions.value;
   closeMinervaEditMenu();
@@ -4743,7 +4838,9 @@ function updateBannerArrowDirections() {
     }
   });
   showBannerArrowUp.value = hasAbove;
-  showBannerArrowDown.value = hasBelow || (!hasAbove && !hasBelow);
+  showBannerArrowDown.value = activePrototype.value === 'option-2'
+    ? (hasBelow || (!hasAbove && !hasBelow))
+    : hasBelow;
 }
 
 function updatePrimaryBannerDirection() {
@@ -4771,6 +4868,21 @@ function updatePrimaryBannerDirection() {
     }
   });
   showBannerPrimaryArrowUp.value = nearestDirection === 'up';
+}
+
+function syncMinervaArrowOnlyVisibility() {
+  if (
+    activePrototype.value !== 'option-3' ||
+    !isMinervaSkin.value ||
+    !isEditMode.value ||
+    !showSuggestions.value ||
+    availableSuggestionCount.value === 0
+  ) {
+    showMinervaArrowOnly.value = false;
+    return;
+  }
+
+  showMinervaArrowOnly.value = true;
 }
 
 function clearScrollReappear() {
@@ -5272,7 +5384,7 @@ watch(isEditMode, (newValue) => {
   if (newValue && isMinervaSkin.value && activePrototype.value === 'option-3') {
     nextTick(() => {
       updateSuggestionVisibility();
-      showMinervaArrowOnly.value = !anySuggestionVisible.value;
+      syncMinervaArrowOnlyVisibility();
     });
   }
 });
@@ -5406,6 +5518,7 @@ watch(showSuggestions, (newValue) => {
       alignBothSuggestions();
       updateSuggestionVisibility();
       updateToneCheckFromContent();
+      syncMinervaArrowOnlyVisibility();
     });
   } else {
     updateToneCheckFromContent();
@@ -5422,6 +5535,7 @@ watch(showSuggestions, (newValue) => {
     sidebarTopOffset4.value = 0;
     suggestionsTopOffset.value = 0;
     closeMinervaSuggestion();
+    syncMinervaArrowOnlyVisibility();
   }
 });
 
@@ -5524,6 +5638,10 @@ watch(
   }
 );
 
+watch([activePrototype, minervaToggleLocation], () => {
+  syncMinervaArrowOnlyVisibility();
+});
+
 watch(
   () => [showSuggestions.value, showEmptyState.value, isMinervaSkin.value],
   ([suggestionsActive, emptyActive, isMinerva]) => {
@@ -5619,6 +5737,7 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
       }, 2000);
     }, 500);
   }
+  syncMinervaArrowOnlyVisibility();
 });
 
 watch(anySuggestionVisible, (visible) => {
@@ -5631,6 +5750,7 @@ watch(anySuggestionVisible, (visible) => {
   if (visible || !showSuggestions.value || !isEditMode.value || !isMinervaSkin.value || activePrototype.value !== 'option-3') {
     showMinervaArrowOnly.value = false;
   }
+  syncMinervaArrowOnlyVisibility();
 });
 
 watch(toggleBadgeCount, (newValue, oldValue) => {
@@ -8024,6 +8144,17 @@ function markArticleEdited() {
   background: var(--background-color-progressive, #36c);
 }
 
+.minerva-rail-to-menu-badge {
+  position: fixed;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--background-color-progressive, #36c);
+  pointer-events: none;
+  z-index: 95;
+  transition: left 320ms ease, top 320ms ease, opacity 320ms ease;
+}
+
 .minerva-edit-menu-panel {
   position: fixed;
   top: 42px;
@@ -9133,10 +9264,54 @@ function markArticleEdited() {
   background: transparent;
   border-left: 1px solid var(--border-color-muted, #DADDE3);
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: flex-start;
   align-items: flex-start;
   padding-top: 1px;
   z-index: 0;
+}
+
+.minerva-suggestions-rail-controls {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.minerva-suggestions-rail-controls--bottom {
+  margin-top: auto;
+}
+
+.minerva-suggestions-rail-arrows {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: var(--background-color-base, #ffffff);
+}
+
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn :deep(button),
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn :deep(.cdx-icon),
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn :deep(svg) {
+  color: var(--color-subtle, #54595d);
+  fill: var(--color-subtle, #54595d);
 }
 
 .minerva-suggestions-rail-toggle :deep(button) {
@@ -10309,16 +10484,58 @@ function markArticleEdited() {
   justify-content: flex-end;
 }
 
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-buttons {
+  gap: 0;
+}
+
 .minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn {
   width: 44px;
-  height: 42px;
+  height: 44px;
   padding: 0;
+  background: var(--background-color-base, #ffffff);
 }
 
 .minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn :deep(button) {
   width: 44px;
-  height: 42px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
   padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn :deep(.cdx-icon),
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn :deep(svg) {
+  color: var(--color-subtle, #54595d);
+  fill: var(--color-subtle, #54595d);
+}
+
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn:disabled :deep(.cdx-icon),
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn:disabled :deep(svg),
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn:disabled :deep(.cdx-icon),
+.minerva-suggestions-rail-arrows .suggestions-banner-arrow-btn:disabled :deep(svg) {
+  color: var(--color-disabled, #a2a9b1);
+  fill: var(--color-disabled, #a2a9b1);
+}
+
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-buttons--bounce :deep(.cdx-icon),
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-buttons--bounce :deep(svg),
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-icon-only--bounce :deep(.cdx-icon),
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-icon-only--bounce :deep(svg) {
+  animation: none;
 }
 
 .suggestions-banner--option-2 {
