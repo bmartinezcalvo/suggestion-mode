@@ -4,6 +4,7 @@
     :class="[
       isEditMode ? 'edit-mode' : 'read-mode',
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
+      isMinervaSkin && editFullPageImprovedEnabled ? 'minerva-edit-full-page-improved' : '',
       isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRailToggle ? 'minerva-suggestions-on' : '',
       isMinervaSkin && isEditMode && showMinervaRailToggle ? 'minerva-suggestions-on--rail' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
@@ -322,6 +323,8 @@
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
                 'suggestions-banner--option-3': activePrototype === 'option-3' && bannerSuggestionCount > 0,
                 'suggestions-banner--single-use': activePrototype === 'option-2',
+                'suggestions-banner--contextual-up': showBannerPrimaryArrowUp &&
+                  (activePrototype === 'option-1' || activePrototype === 'option-2'),
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -1564,13 +1567,16 @@
                   <cdx-button
                     v-if="showEditFullPageButtons('early-life')"
                     class="edit-full-page-btn"
+                    :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                     action="default"
-                    weight="normal"
+                    :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                    :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                     @click="showFullPageEdit($event)"
                   ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -1597,13 +1603,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('early-life')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -1618,13 +1627,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('career')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -1741,13 +1753,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('career')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -1762,13 +1777,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('poetry')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -1932,13 +1950,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('poetry')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -1953,13 +1974,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('prose')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -2077,13 +2101,16 @@
                     <cdx-button
                       v-if="showEditFullPageButtons('prose')"
                       class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                       action="default"
-                      weight="normal"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0" class="edit-full-page-indicator">
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
                           <span class="edit-full-page-badge-dot"></span>
                         </span>
@@ -2424,7 +2451,13 @@
               </p>
             </div>
           </div>
-          <div class="suggestions-banner-container">
+          <div
+            class="suggestions-banner-container"
+            :class="{
+              'suggestions-banner-container--contextual-up': showBannerPrimaryArrowUp &&
+                (activePrototype === 'option-1' || activePrototype === 'option-2')
+            }"
+          >
             <transition name="banner-reveal" appear>
               <div
                 v-if="isBannerDelayReady && !isBannerDismissed && !(activePrototype === 'option-3' && isAutoScrollActive) && (isArrowOnceMode
@@ -2437,6 +2470,8 @@
                 'suggestions-banner--option-2': isArrowOnceMode && bannerSuggestionCount > 0,
                 'suggestions-banner--option-3': activePrototype === 'option-3' && bannerSuggestionCount > 0,
                 'suggestions-banner--single-use': activePrototype === 'option-2',
+                'suggestions-banner--contextual-up': showBannerPrimaryArrowUp &&
+                  (activePrototype === 'option-1' || activePrototype === 'option-2'),
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
@@ -2640,6 +2675,15 @@
               <div class="minerva-sheet-title">
                 {{ isEditCheckSheet ? editCheckTitle : minervaSheetTitle }}
               </div>
+              <button
+                v-if="minervaSheetReturnDirection"
+                class="minerva-sheet-close"
+                type="button"
+                :aria-label="minervaSheetReturnDirection === 'up' ? 'Scroll to highlighted item above' : 'Scroll to highlighted item below'"
+                @click="scrollToMinervaSheetTarget"
+              >
+                <cdx-icon :icon="minervaSheetReturnDirection === 'up' ? cdxIconArrowUp : cdxIconArrowDown" size="medium" />
+              </button>
             </div>
           <p v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-description">
             Other editors often revise this kind of wording to have a more balanced tone. Learn more
@@ -2951,6 +2995,9 @@
                 <cdx-checkbox v-model="nonSelectedHighlightUnderlineEnabled">
                   Highlighted text is underlined when non selected
                 </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="editFullPageImprovedEnabled">
+                  "Edit full page" button improved
+                </cdx-checkbox>
               </cdx-field>
             </div>
           </div>
@@ -3222,6 +3269,7 @@ const editSnapshot = ref([]);
 const isMinervaSheetOpen = ref(false);
 const activeMinervaSuggestion = ref(1);
 const minervaSheetRef = ref(null);
+const minervaSheetReturnDirection = ref(null);
 const minervaSheetHeight = ref(0);
 
 // First suggestion card states
@@ -3312,6 +3360,7 @@ const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
+const editFullPageImprovedEnabled = ref(false);
 const selectedPrototype = ref('option-2');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
@@ -3669,6 +3718,9 @@ const isMinervaPaginationNextDisabled = computed(() => (
   minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
 ));
 const showMinervaPagination = computed(() => {
+  if (activeMinervaSuggestion.value === 2 || activeMinervaSuggestion.value === 4) {
+    return minervaPaginationTotal.value > 0;
+  }
   return minervaPaginationTotal.value > 1;
 });
 
@@ -4943,6 +4995,7 @@ function scrollToEditSection(sectionId) {
 function updateSuggestionVisibility() {
   if (!showSuggestions.value) {
     anySuggestionVisible.value = false;
+    updateMinervaSheetReturnDirection();
     return;
   }
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
@@ -5011,6 +5064,7 @@ function updateSuggestionVisibility() {
   }
   updateBannerArrowDirections();
   updatePrimaryBannerDirection();
+  updateMinervaSheetReturnDirection();
 }
 
 function updateEditToolbarScrolled() {
@@ -5659,11 +5713,23 @@ watch(isEditCheckMode, (isActive) => {
 
 watch(isMinervaSheetOpen, () => {
   updateMinervaSheetHeight();
+  nextTick(() => {
+    updateMinervaSheetReturnDirection();
+  });
 });
 
 watch([isMinervaSheetOpen, minervaSheetMode], () => {
   if (!isMinervaSkin.value) return;
   syncEditCheckHighlightState();
+  nextTick(() => {
+    updateMinervaSheetReturnDirection();
+  });
+});
+
+watch([activeMinervaSuggestion, activeEditCheckType], () => {
+  nextTick(() => {
+    updateMinervaSheetReturnDirection();
+  });
 });
 
 watch(
@@ -6352,8 +6418,66 @@ function openMinervaSuggestionSheet(suggestionId) {
   updateMinervaSheetHeight();
 }
 
+function getCurrentMinervaSheetTarget() {
+  if (!isMinervaSkin.value || !isMinervaSheetOpen.value) {
+    return null;
+  }
+  if (minervaSheetMode.value === 'edit-check') {
+    if (activeEditCheckType.value === 'tone') {
+      return toneCheckHighlightRef.value;
+    }
+    if (activeEditCheckType.value === 'paste') {
+      return pasteCheckHighlightRef.value;
+    }
+    return null;
+  }
+  return getSuggestionRefById(activeMinervaSuggestion.value)?.value || null;
+}
+
+function updateMinervaSheetReturnDirection() {
+  if (!isMinervaSkin.value || !isMinervaSheetOpen.value) {
+    minervaSheetReturnDirection.value = null;
+    return;
+  }
+  const target = getCurrentMinervaSheetTarget();
+  const sheet = minervaSheetRef.value;
+  if (!target || !sheet) {
+    minervaSheetReturnDirection.value = null;
+    return;
+  }
+  const rect = target.getBoundingClientRect();
+  const sheetRect = sheet.getBoundingClientRect();
+  const availableTop = 0;
+  const availableBottom = sheetRect.top;
+  const isVisibleAboveSheet = rect.bottom > availableTop && rect.top < availableBottom;
+  if (isVisibleAboveSheet) {
+    minervaSheetReturnDirection.value = null;
+    return;
+  }
+  if (rect.bottom <= availableTop) {
+    minervaSheetReturnDirection.value = 'up';
+    return;
+  }
+  if (rect.top >= availableBottom) {
+    minervaSheetReturnDirection.value = 'down';
+    return;
+  }
+  minervaSheetReturnDirection.value = null;
+}
+
+function scrollToMinervaSheetTarget() {
+  const target = getCurrentMinervaSheetTarget();
+  if (!target) return;
+  startAutoScrollIndicator();
+  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  nextTick(() => {
+    updateMinervaSheetReturnDirection();
+  });
+}
+
 function closeMinervaSuggestion() {
   isMinervaSheetOpen.value = false;
+  minervaSheetReturnDirection.value = null;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
   isCardExpanded3.value = false;
@@ -7524,12 +7648,30 @@ function markArticleEdited() {
   margin: 12px auto;
 }
 
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .edit-full-page-btn-wrapper {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  margin: 0;
+  padding: 24px 0;
+  background-color: var(--background-color-neutral-subtle, #f8f9fa);
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section > .edit-full-page-btn-wrapper {
+  display: none;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section:first-of-type > .edit-full-page-btn-wrapper:first-child,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section:last-of-type > .edit-full-page-btn-wrapper:last-child {
+  display: flex;
+}
+
 .edit-full-page-btn {
   display: block;
   margin: 0;
 }
 
-.edit-full-page-btn :deep(.cdx-button) {
+.edit-full-page-btn:not(.edit-full-page-btn--improved) :deep(.cdx-button) {
   background-color: var(--background-color-interactive-subtle);
   border-color: var(--border-color-interactive);
 }
@@ -7538,6 +7680,19 @@ function markArticleEdited() {
   display: inline-flex;
   align-items: center;
   gap: 8px;
+}
+
+.edit-full-page-start-icon {
+  color: var(--color-subtle, #54595d);
+}
+
+.edit-full-page-btn--improved,
+.edit-full-page-btn--improved .edit-full-page-btn-content,
+.edit-full-page-btn--improved :deep(.cdx-button__label),
+.edit-full-page-btn--improved :deep(.cdx-button__button),
+.edit-full-page-btn--improved :deep(.cdx-icon),
+.edit-full-page-btn--improved :deep(svg) {
+  color: var(--color-subtle, #54595d);
 }
 
 .edit-full-page-separator {
@@ -7908,6 +8063,19 @@ function markArticleEdited() {
 /* ===== EDIT MODE STYLES ===== */
 .edit-mode {
   background-color: #ffffff;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .page-container,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .main-content-area,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .edit-mode-content,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on--rail,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on .article-content-edit,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on--rail .article-content-edit {
+  background-color: var(--background-color-neutral-subtle, #f8f9fa);
 }
 
 .vector-skin.edit-mode .article {
@@ -8483,6 +8651,15 @@ function markArticleEdited() {
   background-color: var(--background-color-base, #ffffff);
 }
 
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .edit-header {
+  background-color: var(--background-color-neutral-subtle, #f8f9fa);
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .main-content-area {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 .tagline-edit {
   font-family: 'Inter', sans-serif;
   font-size: 12px;
@@ -8574,6 +8751,12 @@ function markArticleEdited() {
   pointer-events: none;
 }
 
+.suggestions-banner-container--contextual-up {
+  justify-content: flex-start;
+  padding-top: 40px;
+  padding-bottom: 0;
+}
+
 .suggestions-banner-container .suggestions-banner {
   pointer-events: auto;
 }
@@ -8604,6 +8787,14 @@ function markArticleEdited() {
   gap: 8px;
   width: 100%;
   max-width: 949px;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-main-edit {
+  gap: 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) {
+  background-color: var(--background-color-neutral-subtle, #f8f9fa);
 }
 
 .article-first-section {
@@ -8650,6 +8841,77 @@ function markArticleEdited() {
   gap: 4px;
   padding-top: 20px;
   width: 100%;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-first-section .article-text-block {
+  background-color: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-muted, #DADDE3);
+  padding: 16px;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-first-section .article-text-block .article-text-editable {
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-edit-section {
+  background-color: var(--background-color-neutral-subtle, #f8f9fa);
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-edit-section .section-heading-edit {
+  padding: 24px 16px 0;
+  background-color: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-muted, #DADDE3);
+  border-bottom: 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-edit-section .article-text-editable {
+  padding: 16px;
+  background-color: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-muted, #DADDE3);
+  border-top: 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .infobox {
+  background-color: var(--background-color-base, #ffffff);
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .article-first-section .article-text-block,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .edit-header,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section .section-heading-edit,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section .article-text-editable {
+  background: transparent;
+  border: 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .edit-header {
+  background-color: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-subtle, #C8CCD1);
+  border-bottom: 0;
+  padding: 8px 16px 16px;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .article-main-edit {
+  background-color: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-subtle, #C8CCD1);
+  border-top: 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .article-first-section .article-text-block {
+  padding: 16px;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section {
+  background: transparent;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section .section-heading-edit {
+  padding: 24px 16px 0;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section .article-text-editable {
+  padding: 16px;
 }
 
 .heading-text-edit {
@@ -9203,6 +9465,11 @@ function markArticleEdited() {
   background: var(--background-color-base, #ffffff);
 }
 
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on .article-content-edit,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on--rail .article-content-edit {
+  padding-right: var(--minerva-suggestion-gutter);
+}
+
 .minerva-suggestions-on .minerva-suggestion-target,
 .minerva-suggestions-on--rail .minerva-suggestion-target {
   padding-right: 0;
@@ -9224,6 +9491,12 @@ function markArticleEdited() {
   background-color: var(--background-color-neutral-subtle, #f8f9fa);
   border-left: 1px solid var(--border-color-muted, #DADDE3);
   pointer-events: none;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on .article-content-edit::after,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on--rail .article-content-edit::after,
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-suggestions-rail {
+  border-left: 0;
 }
 
 
@@ -9271,6 +9544,10 @@ function markArticleEdited() {
   z-index: 0;
 }
 
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-suggestions-rail {
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+}
+
 .minerva-suggestions-rail-controls {
   display: flex;
   flex-direction: column;
@@ -9305,6 +9582,7 @@ function markArticleEdited() {
   padding: 0;
   background: transparent;
   border: 0;
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
   box-shadow: none;
 }
 
@@ -9320,6 +9598,12 @@ function markArticleEdited() {
   padding: 0;
   position: relative;
   background: transparent;
+}
+
+.minerva-suggestions-rail-controls--bottom .minerva-suggestions-rail-toggle,
+.minerva-suggestions-rail-controls--bottom .minerva-suggestions-rail-toggle :deep(button),
+.minerva-suggestions-rail-controls--bottom .minerva-suggestions-rail-toggle :deep(.cdx-button__button) {
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
 }
 
 .minerva-suggestions-rail-toggle :deep(.cdx-icon) {
@@ -9495,10 +9779,13 @@ function markArticleEdited() {
   background: transparent;
   padding: 4px;
   cursor: pointer;
-  color: #54595d;
+  color: var(--color-base, #202122);
 }
 
+.minerva-sheet-close :deep(.cdx-icon),
 .minerva-sheet-close :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
   transform: none;
 }
 
@@ -9571,6 +9858,21 @@ function markArticleEdited() {
   display: inline-flex;
   align-items: center;
   gap: 6px;
+  width: 32px;
+  min-width: 32px;
+  max-width: 32px;
+  height: 32px;
+  min-height: 32px;
+  flex: 0 0 32px;
+}
+
+.minerva-sheet-more-actions :deep(button),
+.minerva-sheet-more-actions :deep(.cdx-button__button) {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  padding: 0;
 }
 
 .minerva-skin.edit-mode .edit-mode-content {
@@ -10503,6 +10805,7 @@ function markArticleEdited() {
   padding: 0;
   background: transparent;
   border: 0;
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
   box-shadow: none;
 }
 
@@ -10514,6 +10817,7 @@ function markArticleEdited() {
   padding: 0;
   background: transparent;
   border: 0;
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
   box-shadow: none;
 }
 
@@ -10961,6 +11265,11 @@ function markArticleEdited() {
   position: sticky;
   top: auto;
   bottom: 32px;
+}
+
+.vector-skin .suggestions-banner.suggestions-banner--contextual-up {
+  top: 40px;
+  bottom: auto;
 }
 
 .minerva-skin .suggestions-banner {
