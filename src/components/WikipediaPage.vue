@@ -2128,8 +2128,40 @@
         <aside 
           v-if="isEditMode && !isMinervaSkin && (showSuggestionsDisplay || isArrowOnceMode)" 
           class="suggestions-sidebar"
+          :class="{ 'suggestions-sidebar--arrow-mode': activePrototype === 'option-3' }"
           :style="{ marginTop: `${suggestionsTopOffset}px` }"
         >
+          <div
+            v-if="activePrototype === 'option-3' && showSuggestions && !anySuggestionVisible"
+            class="vector-suggestions-arrow-controls"
+          >
+            <div class="suggestions-banner-arrow-buttons">
+              <cdx-button
+                class="suggestions-banner-arrow-btn"
+                action="default"
+                weight="quiet"
+                size="small"
+                :disabled="!showBannerArrowUp"
+                aria-label="View previous suggestions"
+                @click="scrollToSuggestionByDirection('up')"
+                @keydown="handleBannerKeydown($event)"
+              >
+                <cdx-icon :icon="cdxIconCollapse" size="medium" />
+              </cdx-button>
+              <cdx-button
+                class="suggestions-banner-arrow-btn"
+                action="default"
+                weight="quiet"
+                size="small"
+                :disabled="!showBannerArrowDown"
+                aria-label="View next suggestions"
+                @click="scrollToSuggestionByDirection('down')"
+                @keydown="handleBannerKeydown($event)"
+              >
+                <cdx-icon :icon="cdxIconExpand" size="medium" />
+              </cdx-button>
+            </div>
+          </div>
           <!-- First Add Citation Suggestion Card -->
           <div 
             v-if="showSuggestionsDisplay && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
@@ -2452,6 +2484,7 @@
             </div>
           </div>
           <div
+            v-if="activePrototype !== 'option-3'"
             class="suggestions-banner-container"
             :class="{
               'suggestions-banner-container--contextual-up': showBannerPrimaryArrowUp &&
@@ -2625,7 +2658,7 @@
               </span>
             </cdx-toggle-button>
             <div
-              v-if="activePrototype === 'option-3' && showSuggestions"
+              v-if="activePrototype === 'option-3' && showSuggestions && !anySuggestionVisible"
               class="minerva-suggestions-rail-arrows"
             >
               <cdx-button
@@ -4928,7 +4961,8 @@ function syncMinervaArrowOnlyVisibility() {
     !isMinervaSkin.value ||
     !isEditMode.value ||
     !showSuggestions.value ||
-    availableSuggestionCount.value === 0
+    availableSuggestionCount.value === 0 ||
+    anySuggestionVisible.value
   ) {
     showMinervaArrowOnly.value = false;
     return;
@@ -8741,6 +8775,18 @@ function markArticleEdited() {
   padding-top: 0;
 }
 
+.vector-skin .suggestions-sidebar--arrow-mode {
+  padding-top: 0;
+}
+
+.vector-suggestions-arrow-controls {
+  position: sticky;
+  top: 42px;
+  left: 0;
+  z-index: 12;
+  width: fit-content;
+}
+
 .suggestions-banner-container {
   position: absolute;
   inset: 0;
@@ -10788,6 +10834,54 @@ function markArticleEdited() {
 
 .minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-buttons {
   gap: 0;
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-buttons {
+  gap: 0;
+  border: 1px solid var(--border-color-subtle, #C8CCD1);
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn {
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  background: var(--background-color-base, #ffffff);
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn + .suggestions-banner-arrow-btn {
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn :deep(button),
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn + .suggestions-banner-arrow-btn :deep(button),
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn + .suggestions-banner-arrow-btn :deep(.cdx-button__button) {
+  border-top: 1px solid var(--border-color-muted, #DADDE3);
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn :deep(.cdx-icon),
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn :deep(svg) {
+  color: var(--color-subtle, #54595d);
+  fill: var(--color-subtle, #54595d);
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn:disabled :deep(.cdx-icon),
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-btn:disabled :deep(svg) {
+  color: var(--color-disabled, #a2a9b1);
+  fill: var(--color-disabled, #a2a9b1);
 }
 
 .minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-btn {
