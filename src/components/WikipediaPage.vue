@@ -5,8 +5,8 @@
       isEditMode ? 'edit-mode' : 'read-mode',
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
       isMinervaSkin && editFullPageImprovedEnabled ? 'minerva-edit-full-page-improved' : '',
-      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRailToggle ? 'minerva-suggestions-on' : '',
-      isMinervaSkin && isEditMode && showMinervaRailToggle ? 'minerva-suggestions-on--rail' : '',
+      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRailToggle && !showMinervaCollapsedCountRailToggle ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && (showMinervaRailToggle || showMinervaCollapsedCountRailToggle) ? 'minerva-suggestions-on--rail' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -2622,15 +2622,33 @@
         </aside>
 
         <div
-          v-if="showMinervaRailToggle"
+          v-if="showMinervaRailToggle || showMinervaCollapsedCountRailToggle"
           class="minerva-suggestions-rail"
         >
           <div
             class="minerva-suggestions-rail-controls"
-            :class="{ 'minerva-suggestions-rail-controls--bottom': activePrototype === 'option-3' && showSuggestions }"
+            :class="{ 'minerva-suggestions-rail-controls--bottom': (activePrototype === 'option-3' && showSuggestions) || showMinervaCollapsedCountRailToggle }"
           >
             <cdx-toggle-button
-              v-if="activePrototype !== 'option-1' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+              v-if="showMinervaCollapsedCountRailToggle"
+              :model-value="true"
+              quiet
+              aria-label="Show suggestions"
+              class="minerva-suggestions-rail-toggle minerva-suggestions-rail-toggle--count-collapsed minerva-suggestions-rail-toggle--active"
+              @update:model-value="handleMinervaCollapsedCountToggleChange"
+            >
+              <span class="lightbulb-icon-wrapper">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                <span
+                  class="suggestions-badge"
+                  :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                >
+                  {{ toggleBadgeCount }}
+                </span>
+              </span>
+            </cdx-toggle-button>
+            <cdx-toggle-button
+              v-else-if="activePrototype !== 'option-1' && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
               ref="minervaRailToggleRef"
               :model-value="showSuggestions"
               quiet
@@ -3244,8 +3262,17 @@ const minervaRailToggleEnabled = computed(
 const showMinervaRailToggle = computed(
   () => isMinervaSkin.value &&
     isEditMode.value &&
+    activePrototype.value !== 'option-1' &&
     minervaRailToggleEnabled.value &&
     (!minervaMenuToggleEnabled.value || showSuggestions.value)
+);
+const showMinervaCollapsedCountRailToggle = computed(
+  () => isMinervaSkin.value &&
+    isEditMode.value &&
+    activePrototype.value === 'option-1' &&
+    showSuggestions.value &&
+    isBannerDismissed.value &&
+    toggleBadgeCount.value > 0
 );
 const showMinervaEditMenuTriggerDotBadge = computed(
   () => minervaMenuToggleEnabled.value && !showSuggestions.value && toggleBadgeCount.value > 0
@@ -4510,6 +4537,23 @@ function handleMinervaRailToggleChange(nextValue) {
   }
 
   showSuggestions.value = nextValue;
+}
+
+function handleMinervaCollapsedCountToggleChange(nextValue) {
+  if (bannerCloseTimer) {
+    clearTimeout(bannerCloseTimer);
+    bannerCloseTimer = null;
+  }
+  isBannerDismissed.value = false;
+  isBannerDelayReady.value = true;
+  isBannerOpening.value = true;
+  if (bannerOpenTimer) {
+    clearTimeout(bannerOpenTimer);
+  }
+  bannerOpenTimer = setTimeout(() => {
+    isBannerOpening.value = false;
+    bannerOpenTimer = null;
+  }, 220);
 }
 
 function handleMinervaSuggestionsMenuToggle() {
