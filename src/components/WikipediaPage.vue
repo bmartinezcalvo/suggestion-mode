@@ -3421,16 +3421,16 @@
               <cdx-field v-if="isMinervaSkin">
                 <template #label>Customize iterations</template>
                 <cdx-checkbox v-model="minervaRedoButtonEnabled">
-                  Enable Redo
+                  <span class="prototype-dialog-inline-label">Enable Redo button after Undo (<a href="https://phabricator.wikimedia.org/T222316" target="_blank" rel="noopener" class="prototype-dialog-inline-link">T222316</a>)</span>
                 </cdx-checkbox>
                 <cdx-checkbox v-model="minervaTextStylesDrawerEnabled">
-                  Enable text styles drawer
+                  Enable Text styles as drawer
                 </cdx-checkbox>
                 <cdx-checkbox v-model="minervaAddButtonEnabled">
-                  "Add +" button with more tools
+                  <span class="prototype-dialog-inline-label">Enable "Add +" button with more tools (<a href="https://phabricator.wikimedia.org/T385851" target="_blank" rel="noopener" class="prototype-dialog-inline-link">T385851</a>)</span>
                 </cdx-checkbox>
                 <cdx-checkbox v-model="minervaMoveToggleOutsideToolbarEnabled">
-                  Move Suggestions Toggle outside the toolbar
+                  <span class="prototype-dialog-inline-label">Move Suggestions Toggle outside the toolbar (<a href="https://phabricator.wikimedia.org/T420419" target="_blank" rel="noopener" class="prototype-dialog-inline-link">T420419</a>)</span>
                 </cdx-checkbox>
                 <div
                   v-if="minervaMoveToggleOutsideToolbarEnabled"
@@ -3444,10 +3444,10 @@
                   </cdx-checkbox>
                 </div>
                 <cdx-checkbox v-model="minervaOverflowHandleEnabled">
-                  Replace edit handle with "More options" (ellipsis)
+                  Replace Edit handle icon with ellipsis
                 </cdx-checkbox>
                 <cdx-checkbox v-model="minervaPublishCheckIconEnabled">
-                  Replace "Publish" arrow with check (done) icon
+                  Replace Publish arrow with check icon
                 </cdx-checkbox>
               </cdx-field>
             </div>
@@ -9258,6 +9258,21 @@ function markArticleEdited() {
 .prototype-dialog-subgroup :deep(.cdx-radio:last-child),
 .prototype-dialog-subgroup :deep(.cdx-checkbox:last-child) {
   margin-bottom: 12px;
+}
+
+.prototype-dialog-inline-label {
+  white-space: normal;
+}
+
+.prototype-dialog-inline-link {
+  display: inline;
+  color: #36c;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.prototype-dialog-inline-link:hover {
+  text-decoration: underline;
 }
 
 /* ===== EDIT MODE STYLES ===== */
