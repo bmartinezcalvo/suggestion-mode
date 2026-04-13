@@ -9475,6 +9475,18 @@ function markArticleEdited() {
   overflow: visible;
 }
 
+.minerva-text-styles-drawer::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  right: 0;
+  bottom: 1px;
+  width: 44px;
+  background: linear-gradient(to left, #fff 0%, rgba(255, 255, 255, 0) 100%);
+  pointer-events: none;
+  z-index: 2;
+}
+
 .minerva-text-styles-drawer-scroll {
   width: 100%;
   height: 48px;
