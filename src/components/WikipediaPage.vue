@@ -1494,8 +1494,41 @@
                 >
                   <div class="article-text-block">
                     <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
-                      <p>
-                        <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a “Black, lesbian, feminist, socialist, mother, warrior, poet” and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
+                      <p
+                        v-if="showSuggestionsDisplay && !isSuggestionResolved5 && !isSuggestionDeclined5"
+                        ref="highlightedTextRef5"
+                        :class="{
+                          'highlighted-text-wrapper': showSuggestions,
+                          [nonSelectedHighlightClass]: showSuggestions,
+                          'highlighted-text-wrapper--hover': isHovered5 && showSuggestions && !isCardExpanded5,
+                          'highlighted-text-wrapper--selected': isCardExpanded5 && showSuggestions,
+                          'minerva-suggestion-target': isMinervaSkin,
+                          'suggestion-dismiss-right': dismissedSuggestionId === 5
+                        }"
+                        class="suggestion-target"
+                        @mouseenter="isTextHovered5 = true"
+                        @mouseleave="isTextHovered5 = false"
+                        @click="isMinervaSkin ? openMinervaSuggestion(5) : (isCardExpanded5 = true)"
+                      >
+                        <span class="highlighted-text-rail"></span>
+                        <span class="highlighted-text-content">
+                          <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <span class="highlighted-text-annotation"><a href="https://example.org/intersectional-feminist" target="_blank" rel="noopener">intersectional feminist</a></span>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a “Black, lesbian, feminist, socialist, mother, warrior, poet” and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
+                        </span>
+                        <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                        <button
+                          v-if="isMinervaSkin"
+                          type="button"
+                          class="minerva-suggestion-trigger"
+                          aria-label="Show suggestion"
+                          @mousedown.prevent
+                          @touchstart.stop.prevent="openMinervaSuggestion(5)"
+                          @click.stop="openMinervaSuggestion(5)"
+                        >
+                          <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                        </button>
+                      </p>
+                      <p v-else>
+                        <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <a href="https://example.org/intersectional-feminist" target="_blank" rel="noopener">intersectional feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a “Black, lesbian, feminist, socialist, mother, warrior, poet” and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
                       </p>
                       <p>
                         Lorde argued that there could be no hierarchy of oppressions among people working toward liberation, and she returned to that idea across her essays, speeches, and poems.<sup class="citation-marker">[3]</sup> As a poet, she is especially known for combining technical control with emotional force and for writing directly about anger, solidarity, and structural inequality.<sup class="citation-marker">[4]</sup>
@@ -1809,8 +1842,41 @@
                                     <p>
                     Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
                   </p>
-                                    <p>
-                    In 1968, Lorde published The First Cities, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
+                                    <p
+                    v-if="showSuggestionsDisplay && !isSuggestionResolved8 && !isSuggestionDeclined8"
+                    ref="highlightedTextRef8"
+                    :class="{
+                      'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
+                      'highlighted-text-wrapper--hover': isHovered8 && showSuggestions && !isCardExpanded8,
+                      'highlighted-text-wrapper--selected': isCardExpanded8 && showSuggestions,
+                      'minerva-suggestion-target': isMinervaSkin,
+                      'suggestion-dismiss-right': dismissedSuggestionId === 8
+                    }"
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered8 = true"
+                    @mouseleave="isTextHovered8 = false"
+                    @click="isMinervaSkin ? openMinervaSuggestion(8) : (isCardExpanded8 = true)"
+                  >
+                    <span class="highlighted-text-rail"></span>
+                    <span class="highlighted-text-content">
+                      In 1968, Lorde published <span class="highlighted-text-annotation"><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></span>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
+                    </span>
+                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(8)"
+                      @click.stop="openMinervaSuggestion(8)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
+                  </p>
+                                    <p v-else>
+                    In 1968, Lorde published <a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                   </p>
                                     <p>
                     Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
@@ -1821,7 +1887,40 @@
                                     <p>
                     1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
                   </p>
-                                    <p><strong class="subsection-title">Wider recognition</strong></p>
+                                    <p
+                    v-if="showSuggestionsDisplay && !isSuggestionResolved6 && !isSuggestionDeclined6"
+                    ref="highlightedTextRef6"
+                    :class="{
+                      'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
+                      'highlighted-text-wrapper--hover': isHovered6 && showSuggestions && !isCardExpanded6,
+                      'highlighted-text-wrapper--selected': isCardExpanded6 && showSuggestions,
+                      'minerva-suggestion-target': isMinervaSkin,
+                      'suggestion-dismiss-right': dismissedSuggestionId === 6
+                    }"
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered6 = true"
+                    @mouseleave="isTextHovered6 = false"
+                    @click="isMinervaSkin ? openMinervaSuggestion(6) : (isCardExpanded6 = true)"
+                  >
+                    <span class="highlighted-text-rail"></span>
+                    <span class="highlighted-text-content">
+                      <span class="highlighted-text-annotation"><strong class="subsection-title">Wider recognition</strong></span>
+                    </span>
+                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(6)"
+                      @click.stop="openMinervaSuggestion(6)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
+                  </p>
+                                    <p v-else><strong class="subsection-title">Wider recognition</strong></p>
                                     <p>
                     Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
                   </p>
@@ -1996,8 +2095,41 @@
                   </div>
                   
                   <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
-                  <p>
-                    The Cancer Journals (1980) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
+                  <p
+                    v-if="showSuggestionsDisplay && !isSuggestionResolved7 && !isSuggestionDeclined7"
+                    ref="highlightedTextRef7"
+                    :class="{
+                      'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
+                      'highlighted-text-wrapper--hover': isHovered7 && showSuggestions && !isCardExpanded7,
+                      'highlighted-text-wrapper--selected': isCardExpanded7 && showSuggestions,
+                      'minerva-suggestion-target': isMinervaSkin,
+                      'suggestion-dismiss-right': dismissedSuggestionId === 7
+                    }"
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered7 = true"
+                    @mouseleave="isTextHovered7 = false"
+                    @click="isMinervaSkin ? openMinervaSuggestion(7) : (isCardExpanded7 = true)"
+                  >
+                    <span class="highlighted-text-rail"></span>
+                    <span class="highlighted-text-content">
+                      The Cancer Journals (<span class="highlighted-text-annotation"><a href="https://example.org/1980" target="_blank" rel="noopener">1980</a></span>) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
+                    </span>
+                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(7)"
+                      @click.stop="openMinervaSuggestion(7)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
+                  </p>
+                  <p v-else>
+                    The Cancer Journals (<a href="https://example.org/1980" target="_blank" rel="noopener">1980</a>) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                   </p>
                                     <p>
                     Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
@@ -2470,6 +2602,138 @@
             </div>
           </div>
 
+          <div
+            v-if="showSuggestionsDisplay && !isSuggestionResolved5 && !isSuggestionDeclined5"
+            ref="suggestionsSidebarRef5"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded5,
+              'suggestion-card--expanded': isCardExpanded5,
+              'suggestion-card--hover': isHovered5
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset5}px` }"
+            @mouseenter="isCardHovered5 = true"
+            @mouseleave="isCardHovered5 = false"
+          >
+            <button v-if="!isCardExpanded5" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded5 = true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Link to a more specific page</div>
+            </button>
+            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded5 = false" aria-expanded="true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Link to a more specific page</div>
+            </button>
+            <div v-if="isCardExpanded5" class="suggestion-content">
+              <p class="suggestion-description">This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.</p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(5)">Link specifically</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(5)">Dismiss</button>
+                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && !isSuggestionResolved8 && !isSuggestionDeclined8"
+            ref="suggestionsSidebarRef8"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded8,
+              'suggestion-card--expanded': isCardExpanded8,
+              'suggestion-card--hover': isHovered8
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset8}px` }"
+            @mouseenter="isCardHovered8 = true"
+            @mouseleave="isCardHovered8 = false"
+          >
+            <button v-if="!isCardExpanded8" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded8 = true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Redirect link</div>
+            </button>
+            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded8 = false" aria-expanded="true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Redirect link</div>
+            </button>
+            <div v-if="isCardExpanded8" class="suggestion-content">
+              <p class="suggestion-description">This link points to a redirect. Help readers get to the right destination by linking directly to the target page.</p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(8)">Update link</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(8)">Dismiss</button>
+                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && !isSuggestionResolved6 && !isSuggestionDeclined6"
+            ref="suggestionsSidebarRef6"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded6,
+              'suggestion-card--expanded': isCardExpanded6,
+              'suggestion-card--hover': isHovered6
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset6}px` }"
+            @mouseenter="isCardHovered6 = true"
+            @mouseleave="isCardHovered6 = false"
+          >
+            <button v-if="!isCardExpanded6" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded6 = true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Adjust heading level</div>
+            </button>
+            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded6 = false" aria-expanded="true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Adjust heading level</div>
+            </button>
+            <div v-if="isCardExpanded6" class="suggestion-content">
+              <p class="suggestion-description">This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.</p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(6)">Adjust heading</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(6)">Dismiss</button>
+                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && !isSuggestionResolved7 && !isSuggestionDeclined7"
+            ref="suggestionsSidebarRef7"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded7,
+              'suggestion-card--expanded': isCardExpanded7,
+              'suggestion-card--hover': isHovered7
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset7}px` }"
+            @mouseenter="isCardHovered7 = true"
+            @mouseleave="isCardHovered7 = false"
+          >
+            <button v-if="!isCardExpanded7" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded7 = true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Fix year link</div>
+            </button>
+            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded7 = false" aria-expanded="true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Fix year link</div>
+            </button>
+            <div v-if="isCardExpanded7" class="suggestion-content">
+              <p class="suggestion-description">This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.</p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(7)">Fix year link</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(7)">Dismiss</button>
+                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+
           <!-- Success Message for Suggestion 3 -->
           <div 
             v-if="showSuggestionsDisplay && showSuccessMessage3 && citationNumber3 !== null"
@@ -2656,7 +2920,7 @@
               @update:model-value="handleMinervaRailToggleChange"
             >
               <span class="lightbulb-icon-wrapper">
-                <span v-if="showSuggestions" class="bulb-rays">
+                <span v-if="activePrototype !== 'option-4' && showSuggestions" class="bulb-rays">
                   <span class="ray ray-1"></span>
                   <span class="ray ray-2"></span>
                   <span class="ray ray-3"></span>
@@ -2750,7 +3014,7 @@
               @update:model-value="handleMinervaRailToggleChange"
             >
               <span class="lightbulb-icon-wrapper">
-                <span v-if="showSuggestions" class="bulb-rays">
+                <span v-if="activePrototype !== 'option-4' && showSuggestions" class="bulb-rays">
                   <span class="ray ray-1"></span>
                   <span class="ray ray-2"></span>
                   <span class="ray ray-3"></span>
@@ -2823,6 +3087,18 @@
             section, or converting it into a
             <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>
             if appropriate.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 5" class="minerva-sheet-description">
+            This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 6" class="minerva-sheet-description">
+            This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 7" class="minerva-sheet-description">
+            This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 8" class="minerva-sheet-description">
+            This link points to a redirect. Help readers get to the right destination by linking directly to the target page.
           </p>
           <p v-else class="minerva-sheet-description">
             This information has no source. Help readers understand where this information is coming from by adding a
@@ -2940,6 +3216,78 @@
               action="default"
               weight="normal"
               @click="handleNoSuggestion4"
+            >
+              Dismiss
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 5"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handleResolveGenericSuggestion(5)"
+            >
+              Link specifically
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 5"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              @click="handleDeclineGenericSuggestion(5)"
+            >
+              Dismiss
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 6"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handleResolveGenericSuggestion(6)"
+            >
+              Adjust heading
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 6"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              @click="handleDeclineGenericSuggestion(6)"
+            >
+              Dismiss
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 7"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handleResolveGenericSuggestion(7)"
+            >
+              Fix year link
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 7"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              @click="handleDeclineGenericSuggestion(7)"
+            >
+              Dismiss
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 8"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handleResolveGenericSuggestion(8)"
+            >
+              Update link
+            </cdx-button>
+            <cdx-button
+              v-if="activeMinervaSuggestion === 8"
+              class="minerva-sheet-btn minerva-sheet-btn-secondary"
+              action="default"
+              weight="normal"
+              @click="handleDeclineGenericSuggestion(8)"
             >
               Dismiss
             </cdx-button>
@@ -3426,7 +3774,16 @@ const showDesktopFeedbackControls = computed(
 );
 const overviewSuggestionItems = computed(() => getPendingSuggestionIdsForContext().map((id) => ({
   id,
-  title: id === 4 ? 'Remove external link' : 'Add a citation'
+  title: ({
+    1: 'Add a citation',
+    2: 'Add a citation',
+    3: 'Add a citation',
+    4: 'Remove external link',
+    5: 'Link to a more specific page',
+    6: 'Adjust heading level',
+    7: 'Fix year link',
+    8: 'Redirect link'
+  })[id]
 })));
 const linkDialogTab = ref('wikipedia');
 const linkDialogText = ref('');
@@ -3518,6 +3875,18 @@ const isTextHovered3 = ref(false);
 const isCardExpanded4 = ref(false);
 const isCardHovered4 = ref(false);
 const isTextHovered4 = ref(false);
+const isCardExpanded5 = ref(false);
+const isCardHovered5 = ref(false);
+const isTextHovered5 = ref(false);
+const isCardExpanded6 = ref(false);
+const isCardHovered6 = ref(false);
+const isTextHovered6 = ref(false);
+const isCardExpanded7 = ref(false);
+const isCardHovered7 = ref(false);
+const isTextHovered7 = ref(false);
+const isCardExpanded8 = ref(false);
+const isCardHovered8 = ref(false);
+const isTextHovered8 = ref(false);
 
 // Refs for alignment (third suggestion)
 const highlightedTextRef3 = ref(null);
@@ -3526,10 +3895,26 @@ const sidebarTopOffset3 = ref(0);
 const highlightedTextRef4 = ref(null);
 const suggestionsSidebarRef4 = ref(null);
 const sidebarTopOffset4 = ref(0);
+const highlightedTextRef5 = ref(null);
+const suggestionsSidebarRef5 = ref(null);
+const sidebarTopOffset5 = ref(0);
+const highlightedTextRef6 = ref(null);
+const suggestionsSidebarRef6 = ref(null);
+const sidebarTopOffset6 = ref(0);
+const highlightedTextRef7 = ref(null);
+const suggestionsSidebarRef7 = ref(null);
+const sidebarTopOffset7 = ref(0);
+const highlightedTextRef8 = ref(null);
+const suggestionsSidebarRef8 = ref(null);
+const sidebarTopOffset8 = ref(0);
 
 // Computed: sincronizar hover entre texto y card (third suggestion)
 const isHovered3 = computed(() => isCardHovered3.value || isTextHovered3.value);
 const isHovered4 = computed(() => isCardHovered4.value || isTextHovered4.value);
+const isHovered5 = computed(() => isCardHovered5.value || isTextHovered5.value);
+const isHovered6 = computed(() => isCardHovered6.value || isTextHovered6.value);
+const isHovered7 = computed(() => isCardHovered7.value || isTextHovered7.value);
+const isHovered8 = computed(() => isCardHovered8.value || isTextHovered8.value);
 
 // Citation flow states
 const showCitationPopup1 = ref(false);
@@ -3551,6 +3936,14 @@ const isSuggestionDeclined2 = ref(false);
 const isSuggestionDeclined3 = ref(false);
 const isSuggestionDeclined4 = ref(false);
 const isSuggestionResolved4 = ref(false);
+const isSuggestionDeclined5 = ref(false);
+const isSuggestionResolved5 = ref(false);
+const isSuggestionDeclined6 = ref(false);
+const isSuggestionResolved6 = ref(false);
+const isSuggestionDeclined7 = ref(false);
+const isSuggestionResolved7 = ref(false);
+const isSuggestionDeclined8 = ref(false);
+const isSuggestionResolved8 = ref(false);
 const toneCheckActive = ref(false);
 const toneCheckDismissed = ref(false);
 const toneCheckHighlightRef = ref(null);
@@ -3631,7 +4024,18 @@ const allSuggestionsHandled = computed(() => {
   const suggestion2Handled = citationNumber2.value !== null || isSuggestionDeclined2.value;
   const suggestion3Handled = citationNumber3.value !== null || isSuggestionDeclined3.value;
   const suggestion4Handled = isSuggestionResolved4.value || isSuggestionDeclined4.value;
-  return suggestion1Handled && suggestion2Handled && suggestion3Handled && suggestion4Handled;
+  const suggestion5Handled = isSuggestionResolved5.value || isSuggestionDeclined5.value;
+  const suggestion6Handled = isSuggestionResolved6.value || isSuggestionDeclined6.value;
+  const suggestion7Handled = isSuggestionResolved7.value || isSuggestionDeclined7.value;
+  const suggestion8Handled = isSuggestionResolved8.value || isSuggestionDeclined8.value;
+  return suggestion1Handled &&
+    suggestion2Handled &&
+    suggestion3Handled &&
+    suggestion4Handled &&
+    suggestion5Handled &&
+    suggestion6Handled &&
+    suggestion7Handled &&
+    suggestion8Handled;
 });
 
 // Computed property to check if all suggestions are completed or declined (show empty state)
@@ -3640,7 +4044,18 @@ const showEmptyState = computed(() => {
   const suggestion2Done = citationNumber2.value !== null || isSuggestionDeclined2.value;
   const suggestion3Done = citationNumber3.value !== null || isSuggestionDeclined3.value;
   const suggestion4Done = isSuggestionResolved4.value || isSuggestionDeclined4.value;
-  return suggestion1Done && suggestion2Done && suggestion3Done && suggestion4Done;
+  const suggestion5Done = isSuggestionResolved5.value || isSuggestionDeclined5.value;
+  const suggestion6Done = isSuggestionResolved6.value || isSuggestionDeclined6.value;
+  const suggestion7Done = isSuggestionResolved7.value || isSuggestionDeclined7.value;
+  const suggestion8Done = isSuggestionResolved8.value || isSuggestionDeclined8.value;
+  return suggestion1Done &&
+    suggestion2Done &&
+    suggestion3Done &&
+    suggestion4Done &&
+    suggestion5Done &&
+    suggestion6Done &&
+    suggestion7Done &&
+    suggestion8Done;
 });
 const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
 const isSuggestion1Pending = computed(() => (
@@ -3655,11 +4070,27 @@ const isSuggestion3Pending = computed(() => (
 const isSuggestion4Pending = computed(() => (
   !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value
 ));
+const isSuggestion5Pending = computed(() => (
+  !isSuggestionResolved5.value && !isSuggestionDeclined5.value
+));
+const isSuggestion6Pending = computed(() => (
+  !isSuggestionResolved6.value && !isSuggestionDeclined6.value
+));
+const isSuggestion7Pending = computed(() => (
+  !isSuggestionResolved7.value && !isSuggestionDeclined7.value
+));
+const isSuggestion8Pending = computed(() => (
+  !isSuggestionResolved8.value && !isSuggestionDeclined8.value
+));
 const availableSuggestionCount = computed(() => (
   (isSuggestion1Pending.value ? 1 : 0) +
   (isSuggestion2Pending.value ? 1 : 0) +
   (isSuggestion3Pending.value ? 1 : 0) +
-  (isSuggestion4Pending.value ? 1 : 0)
+  (isSuggestion4Pending.value ? 1 : 0) +
+  (isSuggestion5Pending.value ? 1 : 0) +
+  (isSuggestion6Pending.value ? 1 : 0) +
+  (isSuggestion7Pending.value ? 1 : 0) +
+  (isSuggestion8Pending.value ? 1 : 0)
 ));
 const sectionSuggestionCount = computed(() => {
   if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
@@ -3669,10 +4100,13 @@ const sectionSuggestionCount = computed(() => {
     return isSuggestion1Pending.value ? 1 : 0;
   }
   if (minervaEditSectionOnly.value === 'poetry') {
-    return (isSuggestion2Pending.value ? 1 : 0) + (isSuggestion4Pending.value ? 1 : 0);
+    return (isSuggestion2Pending.value ? 1 : 0) +
+      (isSuggestion4Pending.value ? 1 : 0) +
+      (isSuggestion6Pending.value ? 1 : 0) +
+      (isSuggestion8Pending.value ? 1 : 0);
   }
   if (minervaEditSectionOnly.value === 'prose') {
-    return isSuggestion3Pending.value ? 1 : 0;
+    return (isSuggestion3Pending.value ? 1 : 0) + (isSuggestion7Pending.value ? 1 : 0);
   }
   return 0;
 });
@@ -3739,6 +4173,10 @@ const showToggleBadgeZero = computed(() => (
 const minervaSheetTitle = computed(() => {
   if (shouldShowEmptyState.value) return 'No suggestions';
   if (activeMinervaSuggestion.value === 4) return 'Remove external link';
+  if (activeMinervaSuggestion.value === 5) return 'Link to a more specific page';
+  if (activeMinervaSuggestion.value === 6) return 'Adjust heading level';
+  if (activeMinervaSuggestion.value === 7) return 'Fix year link';
+  if (activeMinervaSuggestion.value === 8) return 'Redirect link';
   return 'Add a citation';
 });
 const minervaToggleBottom = computed(() => {
@@ -3757,8 +4195,8 @@ const shouldShowBanner = computed(() => {
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     const sectionToSuggestionId = {
       career: 1,
-      poetry: 2,
-      prose: 3
+      poetry: 8,
+      prose: 7
     };
     const sectionId = minervaEditSectionOnly.value;
     const suggestionId = sectionToSuggestionId[sectionId];
@@ -3860,7 +4298,7 @@ const isSuggestionSheetMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
-  if (activePrototype.value === 'option-3') return false;
+  if (['option-3', 'option-4'].includes(activePrototype.value)) return false;
   if (showMinervaArrowOnly.value) return false;
   if (!isArrowOnceMode.value && !showSuggestionsDisplay.value) return false;
   if (isArrowOnceMode.value && minervaEditSectionOnly.value) {
@@ -3953,14 +4391,38 @@ function resetSuggestionState() {
   isSuggestionDeclined3.value = false;
   isSuggestionDeclined4.value = false;
   isSuggestionResolved4.value = false;
+  isSuggestionDeclined5.value = false;
+  isSuggestionResolved5.value = false;
+  isSuggestionDeclined6.value = false;
+  isSuggestionResolved6.value = false;
+  isSuggestionDeclined7.value = false;
+  isSuggestionResolved7.value = false;
+  isSuggestionDeclined8.value = false;
+  isSuggestionResolved8.value = false;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
   isCardExpanded3.value = false;
   isCardExpanded4.value = false;
+  isCardExpanded5.value = false;
+  isCardExpanded6.value = false;
+  isCardExpanded7.value = false;
+  isCardExpanded8.value = false;
   isCardHovered.value = false;
   isCardHovered2.value = false;
+  isCardHovered3.value = false;
+  isCardHovered4.value = false;
+  isCardHovered5.value = false;
+  isCardHovered6.value = false;
+  isCardHovered7.value = false;
+  isCardHovered8.value = false;
   isTextHovered.value = false;
   isTextHovered2.value = false;
+  isTextHovered3.value = false;
+  isTextHovered4.value = false;
+  isTextHovered5.value = false;
+  isTextHovered6.value = false;
+  isTextHovered7.value = false;
+  isTextHovered8.value = false;
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
@@ -4948,6 +5410,10 @@ function getSuggestionRefById(suggestionId) {
   if (suggestionId === 2) return highlightedTextRef2;
   if (suggestionId === 3) return highlightedTextRef3;
   if (suggestionId === 4) return highlightedTextRef4;
+  if (suggestionId === 5) return highlightedTextRef5;
+  if (suggestionId === 6) return highlightedTextRef6;
+  if (suggestionId === 7) return highlightedTextRef7;
+  if (suggestionId === 8) return highlightedTextRef8;
   return null;
 }
 
@@ -5078,8 +5544,8 @@ function openFirstPendingSuggestionForContext() {
   if (isMinervaSkin.value && minervaEditSectionOnly.value) {
     const sectionToSuggestionId = {
       career: 1,
-      poetry: 2,
-      prose: 3
+      poetry: 8,
+      prose: 7
     };
     const sectionId = minervaEditSectionOnly.value;
     const suggestionId = sectionToSuggestionId[sectionId];
@@ -5097,14 +5563,21 @@ function getPendingSuggestionIdsForContext() {
   const ids = [];
   if (isMinervaSkin.value && minervaEditSectionOnly.value) {
     if (minervaEditSectionOnly.value === 'career' && isSuggestion1Pending.value) ids.push(1);
+    if (minervaEditSectionOnly.value === 'poetry' && isSuggestion8Pending.value) ids.push(8);
+    if (minervaEditSectionOnly.value === 'poetry' && isSuggestion6Pending.value) ids.push(6);
     if (minervaEditSectionOnly.value === 'poetry' && isSuggestion2Pending.value) ids.push(2);
     if (minervaEditSectionOnly.value === 'poetry' && isSuggestion4Pending.value) ids.push(4);
+    if (minervaEditSectionOnly.value === 'prose' && isSuggestion7Pending.value) ids.push(7);
     if (minervaEditSectionOnly.value === 'prose' && isSuggestion3Pending.value) ids.push(3);
     return ids;
   }
+  if (isSuggestion5Pending.value) ids.push(5);
   if (isSuggestion1Pending.value) ids.push(1);
+  if (isSuggestion8Pending.value) ids.push(8);
+  if (isSuggestion6Pending.value) ids.push(6);
   if (isSuggestion2Pending.value) ids.push(2);
   if (isSuggestion4Pending.value) ids.push(4);
+  if (isSuggestion7Pending.value) ids.push(7);
   if (isSuggestion3Pending.value) ids.push(3);
   return ids;
 }
@@ -5269,6 +5742,10 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef2.value) ||
     isVisible(highlightedTextRef4.value) ||
     isVisible(highlightedTextRef3.value) ||
+    isVisible(highlightedTextRef5.value) ||
+    isVisible(highlightedTextRef6.value) ||
+    isVisible(highlightedTextRef7.value) ||
+    isVisible(highlightedTextRef8.value) ||
     isVisible(toneCheckHighlightRef.value) ||
     isVisible(pasteCheckHighlightRef.value);
   const pendingIds = getPendingSuggestionIdsForContext();
@@ -5436,6 +5913,50 @@ function handleNoSuggestion4() {
   scheduleBannerReappear();
 }
 
+function handleResolveGenericSuggestion(suggestionId) {
+  if (suggestionId === 5) {
+    isSuggestionResolved5.value = true;
+    isCardExpanded5.value = false;
+  } else if (suggestionId === 6) {
+    isSuggestionResolved6.value = true;
+    isCardExpanded6.value = false;
+  } else if (suggestionId === 7) {
+    isSuggestionResolved7.value = true;
+    isCardExpanded7.value = false;
+  } else if (suggestionId === 8) {
+    isSuggestionResolved8.value = true;
+    isCardExpanded8.value = false;
+  }
+  closeMinervaSuggestion();
+  nextTick(() => {
+    alignBothSuggestions();
+    updateSuggestionVisibility();
+    scheduleBannerReappear();
+  });
+}
+
+function handleDeclineGenericSuggestion(suggestionId) {
+  if (suggestionId === 5) {
+    isSuggestionDeclined5.value = true;
+    isCardExpanded5.value = false;
+  } else if (suggestionId === 6) {
+    isSuggestionDeclined6.value = true;
+    isCardExpanded6.value = false;
+  } else if (suggestionId === 7) {
+    isSuggestionDeclined7.value = true;
+    isCardExpanded7.value = false;
+  } else if (suggestionId === 8) {
+    isSuggestionDeclined8.value = true;
+    isCardExpanded8.value = false;
+  }
+  closeMinervaSuggestion();
+  nextTick(() => {
+    alignBothSuggestions();
+    updateSuggestionVisibility();
+    scheduleBannerReappear();
+  });
+}
+
 // Function to create citation for suggestion 1
 function createCitation1() {
   if (citationUrl1.value.trim()) {
@@ -5526,6 +6047,10 @@ watch(isCardExpanded, (newValue) => {
     isCardExpanded2.value = false;
     isCardExpanded3.value = false;
     isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
   }
 });
 
@@ -5534,6 +6059,10 @@ watch(isCardExpanded2, (newValue) => {
     isCardExpanded.value = false;
     isCardExpanded3.value = false;
     isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
   }
 });
 
@@ -5542,6 +6071,10 @@ watch(isCardExpanded3, (newValue) => {
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
     isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
   }
 });
 
@@ -5550,6 +6083,58 @@ watch(isCardExpanded4, (newValue) => {
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
     isCardExpanded3.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  }
+});
+
+watch(isCardExpanded5, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  }
+});
+
+watch(isCardExpanded6, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  }
+});
+
+watch(isCardExpanded7, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded8.value = false;
+  }
+});
+
+watch(isCardExpanded8, (newValue) => {
+  if (newValue) {
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
   }
 });
 
@@ -5575,7 +6160,7 @@ function alignSidebarWithText() {
 watch(showSuggestions, (newValue) => {
   if (newValue) {
     nextTick(() => {
-      alignSidebarWithText();
+      alignBothSuggestions();
     });
   } else {
     sidebarTopOffset.value = 0;
@@ -5657,6 +6242,30 @@ watch(isCardExpanded3, (expanded) => {
 watch(isCardExpanded4, () => {
   nextTick(() => {
     alignSidebarWithText4();
+  });
+});
+
+watch(isCardExpanded5, () => {
+  nextTick(() => {
+    alignSidebarWithText5();
+  });
+});
+
+watch(isCardExpanded6, () => {
+  nextTick(() => {
+    alignSidebarWithText6();
+  });
+});
+
+watch(isCardExpanded7, () => {
+  nextTick(() => {
+    alignSidebarWithText7();
+  });
+});
+
+watch(isCardExpanded8, () => {
+  nextTick(() => {
+    alignSidebarWithText8();
   });
 });
 
@@ -5766,6 +6375,50 @@ function alignSidebarWithText4() {
   });
 }
 
+function alignSidebarWithText5() {
+  if (!highlightedTextRef5.value) return;
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    const textRect = highlightedTextRef5.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    sidebarTopOffset5.value = textRect.top - containerRect.top - suggestionsTopOffset.value;
+  });
+}
+
+function alignSidebarWithText6() {
+  if (!highlightedTextRef6.value) return;
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    const textRect = highlightedTextRef6.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    sidebarTopOffset6.value = textRect.top - containerRect.top - suggestionsTopOffset.value;
+  });
+}
+
+function alignSidebarWithText7() {
+  if (!highlightedTextRef7.value) return;
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    const textRect = highlightedTextRef7.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    sidebarTopOffset7.value = textRect.top - containerRect.top - suggestionsTopOffset.value;
+  });
+}
+
+function alignSidebarWithText8() {
+  if (!highlightedTextRef8.value) return;
+  nextTick(() => {
+    const mainContentArea = document.querySelector('.main-content-area');
+    if (!mainContentArea) return;
+    const textRect = highlightedTextRef8.value.getBoundingClientRect();
+    const containerRect = mainContentArea.getBoundingClientRect();
+    sidebarTopOffset8.value = textRect.top - containerRect.top - suggestionsTopOffset.value;
+  });
+}
+
 function alignSuggestionsContainer() {
   if (!articleFirstSectionRef.value) return;
 
@@ -5787,6 +6440,10 @@ function alignBothSuggestions() {
   alignSidebarWithText2();
   alignSidebarWithText3();
   alignSidebarWithText4();
+  alignSidebarWithText5();
+  alignSidebarWithText6();
+  alignSidebarWithText7();
+  alignSidebarWithText8();
   alignToneCheckCard();
 }
 
@@ -6164,21 +6821,73 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false) {
       isCardExpanded2.value = false;
       isCardExpanded3.value = false;
       isCardExpanded4.value = false;
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = false;
     } else if (suggestionId === 2) {
       isCardExpanded2.value = true;
       isCardExpanded.value = false;
       isCardExpanded3.value = false;
       isCardExpanded4.value = false;
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = false;
     } else if (suggestionId === 3) {
       isCardExpanded.value = false;
       isCardExpanded2.value = false;
       isCardExpanded3.value = true;
       isCardExpanded4.value = false;
-    } else {
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = false;
+    } else if (suggestionId === 4) {
       isCardExpanded.value = false;
       isCardExpanded2.value = false;
       isCardExpanded3.value = false;
       isCardExpanded4.value = true;
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = false;
+    } else if (suggestionId === 5) {
+      isCardExpanded.value = false;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = false;
+      isCardExpanded4.value = false;
+      isCardExpanded5.value = true;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = false;
+    } else if (suggestionId === 6) {
+      isCardExpanded.value = false;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = false;
+      isCardExpanded4.value = false;
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = true;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = false;
+    } else if (suggestionId === 7) {
+      isCardExpanded.value = false;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = false;
+      isCardExpanded4.value = false;
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = true;
+      isCardExpanded8.value = false;
+    } else if (suggestionId === 8) {
+      isCardExpanded.value = false;
+      isCardExpanded2.value = false;
+      isCardExpanded3.value = false;
+      isCardExpanded4.value = false;
+      isCardExpanded5.value = false;
+      isCardExpanded6.value = false;
+      isCardExpanded7.value = false;
+      isCardExpanded8.value = true;
     }
   };
 
@@ -6211,6 +6920,18 @@ function getPendingSuggestionTargets() {
   }
   if (citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value && highlightedTextRef3.value) {
     targets.push({ id: 3, ref: highlightedTextRef3 });
+  }
+  if (!isSuggestionResolved5.value && !isSuggestionDeclined5.value && highlightedTextRef5.value) {
+    targets.push({ id: 5, ref: highlightedTextRef5 });
+  }
+  if (!isSuggestionResolved6.value && !isSuggestionDeclined6.value && highlightedTextRef6.value) {
+    targets.push({ id: 6, ref: highlightedTextRef6 });
+  }
+  if (!isSuggestionResolved7.value && !isSuggestionDeclined7.value && highlightedTextRef7.value) {
+    targets.push({ id: 7, ref: highlightedTextRef7 });
+  }
+  if (!isSuggestionResolved8.value && !isSuggestionDeclined8.value && highlightedTextRef8.value) {
+    targets.push({ id: 8, ref: highlightedTextRef8 });
   }
   return targets;
 }
@@ -6318,13 +7039,25 @@ function openFirstPendingSuggestion(expandAfterScroll = false) {
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
   const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
   const suggestion4Pending = !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value;
+  const suggestion5Pending = !isSuggestionResolved5.value && !isSuggestionDeclined5.value;
+  const suggestion6Pending = !isSuggestionResolved6.value && !isSuggestionDeclined6.value;
+  const suggestion7Pending = !isSuggestionResolved7.value && !isSuggestionDeclined7.value;
+  const suggestion8Pending = !isSuggestionResolved8.value && !isSuggestionDeclined8.value;
 
-  if (suggestion1Pending) {
+  if (suggestion5Pending) {
+    openSuggestionAtTarget(5, highlightedTextRef5, expandAfterScroll);
+  } else if (suggestion1Pending) {
     openSuggestionAtTarget(1, highlightedTextRef, expandAfterScroll);
+  } else if (suggestion8Pending) {
+    openSuggestionAtTarget(8, highlightedTextRef8, expandAfterScroll);
+  } else if (suggestion6Pending) {
+    openSuggestionAtTarget(6, highlightedTextRef6, expandAfterScroll);
   } else if (suggestion2Pending) {
     openSuggestionAtTarget(2, highlightedTextRef2, expandAfterScroll);
   } else if (suggestion4Pending) {
     openSuggestionAtTarget(4, highlightedTextRef4, expandAfterScroll);
+  } else if (suggestion7Pending) {
+    openSuggestionAtTarget(7, highlightedTextRef7, expandAfterScroll);
   } else if (suggestion3Pending) {
     openSuggestionAtTarget(3, highlightedTextRef3, expandAfterScroll);
   }
@@ -6649,21 +7382,73 @@ function openMinervaSuggestion(suggestionId) {
     isCardExpanded2.value = false;
     isCardExpanded3.value = false;
     isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
   } else if (suggestionId === 2) {
     isCardExpanded2.value = true;
     isCardExpanded.value = false;
     isCardExpanded3.value = false;
     isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
   } else if (suggestionId === 3) {
     isCardExpanded3.value = true;
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
     isCardExpanded4.value = false;
-  } else {
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  } else if (suggestionId === 4) {
     isCardExpanded4.value = true;
     isCardExpanded.value = false;
     isCardExpanded2.value = false;
     isCardExpanded3.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  } else if (suggestionId === 5) {
+    isCardExpanded5.value = true;
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  } else if (suggestionId === 6) {
+    isCardExpanded6.value = true;
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded7.value = false;
+    isCardExpanded8.value = false;
+  } else if (suggestionId === 7) {
+    isCardExpanded7.value = true;
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded8.value = false;
+  } else if (suggestionId === 8) {
+    isCardExpanded8.value = true;
+    isCardExpanded.value = false;
+    isCardExpanded2.value = false;
+    isCardExpanded3.value = false;
+    isCardExpanded4.value = false;
+    isCardExpanded5.value = false;
+    isCardExpanded6.value = false;
+    isCardExpanded7.value = false;
   }
   updateMinervaSheetHeight();
 }
@@ -9435,9 +10220,15 @@ function markArticleEdited() {
   cursor: pointer;
 }
 
+.suggestion-target--inline.highlighted-text-wrapper {
+  display: inline-flex;
+  vertical-align: baseline;
+}
+
 .suggestion-target--inline .highlighted-text-content {
   display: inline;
   width: auto;
+  flex: 0 0 auto;
 }
 
 /* Wrapper with rail (vertical line) - p element with flex */
@@ -10184,6 +10975,12 @@ function markArticleEdited() {
 .minerva-suggestions-rail-toggle--overview :deep(.cdx-button__button) {
   background: var(--background-color-neutral-subtle, #f8f9fa);
   background-color: var(--background-color-neutral-subtle, #f8f9fa);
+}
+
+.minerva-suggestions-rail-toggle--overview :deep(.cdx-icon),
+.minerva-suggestions-rail-toggle--overview :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 .minerva-suggestions-rail-toggle--overview.minerva-suggestions-rail-toggle--active,
