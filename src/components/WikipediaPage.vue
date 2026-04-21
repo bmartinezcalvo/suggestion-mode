@@ -2232,24 +2232,29 @@
         >
           <div
             v-if="showDesktopFeedbackControls"
+            ref="vectorSuggestionsControlsRef"
             class="vector-suggestions-controls"
+            :class="{ 'vector-suggestions-controls--hidden': desktopSuggestionsControlsHidden }"
           >
-            <cdx-button
-              v-if="showDesktopFilterButton"
-              class="suggestions-filter-btn"
-              action="default"
-              weight="quiet"
-              size="large"
-              aria-label="Filter suggestions"
-              @click="handleFilterSuggestionsClick"
-            >
-              <cdx-icon :icon="cdxIconConfigure" size="medium" />
-            </cdx-button>
             <div
-              v-if="activePrototype === 'option-3' && showSuggestions && !anySuggestionVisible && toggleBadgeCount > 0"
+              v-if="activePrototype === 'option-3' && (showDesktopFilterButton || (showSuggestions && !anySuggestionVisible && toggleBadgeCount > 0))"
               class="vector-suggestions-arrow-controls"
             >
-              <div class="suggestions-banner-arrow-buttons">
+              <div
+                class="suggestions-banner-arrow-buttons"
+                :class="{ 'suggestions-banner-arrow-buttons--with-filter': showDesktopFilterButton }"
+              >
+                <cdx-button
+                  v-if="showDesktopFilterButton"
+                  class="suggestions-filter-btn vector-suggestions-filter-btn"
+                  action="default"
+                  weight="quiet"
+                  size="large"
+                  aria-label="Filter suggestions"
+                  @click="handleFilterSuggestionsClick"
+                >
+                  <cdx-icon :icon="cdxIconConfigure" size="medium" />
+                </cdx-button>
                 <cdx-button
                   class="suggestions-banner-arrow-btn"
                   action="default"
@@ -2276,6 +2281,17 @@
                 </cdx-button>
               </div>
             </div>
+            <cdx-button
+              v-else-if="showDesktopFilterButton"
+              class="suggestions-filter-btn"
+              action="default"
+              weight="quiet"
+              size="large"
+              aria-label="Filter suggestions"
+              @click="handleFilterSuggestionsClick"
+            >
+              <cdx-icon :icon="cdxIconConfigure" size="medium" />
+            </cdx-button>
           </div>
           <!-- First Add Citation Suggestion Card -->
           <div 
@@ -3887,6 +3903,8 @@ const sidebarTopOffset7 = ref(0);
 const highlightedTextRef8 = ref(null);
 const suggestionsSidebarRef8 = ref(null);
 const sidebarTopOffset8 = ref(0);
+const vectorSuggestionsControlsRef = ref(null);
+const desktopSuggestionsControlsHidden = ref(false);
 
 // Computed: sincronizar hover entre texto y card (third suggestion)
 const isHovered3 = computed(() => isCardHovered3.value || isTextHovered3.value);
@@ -5794,6 +5812,7 @@ function scrollToEditSection(sectionId) {
 function updateSuggestionVisibility() {
   if (!showSuggestions.value) {
     anySuggestionVisible.value = false;
+    updateVectorSuggestionsControlsVisibility();
     updateMinervaSheetReturnDirection();
     return;
   }
@@ -5867,7 +5886,41 @@ function updateSuggestionVisibility() {
   syncMinervaSheetToVisibleSuggestion(viewportHeight);
   updateBannerArrowDirections();
   updatePrimaryBannerDirection();
+  updateVectorSuggestionsControlsVisibility();
   updateMinervaSheetReturnDirection();
+}
+
+function updateVectorSuggestionsControlsVisibility() {
+  if (
+    isMinervaSkin.value ||
+    !isEditMode.value ||
+    !showDesktopFeedbackControls.value ||
+    !vectorSuggestionsControlsRef.value
+  ) {
+    desktopSuggestionsControlsHidden.value = false;
+    return;
+  }
+
+  const controlsRect = vectorSuggestionsControlsRef.value.getBoundingClientRect();
+  const threshold = 200;
+  const suggestionCardRefs = [
+    suggestionsSidebarRef,
+    suggestionsSidebarRef2,
+    suggestionsSidebarRef3,
+    suggestionsSidebarRef4,
+    suggestionsSidebarRef5,
+    suggestionsSidebarRef6,
+    suggestionsSidebarRef7,
+    suggestionsSidebarRef8
+  ];
+
+  desktopSuggestionsControlsHidden.value = suggestionCardRefs
+    .map((ref) => ref.value)
+    .filter(Boolean)
+    .some((card) => {
+      const rect = card.getBoundingClientRect();
+      return rect.bottom > controlsRect.top - threshold && rect.top <= controlsRect.bottom + threshold;
+    });
 }
 
 function syncMinervaSheetToVisibleSuggestion(viewportHeight = window.innerHeight || document.documentElement.clientHeight) {
@@ -6583,6 +6636,9 @@ function alignBothSuggestions() {
   alignSidebarWithText7();
   alignSidebarWithText8();
   alignToneCheckCard();
+  nextTick(() => {
+    updateVectorSuggestionsControlsVisibility();
+  });
 }
 
 // Watch for changes in showSuggestions to realign both
@@ -9986,15 +10042,23 @@ function markArticleEdited() {
   position: sticky;
   top: 42px;
   left: 0;
-  z-index: 12;
+  z-index: 20;
   width: fit-content;
   display: flex;
   flex-direction: column;
   gap: 0;
+  transition: opacity 160ms ease;
+}
+
+.vector-suggestions-controls--hidden {
+  opacity: 0;
+  pointer-events: none;
 }
 
 .vector-suggestions-arrow-controls {
   width: fit-content;
+  position: relative;
+  z-index: 20;
 }
 
 .suggestions-banner-container {
@@ -12202,6 +12266,40 @@ function markArticleEdited() {
   border: 1px solid var(--border-color-subtle, #C8CCD1);
   border-radius: 2px;
   overflow: hidden;
+  background: var(--background-color-base, #ffffff);
+}
+
+.vector-suggestions-arrow-controls .suggestions-banner-arrow-buttons--with-filter {
+  display: flex;
+  flex-direction: column;
+}
+
+.vector-suggestions-arrow-controls .vector-suggestions-filter-btn {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: var(--background-color-base, #ffffff);
+  border-bottom: 1px solid var(--border-color-muted, #DADDE3);
+}
+
+.vector-suggestions-arrow-controls .vector-suggestions-filter-btn :deep(button),
+.vector-suggestions-arrow-controls .vector-suggestions-filter-btn :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+
+.vector-suggestions-arrow-controls .vector-suggestions-filter-btn :deep(.cdx-icon),
+.vector-suggestions-arrow-controls .vector-suggestions-filter-btn :deep(svg) {
+  color: var(--color-subtle, #54595d);
+  fill: var(--color-subtle, #54595d);
 }
 
 .vector-suggestions-arrow-controls .suggestions-banner-arrow-btn {
@@ -12212,7 +12310,7 @@ function markArticleEdited() {
 }
 
 .vector-suggestions-arrow-controls .suggestions-banner-arrow-btn + .suggestions-banner-arrow-btn {
-  border-top: 1px solid var(--border-color-muted, #DADDE3);
+  border-top: 0;
 }
 
 .vector-suggestions-arrow-controls .suggestions-banner-arrow-btn :deep(button),
@@ -12229,7 +12327,7 @@ function markArticleEdited() {
 
 .vector-suggestions-arrow-controls .suggestions-banner-arrow-btn + .suggestions-banner-arrow-btn :deep(button),
 .vector-suggestions-arrow-controls .suggestions-banner-arrow-btn + .suggestions-banner-arrow-btn :deep(.cdx-button__button) {
-  border-top: 1px solid var(--border-color-muted, #DADDE3);
+  border-top: 0;
 }
 
 .vector-suggestions-arrow-controls .suggestions-banner-arrow-btn :deep(.cdx-icon),
