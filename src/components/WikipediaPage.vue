@@ -5,6 +5,7 @@
       isEditMode ? 'edit-mode' : 'read-mode',
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
       isMinervaSkin && editFullPageImprovedEnabled ? 'minerva-edit-full-page-improved' : '',
+      isMinervaSkin && editToolbarImprovementsEnabled ? 'minerva-edit-toolbar-improved' : '',
       isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRail ? 'minerva-suggestions-on' : '',
       isMinervaSkin && isEditMode && showMinervaRail ? 'minerva-suggestions-on--rail' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
@@ -1059,7 +1060,248 @@
           <div v-else class="edit-mode-content">
             <!-- Editor Toolbar -->
             <div
-              v-if="isMinervaSkin && (activePrototype === 'option-1' || isArrowOnceMode)"
+              v-if="isMinervaSkin && editToolbarImprovementsEnabled"
+              class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-improved"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              @mousedown="handleToolbarMouseDown"
+              @touchstart="handleToolbarMouseDown"
+              @click="handleToolbarClick"
+              @touchend="handleToolbarClick"
+            >
+              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
+                <cdx-icon :icon="cdxIconClose" size="medium" />
+              </button>
+              <div
+                ref="minervaToolbarScrollAreaRef"
+                class="minerva-toolbar-scroll-area"
+                :class="{ 'minerva-toolbar-scroll-area--overflowing': minervaToolbarOverflowing }"
+              >
+                <button
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                  :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
+                  :disabled="!hasUnsavedChanges"
+                  aria-label="Undo"
+                  @click="undoEdits"
+                >
+                  <cdx-icon :icon="cdxIconUndo" size="medium" />
+                </button>
+                <button
+                  v-if="showMinervaRedoButton"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill"
+                  :class="{ 'toolbar-btn-disabled': !editRedoStack.length }"
+                  :disabled="!editRedoStack.length"
+                  aria-label="Redo"
+                  @click="handleMinervaRedo"
+                >
+                  <cdx-icon :icon="cdxIconRedo" size="medium" />
+                </button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill text-style-menu">
+                  <button
+                    class="text-style-menu-trigger"
+                    :class="{ 'text-style-menu-trigger--active': isTextStyleMenuOpen }"
+                    aria-label="Text styles"
+                    ref="textStyleMenuTriggerRef"
+                    @click.stop="toggleTextStyleMenu"
+                  >
+                    <cdx-icon :icon="cdxIconTextStyle" size="medium" />
+                  </button>
+                  <div
+                    v-if="isTextStyleMenuOpen"
+                    ref="textStyleMenuPanelRef"
+                    class="text-style-menu-panel text-style-menu-panel--minerva"
+                    :class="{ 'text-style-menu-panel--expanded': isTextStyleMenuExpanded }"
+                  >
+                    <ul class="text-style-menu-list" role="menu">
+                      <template v-for="item in visibleMinervaTextStyleMenuItems" :key="item.value">
+                        <li v-if="item.type === 'divider'" class="text-style-menu-divider" role="separator"></li>
+                        <li v-else class="text-style-menu-item" role="none">
+                          <button
+                            type="button"
+                            class="text-style-menu-button"
+                            :class="{ 'text-style-menu-button--selected': isInlineTextStyleActive(item.value) }"
+                            role="menuitem"
+                            :aria-pressed="isTrackedInlineTextStyle(item.value) ? isInlineTextStyleActive(item.value) : undefined"
+                            @click="handleTextStyleItemSelect(item.value)"
+                          >
+                            <cdx-icon :icon="item.icon" size="medium" />
+                            <span>{{ item.label }}</span>
+                          </button>
+                        </li>
+                      </template>
+                      <li v-if="showMinervaTextStyleMenuToggle" class="text-style-menu-divider" role="separator"></li>
+                      <li v-if="showMinervaTextStyleMenuToggle" class="text-style-menu-item" role="none">
+                        <button type="button" class="text-style-menu-button text-style-menu-button--toggle" role="menuitem" @click="toggleTextStyleMenuExpanded">
+                          <cdx-icon :icon="isTextStyleMenuExpanded ? cdxIconCollapse : cdxIconExpand" size="medium" />
+                          <span>{{ isTextStyleMenuExpanded ? 'Fewer' : 'More' }}</span>
+                        </button>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+                <button v-if="showMinervaResponsiveTopLevelLink" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Link">
+                  <cdx-icon :icon="cdxIconLink" size="medium" />
+                </button>
+                <button v-if="showMinervaResponsiveTopLevelCite" class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fill" aria-label="Cite">
+                  <cdx-icon :icon="cdxIconQuotes" size="medium" />
+                </button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-add-menu minerva-toolbar-fill">
+                  <button
+                    class="minerva-add-menu-trigger"
+                    :class="{ 'minerva-add-menu-trigger--active': isMinervaAddMenuOpen }"
+                    aria-label="Add"
+                    ref="minervaAddMenuTriggerRef"
+                    @click.stop="toggleMinervaAddMenu"
+                  >
+                    <cdx-icon :icon="cdxIconAdd" size="medium" />
+                  </button>
+                  <div
+                    v-if="isMinervaAddMenuOpen"
+                    ref="minervaAddMenuPanelRef"
+                    class="minerva-add-menu-panel"
+                  >
+                    <ul class="minerva-add-menu-list" role="menu">
+                      <template v-for="item in visibleMinervaAddMenuItems" :key="item.value">
+                        <li v-if="item.type === 'divider'" class="minerva-edit-menu-divider" role="separator"></li>
+                        <li
+                          v-else
+                          class="minerva-add-menu-item"
+                          role="none"
+                        >
+                        <button type="button" class="minerva-add-menu-button" role="menuitem" @click="handleMinervaAddItem(item.value)">
+                          <cdx-icon :icon="item.icon" size="medium" />
+                          <span>{{ item.label }}</span>
+                        </button>
+                      </li>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
+                <cdx-toggle-button
+                  v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                  v-model="showSuggestions"
+                  quiet
+                  aria-label="Toggle suggestions"
+                  class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
+                  :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
+                >
+                  <span class="lightbulb-icon-wrapper">
+                    <span v-if="showSuggestions" class="bulb-rays">
+                      <span class="ray ray-1"></span>
+                      <span class="ray ray-2"></span>
+                      <span class="ray ray-3"></span>
+                      <span class="ray ray-4"></span>
+                      <span class="ray ray-5"></span>
+                    </span>
+                    <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    <span
+                      v-if="showToggleBadge"
+                      class="suggestions-badge"
+                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                    >
+                      {{ toggleBadgeCount }}
+                    </span>
+                  </span>
+                </cdx-toggle-button>
+                <div class="toolbar-btn toolbar-btn-icon-only minerva-edit-menu minerva-toolbar-fill">
+                  <button
+                    class="minerva-edit-menu-trigger minerva-edit-menu-trigger--overflow"
+                    :class="{ 'minerva-edit-menu-trigger--active': isMinervaEditMenuOpen }"
+                    aria-label="More options"
+                    ref="minervaEditMenuTriggerRef"
+                    @click.stop="toggleMinervaEditMenu"
+                  >
+                    <span ref="minervaEditMenuEllipsisRef" class="minerva-edit-menu-ellipsis-wrapper">
+                      <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-edit-menu-ellipsis-icon" />
+                      <span v-if="showMinervaEditMenuTriggerDotBadge" class="minerva-edit-menu-trigger-badge-dot"></span>
+                    </span>
+                  </button>
+                  <div
+                    v-if="isMinervaEditMenuOpen"
+                    ref="minervaEditMenuPanelRef"
+                    class="minerva-edit-menu-panel"
+                  >
+                    <ul class="minerva-edit-menu-list" role="menu">
+                      <template v-if="minervaMenuToggleEnabled">
+                        <li class="minerva-edit-menu-item" role="none">
+                          <div
+                            class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
+                          >
+                            <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                            <span>Source editing</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              :class="{ 'minerva-edit-menu-switch--checked': minervaSourceEditingEnabled }"
+                              aria-label="Source editing enabled"
+                              role="switch"
+                              :aria-checked="minervaSourceEditingEnabled"
+                              @click.stop="handleMinervaEditMenuSwitchChange('source-editing', !minervaSourceEditingEnabled)"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <div
+                            class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
+                          >
+                            <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
+                              <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                              <span
+                                v-if="showToggleBadge"
+                                class="suggestions-badge"
+                              >
+                                {{ toggleBadgeCount }}
+                              </span>
+                            </span>
+                            <span>Suggestions</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                              aria-label="Suggestions enabled"
+                              role="switch"
+                              :aria-checked="showSuggestions"
+                              @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
+                      </template>
+                      <template v-else>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
+                            <cdx-icon :icon="cdxIconEye" size="medium" />
+                            <span>Visual editing</span>
+                          </button>
+                        </li>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
+                            <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                            <span>Source editing</span>
+                          </button>
+                        </li>
+                      </template>
+                    </ul>
+                  </div>
+                </div>
+              </div>
+              <button
+                class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary minerva-toolbar-fixed"
+                :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
+                :disabled="!hasUnsavedChanges"
+              aria-label="Publish"
+            >
+                <cdx-icon :icon="cdxIconCheck" size="medium" />
+              </button>
+            </div>
+            <div
+              v-else-if="isMinervaSkin && (activePrototype === 'option-1' || isArrowOnceMode)"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-spaced"
               :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
               @mousedown="handleToolbarMouseDown"
@@ -3131,24 +3373,25 @@
               ref="minervaRailToggleRef"
               :model-value="activePrototype === 'option-4'
                 ? isMinervaOverviewSheetOpen
-                : activePrototype === 'option-5'
+                : isPaginationManualMode
                   ? (isMinervaSheetOpen && !isEditCheckSheet)
                   : showSuggestions"
+              :disabled="isPaginationManualMode && toggleBadgeCount === 0"
               quiet
               aria-label="Toggle suggestions"
               class="minerva-suggestions-rail-toggle"
               :class="{
                 'minerva-suggestions-rail-toggle--active': activePrototype === 'option-4'
                   ? isMinervaOverviewSheetOpen
-                  : activePrototype === 'option-5'
+                  : isPaginationManualMode
                     ? (isMinervaSheetOpen && !isEditCheckSheet)
                     : showSuggestions,
-                'minerva-suggestions-rail-toggle--overview': ['option-4', 'option-5'].includes(activePrototype)
+                'minerva-suggestions-rail-toggle--overview': activePrototype === 'option-4' || isPaginationManualMode
               }"
               @update:model-value="handleMinervaRailControlsToggleChange"
             >
               <span class="lightbulb-icon-wrapper">
-                <span v-if="!['option-4', 'option-5'].includes(activePrototype) && showSuggestions" class="bulb-rays">
+                <span v-if="activePrototype !== 'option-4' && !isPaginationManualMode && showSuggestions" class="bulb-rays">
                   <span class="ray ray-1"></span>
                   <span class="ray ray-2"></span>
                   <span class="ray ray-3"></span>
@@ -3202,15 +3445,26 @@
               >
                 {{ minervaSuggestionHeaderIndicatorLabel }}
               </div>
-              <button
-                v-if="showMinervaSheetReturnArrow"
-                class="minerva-sheet-close"
-                type="button"
-                :aria-label="minervaSheetReturnDirection === 'up' ? 'Scroll to highlighted item above' : 'Scroll to highlighted item below'"
-                @click="scrollToMinervaSheetTarget"
-              >
-                <cdx-icon :icon="minervaSheetReturnDirection === 'up' ? cdxIconArrowUp : cdxIconArrowDown" size="medium" />
-              </button>
+              <div class="minerva-sheet-header-actions">
+                <button
+                  v-if="showMinervaSheetReturnArrow"
+                  class="minerva-sheet-icon-button"
+                  type="button"
+                  :aria-label="minervaSheetReturnDirection === 'up' ? 'Scroll to highlighted item above' : 'Scroll to highlighted item below'"
+                  @click="scrollToMinervaSheetTarget"
+                >
+                  <cdx-icon :icon="minervaSheetReturnDirection === 'up' ? cdxIconArrowUp : cdxIconArrowDown" size="medium" />
+                </button>
+                <button
+                  v-else
+                  class="minerva-sheet-icon-button minerva-sheet-icon-button--close"
+                  type="button"
+                  aria-label="Close"
+                  @click="closeMinervaSuggestion"
+                >
+                  <cdx-icon :icon="cdxIconClose" size="medium" />
+                </button>
+              </div>
             </div>
           <p v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-description">
             Other editors often revise this kind of wording to have a more balanced tone. Learn more
@@ -3593,7 +3847,14 @@
                     name="suggestions-discoverability"
                     input-value="option-5"
                   >
-                    Pagination
+                    Pagination (auto-advance to next suggestion)
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="selectedPrototype"
+                    name="suggestions-discoverability"
+                    input-value="option-6"
+                  >
+                    Pagination (no auto-advance)
                   </cdx-radio>
                   <cdx-radio
                     v-model="selectedPrototype"
@@ -3652,6 +3913,9 @@
                 </cdx-checkbox>
                 <cdx-checkbox v-model="nonSelectedHighlightUnderlineEnabled">
                   Highlighted text is underlined when non selected
+                </cdx-checkbox>
+                <cdx-checkbox v-model="editToolbarImprovementsEnabled">
+                  Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="editFullPageImprovedEnabled">
                   "Edit full page" button improved
@@ -3820,8 +4084,18 @@ import {
   cdxIconArticle,
   cdxIconClose,
   cdxIconSuccess,
+  cdxIconCheck,
   cdxIconInfo,
-  cdxIconWikiText
+  cdxIconWikiText,
+  cdxIconBold,
+  cdxIconItalic,
+  cdxIconStrikethrough,
+  cdxIconUnderline,
+  cdxIconCode,
+  cdxIconImage,
+  cdxIconTable,
+  cdxIconSpeechBubble,
+  cdxIconHieroglyph
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
 
@@ -3853,6 +4127,9 @@ const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
 const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
+const isTextStyleMenuOpen = ref(false);
+const isTextStyleMenuExpanded = ref(false);
+const isMinervaAddMenuExpanded = ref(false);
 const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
@@ -3871,7 +4148,10 @@ const minervaRailToggleEnabled = computed(
     minervaOutsideRailEnabled.value
 );
 const filteringEnabled = ref(false);
-const isPaginationMode = computed(() => activePrototype.value === 'option-5');
+const isPaginationAutoMode = computed(() => activePrototype.value === 'option-5');
+const isPaginationManualMode = computed(() => activePrototype.value === 'option-6');
+const isPaginationMode = computed(() => isPaginationAutoMode.value || isPaginationManualMode.value);
+const shouldAutoAdvancePaginationSuggestion = computed(() => isPaginationAutoMode.value);
 const isFirstSuggestionNavigationMode = computed(() => (
   activePrototype.value === 'option-2' || isPaginationMode.value
 ));
@@ -3886,7 +4166,8 @@ const showMinervaCollapsedCountRailToggle = computed(
 const showMinervaStandardRailToggle = computed(
   () => isMinervaSkin.value &&
     isEditMode.value &&
-    !['option-1', 'option-4', 'option-5'].includes(activePrototype.value) &&
+    !['option-1', 'option-4'].includes(activePrototype.value) &&
+    !isPaginationAutoMode.value &&
     minervaRailToggleEnabled.value &&
     !showMinervaBottomRailToggle.value &&
     (!minervaMenuToggleEnabled.value || showSuggestions.value)
@@ -3894,7 +4175,7 @@ const showMinervaStandardRailToggle = computed(
 const showMinervaBottomRailToggle = computed(
   () => isMinervaSkin.value &&
     isEditMode.value &&
-    activePrototype.value === 'option-4' &&
+    (activePrototype.value === 'option-4' || isPaginationManualMode.value) &&
     (!minervaMenuToggleEnabled.value || showSuggestions.value) &&
     minervaRailToggleEnabled.value
 );
@@ -3911,7 +4192,7 @@ const showMinervaFilterButton = computed(
     filteringEnabled.value &&
     showSuggestions.value &&
     toggleBadgeCount.value > 0 &&
-    activePrototype.value !== 'option-5'
+    !isPaginationMode.value
 );
 const showMinervaBottomRailToggleControl = computed(
   () => showMinervaStandardRailToggle.value && activePrototype.value === 'option-3'
@@ -3942,14 +4223,14 @@ const showDesktopFilterButton = computed(
     isEditMode.value &&
     filteringEnabled.value &&
     showSuggestions.value &&
-    activePrototype.value !== 'option-5'
+    !isPaginationMode.value
 );
 const showDesktopPaginationFilterButton = computed(
   () => !isMinervaSkin.value &&
     isEditMode.value &&
     filteringEnabled.value &&
     showSuggestions.value &&
-    activePrototype.value === 'option-5' &&
+    isPaginationMode.value &&
     toggleBadgeCount.value > 0
 );
 const showDesktopFeedbackControls = computed(
@@ -3984,7 +4265,7 @@ const isDesktopPaginationNextDisabled = computed(() => (
 const showDesktopPaginationControls = computed(
   () => !isMinervaSkin.value &&
     isEditMode.value &&
-    activePrototype.value === 'option-5' &&
+    isPaginationMode.value &&
     showSuggestions.value &&
     desktopPaginationIds.value.length > 0 &&
     hasOpenedDesktopPagination.value
@@ -4021,6 +4302,15 @@ const showMinervaToggleOnToast = ref(false);
 const showMinervaMoreSuggestionsToast = ref(false);
 const showMinervaZeroSuggestionsToast = ref(false);
 const showPaginationNoSuggestionsToast = ref(false);
+const showMinervaRedoButton = ref(false);
+const minervaViewportWidth = ref(375);
+const minervaToolbarAvailableWidth = ref(0);
+const inlineTextStyleState = ref({
+  bold: false,
+  italic: false,
+  strikethrough: false,
+  underline: false
+});
 const minervaSuccessRef = ref(null);
 const activePrototype = ref('option-1');
 const dismissedSuggestionId = ref(null);
@@ -4053,6 +4343,8 @@ const minervaOpenSections = ref({
   film: false
 });
 const editSnapshot = ref([]);
+const editUndoStack = ref([]);
+const editRedoStack = ref([]);
 const isMinervaSheetOpen = ref(false);
 const activeMinervaSuggestion = ref(1);
 const minervaSheetRef = ref(null);
@@ -4132,6 +4424,9 @@ const sidebarTopOffset8 = ref(0);
 const vectorSuggestionsControlsRef = ref(null);
 const desktopSuggestionsControlsHidden = ref(false);
 const hasOpenedDesktopPagination = ref(false);
+const minervaToolbarScrollAreaRef = ref(null);
+const textStyleMenuTriggerRef = ref(null);
+const textStyleMenuPanelRef = ref(null);
 
 // Computed: sincronizar hover entre texto y card (third suggestion)
 const isHovered3 = computed(() => isCardHovered3.value || isTextHovered3.value);
@@ -4189,6 +4484,7 @@ const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
+const editToolbarImprovementsEnabled = ref(false);
 const editFullPageImprovedEnabled = ref(true);
 const selectedPrototype = ref('option-4');
 const toastsEnabled = ref(true);
@@ -4226,6 +4522,9 @@ function loadPrototypeDialogPrefs() {
     if (typeof prefs.nonSelectedHighlightUnderlineEnabled === 'boolean') {
       nonSelectedHighlightUnderlineEnabled.value = prefs.nonSelectedHighlightUnderlineEnabled;
     }
+    if (typeof prefs.editToolbarImprovementsEnabled === 'boolean') {
+      editToolbarImprovementsEnabled.value = prefs.editToolbarImprovementsEnabled;
+    }
     if (typeof prefs.editFullPageImprovedEnabled === 'boolean') {
       editFullPageImprovedEnabled.value = prefs.editFullPageImprovedEnabled;
     }
@@ -4243,6 +4542,7 @@ function savePrototypeDialogPrefs() {
     filteringEnabled: filteringEnabled.value,
     newSuggestionColorEnabled: newSuggestionColorEnabled.value,
     nonSelectedHighlightUnderlineEnabled: nonSelectedHighlightUnderlineEnabled.value,
+    editToolbarImprovementsEnabled: editToolbarImprovementsEnabled.value,
     editFullPageImprovedEnabled: editFullPageImprovedEnabled.value
   };
   window.localStorage.setItem(prototypeDialogPrefsStorageKey, JSON.stringify(prefs));
@@ -4444,7 +4744,7 @@ const shouldShowToasts = computed(() => (
   (activePrototype.value === 'option-1' ||
     activePrototype.value === 'option-2' ||
     activePrototype.value === 'option-3' ||
-    activePrototype.value === 'option-5')
+    isPaginationMode.value)
 ));
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
@@ -4587,17 +4887,94 @@ const showMinervaBanner = computed(() => {
 const showVectorHelpButton = computed(() => (
   !isMinervaSkin.value &&
   isEditMode.value &&
-  !['option-1', 'option-5'].includes(activePrototype.value) && !isArrowOnceMode.value
+  activePrototype.value !== 'option-1' && !isPaginationMode.value && !isArrowOnceMode.value
 ));
 const showMinervaHelpButton = computed(() => (
   isMinervaSkin.value &&
   isEditMode.value &&
-  !['option-1', 'option-5'].includes(activePrototype.value) && !isArrowOnceMode.value
+  activePrototype.value !== 'option-1' && !isPaginationMode.value && !isArrowOnceMode.value
+));
+const minervaToolbarSlotCount = computed(() => {
+  const availableWidth = minervaToolbarAvailableWidth.value || Math.max(0, minervaViewportWidth.value - 88);
+  return Math.floor(availableWidth / 44);
+});
+const minervaImprovedVisibleActionCount = computed(() => (
+  4 + // Undo + Text styles + Add + overflow menu
+  (showMinervaRedoButton.value ? 1 : 0) +
+  (minervaToolbarToggleEnabled.value ? 1 : 0) +
+  (showMinervaResponsiveTopLevelLink.value ? 1 : 0) +
+  (showMinervaResponsiveTopLevelCite.value ? 1 : 0)
+));
+const minervaImprovedCoreActionCount = computed(() => (
+  4 + // Undo + Text styles + Add + overflow menu
+  (showMinervaRedoButton.value ? 1 : 0) +
+  (minervaToolbarToggleEnabled.value ? 1 : 0)
+));
+const minervaToolbarOverflowing = computed(() => (
+  editToolbarImprovementsEnabled.value &&
+  minervaToolbarSlotCount.value < minervaImprovedVisibleActionCount.value
+));
+const showMinervaResponsiveTopLevelLink = computed(() => (
+  !editToolbarImprovementsEnabled.value ||
+  minervaToolbarSlotCount.value >= minervaImprovedCoreActionCount.value + 1
+));
+const showMinervaResponsiveTopLevelCite = computed(() => (
+  !editToolbarImprovementsEnabled.value ||
+  (
+    showMinervaResponsiveTopLevelLink.value &&
+    minervaToolbarSlotCount.value >= minervaImprovedCoreActionCount.value + 2
+  )
 ));
 const minervaAddMenuItems = computed(() => ([
-  { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
-  { value: 'link', label: 'Link', icon: cdxIconLink }
+  ...(editToolbarImprovementsEnabled.value
+    ? [
+        ...(!showMinervaResponsiveTopLevelLink.value ? [
+          { value: 'link', label: 'Link', icon: cdxIconLink }
+        ] : []),
+        ...(!showMinervaResponsiveTopLevelCite.value ? [
+          { value: 'cite', label: 'Cite', icon: cdxIconQuotes }
+        ] : []),
+        ...(!showMinervaResponsiveTopLevelLink.value || !showMinervaResponsiveTopLevelCite.value ? [
+          { type: 'divider', value: 'minerva-add-divider-primary' }
+        ] : []),
+        { value: 'images-media', label: 'Images and media', icon: cdxIconImage },
+        { value: 'table', label: 'Table', icon: cdxIconTable },
+        { type: 'divider', value: 'minerva-add-divider-insert' },
+        { value: 'invisible-comment', label: 'Invisible comment', icon: cdxIconSpeechBubble },
+        { type: 'divider', value: 'minerva-add-divider-characters' },
+        { value: 'special-characters', label: 'Special characters', icon: cdxIconSpecialCharacter },
+        { value: 'hieroglyphs', label: 'Hieroglyphs', icon: cdxIconHieroglyph },
+        { value: 'code-block', label: 'Code block', icon: cdxIconCode },
+        { value: 'language', label: 'Language', icon: cdxIconLanguage }
+      ]
+    : [
+        { value: 'cite', label: 'Cite', icon: cdxIconQuotes },
+        { value: 'link', label: 'Link', icon: cdxIconLink }
+      ])
 ]));
+const visibleMinervaAddMenuItems = computed(() => minervaAddMenuItems.value);
+const trackedInlineTextStyleCommands = {
+  bold: 'bold',
+  italic: 'italic',
+  strikethrough: 'strikeThrough',
+  underline: 'underline'
+};
+const textStyleMenuItems = [
+  { value: 'bold', label: 'Bold', icon: cdxIconBold },
+  { value: 'italic', label: 'Italic', icon: cdxIconItalic },
+  { value: 'strikethrough', label: 'Strikethrough', icon: cdxIconStrikethrough },
+  { value: 'underline', label: 'Underline', icon: cdxIconUnderline },
+  { type: 'divider', value: 'text-style-divider-1' },
+  { value: 'code', label: 'Computer code', icon: cdxIconCode }
+];
+const visibleMinervaTextStyleMenuItems = computed(() => (
+  isTextStyleMenuExpanded.value
+    ? textStyleMenuItems
+    : textStyleMenuItems.slice(0, 4)
+));
+const showMinervaTextStyleMenuToggle = computed(() => (
+  textStyleMenuItems.filter((item) => item.type !== 'divider').length > 4
+));
 const minervaPaginationIds = computed(() => {
   const ids = [];
   if (citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value) {
@@ -4615,7 +4992,7 @@ const minervaPaginationIds = computed(() => {
   return ids;
 });
 const minervaPaginationIdsForActiveSuggestion = computed(() => {
-  if (activePrototype.value === 'option-5') {
+  if (isPaginationMode.value) {
     return getPendingSuggestionIdsForContext();
   }
   if (activeMinervaSuggestion.value === 2 || activeMinervaSuggestion.value === 4) {
@@ -4673,9 +5050,9 @@ const showMinervaPagination = computed(() => {
     return false;
   }
   if (isEditCheckSheet.value) {
-    return activePrototype.value === 'option-5' && minervaPaginationTotal.value > 0;
+    return isPaginationMode.value && minervaPaginationTotal.value > 0;
   }
-  if (activePrototype.value === 'option-5') {
+  if (isPaginationMode.value) {
     return minervaPaginationTotal.value > 0;
   }
   if (activeMinervaSuggestion.value === 2 || activeMinervaSuggestion.value === 4) {
@@ -4764,8 +5141,9 @@ function resetSuggestionState() {
 function applyPrototypeMode(mode) {
   resetSuggestionState();
   activePrototype.value = mode;
-  showSuggestionNotification.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-4' || mode === 'option-3' || mode === 'option-5';
-  showSuggestionBadge.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-4' || mode === 'option-3' || mode === 'option-5';
+  const modeShowsSuggestions = ['option-1', 'option-2', 'option-3', 'option-4', 'option-5', 'option-6'].includes(mode);
+  showSuggestionNotification.value = modeShowsSuggestions;
+  showSuggestionBadge.value = modeShowsSuggestions;
   isBannerDismissed.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
@@ -4775,7 +5153,7 @@ function applyPrototypeMode(mode) {
   dontShowSuggestionInfo.value = false;
   isBannerDelayReady.value = false;
   enableAutoScroll.value = false;
-  showSuggestions.value = mode === 'option-1' || mode === 'option-2' || mode === 'option-4' || mode === 'option-3' || mode === 'option-5';
+  showSuggestions.value = modeShowsSuggestions;
   showSuggestionToggle.value = true;
 }
 
@@ -4840,10 +5218,10 @@ function showFullPageEdit(event) {
     const newTop = targetRef.value.getBoundingClientRect().top;
     window.scrollTo(0, Math.max(0, startY + (newTop - startTop)));
   });
-  if (activePrototype.value === 'option-3' && isMinervaSkin.value) {
+  if (isMinervaSkin.value && shouldShowToasts.value) {
     nextTick(() => {
       const newAvailable = availableSuggestionCount.value;
-      if (newAvailable > previousAvailable && shouldShowToasts.value) {
+      if (newAvailable > previousAvailable) {
         showMinervaMoreSuggestionsToast.value = true;
         if (showSuggestions.value) {
           isBannerDismissed.value = false;
@@ -5420,14 +5798,23 @@ function dismissSuggestionInfo() {
 
 function toggleMinervaAddMenu() {
   isMinervaAddMenuOpen.value = !isMinervaAddMenuOpen.value;
+  if (isMinervaAddMenuOpen.value) {
+    closeTextStyleMenu();
+    closeMinervaEditMenu();
+  }
 }
 
 function closeMinervaAddMenu() {
   isMinervaAddMenuOpen.value = false;
+  isMinervaAddMenuExpanded.value = false;
 }
 
 function toggleMinervaEditMenu() {
   isMinervaEditMenuOpen.value = !isMinervaEditMenuOpen.value;
+  if (isMinervaEditMenuOpen.value) {
+    closeTextStyleMenu();
+    closeMinervaAddMenu();
+  }
 }
 
 function closeMinervaEditMenu() {
@@ -5445,6 +5832,85 @@ function handleMinervaEditMenuSwitchChange(value, nextValue) {
   if (value === 'source-editing') {
     minervaSourceEditingEnabled.value = nextValue;
   }
+}
+
+function toggleTextStyleMenu() {
+  isTextStyleMenuOpen.value = !isTextStyleMenuOpen.value;
+  if (isTextStyleMenuOpen.value) {
+    isTextStyleMenuExpanded.value = false;
+    closeMinervaAddMenu();
+    closeMinervaEditMenu();
+    updateInlineTextStyleState();
+  }
+}
+
+function closeTextStyleMenu() {
+  isTextStyleMenuOpen.value = false;
+  isTextStyleMenuExpanded.value = false;
+}
+
+function isTrackedInlineTextStyle(value) {
+  return Object.prototype.hasOwnProperty.call(trackedInlineTextStyleCommands, value);
+}
+
+function isInlineTextStyleActive(value) {
+  return Boolean(inlineTextStyleState.value[value]);
+}
+
+function updateInlineTextStyleState() {
+  if (typeof document === 'undefined' || typeof window === 'undefined' || typeof document.queryCommandState !== 'function') {
+    return;
+  }
+  const selection = window.getSelection();
+  if (!selection || selection.rangeCount === 0) return;
+  const range = selection.getRangeAt(0);
+  const container = range.commonAncestorContainer;
+  const element = container.nodeType === Node.ELEMENT_NODE ? container : container.parentElement;
+  if (!element || !element.closest('.article-text-editable')) return;
+  inlineTextStyleState.value = Object.fromEntries(
+    Object.entries(trackedInlineTextStyleCommands).map(([ value, command ]) => [
+      value,
+      Boolean(document.queryCommandState(command))
+    ])
+  );
+}
+
+function restoreSavedArticleSelection() {
+  if (typeof window === 'undefined' || !savedArticleSelectionRange) return false;
+  const selection = window.getSelection();
+  if (!selection) return false;
+  selection.removeAllRanges();
+  selection.addRange(savedArticleSelectionRange);
+  if (lastArticleEditableElement && typeof lastArticleEditableElement.focus === 'function') {
+    lastArticleEditableElement.focus();
+  }
+  return true;
+}
+
+function applyInlineTextStyle(command) {
+  if (typeof document === 'undefined') return false;
+  if (!restoreSavedArticleSelection()) return false;
+  const applied = document.execCommand(command, false);
+  if (!applied) return false;
+  const selection = window.getSelection();
+  if (selection && selection.rangeCount > 0) {
+    savedArticleSelectionRange = selection.getRangeAt(0).cloneRange();
+  }
+  updateInlineTextStyleState();
+  markArticleEdited();
+  return true;
+}
+
+function handleTextStyleItemSelect(value) {
+  const command = trackedInlineTextStyleCommands[value];
+  if (command) {
+    applyInlineTextStyle(command);
+  }
+  closeTextStyleMenu();
+}
+
+function toggleTextStyleMenuExpanded() {
+  isTextStyleMenuExpanded.value = !isTextStyleMenuExpanded.value;
 }
 
 function getToggleRootElement(toggleRef) {
@@ -5501,7 +5967,7 @@ function handleMinervaRailToggleChange(nextValue) {
     isMinervaOverviewSheetOpen.value = nextValue;
     return;
   }
-  if (isMinervaSkin.value && activePrototype.value === 'option-5') {
+  if (isMinervaSkin.value && isPaginationManualMode.value) {
     openNextPaginationSuggestion();
     return;
   }
@@ -5532,12 +5998,12 @@ function openNextPaginationSuggestion() {
   const targetRef = getSuggestionRefById(nextId);
   if (!targetRef) return;
   suppressMinervaReturnDirectionDuringPaginationScroll();
-  openSuggestionAtTarget(nextId, targetRef, true);
+  openSuggestionAtTarget(nextId, targetRef, true, { openMinervaAfterScroll: true });
 }
 
 function handleMinervaRailControlsToggleChange(nextValue) {
   if (isMinervaSkin.value && isMinervaSheetOpen.value && !isEditCheckSheet.value) {
-    if (activePrototype.value === 'option-5') {
+    if (isPaginationManualMode.value) {
       handleMinervaRailToggleChange(nextValue);
       return;
     }
@@ -5654,6 +6120,14 @@ function handleMinervaSuggestionsMenuToggle() {
 }
 
 function handleMinervaAddItem(value) {
+  if (value === 'more') {
+    isMinervaAddMenuExpanded.value = true;
+    return;
+  }
+  if (value === 'fewer') {
+    isMinervaAddMenuExpanded.value = false;
+    return;
+  }
   if (value === 'link') {
     openMinervaLinkDialog();
     closeMinervaAddMenu();
@@ -5859,14 +6333,17 @@ function handleSelectionChange() {
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value) return;
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value) return;
   const target = event.target;
   if (minervaAddMenuPanelRef.value?.contains(target)) return;
   if (minervaAddMenuTriggerRef.value?.contains(target)) return;
   if (minervaEditMenuPanelRef.value?.contains(target)) return;
   if (minervaEditMenuTriggerRef.value?.contains(target)) return;
+  if (textStyleMenuPanelRef.value?.contains(target)) return;
+  if (textStyleMenuTriggerRef.value?.contains(target)) return;
   closeMinervaAddMenu();
   closeMinervaEditMenu();
+  closeTextStyleMenu();
 }
 
 function getSuggestionRefById(suggestionId) {
@@ -5952,9 +6429,19 @@ function showPaginationNoMoreSuggestionsToast() {
   }, 2000);
 }
 
+function shouldAdvanceMinervaSuggestionAfterResolve() {
+  if (shouldAutoAdvancePaginationSuggestion.value) {
+    return true;
+  }
+  if (isPaginationManualMode.value) {
+    return false;
+  }
+  return showMinervaPagination.value;
+}
+
 function advanceMinervaSuggestion(currentId) {
   nextTick(() => {
-    const ids = activePrototype.value === 'option-5'
+    const ids = isPaginationMode.value
       ? getPendingSuggestionIdsForContext()
       : (currentId === 2 || currentId === 4)
         ? minervaPaginationIds.value.filter((id) => id === 2 || id === 4)
@@ -5966,7 +6453,7 @@ function advanceMinervaSuggestion(currentId) {
     }
     const contextIds = getSuggestionIdsForCurrentContext();
     const currentOrderIndex = contextIds.indexOf(currentId);
-    const nextId = activePrototype.value === 'option-5'
+    const nextId = isPaginationMode.value
       ? ids.find((id) => contextIds.indexOf(id) > currentOrderIndex) ?? ids[0]
       : ids[Math.max(0, Math.min(ids.indexOf(currentId), ids.length - 1))];
     const targetRef = getSuggestionRefById(nextId);
@@ -6483,7 +6970,7 @@ function handleNoSuggestion1() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(1);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(1);
       } else {
         closeMinervaSuggestion();
@@ -6502,7 +6989,7 @@ function handleNoSuggestion2() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(2);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(2);
       } else {
         closeMinervaSuggestion();
@@ -6521,7 +7008,7 @@ function handleNoSuggestion3() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(3);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(3);
       } else {
         closeMinervaSuggestion();
@@ -6539,7 +7026,7 @@ function handleYesSuggestion4() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(4);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(4);
       } else {
         closeMinervaSuggestion();
@@ -6561,7 +7048,7 @@ function handleNoSuggestion4() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(4);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(4);
       } else {
         closeMinervaSuggestion();
@@ -6590,7 +7077,7 @@ function handleResolveGenericSuggestion(suggestionId) {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(suggestionId);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(suggestionId);
       } else {
         closeMinervaSuggestion();
@@ -6623,7 +7110,7 @@ function handleDeclineGenericSuggestion(suggestionId) {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(suggestionId);
     setTimeout(() => {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(suggestionId);
       } else {
         closeMinervaSuggestion();
@@ -6646,7 +7133,7 @@ function createCitation1() {
     citationNumber1.value = citationCounter.value;
     showCitationPopup1.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(1);
       } else {
         closeMinervaSuggestion();
@@ -6674,7 +7161,7 @@ function createCitation2() {
     citationNumber2.value = citationCounter.value;
     showCitationPopup2.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(2);
       } else {
         closeMinervaSuggestion();
@@ -6702,7 +7189,7 @@ function createCitation3() {
     citationNumber3.value = citationCounter.value;
     showCitationPopup3.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      if (isPaginationMode.value || showMinervaPagination.value) {
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
         advanceMinervaSuggestion(3);
       } else {
         closeMinervaSuggestion();
@@ -6833,7 +7320,7 @@ watch(
   (values) => {
     if (
       !isMinervaSkin.value &&
-      activePrototype.value === 'option-5' &&
+      isPaginationMode.value &&
       values.some(Boolean)
     ) {
       hasOpenedDesktopPagination.value = true;
@@ -7298,10 +7785,10 @@ watch(minervaToggleLocation, (value) => {
 
 watch(activePrototype, (value) => {
   isMinervaOverviewSheetOpen.value = false;
-  if (value !== 'option-5') {
+  if (!['option-5', 'option-6'].includes(value)) {
     hasOpenedDesktopPagination.value = false;
   }
-  if (value === 'option-3' || value === 'option-4' || value === 'option-5') {
+  if (value === 'option-3' || value === 'option-4' || value === 'option-5' || value === 'option-6') {
     minervaOutsideRailEnabled.value = true;
     return;
   }
@@ -7329,11 +7816,26 @@ watch(
     filteringEnabled,
     newSuggestionColorEnabled,
     nonSelectedHighlightUnderlineEnabled,
+    editToolbarImprovementsEnabled,
     editFullPageImprovedEnabled
   ],
   () => {
     savePrototypeDialogPrefs();
   }
+);
+
+watch(
+  [
+    isEditMode,
+    isMinervaSkin,
+    editToolbarImprovementsEnabled,
+    showMinervaRedoButton,
+    minervaToolbarToggleEnabled
+  ],
+  () => {
+    updateMinervaViewportWidth();
+  },
+  { flush: 'post' }
 );
 
 watch(
@@ -7437,6 +7939,19 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
     }
   }
   syncMinervaArrowOnlyVisibility();
+});
+
+watch(sectionSuggestionCount, (newValue, oldValue) => {
+  if (
+    isMinervaSkin.value &&
+    minervaEditSectionOnly.value &&
+    isEditMode.value &&
+    showSuggestions.value &&
+    oldValue > 0 &&
+    newValue === 0
+  ) {
+    showPaginationNoMoreSuggestionsToast();
+  }
 });
 
 watch(anySuggestionVisible, (visible) => {
@@ -7554,7 +8069,7 @@ function getSuggestionCardRefById(suggestionId) {
 }
 
 function ensureDesktopSuggestionClearsPagination(suggestionId) {
-  if (isMinervaSkin.value || activePrototype.value !== 'option-5' || typeof window === 'undefined') return;
+  if (isMinervaSkin.value || !isPaginationMode.value || typeof window === 'undefined') return;
   const cardRef = getSuggestionCardRefById(suggestionId);
   const card = cardRef?.value;
   const pagination = document.querySelector('.vector-pagination-controls');
@@ -7957,9 +8472,11 @@ onMounted(() => {
   
   if (typeof window !== 'undefined') {
     // Add event listeners to keep alignment updated for both suggestions
+    updateMinervaViewportWidth();
     window.addEventListener('resize', alignBothSuggestions);
     window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
     window.addEventListener('resize', updateMinervaSheetHeight);
+    window.addEventListener('resize', updateMinervaViewportWidth);
     window.addEventListener('scroll', updateSuggestionVisibility, true);
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
@@ -7977,6 +8494,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', alignBothSuggestions);
     window.removeEventListener('scroll', alignBothSuggestions, true);
     window.removeEventListener('resize', updateMinervaSheetHeight);
+    window.removeEventListener('resize', updateMinervaViewportWidth);
     window.removeEventListener('scroll', updateSuggestionVisibility, true);
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
@@ -8393,36 +8911,111 @@ function updateMinervaSheetHeight() {
   });
 }
 
-function captureEditSnapshot() {
-  if (!pageRoot.value) {
-    return;
-  }
+function updateMinervaViewportWidth() {
+  if (typeof window === 'undefined') return;
+  minervaViewportWidth.value = window.innerWidth || document.documentElement.clientWidth || 375;
+  nextTick(() => {
+    const toolbarScrollArea = minervaToolbarScrollAreaRef.value;
+    minervaToolbarAvailableWidth.value = toolbarScrollArea?.clientWidth || 0;
+  });
+}
+
+function cloneEditSnapshot(snapshot) {
+  return snapshot.map(({ node, html }) => ({ node, html }));
+}
+
+function getCurrentEditSnapshot() {
+  if (!pageRoot.value) return [];
   const nodes = pageRoot.value.querySelectorAll('.article-text-editable');
-  editSnapshot.value = Array.from(nodes).map((node) => ({
+  return Array.from(nodes).map((node) => ({
     node,
     html: node.innerHTML
   }));
+}
+
+function areSnapshotsEqual(leftSnapshot, rightSnapshot) {
+  if (leftSnapshot.length !== rightSnapshot.length) return false;
+  return leftSnapshot.every((entry, index) => (
+    entry.node === rightSnapshot[index]?.node &&
+    entry.html === rightSnapshot[index]?.html
+  ));
+}
+
+function applyEditSnapshot(snapshot) {
+  snapshot.forEach(({ node, html }) => {
+    if (node) {
+      node.innerHTML = html;
+    }
+  });
+  nextTick(() => {
+    updateToneCheckFromContent();
+  });
+}
+
+function syncMinervaRedoButtonVisibility() {
+  showMinervaRedoButton.value = editRedoStack.value.length > 0;
+}
+
+function captureEditSnapshot() {
+  editSnapshot.value = getCurrentEditSnapshot();
+  editUndoStack.value = [cloneEditSnapshot(editSnapshot.value)];
+  editRedoStack.value = [];
+  syncMinervaRedoButtonVisibility();
+  return editSnapshot.value;
 }
 
 function restoreEditSnapshot() {
   if (!editSnapshot.value.length) {
     return;
   }
-  editSnapshot.value.forEach(({ node, html }) => {
-    if (node) {
-      node.innerHTML = html;
-    }
-  });
+  applyEditSnapshot(editSnapshot.value);
+  editUndoStack.value = [cloneEditSnapshot(editSnapshot.value)];
+  editRedoStack.value = [];
+  syncMinervaRedoButtonVisibility();
 }
 
 function undoEdits() {
-  restoreEditSnapshot();
-  hasUnsavedChanges.value = false;
+  if (editUndoStack.value.length <= 1) {
+    return;
+  }
+  const currentSnapshot = editUndoStack.value.pop();
+  if (currentSnapshot) {
+    editRedoStack.value.push(cloneEditSnapshot(currentSnapshot));
+  }
+  const previousSnapshot = editUndoStack.value[editUndoStack.value.length - 1];
+  if (previousSnapshot) {
+    applyEditSnapshot(previousSnapshot);
+  }
+  hasUnsavedChanges.value = editUndoStack.value.length > 1;
+  syncMinervaRedoButtonVisibility();
+}
+
+function handleMinervaRedo() {
+  if (!editRedoStack.value.length) {
+    syncMinervaRedoButtonVisibility();
+    return;
+  }
+  const nextSnapshot = editRedoStack.value.pop();
+  if (!nextSnapshot) {
+    syncMinervaRedoButtonVisibility();
+    return;
+  }
+  editUndoStack.value.push(cloneEditSnapshot(nextSnapshot));
+  applyEditSnapshot(nextSnapshot);
+  hasUnsavedChanges.value = editUndoStack.value.length > 1;
+  syncMinervaRedoButtonVisibility();
 }
 
 // Mark article as edited
 function markArticleEdited() {
-  hasUnsavedChanges.value = true;
+  const currentSnapshot = getCurrentEditSnapshot();
+  const lastUndoSnapshot = editUndoStack.value[editUndoStack.value.length - 1] || [];
+  if (!areSnapshotsEqual(currentSnapshot, lastUndoSnapshot)) {
+    editUndoStack.value.push(cloneEditSnapshot(currentSnapshot));
+    editRedoStack.value = [];
+  }
+  hasUnsavedChanges.value = editUndoStack.value.length > 1;
+  syncMinervaRedoButtonVisibility();
   updateToneCheckFromContent();
 }
 </script>
@@ -10030,6 +10623,173 @@ function markArticleEdited() {
 
 .editor-toolbar--minerva .toolbar-btn-icon-only:first-child {
   border-right: 1px solid var(--border-color-muted, #c8ccd1);
+}
+
+.editor-toolbar--minerva-improved {
+  flex-wrap: nowrap;
+  min-height: 48px;
+}
+
+.editor-toolbar--minerva-improved .toolbar-btn-primary {
+  height: 48px;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-fixed {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+  height: 48px;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area {
+  flex: 1 1 auto;
+  min-width: 0;
+  height: 48px;
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area::-webkit-scrollbar {
+  display: none;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area--overflowing {
+  overflow-x: auto;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area--overflowing::after {
+  content: '';
+  position: sticky;
+  right: 0;
+  display: block;
+  flex: 0 0 16px;
+  width: 16px;
+  height: 48px;
+  margin-left: -16px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0), #fff 85%);
+  pointer-events: none;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area > .minerva-toolbar-fill {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 44px;
+  max-width: none;
+  height: 48px;
+  padding: 0;
+  border-left: 0;
+  border-right: 0;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area--overflowing > .minerva-toolbar-fill {
+  flex: 0 0 44px;
+  width: 44px;
+  max-width: 44px;
+}
+
+.editor-toolbar--minerva-improved > .minerva-toolbar-scroll-area > .text-style-menu {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.editor-toolbar--minerva-improved .minerva-add-menu-trigger,
+.editor-toolbar--minerva-improved .minerva-edit-menu-trigger,
+.editor-toolbar--minerva-improved .text-style-menu-trigger,
+.editor-toolbar--minerva-improved .minerva-toolbar-toggle,
+.editor-toolbar--minerva-improved .minerva-toolbar-toggle :deep(button) {
+  width: 44px;
+  height: 48px;
+}
+
+.minerva-skin.edit-mode.minerva-edit-toolbar-improved .edit-mode-content {
+  padding-top: 48px;
+}
+
+.text-style-menu-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 1px solid transparent;
+  background: transparent;
+  cursor: pointer;
+}
+
+.text-style-menu-trigger--active {
+  background: var(--background-color-interactive-subtle, #eaecf0);
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
+.text-style-menu-panel {
+  position: fixed;
+  top: 48px;
+  right: 0;
+  left: auto;
+  width: min(224px, calc(100vw - 16px));
+  background: #fff;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+  z-index: 90;
+}
+
+.text-style-menu-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.text-style-menu-item {
+  display: flex;
+}
+
+.text-style-menu-divider {
+  height: 1px;
+  margin: 4px 0;
+  background: var(--border-color-subtle, #c8ccd1);
+}
+
+.text-style-menu-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 0;
+  border-radius: 2px;
+  background: transparent;
+  color: var(--color-base, #202122);
+  font-size: 16px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.text-style-menu-button:hover {
+  background: #f8f9fa;
+}
+
+.text-style-menu-button--selected {
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #36c);
+}
+
+.text-style-menu-button :deep(.cdx-icon),
+.text-style-menu-button :deep(svg) {
+  width: 20px;
+  height: 20px;
 }
 
 .minerva-skin.edit-mode .edit-mode-content {
@@ -11839,8 +12599,18 @@ function markArticleEdited() {
   color: var(--color-subtle, #54595d);
 }
 
-.minerva-sheet-close {
+.minerva-sheet-header-actions {
+  margin-left: auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.minerva-sheet-header-indicator + .minerva-sheet-header-actions {
   margin-left: 8px;
+}
+
+.minerva-sheet-icon-button {
   border: none;
   background: transparent;
   padding: 4px;
@@ -11848,11 +12618,17 @@ function markArticleEdited() {
   color: var(--color-base, #202122);
 }
 
-.minerva-sheet-close :deep(.cdx-icon),
-.minerva-sheet-close :deep(svg) {
+.minerva-sheet-icon-button :deep(.cdx-icon),
+.minerva-sheet-icon-button :deep(svg) {
   color: var(--color-base, #202122);
   fill: var(--color-base, #202122);
   transform: none;
+}
+
+.minerva-sheet-icon-button--close :deep(.cdx-icon),
+.minerva-sheet-icon-button--close :deep(svg) {
+  color: var(--color-subtle, #54595d);
+  fill: var(--color-subtle, #54595d);
 }
 
 .minerva-sheet-description {
@@ -11935,6 +12711,20 @@ function markArticleEdited() {
 .minerva-suggestions-rail-toggle--overview :deep(svg) {
   color: var(--color-progressive, #36c);
   fill: var(--color-progressive, #36c);
+}
+
+.minerva-suggestions-rail-toggle:disabled :deep(.cdx-icon),
+.minerva-suggestions-rail-toggle:disabled :deep(svg),
+.minerva-suggestions-rail-toggle--overview:disabled :deep(.cdx-icon),
+.minerva-suggestions-rail-toggle--overview:disabled :deep(svg) {
+  color: var(--color-disabled, #a2a9b1);
+  fill: var(--color-disabled, #a2a9b1);
+}
+
+.minerva-suggestions-rail-toggle:disabled .suggestions-badge,
+.minerva-suggestions-rail-toggle--overview:disabled .suggestions-badge {
+  color: var(--color-disabled, #a2a9b1);
+  border-color: var(--color-disabled, #a2a9b1);
 }
 
 .minerva-suggestions-rail-toggle--overview.minerva-suggestions-rail-toggle--active,
