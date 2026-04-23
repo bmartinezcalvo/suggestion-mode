@@ -30,9 +30,63 @@ jobs:
       - run: npm run build
         env:
           BASE_PATH: /suggestion-mode/${{ env.BRANCH_PATH }}/
-      - uses: peaceiris/actions-gh-pages@v4
-        with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: dist
-          destination_dir: ${{ env.BRANCH_PATH }}
-          keep_files: true
+      - name: Deploy preview to gh-pages
+        run: |
+          set -euo pipefail
+
+          deploy_dir="$RUNNER_TEMP/gh-pages-preview"
+
+          cleanup() {
+            git worktree remove --force "$deploy_dir" 2>/dev/null || true
+          }
+
+          retry() {
+            local attempts="$1"
+            shift
+            local attempt=1
+            until "$@"; do
+              if [ "$attempt" -ge "$attempts" ]; then
+                return 1
+              fi
+              attempt=$(( attempt + 1 ))
+              sleep 5
+            done
+          }
+
+          trap cleanup EXIT
+
+          retry 3 git fetch --no-tags origin gh-pages:refs/remotes/origin/gh-pages
+          git worktree add --detach "$deploy_dir" refs/remotes/origin/gh-pages
+
+          cd "$deploy_dir"
+          git switch -c "gh-pages-deploy-${GITHUB_RUN_ID:-$$}"
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+          mkdir -p "$BRANCH_PATH"
+          find "$BRANCH_PATH" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+          cp -R "$GITHUB_WORKSPACE/dist/." "$BRANCH_PATH/"
+          touch .nojekyll
+
+          git add --all
+
+          if git diff --cached --quiet; then
+            echo "No preview changes to publish"
+            exit 0
+          fi
+
+          git commit -m "deploy: ${GITHUB_SHA}"
+
+          for attempt in 1 2 3; do
+            if git push origin HEAD:gh-pages; then
+              exit 0
+            fi
+
+            if [ "$attempt" -eq 3 ]; then
+              exit 1
+            fi
+
+            retry 3 git fetch --no-tags origin gh-pages:refs/remotes/origin/gh-pages
+            git rebase refs/remotes/origin/gh-pages
+            sleep 5
+          done
