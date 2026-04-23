@@ -3935,7 +3935,7 @@ const showMinervaRail = computed(
     (showMinervaTopRailControls.value || showMinervaBottomRailControls.value)
 );
 const showMinervaEditMenuTriggerDotBadge = computed(
-  () => minervaMenuToggleEnabled.value && !showSuggestions.value && toggleBadgeCount.value > 0
+  () => minervaMenuToggleEnabled.value && !showSuggestions.value
 );
 const showDesktopFilterButton = computed(
   () => !isMinervaSkin.value &&
@@ -5567,10 +5567,10 @@ function handleMinervaRailArrowClick(direction) {
     : null;
   if (suggestionIdToSkip !== null) {
     suppressMinervaReturnDirectionDuringAutoScroll(500);
-    scrollToSuggestionByDirection(direction, suggestionIdToSkip);
+    scrollToSuggestionByDirection(direction, suggestionIdToSkip, { keepMinervaSheetClear: true });
     return;
   }
-  scrollToSuggestionByDirection(direction);
+  scrollToSuggestionByDirection(direction, null, { keepMinervaSheetClear: true });
 }
 
 function suppressMinervaReturnDirectionDuringAutoScroll(duration = 1200) {
@@ -7529,6 +7529,19 @@ function scrollTargetClearOfDesktopPagination(target) {
   });
 }
 
+function scrollTargetAboveMinervaSheet(target) {
+  if (!target || typeof window === 'undefined') return;
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const sheetHeight = minervaSheetRef.value?.offsetHeight || minervaSheetHeight.value || 0;
+  const usableHeight = Math.max(160, viewportHeight - sheetHeight);
+  const desiredTop = Math.max(72, Math.min(usableHeight * 0.36, usableHeight - 96));
+  const targetTop = target.getBoundingClientRect().top + window.scrollY;
+  window.scrollTo({
+    top: Math.max(0, targetTop - desiredTop),
+    behavior: 'smooth'
+  });
+}
+
 function getSuggestionCardRefById(suggestionId) {
   if (suggestionId === 1) return suggestionsSidebarRef;
   if (suggestionId === 2) return suggestionsSidebarRef2;
@@ -7570,7 +7583,11 @@ function startAutoScrollIndicator() {
 }
 
 function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false, options = {}) {
-  const { openMinervaAfterScroll = false, keepDesktopPaginationClear = false } = options;
+  const {
+    openMinervaAfterScroll = false,
+    keepDesktopPaginationClear = false,
+    keepMinervaSheetClear = false
+  } = options;
   const openSuggestionAndAlign = (suggestionId) => {
     openSuggestion(suggestionId);
     if (keepDesktopPaginationClear) {
@@ -7663,7 +7680,11 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false, option
 
   if (expandAfterScroll) {
     const target = targetRef.value;
-    const shouldScroll = target && (keepDesktopPaginationClear || !isTargetVisibleInViewport(target));
+    const shouldScroll = target && (
+      keepDesktopPaginationClear ||
+      keepMinervaSheetClear ||
+      !isTargetVisibleInViewport(target)
+    );
     if (shouldScroll) {
       if (isMinervaSkin.value) {
         if (openMinervaAfterScroll) {
@@ -7678,7 +7699,9 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false, option
         openSuggestion(id);
       }
       startAutoScrollIndicator();
-      if (keepDesktopPaginationClear) {
+      if (keepMinervaSheetClear && isMinervaSkin.value) {
+        scrollTargetAboveMinervaSheet(target);
+      } else if (keepDesktopPaginationClear) {
         scrollTargetClearOfDesktopPagination(target);
       } else {
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -7791,7 +7814,7 @@ function scrollToNearestSuggestionFromBanner() {
   openSuggestionAtTarget(lastAbove.id, lastAbove.ref, true);
 }
 
-function scrollToSuggestionByDirection(direction, suggestionIdToSkip = null) {
+function scrollToSuggestionByDirection(direction, suggestionIdToSkip = null, options = {}) {
   if (!isEditMode.value || !showSuggestions.value) return;
   const pendingTargets = getPendingSuggestionTargets();
   if (!pendingTargets.length) return;
@@ -7822,7 +7845,7 @@ function scrollToSuggestionByDirection(direction, suggestionIdToSkip = null) {
         ? orderedTargets[activeIndex + 1]
         : orderedTargets[activeIndex - 1];
       if (nextTarget) {
-        openSuggestionAtTarget(nextTarget.id, nextTarget.ref, true);
+        openSuggestionAtTarget(nextTarget.id, nextTarget.ref, true, options);
         return;
       }
     }
@@ -7833,7 +7856,7 @@ function scrollToSuggestionByDirection(direction, suggestionIdToSkip = null) {
   if (direction === 'down') {
     const below = positionedTargets.filter((target) => target.top > currentY);
     if (below.length) {
-      openSuggestionAtTarget(below[0].id, below[0].ref, true);
+      openSuggestionAtTarget(below[0].id, below[0].ref, true, options);
       return;
     }
     return;
@@ -7841,7 +7864,7 @@ function scrollToSuggestionByDirection(direction, suggestionIdToSkip = null) {
   if (direction === 'up') {
     const above = positionedTargets.filter((target) => target.top < currentY);
     if (above.length) {
-      openSuggestionAtTarget(above[above.length - 1].id, above[above.length - 1].ref, true);
+      openSuggestionAtTarget(above[above.length - 1].id, above[above.length - 1].ref, true, options);
     }
   }
 }
