@@ -3416,7 +3416,7 @@
         </div>
 
         <div
-          v-if="isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet)"
+          v-if="isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState)"
           class="minerva-bottom-sheet"
             :class="{
               'minerva-bottom-sheet--edit-check': isEditCheckSheet,
@@ -3433,7 +3433,7 @@
           >
             <div
               class="minerva-sheet-header"
-              :class="{ 'minerva-sheet-header--empty': shouldShowEmptyState && !isEditCheckSheet }"
+              :class="{ 'minerva-sheet-header--empty': (shouldShowEmptyState || showMinervaNoMoreSuggestionsState) && !isEditCheckSheet }"
             >
               <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : cdxIconLightbulb" size="medium" />
               <div class="minerva-sheet-title">
@@ -3480,6 +3480,9 @@
               copyright violation or plagiarism
             </a>
             and may result in your content being removed or your account being blocked.
+          </p>
+          <p v-else-if="showMinervaNoMoreSuggestionsState" class="minerva-sheet-description">
+            {{ minervaNoMoreSuggestionsDescription }}
           </p>
           <p v-else-if="shouldShowEmptyState && !showSuggestionNotification" class="minerva-empty-sheet-text">
             There are no suggestions to improve this article yet.
@@ -3542,6 +3545,35 @@
             >
               No, remove it
             </cdx-button>
+          </div>
+            <div v-else-if="showMinervaNoMoreSuggestionsState" class="minerva-sheet-actions">
+            <cdx-button
+              v-if="isMinervaNoMoreSuggestionsSectionState"
+              class="minerva-sheet-btn"
+              action="default"
+              weight="normal"
+              @click="handleMinervaViewMoreSuggestions"
+            >
+              View more suggestions
+            </cdx-button>
+            <template v-else>
+              <cdx-button
+                class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                action="default"
+                weight="normal"
+                @click="handleMinervaContinueEditing"
+              >
+                Continue editing
+              </cdx-button>
+              <cdx-button
+                class="minerva-sheet-btn"
+                action="progressive"
+                weight="primary"
+                @click="publishEdits"
+              >
+                Publish
+              </cdx-button>
+            </template>
           </div>
             <div v-else-if="!shouldShowEmptyState" class="minerva-sheet-actions">
             <cdx-button
@@ -3705,7 +3737,7 @@
           </div>
           </div>
           <div
-            v-if="showMinervaPagination"
+            v-if="showMinervaPagination && !showMinervaNoMoreSuggestionsState"
             class="minerva-sheet-pagination"
           >
             <div class="minerva-pagination-count">{{ minervaPaginationLabel }}</div>
@@ -3916,6 +3948,9 @@
                 </cdx-checkbox>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
+                </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="noMoreSuggestionsEmptyStateEnabled">
+                  Enable "No more suggestions" empty state
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="editFullPageImprovedEnabled">
                   "Edit full page" button improved
@@ -4485,12 +4520,14 @@ const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(false);
+const noMoreSuggestionsEmptyStateEnabled = ref(false);
 const editFullPageImprovedEnabled = ref(true);
 const selectedPrototype = ref('option-4');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
+const minervaNoMoreSuggestionsState = ref(null);
 const pendingScrollSection = ref(null);
 const minervaEditSectionOnly = ref(null);
 const minervaSectionBannerDismissed = ref({
@@ -4525,6 +4562,9 @@ function loadPrototypeDialogPrefs() {
     if (typeof prefs.editToolbarImprovementsEnabled === 'boolean') {
       editToolbarImprovementsEnabled.value = prefs.editToolbarImprovementsEnabled;
     }
+    if (typeof prefs.noMoreSuggestionsEmptyStateEnabled === 'boolean') {
+      noMoreSuggestionsEmptyStateEnabled.value = prefs.noMoreSuggestionsEmptyStateEnabled;
+    }
     if (typeof prefs.editFullPageImprovedEnabled === 'boolean') {
       editFullPageImprovedEnabled.value = prefs.editFullPageImprovedEnabled;
     }
@@ -4543,6 +4583,7 @@ function savePrototypeDialogPrefs() {
     newSuggestionColorEnabled: newSuggestionColorEnabled.value,
     nonSelectedHighlightUnderlineEnabled: nonSelectedHighlightUnderlineEnabled.value,
     editToolbarImprovementsEnabled: editToolbarImprovementsEnabled.value,
+    noMoreSuggestionsEmptyStateEnabled: noMoreSuggestionsEmptyStateEnabled.value,
     editFullPageImprovedEnabled: editFullPageImprovedEnabled.value
   };
   window.localStorage.setItem(prototypeDialogPrefsStorageKey, JSON.stringify(prefs));
@@ -4666,6 +4707,15 @@ const sectionSuggestionCount = computed(() => {
   }
   return 0;
 });
+const completedSuggestionCount = computed(() => (
+  (citationNumber1.value !== null ? 1 : 0) +
+  (citationNumber2.value !== null ? 1 : 0) +
+  (citationNumber3.value !== null ? 1 : 0) +
+  (isSuggestionResolved4.value ? 1 : 0) +
+  (isSuggestionResolved6.value ? 1 : 0) +
+  (isSuggestionResolved7.value ? 1 : 0) +
+  (isSuggestionResolved8.value ? 1 : 0)
+));
 const otherSuggestionCount = computed(() => {
   if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
     return 0;
@@ -4726,7 +4776,35 @@ const showToggleBadge = computed(() => {
 const showToggleBadgeZero = computed(() => (
   isArrowOnceMode.value && toggleBadgeCount.value === 0
 ));
+const showMinervaNoMoreSuggestionsState = computed(() => (
+  noMoreSuggestionsEmptyStateEnabled.value &&
+  isMinervaSkin.value &&
+  isEditMode.value &&
+  showSuggestions.value &&
+  Boolean(minervaNoMoreSuggestionsState.value)
+));
+const isMinervaNoMoreSuggestionsSectionState = computed(() => (
+  showMinervaNoMoreSuggestionsState.value &&
+  minervaNoMoreSuggestionsState.value === 'section'
+));
+const isMinervaNoMoreSuggestionsArticleState = computed(() => (
+  showMinervaNoMoreSuggestionsState.value &&
+  minervaNoMoreSuggestionsState.value === 'article'
+));
+const completedSuggestionCountLabel = computed(() => (
+  `${completedSuggestionCount.value} suggestion${completedSuggestionCount.value === 1 ? '' : 's'} completed`
+));
+const minervaNoMoreSuggestionsDescription = computed(() => {
+  if (isMinervaNoMoreSuggestionsSectionState.value) {
+    return 'You’ve reviewed all suggestions in this section. Continue completing suggestions in other sections of this article.';
+  }
+  if (isMinervaNoMoreSuggestionsArticleState.value) {
+    return `You’ve reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`;
+  }
+  return '';
+});
 const minervaSheetTitle = computed(() => {
+  if (showMinervaNoMoreSuggestionsState.value) return 'No more suggestions';
   if (shouldShowEmptyState.value) return 'No suggestions';
   if (activeMinervaSuggestion.value === 4) return 'Remove external link';
   if (activeMinervaSuggestion.value === 6) return 'Adjust heading level';
@@ -5030,6 +5108,7 @@ const showMinervaSuggestionHeaderIndicator = computed(() => (
   isMinervaSkin.value &&
   isMinervaSheetOpen.value &&
   !isEditCheckSheet.value &&
+  !showMinervaNoMoreSuggestionsState.value &&
   activePrototype.value === 'option-3' &&
   getPendingSuggestionIdsForContext().length > 0
 ));
@@ -5046,6 +5125,9 @@ const isMinervaPaginationNextDisabled = computed(() => (
   minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
 ));
 const showMinervaPagination = computed(() => {
+  if (showMinervaNoMoreSuggestionsState.value) {
+    return false;
+  }
   if (activePrototype.value === 'option-3') {
     return false;
   }
@@ -5062,6 +5144,7 @@ const showMinervaPagination = computed(() => {
 });
 
 function resetSuggestionState() {
+  clearMinervaNoMoreSuggestionsState();
   showCitationPopup1.value = false;
   showCitationPopup2.value = false;
   citationUrl1.value = '';
@@ -5169,6 +5252,71 @@ function closePrototypeDialog() {
   isPrototypeDialogOpen.value = false;
 }
 
+function clearMinervaNoMoreSuggestionsState() {
+  minervaNoMoreSuggestionsState.value = null;
+}
+
+function openMinervaNoMoreSuggestionsStateSheet(mode) {
+  if (!noMoreSuggestionsEmptyStateEnabled.value || !isMinervaSkin.value) return false;
+  minervaSheetMode.value = 'suggestion';
+  minervaSheetReturnDirection.value = null;
+  minervaNoMoreSuggestionsState.value = mode;
+  isMinervaSheetOpen.value = true;
+  updateMinervaSheetHeight();
+  return true;
+}
+
+function maybeShowMinervaNoMoreSuggestionsState() {
+  if (
+    !noMoreSuggestionsEmptyStateEnabled.value ||
+    !isMinervaSkin.value ||
+    !isEditMode.value ||
+    !showSuggestions.value
+  ) {
+    return false;
+  }
+
+  if (minervaEditSectionOnly.value && sectionSuggestionCount.value === 0 && otherSuggestionCount.value > 0) {
+    return openMinervaNoMoreSuggestionsStateSheet('section');
+  }
+
+  if (!minervaEditSectionOnly.value && availableSuggestionCount.value === 0 && completedSuggestionCount.value > 0) {
+    return openMinervaNoMoreSuggestionsStateSheet('article');
+  }
+
+  return false;
+}
+
+function clearEditModeUiState() {
+  closeMinervaSuggestion();
+  isEditMode.value = false;
+  isBannerDelayReady.value = false;
+  isBannerClosing.value = false;
+  isBannerOpening.value = false;
+  if (bannerDelayTimer) {
+    clearTimeout(bannerDelayTimer);
+    bannerDelayTimer = null;
+  }
+  if (bannerCloseTimer) {
+    clearTimeout(bannerCloseTimer);
+    bannerCloseTimer = null;
+  }
+  if (bannerOpenTimer) {
+    clearTimeout(bannerOpenTimer);
+    bannerOpenTimer = null;
+  }
+}
+
+function publishEdits() {
+  const currentSnapshot = getCurrentEditSnapshot();
+  editSnapshot.value = cloneEditSnapshot(currentSnapshot);
+  editUndoStack.value = [cloneEditSnapshot(currentSnapshot)];
+  editRedoStack.value = [];
+  syncMinervaRedoButtonVisibility();
+  hasUnsavedChanges.value = false;
+  clearEditModeUiState();
+}
+
 function startPrototype() {
   applyPrototypeMode(selectedPrototype.value);
   closePrototypeDialog();
@@ -5178,6 +5326,7 @@ function startPrototype() {
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
+  clearMinervaNoMoreSuggestionsState();
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
@@ -5193,8 +5342,7 @@ function getEditSectionRefById(sectionId) {
   return null;
 }
 
-function showFullPageEdit(event) {
-  const sectionId = event?.currentTarget?.closest('.minerva-edit-section')?.dataset?.section;
+function expandToFullPageEdit(sectionId, { openFirstSuggestion = false } = {}) {
   const targetRef = sectionId ? getEditSectionRefById(sectionId) : null;
   const startY = typeof window !== 'undefined' ? window.scrollY : 0;
   const startTop = targetRef?.value ? targetRef.value.getBoundingClientRect().top : 0;
@@ -5202,6 +5350,7 @@ function showFullPageEdit(event) {
     ? sectionSuggestionCount.value
     : availableSuggestionCount.value;
   minervaEditSectionOnly.value = null;
+  clearMinervaNoMoreSuggestionsState();
   if (isArrowOnceMode.value) {
     isBannerDelayReady.value = false;
     if (bannerDelayTimer) {
@@ -5214,9 +5363,13 @@ function showFullPageEdit(event) {
     }, 2000);
   }
   nextTick(() => {
-    if (!targetRef?.value || typeof window === 'undefined') return;
-    const newTop = targetRef.value.getBoundingClientRect().top;
-    window.scrollTo(0, Math.max(0, startY + (newTop - startTop)));
+    if (targetRef?.value && typeof window !== 'undefined') {
+      const newTop = targetRef.value.getBoundingClientRect().top;
+      window.scrollTo(0, Math.max(0, startY + (newTop - startTop)));
+    }
+    if (openFirstSuggestion) {
+      openFirstPendingSuggestion(true, { openMinervaAfterScroll: true });
+    }
   });
   if (isMinervaSkin.value && shouldShowToasts.value) {
     nextTick(() => {
@@ -5237,6 +5390,20 @@ function showFullPageEdit(event) {
       }
     });
   }
+}
+
+function showFullPageEdit(event) {
+  const sectionId = event?.currentTarget?.closest('.minerva-edit-section')?.dataset?.section;
+  expandToFullPageEdit(sectionId);
+}
+
+function handleMinervaViewMoreSuggestions() {
+  if (!minervaEditSectionOnly.value) return;
+  expandToFullPageEdit(minervaEditSectionOnly.value, { openFirstSuggestion: true });
+}
+
+function handleMinervaContinueEditing() {
+  closeMinervaSuggestion();
 }
 
 function shouldRenderSection(sectionId) {
@@ -6394,6 +6561,7 @@ function getEditCheckTargetByType(type) {
 
 function openEditCheckAtType(type, expandAfterScroll = true) {
   if (!type || !isMinervaSkin.value) return;
+  clearMinervaNoMoreSuggestionsState();
   const target = getEditCheckTargetByType(type);
   if (!target) return;
   activeEditCheckTypeOverride.value = type;
@@ -6493,6 +6661,19 @@ function advanceMinervaEditCheck(currentType) {
     const currentOrderIndex = order.indexOf(currentType);
     const nextType = types.find((type) => order.indexOf(type) > currentOrderIndex) ?? types[0];
     openEditCheckAtType(nextType, false);
+  });
+}
+
+function handleMinervaSuggestionResolutionAfterAction(currentId) {
+  nextTick(() => {
+    if (maybeShowMinervaNoMoreSuggestionsState()) {
+      return;
+    }
+    if (shouldAdvanceMinervaSuggestionAfterResolve()) {
+      advanceMinervaSuggestion(currentId);
+    } else {
+      closeMinervaSuggestion();
+    }
   });
 }
 
@@ -6970,11 +7151,7 @@ function handleNoSuggestion1() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(1);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(1);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(1);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -6989,11 +7166,7 @@ function handleNoSuggestion2() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(2);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(2);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(2);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -7008,11 +7181,7 @@ function handleNoSuggestion3() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(3);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(3);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(3);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -7026,11 +7195,7 @@ function handleYesSuggestion4() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(4);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(4);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(4);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -7048,11 +7213,7 @@ function handleNoSuggestion4() {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(4);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(4);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(4);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -7077,11 +7238,7 @@ function handleResolveGenericSuggestion(suggestionId) {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(suggestionId);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(suggestionId);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(suggestionId);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -7110,11 +7267,7 @@ function handleDeclineGenericSuggestion(suggestionId) {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(suggestionId);
     setTimeout(() => {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(suggestionId);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(suggestionId);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -7133,11 +7286,7 @@ function createCitation1() {
     citationNumber1.value = citationCounter.value;
     showCitationPopup1.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(1);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(1);
     } else {
       closeMinervaSuggestion();
     }
@@ -7161,11 +7310,7 @@ function createCitation2() {
     citationNumber2.value = citationCounter.value;
     showCitationPopup2.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(2);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(2);
     } else {
       closeMinervaSuggestion();
     }
@@ -7189,11 +7334,7 @@ function createCitation3() {
     citationNumber3.value = citationCounter.value;
     showCitationPopup3.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-        advanceMinervaSuggestion(3);
-      } else {
-        closeMinervaSuggestion();
-      }
+      handleMinervaSuggestionResolutionAfterAction(3);
     } else {
       closeMinervaSuggestion();
     }
@@ -7817,6 +7958,7 @@ watch(
     newSuggestionColorEnabled,
     nonSelectedHighlightUnderlineEnabled,
     editToolbarImprovementsEnabled,
+    noMoreSuggestionsEmptyStateEnabled,
     editFullPageImprovedEnabled
   ],
   () => {
@@ -7910,7 +8052,13 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
       isBannerDismissed.value = false;
     }
   }
-  if (isPaginationMode.value && oldValue > 0 && newValue === 0) {
+  if (
+    oldValue > 0 &&
+    newValue === 0 &&
+    maybeShowMinervaNoMoreSuggestionsState()
+  ) {
+    // The bottom sheet handles the no-more-suggestions state in Minerva.
+  } else if (isPaginationMode.value && oldValue > 0 && newValue === 0) {
     showPaginationNoMoreSuggestionsToast();
   } else if (shouldShowToasts.value && oldValue > 0 && newValue === 0) {
     if (minervaZeroSuggestionsToastTimer) {
@@ -7950,6 +8098,9 @@ watch(sectionSuggestionCount, (newValue, oldValue) => {
     oldValue > 0 &&
     newValue === 0
   ) {
+    if (maybeShowMinervaNoMoreSuggestionsState()) {
+      return;
+    }
     showPaginationNoMoreSuggestionsToast();
   }
 });
@@ -8688,23 +8839,7 @@ function exitEditMode() {
   // Returning to read mode: no loading
   restoreEditSnapshot();
   hasUnsavedChanges.value = false;
-  closeMinervaSuggestion();
-  isEditMode.value = false;
-  isBannerDelayReady.value = false;
-  isBannerClosing.value = false;
-  isBannerOpening.value = false;
-  if (bannerDelayTimer) {
-    clearTimeout(bannerDelayTimer);
-    bannerDelayTimer = null;
-  }
-  if (bannerCloseTimer) {
-    clearTimeout(bannerCloseTimer);
-    bannerCloseTimer = null;
-  }
-  if (bannerOpenTimer) {
-    clearTimeout(bannerOpenTimer);
-    bannerOpenTimer = null;
-  }
+  clearEditModeUiState();
 }
 
 function toggleEditMode() {
@@ -8735,6 +8870,7 @@ function openMinervaSuggestion(suggestionId) {
     closeMinervaSuggestion();
     return;
   }
+  clearMinervaNoMoreSuggestionsState();
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = suggestionId;
   isMinervaSheetOpen.value = true;
@@ -8889,12 +9025,17 @@ function handleFilterSuggestionsClick() {
 }
 
 function closeMinervaSuggestion() {
+  clearMinervaNoMoreSuggestionsState();
   isMinervaSheetOpen.value = false;
   minervaSheetReturnDirection.value = null;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
   isCardExpanded3.value = false;
   isCardExpanded4.value = false;
+  isCardExpanded5.value = false;
+  isCardExpanded6.value = false;
+  isCardExpanded7.value = false;
+  isCardExpanded8.value = false;
   minervaSheetHeight.value = 0;
 }
 
