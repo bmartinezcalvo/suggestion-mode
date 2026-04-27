@@ -62,6 +62,24 @@
     >
       No more suggestions available
     </div>
+    <div
+      v-if="isMinervaSkin && toastsEnabled && showSuggestionSuccessToast"
+      class="minerva-toast minerva-toast--success"
+      role="status"
+      aria-live="polite"
+    >
+      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+      <span>Thank you for helping to make this section easier for people to read.</span>
+    </div>
+    <div
+      v-if="!isMinervaSkin && toastsEnabled && showSuggestionSuccessToast"
+      class="vector-success-toast"
+      role="status"
+      aria-live="polite"
+    >
+      <cdx-icon :icon="cdxIconSuccess" size="small" />
+      <span>Thank you for helping to make this section easier for people to read.</span>
+    </div>
     
     <!-- Page Container -->
     <div class="page-container">
@@ -1767,18 +1785,6 @@
                 class="minerva-info-sheet-backdrop"
                 @click="isMinervaInfoSheetOpen = false"
               ></div>
-      <div
-        v-if="isMinervaSkin && showSuggestions && showMinervaSuccessMessage"
-        ref="minervaSuccessRef"
-        class="success-message success-message--minerva"
-      >
-                <div class="success-icon">
-                  <cdx-icon :icon="cdxIconSuccess" size="medium" />
-                </div>
-                <div class="success-content">
-                  <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
-          </div>
-        </div>
         <div v-if="!isMinervaSkin || !minervaEditSectionOnly" class="edit-header">
           <p class="tagline-edit">From Wikipedia, the free encyclopedia</p>
                 
@@ -2744,21 +2750,6 @@
             </div>
           </div>
 
-          <!-- Success Message for Suggestion 1 -->
-          <div 
-            v-if="showSuggestionsDisplay && showSuccessMessage1 && citationNumber1 !== null"
-            ref="suggestionsSidebarRef"
-            class="success-message"
-            :style="{ top: `${sidebarTopOffset}px` }"
-          >
-            <div class="success-icon">
-              <cdx-icon :icon="cdxIconSuccess" size="medium" />
-            </div>
-            <div class="success-content">
-              <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
-            </div>
-          </div>
-
           <!-- Second Add Citation Suggestion Card -->
           <div 
             v-if="showSuggestionsDisplay && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
@@ -2825,21 +2816,6 @@
                   <cdx-icon :icon="cdxIconEllipsis" size="small" />
                 </cdx-button>
               </div>
-            </div>
-          </div>
-
-          <!-- Success Message for Suggestion 2 -->
-          <div 
-            v-if="showSuggestionsDisplay && showSuccessMessage2 && citationNumber2 !== null"
-            ref="suggestionsSidebarRef2"
-            class="success-message"
-            :style="{ top: `${sidebarTopOffset2}px` }"
-          >
-            <div class="success-icon">
-              <cdx-icon :icon="cdxIconSuccess" size="medium" />
-            </div>
-            <div class="success-content">
-              <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
             </div>
           </div>
 
@@ -3063,21 +3039,6 @@
                   <cdx-icon :icon="cdxIconEllipsis" size="small" />
                 </cdx-button>
               </div>
-            </div>
-          </div>
-
-          <!-- Success Message for Suggestion 3 -->
-          <div 
-            v-if="showSuggestionsDisplay && showSuccessMessage3 && citationNumber3 !== null"
-            ref="suggestionsSidebarRef3"
-            class="success-message"
-            :style="{ top: `${sidebarTopOffset3}px` }"
-          >
-            <div class="success-icon">
-              <cdx-icon :icon="cdxIconSuccess" size="medium" />
-            </div>
-            <div class="success-content">
-              <p class="success-text">Thank you for helping to make this section easier for people to read.</p>
             </div>
           </div>
 
@@ -3433,7 +3394,10 @@
           >
             <div
               class="minerva-sheet-header"
-              :class="{ 'minerva-sheet-header--empty': (shouldShowEmptyState || showMinervaNoMoreSuggestionsState) && !isEditCheckSheet }"
+              :class="{
+                'minerva-sheet-header--empty': shouldShowEmptyState && !showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
+                'minerva-sheet-header--no-more': showMinervaNoMoreSuggestionsState && !isEditCheckSheet
+              }"
             >
               <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : cdxIconLightbulb" size="medium" />
               <div class="minerva-sheet-title">
@@ -4290,12 +4254,10 @@ const desktopPaginationLabel = computed(() => (
   `${desktopPaginationIndex.value + 1} of ${desktopPaginationIds.value.length} suggestions`
 ));
 const isDesktopPaginationPrevDisabled = computed(() => (
-  desktopPaginationIds.value.length <= 1 ||
-  desktopPaginationIndex.value <= 0
+  desktopPaginationIds.value.length <= 1
 ));
 const isDesktopPaginationNextDisabled = computed(() => (
-  desktopPaginationIds.value.length <= 1 ||
-  desktopPaginationIndex.value >= desktopPaginationIds.value.length - 1
+  desktopPaginationIds.value.length <= 1
 ));
 const showDesktopPaginationControls = computed(
   () => !isMinervaSkin.value &&
@@ -4337,6 +4299,7 @@ const showMinervaToggleOnToast = ref(false);
 const showMinervaMoreSuggestionsToast = ref(false);
 const showMinervaZeroSuggestionsToast = ref(false);
 const showPaginationNoSuggestionsToast = ref(false);
+const showSuggestionSuccessToast = ref(false);
 const showMinervaRedoButton = ref(false);
 const minervaViewportWidth = ref(375);
 const minervaToolbarAvailableWidth = ref(0);
@@ -4346,7 +4309,6 @@ const inlineTextStyleState = ref({
   strikethrough: false,
   underline: false
 });
-const minervaSuccessRef = ref(null);
 const activePrototype = ref('option-1');
 const dismissedSuggestionId = ref(null);
 let bannerDelayTimer = null;
@@ -4363,6 +4325,7 @@ let minervaToggleOnToastTimer = null;
 let minervaMoreSuggestionsToastTimer = null;
 let minervaZeroSuggestionsToastTimer = null;
 let paginationNoSuggestionsToastTimer = null;
+let suggestionSuccessToastTimer = null;
 let scrollReappearTimer = null;
 let autoScrollTimer = null;
 let savedArticleSelectionRange = null;
@@ -4753,6 +4716,8 @@ const minervaRailToggleRef = ref(null);
 const showMinervaRailToMenuBadgeAnimation = ref(false);
 const minervaRailToMenuBadgeStyle = ref({});
 let minervaRailToMenuBadgeTimer = null;
+const suppressMinervaBannerDuringViewMoreSuggestions = ref(false);
+let suppressMinervaBannerDuringViewMoreSuggestionsTimer = null;
 const firstSuggestionAutoExpandedId = ref(null);
 const firstSuggestionBounceActiveId = ref(null);
 const firstSuggestionBounceDoneId = ref(null);
@@ -4873,9 +4838,6 @@ const bannerButtonLabel = computed(() => {
   }
   return showSuggestions.value ? 'Hide suggestions' : 'Show suggestions';
 });
-const showMinervaSuccessMessage = computed(() => (
-  showSuccessMessage1.value || showSuccessMessage2.value || showSuccessMessage3.value
-));
 const showSuggestionInfo = computed(() => (
   activePrototype.value === 'option-1' && showSuggestionInfoPreference.value
 ));
@@ -4941,6 +4903,7 @@ const isSuggestionSheetMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
+  if (suppressMinervaBannerDuringViewMoreSuggestions.value) return false;
   if (['option-3', 'option-4'].includes(activePrototype.value)) return false;
   if (showMinervaArrowOnly.value) return false;
   if (!isArrowOnceMode.value && !showSuggestionsDisplay.value) return false;
@@ -5117,12 +5080,10 @@ const showMinervaSheetReturnArrow = computed(() => (
   !(activePrototype.value === 'option-3' && !isEditCheckSheet.value)
 ));
 const isMinervaPaginationPrevDisabled = computed(() => (
-  minervaPaginationTotal.value <= 1 ||
-  minervaPaginationIndex.value <= 0
+  minervaPaginationTotal.value <= 1
 ));
 const isMinervaPaginationNextDisabled = computed(() => (
-  minervaPaginationTotal.value <= 1 ||
-  minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
+  minervaPaginationTotal.value <= 1
 ));
 const showMinervaPagination = computed(() => {
   if (showMinervaNoMoreSuggestionsState.value) {
@@ -5397,9 +5358,41 @@ function showFullPageEdit(event) {
   expandToFullPageEdit(sectionId);
 }
 
+function openFirstSuggestionAfterFullPageTransition() {
+  nextTick(() => {
+    if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          openFirstPendingSuggestion(true, { openMinervaAfterScroll: true });
+          if (suppressMinervaBannerDuringViewMoreSuggestionsTimer) {
+            clearTimeout(suppressMinervaBannerDuringViewMoreSuggestionsTimer);
+          }
+          suppressMinervaBannerDuringViewMoreSuggestionsTimer = setTimeout(() => {
+            suppressMinervaBannerDuringViewMoreSuggestions.value = false;
+            suppressMinervaBannerDuringViewMoreSuggestionsTimer = null;
+          }, 1200);
+        });
+      });
+      return;
+    }
+    openFirstPendingSuggestion(true, { openMinervaAfterScroll: true });
+    if (suppressMinervaBannerDuringViewMoreSuggestionsTimer) {
+      clearTimeout(suppressMinervaBannerDuringViewMoreSuggestionsTimer);
+    }
+    suppressMinervaBannerDuringViewMoreSuggestionsTimer = setTimeout(() => {
+      suppressMinervaBannerDuringViewMoreSuggestions.value = false;
+      suppressMinervaBannerDuringViewMoreSuggestionsTimer = null;
+    }, 1200);
+  });
+}
+
 function handleMinervaViewMoreSuggestions() {
   if (!minervaEditSectionOnly.value) return;
-  expandToFullPageEdit(minervaEditSectionOnly.value, { openFirstSuggestion: true });
+  const sectionId = minervaEditSectionOnly.value;
+  suppressMinervaBannerDuringViewMoreSuggestions.value = true;
+  closeMinervaSuggestion();
+  expandToFullPageEdit(sectionId);
+  openFirstSuggestionAfterFullPageTransition();
 }
 
 function handleMinervaContinueEditing() {
@@ -6135,6 +6128,9 @@ function handleMinervaRailToggleChange(nextValue) {
     return;
   }
   if (isMinervaSkin.value && isPaginationManualMode.value) {
+    if (!showSuggestions.value) {
+      showSuggestions.value = true;
+    }
     openNextPaginationSuggestion();
     return;
   }
@@ -6237,7 +6233,8 @@ function handleMinervaRailFilterClick() {
 
 function handleDesktopPaginationPrev() {
   if (isDesktopPaginationPrevDisabled.value) return;
-  const nextId = desktopPaginationIds.value[desktopPaginationIndex.value - 1];
+  const nextIndex = (desktopPaginationIndex.value - 1 + desktopPaginationIds.value.length) % desktopPaginationIds.value.length;
+  const nextId = desktopPaginationIds.value[nextIndex];
   const targetRef = getSuggestionRefById(nextId);
   if (targetRef) {
     openSuggestionAtTarget(nextId, targetRef, true, { keepDesktopPaginationClear: true });
@@ -6246,7 +6243,8 @@ function handleDesktopPaginationPrev() {
 
 function handleDesktopPaginationNext() {
   if (isDesktopPaginationNextDisabled.value) return;
-  const nextId = desktopPaginationIds.value[desktopPaginationIndex.value + 1];
+  const nextIndex = (desktopPaginationIndex.value + 1) % desktopPaginationIds.value.length;
+  const nextId = desktopPaginationIds.value[nextIndex];
   const targetRef = getSuggestionRefById(nextId);
   if (targetRef) {
     openSuggestionAtTarget(nextId, targetRef, true, { keepDesktopPaginationClear: true });
@@ -6527,7 +6525,8 @@ function getSuggestionRefById(suggestionId) {
 
 function handleMinervaPaginationPrev() {
   if (isMinervaPaginationPrevDisabled.value) return;
-  const nextId = minervaPaginationItems.value[minervaPaginationIndex.value - 1];
+  const nextIndex = (minervaPaginationIndex.value - 1 + minervaPaginationItems.value.length) % minervaPaginationItems.value.length;
+  const nextId = minervaPaginationItems.value[nextIndex];
   if (isEditCheckSheet.value) {
     openEditCheckAtType(nextId);
     return;
@@ -6541,7 +6540,8 @@ function handleMinervaPaginationPrev() {
 
 function handleMinervaPaginationNext() {
   if (isMinervaPaginationNextDisabled.value) return;
-  const nextId = minervaPaginationItems.value[minervaPaginationIndex.value + 1];
+  const nextIndex = (minervaPaginationIndex.value + 1) % minervaPaginationItems.value.length;
+  const nextId = minervaPaginationItems.value[nextIndex];
   if (isEditCheckSheet.value) {
     openEditCheckAtType(nextId);
     return;
@@ -6595,6 +6595,18 @@ function showPaginationNoMoreSuggestionsToast() {
     showPaginationNoSuggestionsToast.value = false;
     paginationNoSuggestionsToastTimer = null;
   }, 2000);
+}
+
+function triggerSuggestionSuccessToast() {
+  if (!toastsEnabled.value) return;
+  if (suggestionSuccessToastTimer) {
+    clearTimeout(suggestionSuccessToastTimer);
+  }
+  showSuggestionSuccessToast.value = true;
+  suggestionSuccessToastTimer = setTimeout(() => {
+    showSuggestionSuccessToast.value = false;
+    suggestionSuccessToastTimer = null;
+  }, 4000);
 }
 
 function shouldAdvanceMinervaSuggestionAfterResolve() {
@@ -6968,13 +6980,7 @@ function updateSuggestionVisibility() {
     const visibleHeight = Math.max(0, visibleBottom - visibleTop);
     return visibleHeight / height >= 0.75;
   };
-  const successVisible =
-    (showSuccessMessage1.value && isVisible(suggestionsSidebarRef.value)) ||
-    (showSuccessMessage2.value && isVisible(suggestionsSidebarRef2.value)) ||
-    (showSuccessMessage3.value && isVisible(suggestionsSidebarRef3.value)) ||
-    (showMinervaSuccessMessage.value && isVisible(minervaSuccessRef.value));
   anySuggestionVisible.value =
-    successVisible ||
     isVisible(highlightedTextRef.value) ||
     isVisible(highlightedTextRef2.value) ||
     isVisible(highlightedTextRef4.value) ||
@@ -7200,6 +7206,7 @@ function handleYesSuggestion4() {
   } else {
     closeMinervaSuggestion();
   }
+  triggerSuggestionSuccessToast();
   nextTick(() => {
     alignSidebarWithText4();
     updateSuggestionVisibility();
@@ -7243,6 +7250,7 @@ function handleResolveGenericSuggestion(suggestionId) {
   } else {
     closeMinervaSuggestion();
   }
+  triggerSuggestionSuccessToast();
   nextTick(() => {
     alignBothSuggestions();
     updateSuggestionVisibility();
@@ -7290,16 +7298,11 @@ function createCitation1() {
     } else {
       closeMinervaSuggestion();
     }
-    // Show success message instead of suggestion card
-    showSuccessMessage1.value = true;
-    // Hide success message after 4 seconds
-    setTimeout(() => {
-      showSuccessMessage1.value = false;
-      nextTick(() => {
-        updateSuggestionVisibility();
-        scheduleBannerReappear();
-      });
-    }, 4000);
+    triggerSuggestionSuccessToast();
+    nextTick(() => {
+      updateSuggestionVisibility();
+      scheduleBannerReappear();
+    });
   }
 }
 
@@ -7314,16 +7317,11 @@ function createCitation2() {
     } else {
       closeMinervaSuggestion();
     }
-    // Show success message instead of suggestion card
-    showSuccessMessage2.value = true;
-    // Hide success message after 4 seconds
-    setTimeout(() => {
-      showSuccessMessage2.value = false;
-      nextTick(() => {
-        updateSuggestionVisibility();
-        scheduleBannerReappear();
-      });
-    }, 4000);
+    triggerSuggestionSuccessToast();
+    nextTick(() => {
+      updateSuggestionVisibility();
+      scheduleBannerReappear();
+    });
   }
 }
 
@@ -7338,16 +7336,11 @@ function createCitation3() {
     } else {
       closeMinervaSuggestion();
     }
-    // Show success message instead of suggestion card
-    showSuccessMessage3.value = true;
-    // Hide success message after 4 seconds
-    setTimeout(() => {
-      showSuccessMessage3.value = false;
-      nextTick(() => {
-        updateSuggestionVisibility();
-        scheduleBannerReappear();
-      });
-    }, 4000);
+    triggerSuggestionSuccessToast();
+    nextTick(() => {
+      updateSuggestionVisibility();
+      scheduleBannerReappear();
+    });
   }
 }
 
@@ -7635,6 +7628,7 @@ watch(toastsEnabled, (enabled) => {
   showMinervaMoreSuggestionsToast.value = false;
   showMinervaZeroSuggestionsToast.value = false;
   showPaginationNoSuggestionsToast.value = false;
+  showSuggestionSuccessToast.value = false;
   if (minervaToggleOffToastTimer) {
     clearTimeout(minervaToggleOffToastTimer);
     minervaToggleOffToastTimer = null;
@@ -7654,6 +7648,10 @@ watch(toastsEnabled, (enabled) => {
   if (paginationNoSuggestionsToastTimer) {
     clearTimeout(paginationNoSuggestionsToastTimer);
     paginationNoSuggestionsToastTimer = null;
+  }
+  if (suggestionSuccessToastTimer) {
+    clearTimeout(suggestionSuccessToastTimer);
+    suggestionSuccessToastTimer = null;
   }
 });
 
@@ -8701,6 +8699,10 @@ onBeforeUnmount(() => {
   if (paginationNoSuggestionsToastTimer) {
     clearTimeout(paginationNoSuggestionsToastTimer);
     paginationNoSuggestionsToastTimer = null;
+  }
+  if (suggestionSuccessToastTimer) {
+    clearTimeout(suggestionSuccessToastTimer);
+    suggestionSuccessToastTimer = null;
   }
   if (suppressMinervaSheetReturnDirectionTimer) {
     clearTimeout(suppressMinervaSheetReturnDirectionTimer);
@@ -12573,17 +12575,34 @@ function markArticleEdited() {
 .minerva-toast {
   position: fixed;
   top: calc(42px + 12px);
-  left: 50%;
-  transform: translateX(-50%);
+  left: 16px;
+  right: 16px;
   background: #202122;
   color: #ffffff;
   padding: 10px 16px;
   border-radius: 2px;
   font-size: 14px;
   line-height: 20px;
-  white-space: nowrap;
+  white-space: normal;
   z-index: 220;
   box-shadow: none;
+}
+
+.minerva-toast--success {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.minerva-toast--success :deep(.cdx-icon),
+.minerva-toast--success :deep(svg) {
+  color: var(--color-success, #14866d);
+  fill: var(--color-success, #14866d);
+  flex: 0 0 auto;
+}
+
+.minerva-toast--success span {
+  min-width: 0;
 }
 
 .minerva-toast--more {
@@ -12592,6 +12611,36 @@ function markArticleEdited() {
 
 .minerva-toast--zero {
   top: calc(42px + 16px);
+}
+
+.vector-success-toast {
+  position: fixed;
+  top: 16px;
+  left: 32px;
+  right: 32px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border: 1px solid var(--border-color-subtle, #c8ccd1);
+  border-radius: 2px;
+  background: var(--background-color-base, #fff);
+  color: var(--color-base, #202122);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  line-height: 20px;
+  z-index: 220;
+}
+
+.vector-success-toast span {
+  min-width: 0;
+}
+
+.vector-success-toast :deep(.cdx-icon),
+.vector-success-toast :deep(svg) {
+  color: var(--color-success, #14866d);
+  fill: var(--color-success, #14866d);
+  flex: 0 0 auto;
 }
 
 
@@ -12878,7 +12927,7 @@ function markArticleEdited() {
 .minerva-sheet-pagination {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 12px;
   padding: 0;
   min-height: 38px;
@@ -12891,6 +12940,7 @@ function markArticleEdited() {
 }
 
 .minerva-pagination-count {
+  text-align: left;
   font-size: 14px;
   line-height: 20px;
   color: var(--color-subtle, #54595d);
@@ -14768,6 +14818,12 @@ function markArticleEdited() {
 
 .minerva-sheet-header--empty :deep(svg) {
   fill: var(--color-placeholder, #72777d);
+}
+
+.minerva-sheet-header--no-more :deep(.cdx-icon),
+.minerva-sheet-header--no-more :deep(svg) {
+  color: var(--color-disabled, #a2a9b1);
+  fill: var(--color-disabled, #a2a9b1);
 }
 
 .minerva-sheet-header--empty .minerva-sheet-title {
