@@ -8,8 +8,6 @@ on:
 
 permissions:
   contents: write
-  pages: write
-  id-token: write
 
 concurrency:
   group: preview-${{ github.ref_name }}
@@ -17,9 +15,6 @@ concurrency:
 
 jobs:
   deploy:
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -84,7 +79,7 @@ jobs:
 
           for attempt in 1 2 3; do
             if git push origin HEAD:gh-pages; then
-              break
+              exit 0
             fi
 
             if [ "$attempt" -eq 3 ]; then
@@ -95,17 +90,3 @@ jobs:
             git rebase refs/remotes/origin/gh-pages
             sleep 5
           done
-
-      - name: Prepare Pages artifact
-        run: |
-          git fetch --no-tags origin gh-pages:refs/remotes/origin/gh-pages
-          git worktree add --detach "$RUNNER_TEMP/pages-site" refs/remotes/origin/gh-pages
-
-      - uses: actions/configure-pages@v5
-
-      - uses: actions/upload-pages-artifact@v4
-        with:
-          path: ${{ runner.temp }}/pages-site
-
-      - id: deployment
-        uses: actions/deploy-pages@v4
