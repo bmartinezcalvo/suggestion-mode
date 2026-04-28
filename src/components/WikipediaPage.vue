@@ -1740,6 +1740,103 @@
               </div>
             </div>
 
+            <div
+              v-if="showMinervaFullPageSuggestionNavigationUi"
+              class="minerva-full-page-toc"
+              :style="{ top: minervaFullPageTocTopOffset }"
+              @mouseenter="handleMinervaFullPageTocInteraction"
+              @mousemove="handleMinervaFullPageTocInteraction"
+              @touchstart.passive="handleMinervaFullPageTocInteraction"
+            >
+              <cdx-button
+                ref="minervaFullPageTocButtonRef"
+                class="minerva-full-page-toc-trigger"
+                action="default"
+                weight="normal"
+                aria-label="Open table of contents"
+                @click.stop="toggleMinervaFullPageToc"
+              >
+                <cdx-icon :icon="cdxIconListBullet" size="medium" />
+              </cdx-button>
+              <div
+                v-if="isMinervaFullPageTocOpen"
+                ref="minervaFullPageTocPanelRef"
+                class="minerva-full-page-toc-panel"
+                :style="{ top: minervaFullPageTocPanelTopOffset }"
+              >
+                <div
+                  v-for="item in minervaFullPageTocItems"
+                  :key="item.id"
+                  class="minerva-full-page-toc-node"
+                >
+                  <div
+                    class="minerva-full-page-toc-item"
+                    :class="{ 'minerva-full-page-toc-item--active': activeMinervaFullPageTocSectionId === item.id }"
+                  >
+                    <button
+                      v-if="item.children?.length"
+                      type="button"
+                      class="minerva-full-page-toc-chevron"
+                      :aria-label="isMinervaFullPageTocItemOpen(item.id) ? 'Collapse section' : 'Expand section'"
+                      @click.stop="toggleMinervaFullPageTocItem(item.id)"
+                    >
+                      <cdx-icon
+                        :icon="cdxIconNext"
+                        size="small"
+                        class="minerva-full-page-toc-chevron-icon"
+                        :class="{ 'minerva-full-page-toc-chevron-icon--open': isMinervaFullPageTocItemOpen(item.id) }"
+                      />
+                    </button>
+                    <span v-else class="minerva-full-page-toc-chevron-spacer"></span>
+                    <button
+                      type="button"
+                      class="minerva-full-page-toc-link"
+                      :class="{ 'minerva-full-page-toc-link--top': item.id === 'top' }"
+                      @click="handleMinervaFullPageTocItemClick(item)"
+                    >
+                      {{ item.label }}
+                    </button>
+                    <span
+                      v-if="item.count > 0 && !isMinervaFullPageTocItemOpen(item.id)"
+                      class="minerva-full-page-toc-item-badge"
+                      :title="`${item.count} suggestion${item.count === 1 ? '' : 's'}`"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      <span class="minerva-full-page-toc-item-badge-count">{{ item.count }}</span>
+                    </span>
+                  </div>
+                  <div
+                    v-if="item.children?.length && isMinervaFullPageTocItemOpen(item.id)"
+                    class="minerva-full-page-toc-children"
+                  >
+                    <div
+                      v-for="child in item.children"
+                      :key="child.id"
+                      class="minerva-full-page-toc-item minerva-full-page-toc-item--child"
+                      :class="{ 'minerva-full-page-toc-item--active': activeMinervaFullPageTocSectionId === child.id }"
+                    >
+                      <span class="minerva-full-page-toc-chevron-spacer minerva-full-page-toc-chevron-spacer--child"></span>
+                      <button
+                        type="button"
+                        class="minerva-full-page-toc-link minerva-full-page-toc-link--child"
+                        @click="handleMinervaFullPageTocItemClick(child)"
+                      >
+                        {{ child.label }}
+                      </button>
+                      <span
+                        v-if="child.count > 0"
+                        class="minerva-full-page-toc-item-badge"
+                        :title="`${child.count} suggestion${child.count === 1 ? '' : 's'}`"
+                      >
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                        <span class="minerva-full-page-toc-item-badge-count">{{ child.count }}</span>
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
             <!-- Loading Overlay (only covers content below toolbar) -->
             <div v-if="isLoading" class="loading-overlay"></div>
 
@@ -2653,6 +2750,7 @@
             <div class="vector-pagination-count">{{ desktopPaginationLabel }}</div>
             <div class="vector-pagination-actions">
               <button
+                v-if="showDesktopPaginationArrows"
                 class="vector-pagination-btn"
                 type="button"
                 aria-label="Previous suggestion"
@@ -2662,6 +2760,7 @@
                 <cdx-icon :icon="cdxIconExpand" size="small" class="vector-pagination-icon vector-pagination-icon--prev" />
               </button>
               <button
+                v-if="showDesktopPaginationArrows"
                 class="vector-pagination-btn"
                 type="button"
                 aria-label="Next suggestion"
@@ -3705,7 +3804,7 @@
             class="minerva-sheet-pagination"
           >
             <div class="minerva-pagination-count">{{ minervaPaginationLabel }}</div>
-            <div class="minerva-pagination-actions">
+            <div v-if="showMinervaPaginationArrows" class="minerva-pagination-actions">
               <button
                 class="minerva-pagination-btn"
                 type="button"
@@ -3918,6 +4017,9 @@
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="editFullPageImprovedEnabled">
                   "Edit full page" button improved
+                </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="minervaFullPageSuggestionNavigationEnabled">
+                  Enable navigation of suggestions when editing he full page article (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
                 </cdx-checkbox>
               </cdx-field>
             </div>
@@ -4259,6 +4361,9 @@ const isDesktopPaginationPrevDisabled = computed(() => (
 const isDesktopPaginationNextDisabled = computed(() => (
   desktopPaginationIds.value.length <= 1
 ));
+const showDesktopPaginationArrows = computed(() => (
+  desktopPaginationIds.value.length > 1
+));
 const showDesktopPaginationControls = computed(
   () => !isMinervaSkin.value &&
     isEditMode.value &&
@@ -4327,6 +4432,12 @@ let minervaZeroSuggestionsToastTimer = null;
 let paginationNoSuggestionsToastTimer = null;
 let suggestionSuccessToastTimer = null;
 let scrollReappearTimer = null;
+let minervaFullPageTocShowTimer = null;
+let minervaFullPageTocHideTimer = null;
+let minervaFullPageTocScrollingTimer = null;
+let suppressMinervaFullPageTocScrollVisibilityTimer = null;
+let minervaFullPageTocScrollStartedAt = 0;
+let isMinervaFullPageTocScrolling = false;
 let autoScrollTimer = null;
 let savedArticleSelectionRange = null;
 let lastArticleEditableElement = null;
@@ -4485,6 +4596,7 @@ const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(false);
 const noMoreSuggestionsEmptyStateEnabled = ref(false);
 const editFullPageImprovedEnabled = ref(true);
+const minervaFullPageSuggestionNavigationEnabled = ref(false);
 const selectedPrototype = ref('option-4');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
@@ -4501,11 +4613,15 @@ const minervaSectionBannerDismissed = ref({
   film: false
 });
 const isMinervaOverviewSheetOpen = ref(false);
+const isMinervaFullPageTocOpen = ref(false);
+const activeMinervaFullPageTocSectionId = ref('top');
 const editSectionEarlyLife = ref(null);
 const editSectionCareer = ref(null);
 const editSectionPoetry = ref(null);
 const editSectionProse = ref(null);
 const editSectionFilm = ref(null);
+const minervaFullPageTocButtonRef = ref(null);
+const minervaFullPageTocPanelRef = ref(null);
 const prototypeDialogPrefsStorageKey = 'suggestion-mode.prototype-dialog-prefs';
 
 function loadPrototypeDialogPrefs() {
@@ -4531,6 +4647,9 @@ function loadPrototypeDialogPrefs() {
     if (typeof prefs.editFullPageImprovedEnabled === 'boolean') {
       editFullPageImprovedEnabled.value = prefs.editFullPageImprovedEnabled;
     }
+    if (typeof prefs.minervaFullPageSuggestionNavigationEnabled === 'boolean') {
+      minervaFullPageSuggestionNavigationEnabled.value = prefs.minervaFullPageSuggestionNavigationEnabled;
+    }
   } catch {
     // Ignore invalid persisted dialog preferences.
   }
@@ -4547,7 +4666,8 @@ function savePrototypeDialogPrefs() {
     nonSelectedHighlightUnderlineEnabled: nonSelectedHighlightUnderlineEnabled.value,
     editToolbarImprovementsEnabled: editToolbarImprovementsEnabled.value,
     noMoreSuggestionsEmptyStateEnabled: noMoreSuggestionsEmptyStateEnabled.value,
-    editFullPageImprovedEnabled: editFullPageImprovedEnabled.value
+    editFullPageImprovedEnabled: editFullPageImprovedEnabled.value,
+    minervaFullPageSuggestionNavigationEnabled: minervaFullPageSuggestionNavigationEnabled.value
   };
   window.localStorage.setItem(prototypeDialogPrefsStorageKey, JSON.stringify(prefs));
 }
@@ -4747,6 +4867,132 @@ const showMinervaNoMoreSuggestionsState = computed(() => (
   isEditMode.value &&
   showSuggestions.value &&
   Boolean(minervaNoMoreSuggestionsState.value)
+));
+const isMinervaFullPageTocReady = ref(false);
+const showMinervaFullPageTocOnScroll = ref(false);
+const minervaFullPageTocExpandedItems = ref({
+  poetry: false,
+  prose: false,
+  film: false
+});
+const showMinervaFullPageSuggestionNavigation = computed(() => (
+  minervaFullPageSuggestionNavigationEnabled.value &&
+  isMinervaSkin.value &&
+  isEditMode.value &&
+  !minervaEditSectionOnly.value
+));
+const showMinervaFullPageSuggestionNavigationUi = computed(() => (
+  showMinervaFullPageSuggestionNavigation.value &&
+  isMinervaFullPageTocReady.value &&
+  showMinervaFullPageTocOnScroll.value
+));
+const minervaFullPageTocTopOffset = computed(() => (
+  `${editToolbarImprovementsEnabled.value ? 56 : 50}px`
+));
+const minervaFullPageTocPanelTopOffset = computed(() => (
+  `${editToolbarImprovementsEnabled.value ? 100 : 94}px`
+));
+const minervaFullPageTocItems = computed(() => {
+  const poetryEarlyWorksCount = [ isSuggestion8Pending.value ].filter(Boolean).length;
+  const poetryWiderRecognitionCount = [ isSuggestion6Pending.value, isSuggestion2Pending.value, isSuggestion4Pending.value ]
+    .filter(Boolean)
+    .length;
+  const proseSisterOutsiderCount = [ isSuggestion3Pending.value ].filter(Boolean).length;
+  const proseCount = [ isSuggestion7Pending.value, isSuggestion3Pending.value ].filter(Boolean).length;
+  return [
+    { id: 'top', label: '(Top)', count: 0, sectionId: 'top' },
+    { id: 'early-life', label: 'Early life', count: 0, sectionId: 'early-life' },
+    { id: 'career', label: 'Career', count: isSuggestion1Pending.value ? 1 : 0, sectionId: 'career' },
+    {
+      id: 'poetry',
+      label: 'Poetry',
+      count: poetryEarlyWorksCount + poetryWiderRecognitionCount,
+      sectionId: 'poetry',
+      children: [
+        {
+          id: 'poetry-early-works',
+          label: 'Early works',
+          count: poetryEarlyWorksCount,
+          sectionId: 'poetry',
+          subsectionTitle: 'Early works'
+        },
+        {
+          id: 'poetry-wider-recognition',
+          label: 'Wider recognition',
+          count: poetryWiderRecognitionCount,
+          sectionId: 'poetry',
+          subsectionTitle: 'Wider recognition'
+        }
+      ]
+    },
+    {
+      id: 'prose',
+      label: 'Prose',
+      count: proseCount,
+      sectionId: 'prose',
+      children: [
+        {
+          id: 'prose-sister-outsider',
+          label: 'Sister Outsider',
+          count: proseSisterOutsiderCount,
+          sectionId: 'prose',
+          subsectionTitle: 'Sister Outsider'
+        }
+      ]
+    },
+    {
+      id: 'film',
+      label: 'Film',
+      count: 0,
+      sectionId: 'film',
+      children: [
+        {
+          id: 'film-berlin-years',
+          label: 'The Berlin years',
+          count: 0,
+          sectionId: 'film',
+          subsectionTitle: 'The Berlin Years: 1984–1992'
+        },
+        {
+          id: 'film-body-of-a-poet',
+          label: 'Body of a Poet',
+          count: 0,
+          sectionId: 'film',
+          subsectionTitle: 'Body of a Poet: 1995'
+        }
+      ]
+    }
+  ];
+});
+const minervaFullPageTocPathMap = computed(() => {
+  const pathMap = {};
+  const visit = (items, path = []) => {
+    items.forEach((item) => {
+      const nextPath = [ ...path, item.id ];
+      pathMap[item.id] = nextPath;
+      if (item.children?.length) {
+        visit(item.children, nextPath);
+      }
+    });
+  };
+  visit(minervaFullPageTocItems.value);
+  return pathMap;
+});
+const minervaFullPageTocFlatItems = computed(() => {
+  const flatItems = [];
+  const visit = (items) => {
+    items.forEach((item) => {
+      flatItems.push(item);
+      if (item.children?.length) {
+        visit(item.children);
+      }
+    });
+  };
+  visit(minervaFullPageTocItems.value);
+  return flatItems;
+});
+const minervaFullPageTocActivePathIds = computed(() => (
+  minervaFullPageTocPathMap.value[activeMinervaFullPageTocSectionId.value] || []
 ));
 const isMinervaNoMoreSuggestionsSectionState = computed(() => (
   showMinervaNoMoreSuggestionsState.value &&
@@ -5084,6 +5330,9 @@ const isMinervaPaginationPrevDisabled = computed(() => (
 ));
 const isMinervaPaginationNextDisabled = computed(() => (
   minervaPaginationTotal.value <= 1
+));
+const showMinervaPaginationArrows = computed(() => (
+  minervaPaginationTotal.value > 1
 ));
 const showMinervaPagination = computed(() => {
   if (showMinervaNoMoreSuggestionsState.value) {
@@ -6498,8 +6747,13 @@ function handleSelectionChange() {
 }
 
 function handleDocumentClick(event) {
-  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value) return;
   const target = event.target;
+  if (isMinervaFullPageTocOpen.value) {
+    if (!minervaFullPageTocPanelRef.value?.contains(target) && !minervaFullPageTocButtonRef.value?.contains(target)) {
+      isMinervaFullPageTocOpen.value = false;
+    }
+  }
+  if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value) return;
   if (minervaAddMenuPanelRef.value?.contains(target)) return;
   if (minervaAddMenuTriggerRef.value?.contains(target)) return;
   if (minervaEditMenuPanelRef.value?.contains(target)) return;
@@ -6909,6 +7163,115 @@ function clearScrollReappear() {
   }
 }
 
+function clearMinervaFullPageTocVisibilityTimer() {
+  if (minervaFullPageTocShowTimer) {
+    clearTimeout(minervaFullPageTocShowTimer);
+    minervaFullPageTocShowTimer = null;
+  }
+  if (minervaFullPageTocHideTimer) {
+    clearTimeout(minervaFullPageTocHideTimer);
+    minervaFullPageTocHideTimer = null;
+  }
+  if (minervaFullPageTocScrollingTimer) {
+    clearTimeout(minervaFullPageTocScrollingTimer);
+    minervaFullPageTocScrollingTimer = null;
+  }
+  minervaFullPageTocScrollStartedAt = 0;
+  isMinervaFullPageTocScrolling = false;
+}
+
+function hideMinervaFullPageTocUi() {
+  clearMinervaFullPageTocVisibilityTimer();
+  showMinervaFullPageTocOnScroll.value = false;
+  isMinervaFullPageTocOpen.value = false;
+}
+
+function suppressMinervaFullPageTocScrollVisibility(duration = 1400) {
+  if (suppressMinervaFullPageTocScrollVisibilityTimer) {
+    clearTimeout(suppressMinervaFullPageTocScrollVisibilityTimer);
+  }
+  hideMinervaFullPageTocUi();
+  suppressMinervaFullPageTocScrollVisibilityTimer = setTimeout(() => {
+    suppressMinervaFullPageTocScrollVisibilityTimer = null;
+  }, duration);
+}
+
+function scheduleMinervaFullPageTocHideDelay() {
+  if (!showMinervaFullPageTocOnScroll.value || isMinervaFullPageTocOpen.value) return;
+  if (minervaFullPageTocHideTimer) {
+    clearTimeout(minervaFullPageTocHideTimer);
+  }
+  minervaFullPageTocHideTimer = setTimeout(() => {
+    if (isMinervaFullPageTocOpen.value) {
+      minervaFullPageTocHideTimer = null;
+      return;
+    }
+    showMinervaFullPageTocOnScroll.value = false;
+    isMinervaFullPageTocOpen.value = false;
+    minervaFullPageTocHideTimer = null;
+  }, 3000);
+}
+
+function handleMinervaFullPageTocInteraction() {
+  if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value || !isMinervaFullPageTocReady.value) {
+    return;
+  }
+  showMinervaFullPageTocOnScroll.value = true;
+  if (minervaFullPageTocShowTimer) {
+    clearTimeout(minervaFullPageTocShowTimer);
+    minervaFullPageTocShowTimer = null;
+  }
+  scheduleMinervaFullPageTocHideDelay();
+}
+
+function handleMinervaFullPageTocScrollVisibility() {
+  if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value) {
+    hideMinervaFullPageTocUi();
+    return;
+  }
+  if (suppressMinervaFullPageTocScrollVisibilityTimer) {
+    return;
+  }
+  if (!isMinervaFullPageTocScrolling) {
+    isMinervaFullPageTocScrolling = true;
+    minervaFullPageTocScrollStartedAt = Date.now();
+    if (!showMinervaFullPageTocOnScroll.value) {
+      if (minervaFullPageTocShowTimer) {
+        clearTimeout(minervaFullPageTocShowTimer);
+      }
+      minervaFullPageTocShowTimer = setTimeout(() => {
+        minervaFullPageTocShowTimer = null;
+        if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value || !isMinervaFullPageTocScrolling) {
+          return;
+        }
+        if ((Date.now() - minervaFullPageTocScrollStartedAt) < 1000) {
+          return;
+        }
+        showMinervaFullPageTocOnScroll.value = true;
+      }, 1000);
+    }
+  }
+  if (minervaFullPageTocHideTimer) {
+    clearTimeout(minervaFullPageTocHideTimer);
+    minervaFullPageTocHideTimer = null;
+  }
+  if (minervaFullPageTocScrollingTimer) {
+    clearTimeout(minervaFullPageTocScrollingTimer);
+  }
+  minervaFullPageTocScrollingTimer = setTimeout(() => {
+    isMinervaFullPageTocScrolling = false;
+    minervaFullPageTocScrollStartedAt = 0;
+    if (minervaFullPageTocShowTimer) {
+      clearTimeout(minervaFullPageTocShowTimer);
+      minervaFullPageTocShowTimer = null;
+    }
+    if (showMinervaFullPageTocOnScroll.value && !isMinervaFullPageTocOpen.value) {
+      scheduleMinervaFullPageTocHideDelay();
+    }
+    minervaFullPageTocScrollingTimer = null;
+  }, 180);
+}
+
 function handleScrollReappear() {
   if (activePrototype.value !== 'option-3') return;
   if (!isMinervaSkin.value) return;
@@ -6956,6 +7319,109 @@ function scrollToEditSection(sectionId) {
   if (targetRef && targetRef.value) {
     targetRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }
+}
+
+function getMinervaEditToolbarHeight() {
+  if (typeof document === 'undefined') return editToolbarImprovementsEnabled.value ? 48 : 42;
+  const toolbar = document.querySelector('.editor-toolbar--minerva');
+  return toolbar instanceof HTMLElement ? toolbar.offsetHeight : (editToolbarImprovementsEnabled.value ? 48 : 42);
+}
+
+function getMinervaFullPageTocTargetElement(item) {
+  if (!item || typeof document === 'undefined') return null;
+  if (item.sectionId === 'top') return document.documentElement;
+  const sectionRef = getEditSectionRefById(item.sectionId);
+  if (!sectionRef?.value) return null;
+  if (!item.subsectionTitle) return sectionRef.value;
+
+  const sectionContainer = sectionRef.value.closest('.minerva-edit-section');
+  if (!sectionContainer) return sectionRef.value;
+
+  const candidateElements = Array.from(sectionContainer.querySelectorAll('.subsection-title, em'));
+  const normalizedTarget = item.subsectionTitle.trim().toLowerCase();
+  const match = candidateElements.find((element) => element.textContent?.trim().toLowerCase() === normalizedTarget);
+  return match instanceof HTMLElement ? match : sectionRef.value;
+}
+
+function updateMinervaFullPageTocActiveSection() {
+  if (!showMinervaFullPageSuggestionNavigation.value || typeof window === 'undefined') {
+    activeMinervaFullPageTocSectionId.value = 'top';
+    return;
+  }
+  const threshold = window.scrollY + getMinervaEditToolbarHeight() + 16;
+  let activeSectionId = 'top';
+  minervaFullPageTocFlatItems.value
+    .filter((item) => item.id !== 'top')
+    .forEach((item) => {
+      const target = getMinervaFullPageTocTargetElement(item);
+      if (!target) return;
+      const top = target.getBoundingClientRect().top + window.scrollY;
+      if (top <= threshold) {
+        activeSectionId = item.id;
+      }
+    });
+  activeMinervaFullPageTocSectionId.value = activeSectionId;
+}
+
+function scheduleMinervaFullPageTocReady() {
+  if (typeof window === 'undefined') {
+    isMinervaFullPageTocReady.value = true;
+    return;
+  }
+
+  nextTick(() => {
+    window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(() => {
+        if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value) {
+          return;
+        }
+        isMinervaFullPageTocReady.value = true;
+        updateMinervaFullPageTocActiveSection();
+      });
+    });
+  });
+}
+
+function toggleMinervaFullPageToc() {
+  isMinervaFullPageTocOpen.value = !isMinervaFullPageTocOpen.value;
+  handleMinervaFullPageTocInteraction();
+  if (isMinervaFullPageTocOpen.value) {
+    updateMinervaFullPageTocActiveSection();
+  }
+}
+
+function isMinervaFullPageTocItemOpen(itemId) {
+  return Boolean(
+    minervaFullPageTocExpandedItems.value[itemId] ||
+    minervaFullPageTocActivePathIds.value.includes(itemId)
+  );
+}
+
+function toggleMinervaFullPageTocItem(itemId) {
+  handleMinervaFullPageTocInteraction();
+  minervaFullPageTocExpandedItems.value[itemId] = !isMinervaFullPageTocItemOpen(itemId);
+}
+
+function scrollToMinervaFullPageTocSection(item) {
+  if (typeof window === 'undefined') return;
+  if (!item || item.sectionId === 'top') {
+    window.scrollTo({ top: 0, behavior: 'auto' });
+    return;
+  }
+  const target = getMinervaFullPageTocTargetElement(item);
+  if (!target) return;
+  const toolbarHeight = getMinervaEditToolbarHeight();
+  const targetTop = target.getBoundingClientRect().top + window.scrollY;
+  const offsetTop = Math.max(0, targetTop - toolbarHeight - 8);
+  window.scrollTo({ top: offsetTop, behavior: 'auto' });
+}
+
+function handleMinervaFullPageTocItemClick(item) {
+  if (!item) return;
+  activeMinervaFullPageTocSectionId.value = item.id;
+  isMinervaFullPageTocOpen.value = false;
+  suppressMinervaFullPageTocScrollVisibility();
+  scrollToMinervaFullPageTocSection(item);
 }
 
 function updateSuggestionVisibility() {
@@ -7957,7 +8423,8 @@ watch(
     nonSelectedHighlightUnderlineEnabled,
     editToolbarImprovementsEnabled,
     noMoreSuggestionsEmptyStateEnabled,
-    editFullPageImprovedEnabled
+    editFullPageImprovedEnabled,
+    minervaFullPageSuggestionNavigationEnabled
   ],
   () => {
     savePrototypeDialogPrefs();
@@ -8026,6 +8493,33 @@ watch(
     });
   }
 );
+
+watch(
+  () => [showMinervaFullPageSuggestionNavigation.value, isLoading.value],
+  ([visible, loading]) => {
+    if (!visible || loading) {
+      isMinervaFullPageTocReady.value = false;
+      hideMinervaFullPageTocUi();
+      activeMinervaFullPageTocSectionId.value = 'top';
+      return;
+    }
+    scheduleMinervaFullPageTocReady();
+  }
+);
+
+watch(isMinervaFullPageTocOpen, (isOpen) => {
+  if (isOpen) {
+    if (minervaFullPageTocHideTimer) {
+      clearTimeout(minervaFullPageTocHideTimer);
+      minervaFullPageTocHideTimer = null;
+    }
+    showMinervaFullPageTocOnScroll.value = true;
+    return;
+  }
+  if (showMinervaFullPageTocOnScroll.value) {
+    scheduleMinervaFullPageTocHideDelay();
+  }
+});
 
 watch(
   () => [
@@ -8630,7 +9124,14 @@ onMounted(() => {
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
     window.addEventListener('scroll', handleScrollReappear, true);
+    window.addEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
+    window.addEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
+    window.addEventListener('resize', updateMinervaFullPageTocActiveSection);
     updateEditToolbarScrolled();
+    updateMinervaFullPageTocActiveSection();
+    if (showMinervaFullPageSuggestionNavigation.value && !isLoading.value) {
+      scheduleMinervaFullPageTocReady();
+    }
   }
   document.addEventListener('click', handleDocumentClick);
   document.addEventListener('selectionchange', handleSelectionChange);
@@ -8648,6 +9149,9 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
     window.removeEventListener('scroll', handleScrollReappear, true);
+    window.removeEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
+    window.removeEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
+    window.removeEventListener('resize', updateMinervaFullPageTocActiveSection);
   }
   document.removeEventListener('click', handleDocumentClick);
   document.removeEventListener('selectionchange', handleSelectionChange);
@@ -8711,6 +9215,22 @@ onBeforeUnmount(() => {
   if (scrollReappearTimer) {
     clearTimeout(scrollReappearTimer);
     scrollReappearTimer = null;
+  }
+  if (minervaFullPageTocShowTimer) {
+    clearTimeout(minervaFullPageTocShowTimer);
+    minervaFullPageTocShowTimer = null;
+  }
+  if (minervaFullPageTocHideTimer) {
+    clearTimeout(minervaFullPageTocHideTimer);
+    minervaFullPageTocHideTimer = null;
+  }
+  if (minervaFullPageTocScrollingTimer) {
+    clearTimeout(minervaFullPageTocScrollingTimer);
+    minervaFullPageTocScrollingTimer = null;
+  }
+  if (suppressMinervaFullPageTocScrollVisibilityTimer) {
+    clearTimeout(suppressMinervaFullPageTocScrollVisibilityTimer);
+    suppressMinervaFullPageTocScrollVisibilityTimer = null;
   }
   if (autoScrollTimer) {
     clearTimeout(autoScrollTimer);
@@ -11134,6 +11654,162 @@ function markArticleEdited() {
   box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
   padding: 0;
   z-index: 90;
+}
+
+.minerva-full-page-toc {
+  position: fixed;
+  left: 6px;
+  z-index: 102;
+}
+
+.minerva-full-page-toc-trigger {
+  min-width: 44px;
+}
+
+.minerva-full-page-toc-trigger :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-color: var(--border-color-subtle, #c8ccd1);
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+}
+
+.minerva-full-page-toc-panel {
+  position: fixed;
+  left: 6px;
+  width: min(332px, calc(100vw - 12px));
+  max-height: min(76vh, 720px);
+  overflow-y: auto;
+  background: var(--background-color-base, #fff);
+  border: 1px solid var(--border-color-subtle, #c8ccd1);
+  border-radius: 2px;
+  box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
+  padding: 0;
+}
+
+.minerva-full-page-toc-node {
+  display: flex;
+  flex-direction: column;
+}
+
+.minerva-full-page-toc-item {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  width: 100%;
+  height: 44px;
+  padding: 0 12px;
+}
+
+.minerva-full-page-toc-item--active {
+  color: var(--color-base, #202122);
+}
+
+.minerva-full-page-toc-item--child {
+  height: 44px;
+  padding-left: 44px;
+}
+
+.minerva-full-page-toc-children {
+  display: flex;
+  flex-direction: column;
+}
+
+.minerva-full-page-toc-chevron,
+.minerva-full-page-toc-link {
+  border: 0;
+  background: transparent;
+  padding: 0;
+}
+
+.minerva-full-page-toc-chevron {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  color: var(--color-base, #54595d);
+  flex: 0 0 24px;
+  cursor: pointer;
+}
+
+.minerva-full-page-toc-chevron-icon {
+  transition: transform 160ms ease;
+}
+
+.minerva-full-page-toc-chevron-icon--open {
+  transform: rotate(90deg);
+}
+
+.minerva-full-page-toc-chevron-spacer {
+  flex: 0 0 24px;
+  width: 24px;
+}
+
+.minerva-full-page-toc-chevron-spacer--child {
+  flex-basis: 0;
+  width: 0;
+}
+
+.minerva-full-page-toc-link {
+  flex: 1 1 auto;
+  min-width: 0;
+  color: var(--color-progressive, #36c);
+  text-align: left;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.minerva-full-page-toc-link--top {
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-full-page-toc-link--child {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-full-page-toc-item--active .minerva-full-page-toc-link {
+  color: var(--color-base, #202122);
+  font-weight: 700;
+}
+
+.minerva-full-page-toc-item-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  color: var(--color-subtle, #72777d);
+  flex: 0 0 auto;
+}
+
+.minerva-full-page-toc-item-badge :deep(.cdx-icon),
+.minerva-full-page-toc-item-badge :deep(svg) {
+  color: var(--color-subtle, #72777d);
+  fill: var(--color-subtle, #72777d);
+}
+
+.minerva-full-page-toc-item-badge-count {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  min-width: 12px;
+  height: 12px;
+  padding: 0 2px;
+  border-radius: 3px;
+  background: var(--background-color-progressive, #36c);
+  border: 1px solid var(--background-color-base, #fff);
+  color: #fff;
+  font-size: 10px;
+  line-height: 8px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .minerva-edit-menu-list {
