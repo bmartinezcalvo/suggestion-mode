@@ -3841,16 +3841,16 @@
                   <cdx-radio
                     v-model="selectedPrototype"
                     name="suggestions-discoverability"
-                    input-value="option-5"
+                    input-value="option-6"
                   >
-                    Pagination (auto-advance to next suggestion)
+                    Pagination (no auto-advance to next suggestion)
                   </cdx-radio>
                   <cdx-radio
                     v-model="selectedPrototype"
                     name="suggestions-discoverability"
-                    input-value="option-6"
+                    input-value="option-5"
                   >
-                    Pagination (no auto-advance)
+                    Pagination (auto-advance to next suggestion)
                   </cdx-radio>
                   <cdx-radio
                     v-model="selectedPrototype"
