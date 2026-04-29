@@ -538,7 +538,7 @@
                   </div>
 
                   <!-- Early Life Section -->
-                  <div class="section-heading">
+                  <div class="section-heading" data-read-section="early-life">
                     <div class="section-heading-row">
                       <h2 class="heading-text">Early life</h2>
                       <span class="section-edit">
@@ -622,7 +622,7 @@
             </div>
 
             <!-- Career Section -->
-            <div class="section-heading">
+            <div class="section-heading" data-read-section="career">
               <div class="section-heading-row">
                 <h2 class="heading-text">Career</h2>
                 <span class="section-edit">
@@ -660,7 +660,7 @@
             </div>
 
             <!-- Poetry Section -->
-            <div class="section-heading">
+            <div class="section-heading" data-read-section="poetry">
               <div class="section-heading-row">
                 <h2 class="heading-text">Poetry</h2>
                 <span class="section-edit">
@@ -677,7 +677,7 @@
                             <p>
                 Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
               </p>
-                            <p><strong>Early works</strong></p>
+                            <h3 class="subsection-title">Early works</h3>
                             <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
               </p>
@@ -693,7 +693,7 @@
                             <p>
                 1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
               </p>
-                            <p><strong>Wider recognition</strong></p>
+                            <h3 class="subsection-title">Wider recognition</h3>
                             <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
               </p>
@@ -706,7 +706,7 @@
             </div>
 
             <!-- Prose Section -->
-            <div class="section-heading">
+            <div class="section-heading" data-read-section="prose">
               <div class="section-heading-row">
                 <h2 class="heading-text">Prose</h2>
                 <span class="section-edit">
@@ -723,7 +723,7 @@
                             <p>
                 Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
               </p>
-                            <p><strong>Sister Outsider</strong></p>
+                            <h3 class="subsection-title">Sister Outsider</h3>
                             <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
               </p>
@@ -748,7 +748,7 @@
             </div>
 
             <!-- Film Section -->
-            <div class="section-heading">
+            <div class="section-heading" data-read-section="film">
               <div class="section-heading-row">
                 <h2 class="heading-text">Film</h2>
                 <span class="section-edit">
@@ -762,6 +762,7 @@
               <p>
                 Lorde had several films that highlighted her journey as an <a href="https://en.wikipedia.org/wiki/Activism" target="_blank" rel="noopener">activist</a> in the 1980s and 1990s.<sup class="citation-marker">[50]</sup>
               </p>
+              <h3 class="subsection-title">The Berlin years</h3>
               <p>
                 <em>The Berlin Years: 1984–1992</em> documented Lorde's time in Germany as she led <a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-Germans</a> in a movement that would allow black people to establish identities for themselves outside of stereotypes and discrimination. After a long history of systemic racism in Germany, Lorde introduced a new sense of empowerment for minorities. As seen in the film, she walks through the streets with pride despite stares and words of discouragement. Including moments like these in a documentary was important for people to see during that time. It inspired them to take charge of their identities and discover who they are outside of the labels put on them by society. The film also educates people on the history of racism in Germany. This enables viewers to understand how Germany reached this point in history and how the society developed. Through her promotion of the study of history and her example of taking her experiences in her stride, she influenced people of many different backgrounds.<sup class="citation-marker">[51]</sup>
               </p>
@@ -770,6 +771,124 @@
               </p>
               <p>
                 <em>Body of a Poet: 1995</em> was written as a tribute biopic written to honor Lorde. The film centers on the efforts of a young group of lesbians of color. The film celebrates the life and work of Audre Lorde from her birth to her death.<sup class="citation-marker">[53]</sup>
+              </p>
+            </div>
+
+            <!-- Theory Section -->
+            <div class="section-heading" data-read-section="theory">
+              <div class="section-heading-row">
+                <h2 class="heading-text">Theory</h2>
+                <span class="section-edit">
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('theory')">edit</a><span class="section-edit-bracket">]</span>
+                </span>
+              </div>
+              <div class="heading-divider"></div>
+            </div>
+
+            <div class="body-text">
+              <p>
+                Her writings are based on the "theory of difference", the idea that the binary opposition between men and women is overly simplistic; although feminists have found it necessary to present the illusion of a solid, unified whole, the category of women itself is full of subdivisions.<sup class="citation-marker">[61]</sup>
+              </p>
+              <p>
+                Lorde identified issues of race, class, age and ageism, sex and sexuality and, later in her life, chronic illness and disability; the latter becoming more prominent in her later years as she lived with cancer. She wrote of all of these factors as fundamental to her experience of being a woman. She argued that, although differences in gender have received all the focus, it is essential that these other differences are also recognized and addressed. "Lorde," writes <a href="https://de.wikipedia.org/wiki/Carmen_Birkle" target="_blank" rel="noopener">Carmen Birkle</a>, "puts her emphasis on the authenticity of experience. She wants her difference acknowledged but not judged; she does not want to be subsumed into the one general category of 'woman.'"<sup class="citation-marker">[62]</sup> This theory is today known as <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectionality</a>.<sup class="citation-marker">[63]</sup>
+              </p>
+              <p>
+                While acknowledging that the differences between women are wide and varied, most of Lorde's works are concerned with two subsets that concerned her primarily – race and sexuality. In <a href="https://en.wikipedia.org/wiki/A_Litany_for_Survival:_The_Life_and_Work_of_Audre_Lorde" target="_blank" rel="noopener">Ada Gay Griffin and Michelle Parkerson's documentary <em>A Litany for Survival: The Life and Work of Audre Lorde</em></a>, Lorde says, "Let me tell you first about what it was like being a Black woman poet in the '60s, from jump. It meant being invisible. It meant being really invisible. It meant being doubly invisible as a Black feminist woman and it meant being triply invisible as a Black lesbian and feminist".<sup class="citation-marker">[64]</sup>
+              </p>
+              <p>
+                <em>Front cover art for the 1984 publication of the book <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a> by Audre Lorde.</em>
+              </p>
+              <p>
+                In her essay "The Erotic as Power", written in 1978 and collected in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, Lorde theorizes the Erotic as a site of power for women only when they learn to release it from its suppression and embrace it, without the sexualized meaning it often holds in mainstream society. She proposes that the Erotic needs to be explored and experienced wholeheartedly, because it exists not only in reference to sexuality and the sexual, but also as a feeling of enjoyment, love, and thrill that is felt towards any task or experience that satisfies women in their lives, be it reading a book or loving one's job.<sup class="citation-marker">[65]</sup> She dismisses "the false belief that only by the suppression of the erotic within our lives and consciousness can women be truly strong. But that strength is illusory, for it is fashioned within the context of male models of power".<sup class="citation-marker">[66]</sup> She explains how patriarchal society has misnamed it and used it against women, causing women to fear it. Women also fear it because the erotic is powerful and a deep feeling. Women must share each other's power rather than use it without consent, which is abuse. They should do it as a method to connect everyone in their differences and similarities. Utilizing the erotic as power allows women to use their knowledge and power to face the issues of racism, patriarchy, and our anti-erotic society.<sup class="citation-marker">[65]</sup> She claims that the erotic can be used as a source of power for women to live with passion in all areas of their life. With the erotic guiding life, Lorde encourages women to use the erotic as a compass to identify what holds value in women's lives. Furthermore, Lorde criticizes the idea of <a href="https://en.wikipedia.org/wiki/Compulsory_heterosexuality" target="_blank" rel="noopener">compulsory heterosexuality</a> and the idea that women's happiness will come through marriage, god, or religion. The idea of the erotic will empower women to not settle for what is conventionally expected or safe leaning into the idea of resisting patriarchal values put in place over women and their sexuality. Lorde sees the suppression of the erotic or conformity to heterosexual norms as a form of control over women. In order to assume control over oneself, she urges women to reclaim the erotic and assert control. She erases the erotic differences that lie between varying sexualities in order to promote these desires as a creative force for revolutionary change.<sup class="citation-marker">[65]</sup> While rejecting compulsory heterosexuality, this is a prevalent motif in Uses of the Erotic, and it still carries some heteronormative undertones. The erotic Lorde proposes both promotes this ideal, as "the aim of each thing which we do is to make our lives and the lives of our children richer and more possible. Within the celebration of the erotic in all our endeavours, my work becomes a conscious decision - a longed-for bed which I enter gratefully and from which I rise up empowered," explaining how wielding the erotic as preserving the future for women and children alike.<sup class="citation-marker">[67]</sup> Another feminist philosopher, <a href="https://en.wikipedia.org/wiki/Lee_Edelman" target="_blank" rel="noopener">Lee Edelman</a>, discusses the culture of heteronormativity as a structure upheld through reproduction and the perception of children as the future which relates to this quote as lending to heteronormative culture, despite her rejection of it. Lorde also lends to this reproductive theory by her establishing the root of the erotic as a, "deeply female and spiritual plane, firmly rooted in the power of our unexpressed or unrecognized feeling," imbuing to women that it is inherent to their womanhood. This supports a binary reality by asserting an essentialist view of gender and sex. Essentialism is debated among third-wave feminists and illustrated how intersectionality in third-wave feminism is approached differently than that of fourth-wave feminism.
+              </p>
+              <h3 class="subsection-title theory-subheading">Feminist thought</h3>
+              <p>
+                Lorde set out to confront issues of racism in feminist thought. She maintained that a great deal of the scholarship of White feminists served to augment the oppression of black women, a conviction that led to angry confrontation, most notably in a blunt open letter addressed to the fellow radical lesbian feminist <a href="https://en.wikipedia.org/wiki/Mary_Daly" target="_blank" rel="noopener">Mary Daly</a>, to which Lorde claimed she received no reply.<sup class="citation-marker">[68]</sup> Daly's reply letter to Lorde,<sup class="citation-marker">[69]</sup> dated four months later, was found in 2003 in Lorde's files after she died.<sup class="citation-marker">[70]</sup>
+              </p>
+              <p>
+                This fervent disagreement with notable White feminists furthered Lorde's persona as an outsider: "In the institutional milieu of black feminist and black lesbian feminist scholars ... and within the context of conferences sponsored by White feminist academics, Lorde stood out as an angry, accusatory, isolated black feminist lesbian voice".<sup class="citation-marker">[71]</sup>
+              </p>
+              <p>
+                The criticism was not one-sided: many White feminists were angered by Lorde's brand of feminism. In her 1984 essay "The Master's Tools Will Never Dismantle the Master's House",<sup class="citation-marker">[72]</sup> Lorde attacked what she believed was underlying racism within feminism, describing it as unrecognized dependence on the patriarchy. She argued that, by denying difference in the category of women, White feminists merely furthered old systems of oppression and that, in so doing, they were preventing any real, lasting change. Her argument aligned White feminists who did not recognize race as a feminist issue with White male slave-masters, describing both as "agents of oppression".<sup class="citation-marker">[73]</sup>
+              </p>
+              <h3 class="subsection-title theory-subheading">Lorde's comments on feminism</h3>
+              <p>
+                Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
+              </p>
+              <p>
+                In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+              </p>
+              <p>
+                Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
+              </p>
+              <h3 class="subsection-title theory-subheading">Influences on black feminism</h3>
+              <p>
+                Lorde's work on black feminism continues to be examined by scholars today. Jennifer C. Nash examines how black feminists acknowledge their identities and find love for themselves through those differences.<sup class="citation-marker">[77]</sup> Nash cites Lorde, who writes: "I urge each one of us here to reach down into that deep place of knowledge inside herself and touch that terror and loathing of any difference that lives there. See whose face it wears. Then the personal as the political can begin to illuminate all our choices."<sup class="citation-marker">[77]</sup> Nash explains that Lorde is urging black feminists to embrace politics rather than fear it, which will lead to an improvement in society for them. Lorde adds, "Black women sharing close ties with each other, politically or emotionally, are not the enemies of Black men. Too frequently, however, some Black men attempt to rule by fear those Black women who are more ally than enemy."<sup class="citation-marker">[78]</sup>
+              </p>
+              <p>
+                Lorde's 1979 essay "Sexism: An American Disease in Blackface" is a sort of rallying cry to confront sexism in the black community in order to eradicate the violence within it.<sup class="citation-marker">[6]</sup> Lorde insists that the fight between black women and men must end to end racist politics.
+              </p>
+              <p>
+                In 1981, Lorde and a fellow writer friend, Barbara Smith founded <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a> which was dedicated to helping other black feminist writers by provided resources, guidance and encouragement. Lorde encouraged those around her to celebrate their differences such as race, sexuality or class instead of dwelling upon them, and wanted everyone to have similar opportunities.<sup class="citation-marker">[79]</sup>
+              </p>
+              <h3 class="subsection-title theory-subheading">Personal identity</h3>
+              <p>
+                Throughout Lorde's career she included the idea of a collective identity in many of her poems and books. She did not just identify with one category but she wanted to celebrate all parts of herself equally.<sup class="citation-marker">[80]</sup>
+              </p>
+              <p>
+                She was known to describe herself as black, lesbian, political activist, feminist, poet, mother, etc. In her novel <em>Zami: A New Spelling of My Name</em>, Lorde focuses on how her many different identities shape her life and the different experiences she has because of them. She shows us that personal identity is found within the connections between seemingly different parts of one's life, based on experiences, and that one's authority to speak comes from these experiences. Personal identity is often associated with the visual aspect of a person, but as Lies Xhonneux theorizes when identity is singled down to just what you see, some people, even within minority groups, can become invisible.<sup class="citation-marker">[81]</sup>
+              </p>
+              <p>
+                Lorde's work also focused on the importance of acknowledging, respecting and celebrating our differences as well as our commonalities in defining identity. In <em>The Master's Tools</em>, she wrote that many people choose to pretend the differences between us do not exist, or that these differences are insurmountable, adding, "Difference must be not merely tolerated, but seen as a fund of necessary polarities between which our creativity can spark like a dialectic."<sup class="citation-marker">[82]</sup>
+              </p>
+              <p>
+                Lorde urged her readers to delve into and discover these differences, discussing how ignoring differences can lead to ignoring any bias and prejudice that might come with these differences, while acknowledging them can enrich our visions and our joint struggles. She wrote that we need to constructively deal with the differences between people and recognize that unity does not equal identicality. In <em>I Am Your Sister</em>, she urged activists to take responsibility for learning this, even if it meant self-teaching, "...which might be better used in redefining ourselves and devising realistic scenarios for altering the present and constructing the future".<sup class="citation-marker">[83]</sup>
+              </p>
+              <p>
+                In <em>The Cancer Journals</em> she wrote "If I didn't define myself for myself, I would be crunched into other people's fantasies for me and eaten alive." She stressed the idea of personal identity being more than just what people see or think of a person, but something that must be defined by the individual, based on the person's experiences. "The House of Difference" is a phrase that originates in Lorde's identity theories. Her idea was that everyone is different from each other and it is these collective differences that make us who we are, instead of one small aspect in isolation. Focusing on all of the aspects of one's identity brings people together more than choosing one small piece to identify with.<sup class="citation-marker">[84]</sup>
+              </p>
+              <p>
+                Lorde's works <em>Coal</em> and <em>The Black Unicorn</em> are two examples of poetry that encapsulates her black, feminist identity.<sup class="citation-marker">[85]</sup><sup class="citation-marker">[86]</sup> Each poem focuses on the idea of identity, and how identity itself is not straightforward. Many literary critics assumed that "Coal" was Lorde's way of shaping race in terms of coal and diamonds. Lorde herself stated that those interpretations were incorrect because identity was not so simply defined and her poems were not to be oversimplified.
+              </p>
+              <p>
+                While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities; Lorde was not afraid to assert her differences, such as skin color and sexual orientation, but used her own identity against toxic black male masculinity. Lorde used those identities within her work and used her own life to teach others the importance of being different. She was not ashamed to claim her identity and used it to her own creative advantages.
+              </p>
+              <p>
+                While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities, lesbianism. She was a lesbian and navigated spaces interlocking her womanhood, gayness and blackness in ways that trumped White feminism, predominantly White gay spaces and black male masculinity. Lorde used those identities within her work and ultimately it guided her to create pieces that embodied lesbianism in a light that educated people of many social classes and identities on the issues black lesbian women face in society.
+              </p>
+              <h3 class="subsection-title theory-subheading">Contributions to the third-wave feminist discourse</h3>
+              <p>
+                Around the 1960s, <a href="https://en.wikipedia.org/wiki/Second-wave_feminism" target="_blank" rel="noopener">second-wave feminism</a> became centered around discussions and debates about capitalism as a "biased, discriminatory, and unfair"<sup class="citation-marker">[87]</sup> institution, especially within the context of the rise of <a href="https://en.wikipedia.org/wiki/Globalization" target="_blank" rel="noopener">globalization</a>.
+              </p>
+              <p>
+                <a href="https://en.wikipedia.org/wiki/Third-wave_feminism" target="_blank" rel="noopener">Third-wave feminism</a> emerged in the 1990s after calls for "a more differentiated feminism" by first-world women of color and women in developing nations, such as Audre Lorde, who maintained her critiques of first-world feminism for tending to veer toward "third-world homogenization". This term was coined by radical dependency theorist, <a href="https://en.wikipedia.org/wiki/Andre_Gunder_Frank" target="_blank" rel="noopener">Andre Gunder Frank</a>, to describe the inconsideration of the unique histories of developing countries (in the process of forming development agendas).<sup class="citation-marker">[87]</sup> Audre Lorde was critical of the first-world feminist movement "for downplaying sexual, racial, and class differences" and the unique power structures and cultural factors which vary by region, nation, community, etc.<sup class="citation-marker">[88]</sup>
+              </p>
+              <p>
+                Other feminist scholars of this period, like <a href="https://en.wikipedia.org/wiki/Chandra_Talpade_Mohanty" target="_blank" rel="noopener">Chandra Talpade Mohanty</a>, echoed Lorde's sentiments. Collectively they called for a "feminist politics of location, which theorized that women were subject to particular assemblies of oppression, and therefore that all women emerged with particular rather than generic identities".<sup class="citation-marker">[88]</sup> While they encouraged a global community of women, Audre Lorde, in particular, felt the cultural homogenization of third-world women could only lead to a disguised form of oppression with its own forms of "othering" women in developing nations into figures of deviance and non-actors in theories of their own development.
+              </p>
+              <h4 class="subsection-title theory-subheading theory-subheading--level4">Essay</h4>
+              <p>
+                Originally published in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, a collection of essays and speeches, Audre Lorde cautioned against the "institutionalized rejection of difference" in her essay, "Age, Race, Class, and Sex: Women Redefining Difference", fearing that when "we do not develop tools for using human difference as a springboard for creative change within our lives[,] we speak not of human difference, but of human deviance".<sup class="citation-marker">[50]</sup> Lorde saw this already happening with the lack of inclusion of literature from women of color in the second-wave feminist discourse. Poetry, considered lesser than prose and more common among lower class and working people, was rejected from women's magazine collectives which Lorde claims have robbed "women of each other's energy and creative insight". She found that "the literature of women of Color [was] seldom included in women's literature courses and almost never in other literature courses, nor in women's studies as a whole"<sup class="citation-marker">[50]</sup> and pointed to the "othering" of women of color and women in developing nations as the reason. By homogenizing these communities and ignoring their difference, "women of Color become 'other,' the outside whose experiences and tradition is too 'alien' to comprehend",<sup class="citation-marker">[50]</sup> and thus, seemingly unworthy of scholarly attention and differentiated scholarship. Lorde expands on this idea of rejecting the other saying that it is a product of our capitalistic society. Psychologically, people have been trained to react to discontentment by ignoring it. When ignoring a problem does not work, they are forced to either conform or destroy. She contends that people have reacted in this matter to differences in sex, race, and gender: ignore, conform, or destroy. Instead, she states that differences should be approached with curiosity or understanding. Lorde denounces the concept of having to choose a superior and an inferior when comparing two things. In the case of people, expression, and identity, she claims that there should be a third option of equality. However, Lorde emphasizes in her essay that differences should not be squashed or unacknowledged. There is no denying the difference in experience of black women and White women, as shown through example in Lorde's essay, but Lorde fights against the premise that difference is bad.
+              </p>
+              <p>
+                Audre Lorde called for the embracing of these differences. In the same essay, she proclaimed, "now we must recognize difference among women who are our equals, neither inferior nor superior, and devise ways to use each other's difference to enrich our visions and our joint struggles"<sup class="citation-marker">[50]</sup> Doing so would lead to more inclusive and thus, more effective global feminist goals. Lorde writes that women must "develop new definitions of power and new patterns of relating across difference. The old definitions have not served us". By unification, Lorde writes that women can reverse the oppression that they face and create better communities for themselves and loved ones. Lorde theorized that true development in third-world communities would and even "the future of our earth may depend upon the ability of all women to identify and develop new definitions of power and new patterns of relating across differences."<sup class="citation-marker">[50]</sup> In other words, the individual voices and concerns of women and color and women in developing nations would be the first step in attaining the autonomy with the potential to develop and transform their communities effectively in the age (and future) of globalization.
+              </p>
+              <h4 class="subsection-title theory-subheading theory-subheading--level4">Speeches</h4>
+              <p>
+                In a keynote speech at the National Third-World Gay and Lesbian Conference on October 13, 1979, titled, "When will the ignorance end?" Lorde reminded and cautioned the attendees, "There is a wonderful diversity of groups within this conference, and a wonderful diversity between us within those groups. That diversity can be a generative force, a source of energy fueling our visions of action for the future. We must not let diversity be used to tear us apart from each other, nor from our communities that is the mistake they made about us. I do not want us to make it ourselves... and we must never forget those lessons: that we cannot separate our oppressions, nor yet are they the same".<sup class="citation-marker">[89]</sup> In other words, while common experiences in racism, sexism, and homophobia had brought the group together and that commonality could not be ignored, there must still be a recognition of their individualized humanity.
+              </p>
+              <p>
+                Years later, on August 27, 1983, Audre Lorde delivered an address as part of the "Litany of Commitment" at the <a href="https://en.wikipedia.org/wiki/March_on_Washington_for_Jobs_and_Freedom" target="_blank" rel="noopener">March on Washington for Jobs and Freedom</a>. "Today we march," she said, "lesbians and gay men and our children, standing in our own names together with all our struggling sisters and brothers here and around the world, in the Middle East, in Central America, in the Caribbean and South Africa, sharing our commitment to work for a joint livable future. We know we do not have to become copies of each other to be able to work together. We know that when we join hands across the table of our difference, our diversity gives us great power. When we can arm ourselves with the strength and vision from all of our diverse communities, then we will in truth all be free at last."<sup class="citation-marker">[89]</sup>
+              </p>
+              <h4 class="subsection-title theory-subheading theory-subheading--level4">Interview</h4>
+              <p>
+                Afro-German feminist scholar and author <a href="https://en.wikipedia.org/wiki/Marion_Kraft" target="_blank" rel="noopener">Dr. Marion Kraft</a> interviewed Audre Lorde in 1986 to discuss a number of her literary works and poems. In this interview, Audre Lorde articulated hope for the next wave of feminist scholarship and discourse. When asked by Kraft, "Do you see any development of the awareness about the importance of differences within the White feminist movement?" Lorde replied with both critiques and hope:<sup class="citation-marker">[90]</sup>
+              </p>
+              <p>
+                Well, the feminist movement, the White feminist movement, has been notoriously slow to recognize that racism is a feminist concern, not one that is altruistic, but one that is part and parcel of feminist consciousness... I think, in fact, though, that things are slowly changing and that there are White women now who recognize that in the interest of genuine coalition, they must see that we are not the same. Black feminism is not White feminism in Blackface. It is an intricate movement coming out of the lives, aspirations, and realities of Black women. We share some things with White women, and there are other things we do not share. We must be able to come together around those things we share.
+              </p>
+              <p>
+                Miriam Kraft summarized Lorde's position when reflecting on the interview; "Yes, we have different historical, social, and cultural backgrounds, different sexual orientations; different aspirations and visions; different skin colors and ages. But we share common experiences and a common goal. Our experiences are rooted in the oppressive forces of racism in various societies, and our goal is our mutual concern to work toward 'a future which has not yet been' in Audre's words."<sup class="citation-marker">[90]</sup>
               </p>
             </div>
           </div>
@@ -841,14 +960,14 @@
             </div>
 
             <div class="minerva-accordion">
-              <div class="minerva-accordion-item">
+              <div class="minerva-accordion-item" data-read-section="early-life">
                 <div class="minerva-accordion-header">
                   <button class="minerva-accordion-toggle" @click="toggleMinervaSection('early-life')" :aria-expanded="isMinervaSectionOpen('early-life')">
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('early-life') }" />
                     <span>Early life</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
-                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                    <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
@@ -869,14 +988,14 @@
                 </div>
               </div>
 
-              <div class="minerva-accordion-item">
+              <div class="minerva-accordion-item" data-read-section="career">
                 <div class="minerva-accordion-header">
                   <button class="minerva-accordion-toggle" @click="toggleMinervaSection('career')" :aria-expanded="isMinervaSectionOpen('career')">
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('career') }" />
                     <span>Career</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('career')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('career')">
-                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                    <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('career')" class="minerva-accordion-panel">
@@ -909,14 +1028,14 @@
                 </div>
               </div>
 
-              <div class="minerva-accordion-item">
+              <div class="minerva-accordion-item" data-read-section="poetry">
                 <div class="minerva-accordion-header">
                   <button class="minerva-accordion-toggle" @click="toggleMinervaSection('poetry')" :aria-expanded="isMinervaSectionOpen('poetry')">
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('poetry') }" />
                     <span>Poetry</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
-                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                    <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-panel">
@@ -957,14 +1076,14 @@
                 </div>
               </div>
 
-              <div class="minerva-accordion-item">
+              <div class="minerva-accordion-item" data-read-section="prose">
                 <div class="minerva-accordion-header">
                   <button class="minerva-accordion-toggle" @click="toggleMinervaSection('prose')" :aria-expanded="isMinervaSectionOpen('prose')">
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('prose') }" />
                     <span>Prose</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('prose')">
-                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                    <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-panel">
@@ -1001,14 +1120,14 @@
                 </div>
               </div>
 
-              <div class="minerva-accordion-item">
+              <div class="minerva-accordion-item" data-read-section="film">
                 <div class="minerva-accordion-header">
                   <button class="minerva-accordion-toggle" @click="toggleMinervaSection('film')" :aria-expanded="isMinervaSectionOpen('film')">
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('film') }" />
                     <span>Film</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('film')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('film')">
-                    <cdx-icon :icon="cdxIconEdit" size="small" />
+                    <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('film')" class="minerva-accordion-panel">
@@ -1024,6 +1143,126 @@
                     </p>
                     <p>
                       <em>Body of a Poet: 1995</em> was written as a tribute biopic written to honor Lorde. The film centers on the efforts of a young group of lesbians of color. The film celebrates the life and work of Audre Lorde from her birth to her death.<sup class="citation-marker">[53]</sup>
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="minerva-accordion-item" data-read-section="theory">
+                <div class="minerva-accordion-header">
+                  <button class="minerva-accordion-toggle" @click="toggleMinervaSection('theory')" :aria-expanded="isMinervaSectionOpen('theory')">
+                    <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('theory') }" />
+                    <span>Theory</span>
+                  </button>
+                  <button v-if="isMinervaSectionOpen('theory')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('theory')">
+                    <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  </button>
+                </div>
+                <div v-if="isMinervaSectionOpen('theory')" class="minerva-accordion-panel">
+                  <div class="body-text">
+                    <p>
+                      Her writings are based on the "theory of difference", the idea that the binary opposition between men and women is overly simplistic; although feminists have found it necessary to present the illusion of a solid, unified whole, the category of women itself is full of subdivisions.<sup class="citation-marker">[61]</sup>
+                    </p>
+                    <p>
+                      Lorde identified issues of race, class, age and ageism, sex and sexuality and, later in her life, chronic illness and disability; the latter becoming more prominent in her later years as she lived with cancer. She wrote of all of these factors as fundamental to her experience of being a woman. She argued that, although differences in gender have received all the focus, it is essential that these other differences are also recognized and addressed. "Lorde," writes <a href="https://de.wikipedia.org/wiki/Carmen_Birkle" target="_blank" rel="noopener">Carmen Birkle</a>, "puts her emphasis on the authenticity of experience. She wants her difference acknowledged but not judged; she does not want to be subsumed into the one general category of 'woman.'"<sup class="citation-marker">[62]</sup> This theory is today known as <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectionality</a>.<sup class="citation-marker">[63]</sup>
+                    </p>
+                    <p>
+                      While acknowledging that the differences between women are wide and varied, most of Lorde's works are concerned with two subsets that concerned her primarily – race and sexuality. In <a href="https://en.wikipedia.org/wiki/A_Litany_for_Survival:_The_Life_and_Work_of_Audre_Lorde" target="_blank" rel="noopener">Ada Gay Griffin and Michelle Parkerson's documentary <em>A Litany for Survival: The Life and Work of Audre Lorde</em></a>, Lorde says, "Let me tell you first about what it was like being a Black woman poet in the '60s, from jump. It meant being invisible. It meant being really invisible. It meant being doubly invisible as a Black feminist woman and it meant being triply invisible as a Black lesbian and feminist".<sup class="citation-marker">[64]</sup>
+                    </p>
+                    <p>
+                      <em>Front cover art for the 1984 publication of the book <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a> by Audre Lorde.</em>
+                    </p>
+                    <p>
+                      In her essay "The Erotic as Power", written in 1978 and collected in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, Lorde theorizes the Erotic as a site of power for women only when they learn to release it from its suppression and embrace it, without the sexualized meaning it often holds in mainstream society. She proposes that the Erotic needs to be explored and experienced wholeheartedly, because it exists not only in reference to sexuality and the sexual, but also as a feeling of enjoyment, love, and thrill that is felt towards any task or experience that satisfies women in their lives, be it reading a book or loving one's job.<sup class="citation-marker">[65]</sup> She dismisses "the false belief that only by the suppression of the erotic within our lives and consciousness can women be truly strong. But that strength is illusory, for it is fashioned within the context of male models of power".<sup class="citation-marker">[66]</sup> She explains how patriarchal society has misnamed it and used it against women, causing women to fear it. Women also fear it because the erotic is powerful and a deep feeling. Women must share each other's power rather than use it without consent, which is abuse. They should do it as a method to connect everyone in their differences and similarities. Utilizing the erotic as power allows women to use their knowledge and power to face the issues of racism, patriarchy, and our anti-erotic society.<sup class="citation-marker">[65]</sup> She claims that the erotic can be used as a source of power for women to live with passion in all areas of their life. With the erotic guiding life, Lorde encourages women to use the erotic as a compass to identify what holds value in women's lives. Furthermore, Lorde criticizes the idea of <a href="https://en.wikipedia.org/wiki/Compulsory_heterosexuality" target="_blank" rel="noopener">compulsory heterosexuality</a> and the idea that women's happiness will come through marriage, god, or religion. The idea of the erotic will empower women to not settle for what is conventionally expected or safe leaning into the idea of resisting patriarchal values put in place over women and their sexuality. Lorde sees the suppression of the erotic or conformity to heterosexual norms as a form of control over women. In order to assume control over oneself, she urges women to reclaim the erotic and assert control. She erases the erotic differences that lie between varying sexualities in order to promote these desires as a creative force for revolutionary change.<sup class="citation-marker">[65]</sup> While rejecting compulsory heterosexuality, this is a prevalent motif in Uses of the Erotic, and it still carries some heteronormative undertones. The erotic Lorde proposes both promotes this ideal, as "the aim of each thing which we do is to make our lives and the lives of our children richer and more possible. Within the celebration of the erotic in all our endeavours, my work becomes a conscious decision - a longed-for bed which I enter gratefully and from which I rise up empowered," explaining how wielding the erotic as preserving the future for women and children alike.<sup class="citation-marker">[67]</sup> Another feminist philosopher, <a href="https://en.wikipedia.org/wiki/Lee_Edelman" target="_blank" rel="noopener">Lee Edelman</a>, discusses the culture of heteronormativity as a structure upheld through reproduction and the perception of children as the future which relates to this quote as lending to heteronormative culture, despite her rejection of it. Lorde also lends to this reproductive theory by her establishing the root of the erotic as a, "deeply female and spiritual plane, firmly rooted in the power of our unexpressed or unrecognized feeling," imbuing to women that it is inherent to their womanhood. This supports a binary reality by asserting an essentialist view of gender and sex. Essentialism is debated among third-wave feminists and illustrated how intersectionality in third-wave feminism is approached differently than that of fourth-wave feminism.
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Feminist thought</h3>
+                    <p>
+                      Lorde set out to confront issues of racism in feminist thought. She maintained that a great deal of the scholarship of White feminists served to augment the oppression of black women, a conviction that led to angry confrontation, most notably in a blunt open letter addressed to the fellow radical lesbian feminist <a href="https://en.wikipedia.org/wiki/Mary_Daly" target="_blank" rel="noopener">Mary Daly</a>, to which Lorde claimed she received no reply.<sup class="citation-marker">[68]</sup> Daly's reply letter to Lorde,<sup class="citation-marker">[69]</sup> dated four months later, was found in 2003 in Lorde's files after she died.<sup class="citation-marker">[70]</sup>
+                    </p>
+                    <p>
+                      This fervent disagreement with notable White feminists furthered Lorde's persona as an outsider: "In the institutional milieu of black feminist and black lesbian feminist scholars ... and within the context of conferences sponsored by White feminist academics, Lorde stood out as an angry, accusatory, isolated black feminist lesbian voice".<sup class="citation-marker">[71]</sup>
+                    </p>
+                    <p>
+                      The criticism was not one-sided: many White feminists were angered by Lorde's brand of feminism. In her 1984 essay "The Master's Tools Will Never Dismantle the Master's House",<sup class="citation-marker">[72]</sup> Lorde attacked what she believed was underlying racism within feminism, describing it as unrecognized dependence on the patriarchy. She argued that, by denying difference in the category of women, White feminists merely furthered old systems of oppression and that, in so doing, they were preventing any real, lasting change. Her argument aligned White feminists who did not recognize race as a feminist issue with White male slave-masters, describing both as "agents of oppression".<sup class="citation-marker">[73]</sup>
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Lorde's comments on feminism</h3>
+                    <p>
+                      Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
+                    </p>
+                    <p>
+                      In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+                    </p>
+                    <p>
+                      Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Influences on black feminism</h3>
+                    <p>
+                      Lorde's work on black feminism continues to be examined by scholars today. Jennifer C. Nash examines how black feminists acknowledge their identities and find love for themselves through those differences.<sup class="citation-marker">[77]</sup> Nash cites Lorde, who writes: "I urge each one of us here to reach down into that deep place of knowledge inside herself and touch that terror and loathing of any difference that lives there. See whose face it wears. Then the personal as the political can begin to illuminate all our choices."<sup class="citation-marker">[77]</sup> Nash explains that Lorde is urging black feminists to embrace politics rather than fear it, which will lead to an improvement in society for them. Lorde adds, "Black women sharing close ties with each other, politically or emotionally, are not the enemies of Black men. Too frequently, however, some Black men attempt to rule by fear those Black women who are more ally than enemy."<sup class="citation-marker">[78]</sup>
+                    </p>
+                    <p>
+                      Lorde's 1979 essay "Sexism: An American Disease in Blackface" is a sort of rallying cry to confront sexism in the black community in order to eradicate the violence within it.<sup class="citation-marker">[6]</sup> Lorde insists that the fight between black women and men must end to end racist politics.
+                    </p>
+                    <p>
+                      In 1981, Lorde and a fellow writer friend, Barbara Smith founded <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a> which was dedicated to helping other black feminist writers by provided resources, guidance and encouragement. Lorde encouraged those around her to celebrate their differences such as race, sexuality or class instead of dwelling upon them, and wanted everyone to have similar opportunities.<sup class="citation-marker">[79]</sup>
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Personal identity</h3>
+                    <p>
+                      Throughout Lorde's career she included the idea of a collective identity in many of her poems and books. She did not just identify with one category but she wanted to celebrate all parts of herself equally.<sup class="citation-marker">[80]</sup>
+                    </p>
+                    <p>
+                      She was known to describe herself as black, lesbian, political activist, feminist, poet, mother, etc. In her novel <em>Zami: A New Spelling of My Name</em>, Lorde focuses on how her many different identities shape her life and the different experiences she has because of them. She shows us that personal identity is found within the connections between seemingly different parts of one's life, based on experiences, and that one's authority to speak comes from these experiences. Personal identity is often associated with the visual aspect of a person, but as Lies Xhonneux theorizes when identity is singled down to just what you see, some people, even within minority groups, can become invisible.<sup class="citation-marker">[81]</sup>
+                    </p>
+                    <p>
+                      Lorde's work also focused on the importance of acknowledging, respecting and celebrating our differences as well as our commonalities in defining identity. In <em>The Master's Tools</em>, she wrote that many people choose to pretend the differences between us do not exist, or that these differences are insurmountable, adding, "Difference must be not merely tolerated, but seen as a fund of necessary polarities between which our creativity can spark like a dialectic."<sup class="citation-marker">[82]</sup>
+                    </p>
+                    <p>
+                      Lorde urged her readers to delve into and discover these differences, discussing how ignoring differences can lead to ignoring any bias and prejudice that might come with these differences, while acknowledging them can enrich our visions and our joint struggles. She wrote that we need to constructively deal with the differences between people and recognize that unity does not equal identicality. In <em>I Am Your Sister</em>, she urged activists to take responsibility for learning this, even if it meant self-teaching, "...which might be better used in redefining ourselves and devising realistic scenarios for altering the present and constructing the future".<sup class="citation-marker">[83]</sup>
+                    </p>
+                    <p>
+                      In <em>The Cancer Journals</em> she wrote "If I didn't define myself for myself, I would be crunched into other people's fantasies for me and eaten alive." She stressed the idea of personal identity being more than just what people see or think of a person, but something that must be defined by the individual, based on the person's experiences. "The House of Difference" is a phrase that originates in Lorde's identity theories. Her idea was that everyone is different from each other and it is these collective differences that make us who we are, instead of one small aspect in isolation. Focusing on all of the aspects of one's identity brings people together more than choosing one small piece to identify with.<sup class="citation-marker">[84]</sup>
+                    </p>
+                    <p>
+                      Lorde's works <em>Coal</em> and <em>The Black Unicorn</em> are two examples of poetry that encapsulates her black, feminist identity.<sup class="citation-marker">[85]</sup><sup class="citation-marker">[86]</sup> Each poem focuses on the idea of identity, and how identity itself is not straightforward. Many literary critics assumed that "Coal" was Lorde's way of shaping race in terms of coal and diamonds. Lorde herself stated that those interpretations were incorrect because identity was not so simply defined and her poems were not to be oversimplified.
+                    </p>
+                    <p>
+                      While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities; Lorde was not afraid to assert her differences, such as skin color and sexual orientation, but used her own identity against toxic black male masculinity. Lorde used those identities within her work and used her own life to teach others the importance of being different. She was not ashamed to claim her identity and used it to her own creative advantages.
+                    </p>
+                    <p>
+                      While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities, lesbianism. She was a lesbian and navigated spaces interlocking her womanhood, gayness and blackness in ways that trumped White feminism, predominantly White gay spaces and black male masculinity. Lorde used those identities within her work and ultimately it guided her to create pieces that embodied lesbianism in a light that educated people of many social classes and identities on the issues black lesbian women face in society.
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Contributions to the third-wave feminist discourse</h3>
+                    <p>
+                      Around the 1960s, <a href="https://en.wikipedia.org/wiki/Second-wave_feminism" target="_blank" rel="noopener">second-wave feminism</a> became centered around discussions and debates about capitalism as a "biased, discriminatory, and unfair"<sup class="citation-marker">[87]</sup> institution, especially within the context of the rise of <a href="https://en.wikipedia.org/wiki/Globalization" target="_blank" rel="noopener">globalization</a>.
+                    </p>
+                    <p>
+                      <a href="https://en.wikipedia.org/wiki/Third-wave_feminism" target="_blank" rel="noopener">Third-wave feminism</a> emerged in the 1990s after calls for "a more differentiated feminism" by first-world women of color and women in developing nations, such as Audre Lorde, who maintained her critiques of first-world feminism for tending to veer toward "third-world homogenization". This term was coined by radical dependency theorist, <a href="https://en.wikipedia.org/wiki/Andre_Gunder_Frank" target="_blank" rel="noopener">Andre Gunder Frank</a>, to describe the inconsideration of the unique histories of developing countries (in the process of forming development agendas).<sup class="citation-marker">[87]</sup> Audre Lorde was critical of the first-world feminist movement "for downplaying sexual, racial, and class differences" and the unique power structures and cultural factors which vary by region, nation, community, etc.<sup class="citation-marker">[88]</sup>
+                    </p>
+                    <p>
+                      Other feminist scholars of this period, like <a href="https://en.wikipedia.org/wiki/Chandra_Talpade_Mohanty" target="_blank" rel="noopener">Chandra Talpade Mohanty</a>, echoed Lorde's sentiments. Collectively they called for a "feminist politics of location, which theorized that women were subject to particular assemblies of oppression, and therefore that all women emerged with particular rather than generic identities".<sup class="citation-marker">[88]</sup> While they encouraged a global community of women, Audre Lorde, in particular, felt the cultural homogenization of third-world women could only lead to a disguised form of oppression with its own forms of "othering" women in developing nations into figures of deviance and non-actors in theories of their own development.
+                    </p>
+                    <h4 class="subsection-title theory-subheading theory-subheading--level4">Essay</h4>
+                    <p>
+                      Originally published in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, a collection of essays and speeches, Audre Lorde cautioned against the "institutionalized rejection of difference" in her essay, "Age, Race, Class, and Sex: Women Redefining Difference", fearing that when "we do not develop tools for using human difference as a springboard for creative change within our lives[,] we speak not of human difference, but of human deviance".<sup class="citation-marker">[50]</sup> Lorde saw this already happening with the lack of inclusion of literature from women of color in the second-wave feminist discourse. Poetry, considered lesser than prose and more common among lower class and working people, was rejected from women's magazine collectives which Lorde claims have robbed "women of each other's energy and creative insight". She found that "the literature of women of Color [was] seldom included in women's literature courses and almost never in other literature courses, nor in women's studies as a whole"<sup class="citation-marker">[50]</sup> and pointed to the "othering" of women of color and women in developing nations as the reason. By homogenizing these communities and ignoring their difference, "women of Color become 'other,' the outside whose experiences and tradition is too 'alien' to comprehend",<sup class="citation-marker">[50]</sup> and thus, seemingly unworthy of scholarly attention and differentiated scholarship. Lorde expands on this idea of rejecting the other saying that it is a product of our capitalistic society. Psychologically, people have been trained to react to discontentment by ignoring it. When ignoring a problem does not work, they are forced to either conform or destroy. She contends that people have reacted in this matter to differences in sex, race, and gender: ignore, conform, or destroy. Instead, she states that differences should be approached with curiosity or understanding. Lorde denounces the concept of having to choose a superior and an inferior when comparing two things. In the case of people, expression, and identity, she claims that there should be a third option of equality. However, Lorde emphasizes in her essay that differences should not be squashed or unacknowledged. There is no denying the difference in experience of black women and White women, as shown through example in Lorde's essay, but Lorde fights against the premise that difference is bad.
+                    </p>
+                    <p>
+                      Audre Lorde called for the embracing of these differences. In the same essay, she proclaimed, "now we must recognize difference among women who are our equals, neither inferior nor superior, and devise ways to use each other's difference to enrich our visions and our joint struggles"<sup class="citation-marker">[50]</sup> Doing so would lead to more inclusive and thus, more effective global feminist goals. Lorde writes that women must "develop new definitions of power and new patterns of relating across difference. The old definitions have not served us". By unification, Lorde writes that women can reverse the oppression that they face and create better communities for themselves and loved ones. Lorde theorized that true development in third-world communities would and even "the future of our earth may depend upon the ability of all women to identify and develop new definitions of power and new patterns of relating across differences."<sup class="citation-marker">[50]</sup> In other words, the individual voices and concerns of women and color and women in developing nations would be the first step in attaining the autonomy with the potential to develop and transform their communities effectively in the age (and future) of globalization.
+                    </p>
+                    <h4 class="subsection-title theory-subheading theory-subheading--level4">Speeches</h4>
+                    <p>
+                      In a keynote speech at the National Third-World Gay and Lesbian Conference on October 13, 1979, titled, "When will the ignorance end?" Lorde reminded and cautioned the attendees, "There is a wonderful diversity of groups within this conference, and a wonderful diversity between us within those groups. That diversity can be a generative force, a source of energy fueling our visions of action for the future. We must not let diversity be used to tear us apart from each other, nor from our communities that is the mistake they made about us. I do not want us to make it ourselves... and we must never forget those lessons: that we cannot separate our oppressions, nor yet are they the same".<sup class="citation-marker">[89]</sup> In other words, while common experiences in racism, sexism, and homophobia had brought the group together and that commonality could not be ignored, there must still be a recognition of their individualized humanity.
+                    </p>
+                    <p>
+                      Years later, on August 27, 1983, Audre Lorde delivered an address as part of the "Litany of Commitment" at the <a href="https://en.wikipedia.org/wiki/March_on_Washington_for_Jobs_and_Freedom" target="_blank" rel="noopener">March on Washington for Jobs and Freedom</a>. "Today we march," she said, "lesbians and gay men and our children, standing in our own names together with all our struggling sisters and brothers here and around the world, in the Middle East, in Central America, in the Caribbean and South Africa, sharing our commitment to work for a joint livable future. We know we do not have to become copies of each other to be able to work together. We know that when we join hands across the table of our difference, our diversity gives us great power. When we can arm ourselves with the strength and vision from all of our diverse communities, then we will in truth all be free at last."<sup class="citation-marker">[89]</sup>
+                    </p>
+                    <h4 class="subsection-title theory-subheading theory-subheading--level4">Interview</h4>
+                    <p>
+                      Afro-German feminist scholar and author <a href="https://en.wikipedia.org/wiki/Marion_Kraft" target="_blank" rel="noopener">Dr. Marion Kraft</a> interviewed Audre Lorde in 1986 to discuss a number of her literary works and poems. In this interview, Audre Lorde articulated hope for the next wave of feminist scholarship and discourse. When asked by Kraft, "Do you see any development of the awareness about the importance of differences within the White feminist movement?" Lorde replied with both critiques and hope:<sup class="citation-marker">[90]</sup>
+                    </p>
+                    <p>
+                      Well, the feminist movement, the White feminist movement, has been notoriously slow to recognize that racism is a feminist concern, not one that is altruistic, but one that is part and parcel of feminist consciousness... I think, in fact, though, that things are slowly changing and that there are White women now who recognize that in the interest of genuine coalition, they must see that we are not the same. Black feminism is not White feminism in Blackface. It is an intricate movement coming out of the lives, aspirations, and realities of Black women. We share some things with White women, and there are other things we do not share. We must be able to come together around those things we share.
+                    </p>
+                    <p>
+                      Miriam Kraft summarized Lorde's position when reflecting on the interview; "Yes, we have different historical, social, and cultural backgrounds, different sexual orientations; different aspirations and visions; different skin colors and ages. But we share common experiences and a common goal. Our experiences are rooted in the oppressive forces of racism in various societies, and our goal is our mutual concern to work toward 'a future which has not yet been' in Audre's words."<sup class="citation-marker">[90]</sup>
                     </p>
                   </div>
                 </div>
@@ -1741,7 +1980,7 @@
             </div>
 
             <div
-              v-if="showMinervaFullPageSuggestionNavigationUi"
+              v-if="showMinervaFullPageTocButtonUi"
               class="minerva-full-page-toc"
               :style="{ top: minervaFullPageTocTopOffset }"
               @mouseenter="handleMinervaFullPageTocInteraction"
@@ -1835,6 +2074,59 @@
                   </div>
                 </div>
               </div>
+            </div>
+
+            <div
+              v-if="showMinervaFullPageSectionsButtonUi"
+              class="minerva-full-page-sections-nav"
+              :style="{ top: minervaFullPageSectionsNavTopOffset }"
+              @mouseenter="handleMinervaFullPageSectionsPanelInteraction"
+              @mousemove="handleMinervaFullPageSectionsPanelInteraction"
+              @touchstart.passive="handleMinervaFullPageSectionsPanelInteraction"
+            >
+              <div
+                v-if="isMinervaFullPageTocOpen"
+                class="minerva-full-page-sections-nav-gradient"
+              ></div>
+              <div
+                v-if="isMinervaFullPageTocOpen"
+                ref="minervaFullPageSectionsPanelRef"
+                class="minerva-full-page-sections-panel"
+              >
+                <div
+                  v-for="item in minervaFullPageSectionItems"
+                  :key="item.id"
+                  class="minerva-full-page-sections-item"
+                  :class="{ 'minerva-full-page-sections-item--active': minervaFullPageTocActivePathIds.includes(item.id) }"
+                >
+                  <button
+                    type="button"
+                    class="minerva-full-page-sections-link"
+                    @click="handleMinervaFullPageTocItemClick(item)"
+                  >
+                    {{ item.label }}
+                  </button>
+                  <span
+                    v-if="item.count > 0"
+                    class="minerva-full-page-sections-badge"
+                    :title="`${item.count} suggestion${item.count === 1 ? '' : 's'}`"
+                  >
+                    {{ item.count }}
+                  </span>
+                </div>
+              </div>
+              <cdx-button
+                ref="minervaFullPageSectionsButtonRef"
+                class="minerva-full-page-sections-trigger"
+                :style="{ top: minervaFullPageSectionsButtonTopOffset }"
+                action="default"
+                weight="quiet"
+                aria-label="Open sections navigation"
+                @pointerdown.stop.prevent="handleMinervaFullPageSectionsButtonPointerDown"
+                @click.stop="handleMinervaFullPageSectionsButtonClick"
+              >
+                <img :src="minervaScrollIcon" alt="" class="minerva-full-page-sections-trigger-icon">
+              </cdx-button>
             </div>
 
             <!-- Loading Overlay (only covers content below toolbar) -->
@@ -2212,7 +2504,7 @@
                                     <p>
                     Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
                   </p>
-                                    <p><strong class="subsection-title">Early works</strong></p>
+                                    <h3 class="subsection-title">Early works</h3>
                                     <p>
                     Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
                   </p>
@@ -2294,7 +2586,7 @@
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
                   </p>
-                                    <p v-else><strong class="subsection-title">Wider recognition</strong></p>
+                                    <h3 v-else class="subsection-title">Wider recognition</h3>
                                     <p>
                     Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
                   </p>
@@ -2508,7 +2800,7 @@
                                     <p>
                     Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
                   </p>
-                                    <p><strong class="subsection-title">Sister Outsider</strong></p>
+                                    <h3 class="subsection-title">Sister Outsider</h3>
                                     <p>
                     In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
                   </p>
@@ -2656,6 +2948,7 @@
                     <p>
                       Lorde had several films that highlighted her journey as an <a href="https://en.wikipedia.org/wiki/Activism" target="_blank" rel="noopener">activist</a> in the 1980s and 1990s.<sup class="citation-marker">[50]</sup>
                     </p>
+                    <h3 class="subsection-title">The Berlin years</h3>
                     <p>
                       <em>The Berlin Years: 1984–1992</em> documented Lorde's time in Germany as she led <a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-Germans</a> in a movement that would allow black people to establish identities for themselves outside of stereotypes and discrimination. After a long history of systemic racism in Germany, Lorde introduced a new sense of empowerment for minorities. As seen in the film, she walks through the streets with pride despite stares and words of discouragement. Including moments like these in a documentary was important for people to see during that time. It inspired them to take charge of their identities and discover who they are outside of the labels put on them by society. The film also educates people on the history of racism in Germany. This enables viewers to understand how Germany reached this point in history and how the society developed. Through her promotion of the study of history and her example of taking her experiences in her stride, she influenced people of many different backgrounds.<sup class="citation-marker">[51]</sup>
                     </p>
@@ -2664,6 +2957,140 @@
                     </p>
                     <p>
                       <em>Body of a Poet: 1995</em> was written as a tribute biopic written to honor Lorde. The film centers on the efforts of a young group of lesbians of color. The film celebrates the life and work of Audre Lorde from her birth to her death.<sup class="citation-marker">[53]</sup>
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="shouldRenderSection('theory')" class="minerva-edit-section" data-section="theory">
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('theory')"
+                      class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
+                      action="default"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
+                        <span>Edit full page</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
+                    </cdx-button>
+                  </div>
+                  <div class="section-heading-edit" ref="editSectionTheory">
+                    <h2 class="heading-text-edit">Theory</h2>
+                    <div class="heading-divider"></div>
+                  </div>
+
+                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
+                    <p>
+                      Her writings are based on the "theory of difference", the idea that the binary opposition between men and women is overly simplistic; although feminists have found it necessary to present the illusion of a solid, unified whole, the category of women itself is full of subdivisions.<sup class="citation-marker">[61]</sup>
+                    </p>
+                    <p>
+                      Lorde identified issues of race, class, age and ageism, sex and sexuality and, later in her life, chronic illness and disability; the latter becoming more prominent in her later years as she lived with cancer. She wrote of all of these factors as fundamental to her experience of being a woman. She argued that, although differences in gender have received all the focus, it is essential that these other differences are also recognized and addressed. "Lorde," writes <a href="https://de.wikipedia.org/wiki/Carmen_Birkle" target="_blank" rel="noopener">Carmen Birkle</a>, "puts her emphasis on the authenticity of experience. She wants her difference acknowledged but not judged; she does not want to be subsumed into the one general category of 'woman.'"<sup class="citation-marker">[62]</sup> This theory is today known as <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectionality</a>.<sup class="citation-marker">[63]</sup>
+                    </p>
+                    <p>
+                      While acknowledging that the differences between women are wide and varied, most of Lorde's works are concerned with two subsets that concerned her primarily – race and sexuality. In <a href="https://en.wikipedia.org/wiki/A_Litany_for_Survival:_The_Life_and_Work_of_Audre_Lorde" target="_blank" rel="noopener">Ada Gay Griffin and Michelle Parkerson's documentary <em>A Litany for Survival: The Life and Work of Audre Lorde</em></a>, Lorde says, "Let me tell you first about what it was like being a Black woman poet in the '60s, from jump. It meant being invisible. It meant being really invisible. It meant being doubly invisible as a Black feminist woman and it meant being triply invisible as a Black lesbian and feminist".<sup class="citation-marker">[64]</sup>
+                    </p>
+                    <p>
+                      <em>Front cover art for the 1984 publication of the book <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a> by Audre Lorde.</em>
+                    </p>
+                    <p>
+                      In her essay "The Erotic as Power", written in 1978 and collected in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, Lorde theorizes the Erotic as a site of power for women only when they learn to release it from its suppression and embrace it, without the sexualized meaning it often holds in mainstream society. She proposes that the Erotic needs to be explored and experienced wholeheartedly, because it exists not only in reference to sexuality and the sexual, but also as a feeling of enjoyment, love, and thrill that is felt towards any task or experience that satisfies women in their lives, be it reading a book or loving one's job.<sup class="citation-marker">[65]</sup> She dismisses "the false belief that only by the suppression of the erotic within our lives and consciousness can women be truly strong. But that strength is illusory, for it is fashioned within the context of male models of power".<sup class="citation-marker">[66]</sup> She explains how patriarchal society has misnamed it and used it against women, causing women to fear it. Women also fear it because the erotic is powerful and a deep feeling. Women must share each other's power rather than use it without consent, which is abuse. They should do it as a method to connect everyone in their differences and similarities. Utilizing the erotic as power allows women to use their knowledge and power to face the issues of racism, patriarchy, and our anti-erotic society.<sup class="citation-marker">[65]</sup> She claims that the erotic can be used as a source of power for women to live with passion in all areas of their life. With the erotic guiding life, Lorde encourages women to use the erotic as a compass to identify what holds value in women's lives. Furthermore, Lorde criticizes the idea of <a href="https://en.wikipedia.org/wiki/Compulsory_heterosexuality" target="_blank" rel="noopener">compulsory heterosexuality</a> and the idea that women's happiness will come through marriage, god, or religion. The idea of the erotic will empower women to not settle for what is conventionally expected or safe leaning into the idea of resisting patriarchal values put in place over women and their sexuality. Lorde sees the suppression of the erotic or conformity to heterosexual norms as a form of control over women. In order to assume control over oneself, she urges women to reclaim the erotic and assert control. She erases the erotic differences that lie between varying sexualities in order to promote these desires as a creative force for revolutionary change.<sup class="citation-marker">[65]</sup> While rejecting compulsory heterosexuality, this is a prevalent motif in Uses of the Erotic, and it still carries some heteronormative undertones. The erotic Lorde proposes both promotes this ideal, as "the aim of each thing which we do is to make our lives and the lives of our children richer and more possible. Within the celebration of the erotic in all our endeavours, my work becomes a conscious decision - a longed-for bed which I enter gratefully and from which I rise up empowered," explaining how wielding the erotic as preserving the future for women and children alike.<sup class="citation-marker">[67]</sup> Another feminist philosopher, <a href="https://en.wikipedia.org/wiki/Lee_Edelman" target="_blank" rel="noopener">Lee Edelman</a>, discusses the culture of heteronormativity as a structure upheld through reproduction and the perception of children as the future which relates to this quote as lending to heteronormative culture, despite her rejection of it. Lorde also lends to this reproductive theory by her establishing the root of the erotic as a, "deeply female and spiritual plane, firmly rooted in the power of our unexpressed or unrecognized feeling," imbuing to women that it is inherent to their womanhood. This supports a binary reality by asserting an essentialist view of gender and sex. Essentialism is debated among third-wave feminists and illustrated how intersectionality in third-wave feminism is approached differently than that of fourth-wave feminism.
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Feminist thought</h3>
+                    <p>
+                      Lorde set out to confront issues of racism in feminist thought. She maintained that a great deal of the scholarship of White feminists served to augment the oppression of black women, a conviction that led to angry confrontation, most notably in a blunt open letter addressed to the fellow radical lesbian feminist <a href="https://en.wikipedia.org/wiki/Mary_Daly" target="_blank" rel="noopener">Mary Daly</a>, to which Lorde claimed she received no reply.<sup class="citation-marker">[68]</sup> Daly's reply letter to Lorde,<sup class="citation-marker">[69]</sup> dated four months later, was found in 2003 in Lorde's files after she died.<sup class="citation-marker">[70]</sup>
+                    </p>
+                    <p>
+                      This fervent disagreement with notable White feminists furthered Lorde's persona as an outsider: "In the institutional milieu of black feminist and black lesbian feminist scholars ... and within the context of conferences sponsored by White feminist academics, Lorde stood out as an angry, accusatory, isolated black feminist lesbian voice".<sup class="citation-marker">[71]</sup>
+                    </p>
+                    <p>
+                      The criticism was not one-sided: many White feminists were angered by Lorde's brand of feminism. In her 1984 essay "The Master's Tools Will Never Dismantle the Master's House",<sup class="citation-marker">[72]</sup> Lorde attacked what she believed was underlying racism within feminism, describing it as unrecognized dependence on the patriarchy. She argued that, by denying difference in the category of women, White feminists merely furthered old systems of oppression and that, in so doing, they were preventing any real, lasting change. Her argument aligned White feminists who did not recognize race as a feminist issue with White male slave-masters, describing both as "agents of oppression".<sup class="citation-marker">[73]</sup>
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Lorde's comments on feminism</h3>
+                    <p>
+                      Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
+                    </p>
+                    <p>
+                      In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+                    </p>
+                    <p>
+                      Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Influences on black feminism</h3>
+                    <p>
+                      Lorde's work on black feminism continues to be examined by scholars today. Jennifer C. Nash examines how black feminists acknowledge their identities and find love for themselves through those differences.<sup class="citation-marker">[77]</sup> Nash cites Lorde, who writes: "I urge each one of us here to reach down into that deep place of knowledge inside herself and touch that terror and loathing of any difference that lives there. See whose face it wears. Then the personal as the political can begin to illuminate all our choices."<sup class="citation-marker">[77]</sup> Nash explains that Lorde is urging black feminists to embrace politics rather than fear it, which will lead to an improvement in society for them. Lorde adds, "Black women sharing close ties with each other, politically or emotionally, are not the enemies of Black men. Too frequently, however, some Black men attempt to rule by fear those Black women who are more ally than enemy."<sup class="citation-marker">[78]</sup>
+                    </p>
+                    <p>
+                      Lorde's 1979 essay "Sexism: An American Disease in Blackface" is a sort of rallying cry to confront sexism in the black community in order to eradicate the violence within it.<sup class="citation-marker">[6]</sup> Lorde insists that the fight between black women and men must end to end racist politics.
+                    </p>
+                    <p>
+                      In 1981, Lorde and a fellow writer friend, Barbara Smith founded <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a> which was dedicated to helping other black feminist writers by provided resources, guidance and encouragement. Lorde encouraged those around her to celebrate their differences such as race, sexuality or class instead of dwelling upon them, and wanted everyone to have similar opportunities.<sup class="citation-marker">[79]</sup>
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Personal identity</h3>
+                    <p>
+                      Throughout Lorde's career she included the idea of a collective identity in many of her poems and books. She did not just identify with one category but she wanted to celebrate all parts of herself equally.<sup class="citation-marker">[80]</sup>
+                    </p>
+                    <p>
+                      She was known to describe herself as black, lesbian, political activist, feminist, poet, mother, etc. In her novel <em>Zami: A New Spelling of My Name</em>, Lorde focuses on how her many different identities shape her life and the different experiences she has because of them. She shows us that personal identity is found within the connections between seemingly different parts of one's life, based on experiences, and that one's authority to speak comes from these experiences. Personal identity is often associated with the visual aspect of a person, but as Lies Xhonneux theorizes when identity is singled down to just what you see, some people, even within minority groups, can become invisible.<sup class="citation-marker">[81]</sup>
+                    </p>
+                    <p>
+                      Lorde's work also focused on the importance of acknowledging, respecting and celebrating our differences as well as our commonalities in defining identity. In <em>The Master's Tools</em>, she wrote that many people choose to pretend the differences between us do not exist, or that these differences are insurmountable, adding, "Difference must be not merely tolerated, but seen as a fund of necessary polarities between which our creativity can spark like a dialectic."<sup class="citation-marker">[82]</sup>
+                    </p>
+                    <p>
+                      Lorde urged her readers to delve into and discover these differences, discussing how ignoring differences can lead to ignoring any bias and prejudice that might come with these differences, while acknowledging them can enrich our visions and our joint struggles. She wrote that we need to constructively deal with the differences between people and recognize that unity does not equal identicality. In <em>I Am Your Sister</em>, she urged activists to take responsibility for learning this, even if it meant self-teaching, "...which might be better used in redefining ourselves and devising realistic scenarios for altering the present and constructing the future".<sup class="citation-marker">[83]</sup>
+                    </p>
+                    <p>
+                      In <em>The Cancer Journals</em> she wrote "If I didn't define myself for myself, I would be crunched into other people's fantasies for me and eaten alive." She stressed the idea of personal identity being more than just what people see or think of a person, but something that must be defined by the individual, based on the person's experiences. "The House of Difference" is a phrase that originates in Lorde's identity theories. Her idea was that everyone is different from each other and it is these collective differences that make us who we are, instead of one small aspect in isolation. Focusing on all of the aspects of one's identity brings people together more than choosing one small piece to identify with.<sup class="citation-marker">[84]</sup>
+                    </p>
+                    <p>
+                      Lorde's works <em>Coal</em> and <em>The Black Unicorn</em> are two examples of poetry that encapsulates her black, feminist identity.<sup class="citation-marker">[85]</sup><sup class="citation-marker">[86]</sup> Each poem focuses on the idea of identity, and how identity itself is not straightforward. Many literary critics assumed that "Coal" was Lorde's way of shaping race in terms of coal and diamonds. Lorde herself stated that those interpretations were incorrect because identity was not so simply defined and her poems were not to be oversimplified.
+                    </p>
+                    <p>
+                      While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities; Lorde was not afraid to assert her differences, such as skin color and sexual orientation, but used her own identity against toxic black male masculinity. Lorde used those identities within her work and used her own life to teach others the importance of being different. She was not ashamed to claim her identity and used it to her own creative advantages.
+                    </p>
+                    <p>
+                      While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities, lesbianism. She was a lesbian and navigated spaces interlocking her womanhood, gayness and blackness in ways that trumped White feminism, predominantly White gay spaces and black male masculinity. Lorde used those identities within her work and ultimately it guided her to create pieces that embodied lesbianism in a light that educated people of many social classes and identities on the issues black lesbian women face in society.
+                    </p>
+                    <h3 class="subsection-title theory-subheading">Contributions to the third-wave feminist discourse</h3>
+                    <p>
+                      Around the 1960s, <a href="https://en.wikipedia.org/wiki/Second-wave_feminism" target="_blank" rel="noopener">second-wave feminism</a> became centered around discussions and debates about capitalism as a "biased, discriminatory, and unfair"<sup class="citation-marker">[87]</sup> institution, especially within the context of the rise of <a href="https://en.wikipedia.org/wiki/Globalization" target="_blank" rel="noopener">globalization</a>.
+                    </p>
+                    <p>
+                      <a href="https://en.wikipedia.org/wiki/Third-wave_feminism" target="_blank" rel="noopener">Third-wave feminism</a> emerged in the 1990s after calls for "a more differentiated feminism" by first-world women of color and women in developing nations, such as Audre Lorde, who maintained her critiques of first-world feminism for tending to veer toward "third-world homogenization". This term was coined by radical dependency theorist, <a href="https://en.wikipedia.org/wiki/Andre_Gunder_Frank" target="_blank" rel="noopener">Andre Gunder Frank</a>, to describe the inconsideration of the unique histories of developing countries (in the process of forming development agendas).<sup class="citation-marker">[87]</sup> Audre Lorde was critical of the first-world feminist movement "for downplaying sexual, racial, and class differences" and the unique power structures and cultural factors which vary by region, nation, community, etc.<sup class="citation-marker">[88]</sup>
+                    </p>
+                    <p>
+                      Other feminist scholars of this period, like <a href="https://en.wikipedia.org/wiki/Chandra_Talpade_Mohanty" target="_blank" rel="noopener">Chandra Talpade Mohanty</a>, echoed Lorde's sentiments. Collectively they called for a "feminist politics of location, which theorized that women were subject to particular assemblies of oppression, and therefore that all women emerged with particular rather than generic identities".<sup class="citation-marker">[88]</sup> While they encouraged a global community of women, Audre Lorde, in particular, felt the cultural homogenization of third-world women could only lead to a disguised form of oppression with its own forms of "othering" women in developing nations into figures of deviance and non-actors in theories of their own development.
+                    </p>
+                    <h4 class="subsection-title theory-subheading theory-subheading--level4">Essay</h4>
+                    <p>
+                      Originally published in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, a collection of essays and speeches, Audre Lorde cautioned against the "institutionalized rejection of difference" in her essay, "Age, Race, Class, and Sex: Women Redefining Difference", fearing that when "we do not develop tools for using human difference as a springboard for creative change within our lives[,] we speak not of human difference, but of human deviance".<sup class="citation-marker">[50]</sup> Lorde saw this already happening with the lack of inclusion of literature from women of color in the second-wave feminist discourse. Poetry, considered lesser than prose and more common among lower class and working people, was rejected from women's magazine collectives which Lorde claims have robbed "women of each other's energy and creative insight". She found that "the literature of women of Color [was] seldom included in women's literature courses and almost never in other literature courses, nor in women's studies as a whole"<sup class="citation-marker">[50]</sup> and pointed to the "othering" of women of color and women in developing nations as the reason. By homogenizing these communities and ignoring their difference, "women of Color become 'other,' the outside whose experiences and tradition is too 'alien' to comprehend",<sup class="citation-marker">[50]</sup> and thus, seemingly unworthy of scholarly attention and differentiated scholarship. Lorde expands on this idea of rejecting the other saying that it is a product of our capitalistic society. Psychologically, people have been trained to react to discontentment by ignoring it. When ignoring a problem does not work, they are forced to either conform or destroy. She contends that people have reacted in this matter to differences in sex, race, and gender: ignore, conform, or destroy. Instead, she states that differences should be approached with curiosity or understanding. Lorde denounces the concept of having to choose a superior and an inferior when comparing two things. In the case of people, expression, and identity, she claims that there should be a third option of equality. However, Lorde emphasizes in her essay that differences should not be squashed or unacknowledged. There is no denying the difference in experience of black women and White women, as shown through example in Lorde's essay, but Lorde fights against the premise that difference is bad.
+                    </p>
+                    <p>
+                      Audre Lorde called for the embracing of these differences. In the same essay, she proclaimed, "now we must recognize difference among women who are our equals, neither inferior nor superior, and devise ways to use each other's difference to enrich our visions and our joint struggles"<sup class="citation-marker">[50]</sup> Doing so would lead to more inclusive and thus, more effective global feminist goals. Lorde writes that women must "develop new definitions of power and new patterns of relating across difference. The old definitions have not served us". By unification, Lorde writes that women can reverse the oppression that they face and create better communities for themselves and loved ones. Lorde theorized that true development in third-world communities would and even "the future of our earth may depend upon the ability of all women to identify and develop new definitions of power and new patterns of relating across differences."<sup class="citation-marker">[50]</sup> In other words, the individual voices and concerns of women and color and women in developing nations would be the first step in attaining the autonomy with the potential to develop and transform their communities effectively in the age (and future) of globalization.
+                    </p>
+                    <h4 class="subsection-title theory-subheading theory-subheading--level4">Speeches</h4>
+                    <p>
+                      In a keynote speech at the National Third-World Gay and Lesbian Conference on October 13, 1979, titled, "When will the ignorance end?" Lorde reminded and cautioned the attendees, "There is a wonderful diversity of groups within this conference, and a wonderful diversity between us within those groups. That diversity can be a generative force, a source of energy fueling our visions of action for the future. We must not let diversity be used to tear us apart from each other, nor from our communities that is the mistake they made about us. I do not want us to make it ourselves... and we must never forget those lessons: that we cannot separate our oppressions, nor yet are they the same".<sup class="citation-marker">[89]</sup> In other words, while common experiences in racism, sexism, and homophobia had brought the group together and that commonality could not be ignored, there must still be a recognition of their individualized humanity.
+                    </p>
+                    <p>
+                      Years later, on August 27, 1983, Audre Lorde delivered an address as part of the "Litany of Commitment" at the <a href="https://en.wikipedia.org/wiki/March_on_Washington_for_Jobs_and_Freedom" target="_blank" rel="noopener">March on Washington for Jobs and Freedom</a>. "Today we march," she said, "lesbians and gay men and our children, standing in our own names together with all our struggling sisters and brothers here and around the world, in the Middle East, in Central America, in the Caribbean and South Africa, sharing our commitment to work for a joint livable future. We know we do not have to become copies of each other to be able to work together. We know that when we join hands across the table of our difference, our diversity gives us great power. When we can arm ourselves with the strength and vision from all of our diverse communities, then we will in truth all be free at last."<sup class="citation-marker">[89]</sup>
+                    </p>
+                    <h4 class="subsection-title theory-subheading theory-subheading--level4">Interview</h4>
+                    <p>
+                      Afro-German feminist scholar and author <a href="https://en.wikipedia.org/wiki/Marion_Kraft" target="_blank" rel="noopener">Dr. Marion Kraft</a> interviewed Audre Lorde in 1986 to discuss a number of her literary works and poems. In this interview, Audre Lorde articulated hope for the next wave of feminist scholarship and discourse. When asked by Kraft, "Do you see any development of the awareness about the importance of differences within the White feminist movement?" Lorde replied with both critiques and hope:<sup class="citation-marker">[90]</sup>
+                    </p>
+                    <p>
+                      Well, the feminist movement, the White feminist movement, has been notoriously slow to recognize that racism is a feminist concern, not one that is altruistic, but one that is part and parcel of feminist consciousness... I think, in fact, though, that things are slowly changing and that there are White women now who recognize that in the interest of genuine coalition, they must see that we are not the same. Black feminism is not White feminism in Blackface. It is an intricate movement coming out of the lives, aspirations, and realities of Black women. We share some things with White women, and there are other things we do not share. We must be able to come together around those things we share.
+                    </p>
+                    <p>
+                      Miriam Kraft summarized Lorde's position when reflecting on the interview; "Yes, we have different historical, social, and cultural backgrounds, different sexual orientations; different aspirations and visions; different skin colors and ages. But we share common experiences and a common goal. Our experiences are rooted in the oppressive forces of racism in various societies, and our goal is our mutual concern to work toward 'a future which has not yet been' in Audre's words."<sup class="citation-marker">[90]</sup>
                     </p>
                   </div>
                 </div>
@@ -3944,6 +4371,14 @@
                   >
                     Pagination (no auto-advance to next suggestion)
                   </cdx-radio>
+                  <div
+                    v-if="isMinervaSkin && selectedPrototype === 'option-6' && minervaToggleLocation !== 'toolbar'"
+                    class="prototype-suboptions"
+                  >
+                    <cdx-checkbox v-model="paginationManualNavigableButtonEnabled">
+                      Enable navigable button to next suggestion
+                    </cdx-checkbox>
+                  </div>
                   <cdx-radio
                     v-model="selectedPrototype"
                     name="suggestions-discoverability"
@@ -4019,8 +4454,24 @@
                   "Edit full page" button improved
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="minervaFullPageSuggestionNavigationEnabled">
-                  Enable navigation of suggestions when editing he full page article (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
+                  Enable sections navigation when editing full page (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
                 </cdx-checkbox>
+                <div v-if="isMinervaSkin && minervaFullPageSuggestionNavigationEnabled" class="prototype-suboptions">
+                  <cdx-radio
+                    v-model="minervaFullPageSuggestionNavigationMode"
+                    name="minerva-full-page-suggestion-navigation-mode"
+                    input-value="toc-button"
+                  >
+                    Use Table of contents button
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="minervaFullPageSuggestionNavigationMode"
+                    name="minerva-full-page-suggestion-navigation-mode"
+                    input-value="scroll-button"
+                  >
+                    Use scroll button with sections
+                  </cdx-radio>
+                </div>
               </cdx-field>
             </div>
           </div>
@@ -4199,6 +4650,7 @@ import {
   cdxIconHieroglyph
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
+import scrollIcon from '../assets/scroll.svg';
 
 const cdxIconConfigure = '<path fill-rule="evenodd" d="M3 4.17V2h2v2.17a3.001 3.001 0 010 5.66V18H3V9.83a3.001 3.001 0 010-5.66M4 6a1 1 0 110 2 1 1 0 010-2m11 12v-6.17a3.001 3.001 0 010-5.66V2h2v4.17a3.001 3.001 0 010 5.66V18zm2-9a1 1 0 10-2 0 1 1 0 002 0"/><path fill-rule="evenodd" d="M11 11.17a3.001 3.001 0 010 5.66V18H9v-1.17a3.001 3.001 0 010-5.66V2h2zM10 13a1 1 0 110 2 1 1 0 010-2"/>';
 
@@ -4236,6 +4688,7 @@ const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
 const minervaToggleLocation = ref('outside');
+const paginationManualNavigableButtonEnabled = ref(false);
 const minervaOutsideMenuEnabled = ref(true);
 const minervaOutsideRailEnabled = ref(true);
 const minervaSourceEditingEnabled = ref(false);
@@ -4276,7 +4729,10 @@ const showMinervaStandardRailToggle = computed(
 const showMinervaBottomRailToggle = computed(
   () => isMinervaSkin.value &&
     isEditMode.value &&
-    (activePrototype.value === 'option-4' || isPaginationManualMode.value) &&
+    (
+      activePrototype.value === 'option-4' ||
+      (isPaginationManualMode.value && paginationManualNavigableButtonEnabled.value)
+    ) &&
     (!minervaMenuToggleEnabled.value || showSuggestions.value) &&
     minervaRailToggleEnabled.value
 );
@@ -4436,6 +4892,10 @@ let minervaFullPageTocShowTimer = null;
 let minervaFullPageTocHideTimer = null;
 let minervaFullPageTocScrollingTimer = null;
 let suppressMinervaFullPageTocScrollVisibilityTimer = null;
+let minervaFullPageManualScrollIntentTimer = null;
+let minervaFullPageSectionsPanelInactivityTimer = null;
+let minervaFullPageSectionsButtonDragMoved = false;
+let minervaFullPageSectionsButtonPointerId = null;
 let minervaFullPageTocScrollStartedAt = 0;
 let isMinervaFullPageTocScrolling = false;
 let autoScrollTimer = null;
@@ -4449,11 +4909,13 @@ const minervaOpenSections = ref({
   career: false,
   poetry: false,
   prose: false,
-  film: false
+  film: false,
+  theory: false
 });
 const editSnapshot = ref([]);
 const editUndoStack = ref([]);
 const editRedoStack = ref([]);
+const readModeReturnSectionId = ref(null);
 const isMinervaSheetOpen = ref(false);
 const activeMinervaSuggestion = ref(1);
 const minervaSheetRef = ref(null);
@@ -4597,6 +5059,7 @@ const editToolbarImprovementsEnabled = ref(false);
 const noMoreSuggestionsEmptyStateEnabled = ref(false);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false);
+const minervaFullPageSuggestionNavigationMode = ref('toc-button');
 const selectedPrototype = ref('option-4');
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
@@ -4610,19 +5073,25 @@ const minervaSectionBannerDismissed = ref({
   career: false,
   poetry: false,
   prose: false,
-  film: false
+  film: false,
+  theory: false
 });
 const isMinervaOverviewSheetOpen = ref(false);
 const isMinervaFullPageTocOpen = ref(false);
 const activeMinervaFullPageTocSectionId = ref('top');
+const isMinervaFullPageSectionsButtonDragging = ref(false);
 const editSectionEarlyLife = ref(null);
 const editSectionCareer = ref(null);
 const editSectionPoetry = ref(null);
 const editSectionProse = ref(null);
 const editSectionFilm = ref(null);
+const editSectionTheory = ref(null);
 const minervaFullPageTocButtonRef = ref(null);
 const minervaFullPageTocPanelRef = ref(null);
+const minervaFullPageSectionsButtonRef = ref(null);
+const minervaFullPageSectionsPanelRef = ref(null);
 const prototypeDialogPrefsStorageKey = 'suggestion-mode.prototype-dialog-prefs';
+const minervaScrollIcon = scrollIcon;
 
 function loadPrototypeDialogPrefs() {
   if (typeof window === 'undefined') return;
@@ -4632,6 +5101,9 @@ function loadPrototypeDialogPrefs() {
     const prefs = JSON.parse(raw);
     if (typeof prefs.selectedPrototype === 'string') selectedPrototype.value = prefs.selectedPrototype;
     if (typeof prefs.minervaToggleLocation === 'string') minervaToggleLocation.value = prefs.minervaToggleLocation;
+    if (typeof prefs.paginationManualNavigableButtonEnabled === 'boolean') {
+      paginationManualNavigableButtonEnabled.value = prefs.paginationManualNavigableButtonEnabled;
+    }
     if (typeof prefs.toastsEnabled === 'boolean') toastsEnabled.value = prefs.toastsEnabled;
     if (typeof prefs.filteringEnabled === 'boolean') filteringEnabled.value = prefs.filteringEnabled;
     if (typeof prefs.newSuggestionColorEnabled === 'boolean') newSuggestionColorEnabled.value = prefs.newSuggestionColorEnabled;
@@ -4650,6 +5122,9 @@ function loadPrototypeDialogPrefs() {
     if (typeof prefs.minervaFullPageSuggestionNavigationEnabled === 'boolean') {
       minervaFullPageSuggestionNavigationEnabled.value = prefs.minervaFullPageSuggestionNavigationEnabled;
     }
+    if (typeof prefs.minervaFullPageSuggestionNavigationMode === 'string') {
+      minervaFullPageSuggestionNavigationMode.value = prefs.minervaFullPageSuggestionNavigationMode;
+    }
   } catch {
     // Ignore invalid persisted dialog preferences.
   }
@@ -4660,6 +5135,7 @@ function savePrototypeDialogPrefs() {
   const prefs = {
     selectedPrototype: selectedPrototype.value,
     minervaToggleLocation: minervaToggleLocation.value,
+    paginationManualNavigableButtonEnabled: paginationManualNavigableButtonEnabled.value,
     toastsEnabled: toastsEnabled.value,
     filteringEnabled: filteringEnabled.value,
     newSuggestionColorEnabled: newSuggestionColorEnabled.value,
@@ -4667,7 +5143,8 @@ function savePrototypeDialogPrefs() {
     editToolbarImprovementsEnabled: editToolbarImprovementsEnabled.value,
     noMoreSuggestionsEmptyStateEnabled: noMoreSuggestionsEmptyStateEnabled.value,
     editFullPageImprovedEnabled: editFullPageImprovedEnabled.value,
-    minervaFullPageSuggestionNavigationEnabled: minervaFullPageSuggestionNavigationEnabled.value
+    minervaFullPageSuggestionNavigationEnabled: minervaFullPageSuggestionNavigationEnabled.value,
+    minervaFullPageSuggestionNavigationMode: minervaFullPageSuggestionNavigationMode.value
   };
   window.localStorage.setItem(prototypeDialogPrefsStorageKey, JSON.stringify(prefs));
 }
@@ -4870,11 +5347,20 @@ const showMinervaNoMoreSuggestionsState = computed(() => (
 ));
 const isMinervaFullPageTocReady = ref(false);
 const showMinervaFullPageTocOnScroll = ref(false);
+const isMinervaFullPageManualScrollIntent = ref(false);
+const minervaFullPageSectionsButtonTop = ref(0);
 const minervaFullPageTocExpandedItems = ref({
   poetry: false,
   prose: false,
-  film: false
+  film: false,
+  theory: false
 });
+const isMinervaFullPageTocButtonMode = computed(() => (
+  minervaFullPageSuggestionNavigationMode.value === 'toc-button'
+));
+const isMinervaFullPageSectionsButtonMode = computed(() => (
+  minervaFullPageSuggestionNavigationMode.value === 'scroll-button'
+));
 const showMinervaFullPageSuggestionNavigation = computed(() => (
   minervaFullPageSuggestionNavigationEnabled.value &&
   isMinervaSkin.value &&
@@ -4886,11 +5372,31 @@ const showMinervaFullPageSuggestionNavigationUi = computed(() => (
   isMinervaFullPageTocReady.value &&
   showMinervaFullPageTocOnScroll.value
 ));
+const hasMinervaExpandedSheet = computed(() => (
+  isMinervaSkin.value &&
+  isMinervaSheetOpen.value &&
+  (minervaSheetMode.value === 'suggestion' || minervaSheetMode.value === 'edit-check')
+));
+const showMinervaFullPageTocButtonUi = computed(() => (
+  showMinervaFullPageSuggestionNavigationUi.value &&
+  isMinervaFullPageTocButtonMode.value
+));
+const showMinervaFullPageSectionsButtonUi = computed(() => (
+  showMinervaFullPageSuggestionNavigationUi.value &&
+  isMinervaFullPageSectionsButtonMode.value &&
+  !hasMinervaExpandedSheet.value
+));
 const minervaFullPageTocTopOffset = computed(() => (
+  `${editToolbarImprovementsEnabled.value ? 56 : 50}px`
+));
+const minervaFullPageSectionsNavTopOffset = computed(() => (
   `${editToolbarImprovementsEnabled.value ? 56 : 50}px`
 ));
 const minervaFullPageTocPanelTopOffset = computed(() => (
   `${editToolbarImprovementsEnabled.value ? 100 : 94}px`
+));
+const minervaFullPageSectionsButtonTopOffset = computed(() => (
+  `${minervaFullPageSectionsButtonTop.value}px`
 ));
 const minervaFullPageTocItems = computed(() => {
   const poetryEarlyWorksCount = [ isSuggestion8Pending.value ].filter(Boolean).length;
@@ -4961,6 +5467,70 @@ const minervaFullPageTocItems = computed(() => {
           subsectionTitle: 'Body of a Poet: 1995'
         }
       ]
+    },
+    {
+      id: 'theory',
+      label: 'Theory',
+      count: 0,
+      sectionId: 'theory',
+      children: [
+        {
+          id: 'theory-feminist-thought',
+          label: 'Feminist thought',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Feminist thought'
+        },
+        {
+          id: 'theory-lorde-comments',
+          label: "Lorde's comments on feminism",
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: "Lorde's comments on feminism"
+        },
+        {
+          id: 'theory-black-feminism',
+          label: 'Influences on black feminism',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Influences on black feminism'
+        },
+        {
+          id: 'theory-personal-identity',
+          label: 'Personal identity',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Personal identity'
+        },
+        {
+          id: 'theory-third-wave',
+          label: 'Contributions to the third-wave feminist discourse',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Contributions to the third-wave feminist discourse'
+        },
+        {
+          id: 'theory-essay',
+          label: 'Essay',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Essay'
+        },
+        {
+          id: 'theory-speeches',
+          label: 'Speeches',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Speeches'
+        },
+        {
+          id: 'theory-interview',
+          label: 'Interview',
+          count: 0,
+          sectionId: 'theory',
+          subsectionTitle: 'Interview'
+        }
+      ]
     }
   ];
 });
@@ -4991,6 +5561,14 @@ const minervaFullPageTocFlatItems = computed(() => {
   visit(minervaFullPageTocItems.value);
   return flatItems;
 });
+const minervaFullPageSectionItems = computed(() => (
+  minervaFullPageTocItems.value.map((item) => ({
+    id: item.id,
+    label: item.label,
+    count: item.count,
+    sectionId: item.sectionId
+  }))
+));
 const minervaFullPageTocActivePathIds = computed(() => (
   minervaFullPageTocPathMap.value[activeMinervaFullPageTocSectionId.value] || []
 ));
@@ -5414,7 +5992,8 @@ function resetSuggestionState() {
     career: false,
     poetry: false,
     prose: false,
-    film: false
+    film: false,
+    theory: false
   };
   toneCheckActive.value = false;
   toneCheckDismissed.value = false;
@@ -5454,6 +6033,7 @@ function openPrototypeDialog(fromSection = false) {
   if (isEditMode.value) return;
   if (!fromSection) {
     minervaEditSectionOnly.value = null;
+    readModeReturnSectionId.value = null;
   }
   isPrototypeDialogOpen.value = true;
 }
@@ -5536,6 +6116,7 @@ function startPrototype() {
 function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
+  readModeReturnSectionId.value = sectionId;
   clearMinervaNoMoreSuggestionsState();
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
@@ -5549,6 +6130,7 @@ function getEditSectionRefById(sectionId) {
   if (sectionId === 'poetry') return editSectionPoetry;
   if (sectionId === 'prose') return editSectionProse;
   if (sectionId === 'film') return editSectionFilm;
+  if (sectionId === 'theory') return editSectionTheory;
   return null;
 }
 
@@ -5605,6 +6187,33 @@ function expandToFullPageEdit(sectionId, { openFirstSuggestion = false } = {}) {
 function showFullPageEdit(event) {
   const sectionId = event?.currentTarget?.closest('.minerva-edit-section')?.dataset?.section;
   expandToFullPageEdit(sectionId);
+}
+
+function scrollReadModeSectionIntoView(sectionId) {
+  if (!sectionId || typeof document === 'undefined') return;
+  const target = document.querySelector(`[data-read-section="${sectionId}"]`);
+  if (!(target instanceof HTMLElement)) return;
+  target.scrollIntoView({ behavior: 'auto', block: 'start' });
+}
+
+function restoreReadModeSection(sectionId) {
+  if (!sectionId || typeof window === 'undefined') return;
+  if (isMinervaSkin.value) {
+    minervaOpenSections.value = {
+      'early-life': false,
+      career: false,
+      poetry: false,
+      prose: false,
+      film: false,
+      theory: false
+    };
+    if (Object.prototype.hasOwnProperty.call(minervaOpenSections.value, sectionId)) {
+      minervaOpenSections.value[sectionId] = true;
+    }
+  }
+  nextTick(() => {
+    scrollReadModeSectionIntoView(sectionId);
+  });
 }
 
 function openFirstSuggestionAfterFullPageTransition() {
@@ -6749,7 +7358,13 @@ function handleSelectionChange() {
 function handleDocumentClick(event) {
   const target = event.target;
   if (isMinervaFullPageTocOpen.value) {
-    if (!minervaFullPageTocPanelRef.value?.contains(target) && !minervaFullPageTocButtonRef.value?.contains(target)) {
+    const clickedInsideTocButtonMode =
+      minervaFullPageTocPanelRef.value?.contains(target) ||
+      minervaFullPageTocButtonRef.value?.contains(target);
+    const clickedInsideSectionsButtonMode =
+      minervaFullPageSectionsPanelRef.value?.contains(target) ||
+      minervaFullPageSectionsButtonRef.value?.contains(target);
+    if (!clickedInsideTocButtonMode && !clickedInsideSectionsButtonMode) {
       isMinervaFullPageTocOpen.value = false;
     }
   }
@@ -7180,8 +7795,102 @@ function clearMinervaFullPageTocVisibilityTimer() {
   isMinervaFullPageTocScrolling = false;
 }
 
+function clearMinervaFullPageManualScrollIntent() {
+  if (minervaFullPageManualScrollIntentTimer) {
+    clearTimeout(minervaFullPageManualScrollIntentTimer);
+    minervaFullPageManualScrollIntentTimer = null;
+  }
+  isMinervaFullPageManualScrollIntent.value = false;
+}
+
+function clearMinervaFullPageSectionsPanelInactivityTimer() {
+  if (minervaFullPageSectionsPanelInactivityTimer) {
+    clearTimeout(minervaFullPageSectionsPanelInactivityTimer);
+    minervaFullPageSectionsPanelInactivityTimer = null;
+  }
+}
+
+function scheduleMinervaFullPageSectionsPanelInactivityClose() {
+  if (!isMinervaFullPageSectionsButtonMode.value || !isMinervaFullPageTocOpen.value) return;
+  clearMinervaFullPageSectionsPanelInactivityTimer();
+  minervaFullPageSectionsPanelInactivityTimer = setTimeout(() => {
+    isMinervaFullPageTocOpen.value = false;
+    minervaFullPageSectionsPanelInactivityTimer = null;
+  }, 3000);
+}
+
+function markMinervaFullPageManualScrollIntent() {
+  if (!showMinervaFullPageSuggestionNavigation.value || !isMinervaFullPageSectionsButtonMode.value) {
+    return;
+  }
+  isMinervaFullPageManualScrollIntent.value = true;
+  if (minervaFullPageManualScrollIntentTimer) {
+    clearTimeout(minervaFullPageManualScrollIntentTimer);
+  }
+  minervaFullPageManualScrollIntentTimer = setTimeout(() => {
+    isMinervaFullPageManualScrollIntent.value = false;
+    minervaFullPageManualScrollIntentTimer = null;
+  }, 300);
+}
+
+function updateMinervaFullPageSectionsButtonPosition() {
+  if (typeof window === 'undefined') return;
+  const topOffset = Number.parseFloat(minervaFullPageSectionsNavTopOffset.value) || 0;
+  const buttonHeight = 44;
+  const viewportHeight = window.innerHeight;
+  const maxScroll = Math.max(1, document.documentElement.scrollHeight - viewportHeight);
+  const progress = Math.max(0, Math.min(1, window.scrollY / maxScroll));
+  const availableTrack = Math.max(0, viewportHeight - topOffset - buttonHeight);
+  minervaFullPageSectionsButtonTop.value = Math.round(progress * availableTrack);
+}
+
+function handleMinervaFullPageSectionsButtonPointerMove(event) {
+  if (!isMinervaFullPageSectionsButtonDragging.value || typeof window === 'undefined') return;
+  if (minervaFullPageSectionsButtonPointerId !== null && event.pointerId !== minervaFullPageSectionsButtonPointerId) return;
+
+  const topOffset = Number.parseFloat(minervaFullPageSectionsNavTopOffset.value) || 0;
+  const buttonHeight = 44;
+  const viewportHeight = window.innerHeight;
+  const availableTrack = Math.max(0, viewportHeight - topOffset - buttonHeight);
+  const nextTop = Math.max(0, Math.min(availableTrack, event.clientY - topOffset - buttonHeight / 2));
+  const progress = availableTrack > 0 ? nextTop / availableTrack : 0;
+  const maxScroll = Math.max(0, document.documentElement.scrollHeight - viewportHeight);
+
+  minervaFullPageSectionsButtonDragMoved = true;
+  minervaFullPageSectionsButtonTop.value = Math.round(nextTop);
+  clearMinervaFullPageSectionsPanelInactivityTimer();
+  isMinervaFullPageTocOpen.value = false;
+  showMinervaFullPageTocOnScroll.value = true;
+  window.scrollTo({ top: progress * maxScroll, behavior: 'auto' });
+}
+
+function handleMinervaFullPageSectionsButtonPointerUp(event) {
+  if (!isMinervaFullPageSectionsButtonDragging.value) return;
+  if (minervaFullPageSectionsButtonPointerId !== null && event.pointerId !== minervaFullPageSectionsButtonPointerId) return;
+
+  isMinervaFullPageSectionsButtonDragging.value = false;
+  minervaFullPageSectionsButtonPointerId = null;
+  window.removeEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
+  window.removeEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
+  window.removeEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
+  scheduleMinervaFullPageTocHideDelay();
+}
+
+function handleMinervaFullPageSectionsButtonPointerDown(event) {
+  if (!isMinervaFullPageSectionsButtonMode.value) return;
+  markMinervaFullPageManualScrollIntent();
+  isMinervaFullPageSectionsButtonDragging.value = true;
+  minervaFullPageSectionsButtonDragMoved = false;
+  minervaFullPageSectionsButtonPointerId = event.pointerId ?? null;
+  clearMinervaFullPageSectionsPanelInactivityTimer();
+  window.addEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
+  window.addEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
+  window.addEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
+}
+
 function hideMinervaFullPageTocUi() {
   clearMinervaFullPageTocVisibilityTimer();
+  clearMinervaFullPageSectionsPanelInactivityTimer();
   showMinervaFullPageTocOnScroll.value = false;
   isMinervaFullPageTocOpen.value = false;
 }
@@ -7209,7 +7918,7 @@ function scheduleMinervaFullPageTocHideDelay() {
     showMinervaFullPageTocOnScroll.value = false;
     isMinervaFullPageTocOpen.value = false;
     minervaFullPageTocHideTimer = null;
-  }, 3000);
+  }, isMinervaFullPageSectionsButtonMode.value ? 2500 : 3000);
 }
 
 function handleMinervaFullPageTocInteraction() {
@@ -7224,18 +7933,58 @@ function handleMinervaFullPageTocInteraction() {
   scheduleMinervaFullPageTocHideDelay();
 }
 
+function handleMinervaFullPageSectionsPanelInteraction() {
+  handleMinervaFullPageTocInteraction();
+  if (isMinervaFullPageTocOpen.value) {
+    scheduleMinervaFullPageSectionsPanelInactivityClose();
+  }
+}
+
+function handleMinervaFullPageSectionsButtonClick() {
+  if (minervaFullPageSectionsButtonDragMoved) {
+    minervaFullPageSectionsButtonDragMoved = false;
+    return;
+  }
+  if (isMinervaFullPageTocOpen.value) {
+    clearMinervaFullPageSectionsPanelInactivityTimer();
+    isMinervaFullPageTocOpen.value = false;
+    scheduleMinervaFullPageTocHideDelay();
+    return;
+  }
+  toggleMinervaFullPageToc();
+  scheduleMinervaFullPageSectionsPanelInactivityClose();
+}
+
 function handleMinervaFullPageTocScrollVisibility() {
   if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value) {
     hideMinervaFullPageTocUi();
     return;
   }
-  if (suppressMinervaFullPageTocScrollVisibilityTimer) {
+  if (isMinervaFullPageSectionsButtonMode.value && hasMinervaExpandedSheet.value) {
+    hideMinervaFullPageTocUi();
     return;
+  }
+  if (suppressMinervaFullPageTocScrollVisibilityTimer) {
+    updateMinervaFullPageSectionsButtonPosition();
+    return;
+  }
+  updateMinervaFullPageSectionsButtonPosition();
+  if (isMinervaFullPageSectionsButtonMode.value && !isMinervaFullPageManualScrollIntent.value) {
+    if (isMinervaFullPageTocOpen.value) {
+      scheduleMinervaFullPageSectionsPanelInactivityClose();
+    }
+    if (showMinervaFullPageTocOnScroll.value && !isMinervaFullPageTocOpen.value) {
+      scheduleMinervaFullPageTocHideDelay();
+    }
+    return;
+  }
+  if (isMinervaFullPageSectionsButtonMode.value && isMinervaFullPageTocOpen.value) {
+    scheduleMinervaFullPageSectionsPanelInactivityClose();
   }
   if (!isMinervaFullPageTocScrolling) {
     isMinervaFullPageTocScrolling = true;
     minervaFullPageTocScrollStartedAt = Date.now();
-    if (!showMinervaFullPageTocOnScroll.value) {
+    if (isMinervaFullPageSectionsButtonMode.value) {
       if (minervaFullPageTocShowTimer) {
         clearTimeout(minervaFullPageTocShowTimer);
       }
@@ -7244,11 +7993,10 @@ function handleMinervaFullPageTocScrollVisibility() {
         if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value || !isMinervaFullPageTocScrolling) {
           return;
         }
-        if ((Date.now() - minervaFullPageTocScrollStartedAt) < 1000) {
-          return;
-        }
         showMinervaFullPageTocOnScroll.value = true;
-      }, 1000);
+      }, 500);
+    } else {
+      showMinervaFullPageTocOnScroll.value = true;
     }
   }
   if (minervaFullPageTocHideTimer) {
@@ -7267,6 +8015,9 @@ function handleMinervaFullPageTocScrollVisibility() {
     }
     if (showMinervaFullPageTocOnScroll.value && !isMinervaFullPageTocOpen.value) {
       scheduleMinervaFullPageTocHideDelay();
+    }
+    if (isMinervaFullPageTocOpen.value && isMinervaFullPageSectionsButtonMode.value) {
+      scheduleMinervaFullPageSectionsPanelInactivityClose();
     }
     minervaFullPageTocScrollingTimer = null;
   }, 180);
@@ -7311,7 +8062,8 @@ const editSectionRefs = {
   career: editSectionCareer,
   poetry: editSectionPoetry,
   prose: editSectionProse,
-  film: editSectionFilm
+  film: editSectionFilm,
+  theory: editSectionTheory
 };
 
 function scrollToEditSection(sectionId) {
@@ -7420,6 +8172,7 @@ function handleMinervaFullPageTocItemClick(item) {
   if (!item) return;
   activeMinervaFullPageTocSectionId.value = item.id;
   isMinervaFullPageTocOpen.value = false;
+  clearMinervaFullPageManualScrollIntent();
   suppressMinervaFullPageTocScrollVisibility();
   scrollToMinervaFullPageTocSection(item);
 }
@@ -8417,6 +9170,7 @@ watch(
   [
     selectedPrototype,
     minervaToggleLocation,
+    paginationManualNavigableButtonEnabled,
     toastsEnabled,
     filteringEnabled,
     newSuggestionColorEnabled,
@@ -8424,7 +9178,8 @@ watch(
     editToolbarImprovementsEnabled,
     noMoreSuggestionsEmptyStateEnabled,
     editFullPageImprovedEnabled,
-    minervaFullPageSuggestionNavigationEnabled
+    minervaFullPageSuggestionNavigationEnabled,
+    minervaFullPageSuggestionNavigationMode
   ],
   () => {
     savePrototypeDialogPrefs();
@@ -8473,6 +9228,9 @@ watch(isMinervaSheetOpen, () => {
 
 watch([isMinervaSheetOpen, minervaSheetMode], () => {
   if (!isMinervaSkin.value) return;
+  if (isMinervaFullPageSectionsButtonMode.value && hasMinervaExpandedSheet.value) {
+    hideMinervaFullPageTocUi();
+  }
   syncEditCheckHighlightState();
   nextTick(() => {
     updateMinervaSheetReturnDirection();
@@ -8500,9 +9258,11 @@ watch(
     if (!visible || loading) {
       isMinervaFullPageTocReady.value = false;
       hideMinervaFullPageTocUi();
+      clearMinervaFullPageManualScrollIntent();
       activeMinervaFullPageTocSectionId.value = 'top';
       return;
     }
+    updateMinervaFullPageSectionsButtonPosition();
     scheduleMinervaFullPageTocReady();
   }
 );
@@ -8514,6 +9274,18 @@ watch(isMinervaFullPageTocOpen, (isOpen) => {
       minervaFullPageTocHideTimer = null;
     }
     showMinervaFullPageTocOnScroll.value = true;
+    if (isMinervaFullPageSectionsButtonMode.value) {
+      scheduleMinervaFullPageSectionsPanelInactivityClose();
+    }
+    return;
+  }
+  clearMinervaFullPageSectionsPanelInactivityTimer();
+  if (isMinervaFullPageSectionsButtonMode.value) {
+    if (minervaFullPageTocHideTimer) {
+      clearTimeout(minervaFullPageTocHideTimer);
+      minervaFullPageTocHideTimer = null;
+    }
+    showMinervaFullPageTocOnScroll.value = false;
     return;
   }
   if (showMinervaFullPageTocOnScroll.value) {
@@ -8698,6 +9470,22 @@ function scrollTargetAboveMinervaSheet(target) {
     top: Math.max(0, targetTop - desiredTop),
     behavior: 'smooth'
   });
+}
+
+function ensureTargetVisibleAboveMinervaSheet(target) {
+  if (!target || typeof window === 'undefined' || !isMinervaSheetOpen.value) return;
+  const sheet = minervaSheetRef.value;
+  if (!sheet) return;
+
+  const rect = target.getBoundingClientRect();
+  const sheetRect = sheet.getBoundingClientRect();
+  const visibleTop = 56;
+  const visibleBottom = sheetRect.top - 16;
+  const isFullyVisible = rect.top >= visibleTop && rect.bottom <= visibleBottom;
+
+  if (!isFullyVisible) {
+    scrollTargetAboveMinervaSheet(target);
+  }
 }
 
 function getSuggestionCardRefById(suggestionId) {
@@ -8908,7 +9696,8 @@ function getCurrentSectionId(currentY) {
     { id: 'career', ref: editSectionCareer },
     { id: 'poetry', ref: editSectionPoetry },
     { id: 'prose', ref: editSectionProse },
-    { id: 'film', ref: editSectionFilm }
+    { id: 'film', ref: editSectionFilm },
+    { id: 'theory', ref: editSectionTheory }
   ].filter((section) => section.ref.value);
 
   if (!sections.length) {
@@ -9116,6 +9905,7 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     // Add event listeners to keep alignment updated for both suggestions
     updateMinervaViewportWidth();
+    updateMinervaFullPageSectionsButtonPosition();
     window.addEventListener('resize', alignBothSuggestions);
     window.addEventListener('scroll', alignBothSuggestions, true); // true for capture phase
     window.addEventListener('resize', updateMinervaSheetHeight);
@@ -9124,9 +9914,12 @@ onMounted(() => {
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
     window.addEventListener('scroll', handleScrollReappear, true);
+    window.addEventListener('wheel', markMinervaFullPageManualScrollIntent, { passive: true });
+    window.addEventListener('touchmove', markMinervaFullPageManualScrollIntent, { passive: true });
     window.addEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
     window.addEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
     window.addEventListener('resize', updateMinervaFullPageTocActiveSection);
+    window.addEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
     updateEditToolbarScrolled();
     updateMinervaFullPageTocActiveSection();
     if (showMinervaFullPageSuggestionNavigation.value && !isLoading.value) {
@@ -9149,9 +9942,12 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
     window.removeEventListener('scroll', handleScrollReappear, true);
+    window.removeEventListener('wheel', markMinervaFullPageManualScrollIntent);
+    window.removeEventListener('touchmove', markMinervaFullPageManualScrollIntent);
     window.removeEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
     window.removeEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
     window.removeEventListener('resize', updateMinervaFullPageTocActiveSection);
+    window.removeEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
   }
   document.removeEventListener('click', handleDocumentClick);
   document.removeEventListener('selectionchange', handleSelectionChange);
@@ -9232,6 +10028,13 @@ onBeforeUnmount(() => {
     clearTimeout(suppressMinervaFullPageTocScrollVisibilityTimer);
     suppressMinervaFullPageTocScrollVisibilityTimer = null;
   }
+  if (minervaFullPageSectionsPanelInactivityTimer) {
+    clearTimeout(minervaFullPageSectionsPanelInactivityTimer);
+    minervaFullPageSectionsPanelInactivityTimer = null;
+  }
+  window.removeEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
+  window.removeEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
+  window.removeEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
   if (autoScrollTimer) {
     clearTimeout(autoScrollTimer);
     autoScrollTimer = null;
@@ -9359,9 +10162,12 @@ function enterEditMode() {
 
 function exitEditMode() {
   // Returning to read mode: no loading
+  const targetSectionId = readModeReturnSectionId.value;
   restoreEditSnapshot();
   hasUnsavedChanges.value = false;
   clearEditModeUiState();
+  readModeReturnSectionId.value = null;
+  restoreReadModeSection(targetSectionId);
 }
 
 function toggleEditMode() {
@@ -9471,6 +10277,15 @@ function openMinervaSuggestion(suggestionId) {
     isCardExpanded7.value = false;
   }
   updateMinervaSheetHeight();
+  nextTick(() => {
+    window.requestAnimationFrame(() => {
+      const target = getSuggestionRefById(suggestionId)?.value;
+      ensureTargetVisibleAboveMinervaSheet(target);
+      nextTick(() => {
+        updateMinervaSheetReturnDirection();
+      });
+    });
+  });
 }
 
 function openMinervaSuggestionSheet(suggestionId) {
@@ -10549,10 +11364,10 @@ function markArticleEdited() {
 .minerva-accordion-toggle span {
   color: var(--color-emphasized, #202122);
   font-family: 'Source Serif Pro', serif;
-  font-size: var(--font-size-xx-large, 21px);
+  font-size: 24px;
   font-style: normal;
   font-weight: 400;
-  line-height: var(--line-height-xx-large, 27.3px);
+  line-height: 34px;
 }
 
 .minerva-accordion-panel {
@@ -10573,6 +11388,11 @@ function markArticleEdited() {
   color: var(--color-subtle, #54595d);
   padding: 4px;
   cursor: pointer;
+}
+
+.minerva-accordion-edit :deep(svg) {
+  width: 20px;
+  height: 20px;
 }
 
 .minerva-last-edited {
@@ -10750,8 +11570,8 @@ function markArticleEdited() {
 .heading-text {
   font-family: 'Source Serif Pro', serif;
   font-weight: 400;
-  font-size: 21px;
-  line-height: 27.3px;
+  font-size: 22px;
+  line-height: 32px;
   color: #202122;
   margin: 0;
   white-space: pre-wrap;
@@ -10784,6 +11604,29 @@ function markArticleEdited() {
 
 .minerva-skin .subsection-title {
   font-size: 20px;
+}
+
+.theory-subheading {
+  display: block;
+  margin: 16px 0 0;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 28px;
+}
+
+.theory-subheading--level4 {
+  font-size: 16px;
+  line-height: 26px;
+}
+
+.minerva-skin .theory-subheading {
+  font-size: 20px;
+  line-height: 30px;
+}
+
+.minerva-skin .theory-subheading--level4 {
+  font-size: 18px;
+  line-height: 28px;
 }
 
 .heading-divider {
@@ -11678,14 +12521,14 @@ function markArticleEdited() {
 .minerva-full-page-toc-panel {
   position: fixed;
   left: 6px;
-  width: min(332px, calc(100vw - 12px));
+  width: min(256px, calc(100vw - 12px));
   max-height: min(76vh, 720px);
   overflow-y: auto;
   background: var(--background-color-base, #fff);
   border: 1px solid var(--border-color-subtle, #c8ccd1);
   border-radius: 2px;
   box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
-  padding: 0;
+  padding: 12px 0;
 }
 
 .minerva-full-page-toc-node {
@@ -11810,6 +12653,124 @@ function markArticleEdited() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+}
+
+.prototype-suboptions {
+  margin: 8px 0 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.minerva-full-page-sections-nav {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+  z-index: 102;
+  display: block;
+  width: 44px;
+  pointer-events: none;
+}
+
+.minerva-full-page-sections-nav-gradient {
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 320px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.94) 18%, #fff 34%, #fff 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.minerva-full-page-sections-trigger {
+  position: absolute;
+  right: 0;
+  min-width: 44px;
+  height: 44px;
+  margin-right: 0;
+  pointer-events: auto;
+}
+
+.minerva-full-page-sections-trigger :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  padding: 0;
+  border-radius: 0;
+  border-color: transparent;
+  background: var(--background-color-neutral-subtle, #f8f9fa) !important;
+  background-color: var(--background-color-neutral-subtle, #f8f9fa) !important;
+}
+
+.minerva-full-page-sections-trigger :deep(.cdx-button__button:hover) {
+  background: var(--background-color-neutral-subtle, #f8f9fa) !important;
+  background-color: var(--background-color-neutral-subtle, #f8f9fa) !important;
+}
+
+.minerva-full-page-sections-trigger :deep(.cdx-button__button:active) {
+  background: var(--background-color-interactive-subtle--active, #dadde3) !important;
+  background-color: var(--background-color-interactive-subtle--active, #dadde3) !important;
+}
+
+.minerva-full-page-sections-trigger-icon {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
+
+.minerva-full-page-sections-panel {
+  position: absolute;
+  top: 0;
+  right: 44px;
+  bottom: 0;
+  width: 256px;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--background-color-base, #fff);
+  border-left: 1px solid var(--border-color-subtle, #c8ccd1);
+  padding: 12px 0;
+  pointer-events: auto;
+}
+
+.minerva-full-page-sections-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+}
+
+.minerva-full-page-sections-item--active .minerva-full-page-sections-link {
+  color: var(--color-base, #202122);
+  font-weight: 700;
+}
+
+.minerva-full-page-sections-link {
+  flex: 1 1 auto;
+  min-width: 0;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--color-progressive, #36c);
+  text-align: left;
+  font-size: 16px;
+  line-height: 24px;
+  cursor: pointer;
+}
+
+.minerva-full-page-sections-badge {
+  width: 16px;
+  height: 12px;
+  padding: 0;
+  border-radius: 6px;
+  background: var(--background-color-progressive, #36c);
+  color: #fff;
+  font-size: 10px;
+  line-height: 12px;
+  font-weight: 700;
+  text-align: center;
+  flex: 0 0 16px;
 }
 
 .minerva-edit-menu-list {
@@ -12478,11 +13439,16 @@ function markArticleEdited() {
 
 .heading-text-edit {
   font-family: 'Source Serif Pro', serif;
-  font-size: 21px;
+  font-size: 22px;
   font-weight: 400;
-  line-height: 27.3px;
+  line-height: 32px;
   color: #202122;
   margin: 0;
+}
+
+.minerva-skin .heading-text-edit {
+  font-size: 24px;
+  line-height: 34px;
 }
 
 /* Infobox (shared between Read and Edit modes) */
@@ -12781,6 +13747,12 @@ function markArticleEdited() {
   color: #202122;
   position: relative;
   z-index: 2;
+}
+
+.minerva-skin .highlighted-text-content,
+.minerva-skin .highlighted-text-content a {
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .highlighted-text-annotation {
