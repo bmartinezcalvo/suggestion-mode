@@ -7359,15 +7359,36 @@ function handleSelectionChange() {
 
 function handleDocumentClick(event) {
   const target = event.target;
-  if (isMinervaFullPageTocOpen.value) {
+  const getRefElement = (refValue) => {
+    if (!refValue) return null;
+    if (refValue instanceof HTMLElement) return refValue;
+    if (refValue.$el instanceof HTMLElement) return refValue.$el;
+    return null;
+  };
+  const tocButtonElement = getRefElement(minervaFullPageTocButtonRef.value);
+  const tocPanelElement = getRefElement(minervaFullPageTocPanelRef.value);
+  const sectionsButtonElement = getRefElement(minervaFullPageSectionsButtonRef.value);
+  const sectionsPanelElement = getRefElement(minervaFullPageSectionsPanelRef.value);
+  const shouldHandleFullPageTocOutsideClick = (
+    isMinervaFullPageTocOpen.value ||
+    showMinervaFullPageTocButtonUi.value ||
+    showMinervaFullPageSectionsButtonUi.value
+  );
+
+  if (shouldHandleFullPageTocOutsideClick) {
     const clickedInsideTocButtonMode =
-      minervaFullPageTocPanelRef.value?.contains(target) ||
-      minervaFullPageTocButtonRef.value?.contains(target);
+      tocPanelElement?.contains(target) ||
+      tocButtonElement?.contains(target);
     const clickedInsideSectionsButtonMode =
-      minervaFullPageSectionsPanelRef.value?.contains(target) ||
-      minervaFullPageSectionsButtonRef.value?.contains(target);
+      sectionsPanelElement?.contains(target) ||
+      sectionsButtonElement?.contains(target);
     if (!clickedInsideTocButtonMode && !clickedInsideSectionsButtonMode) {
       isMinervaFullPageTocOpen.value = false;
+      if (isMinervaFullPageSectionsButtonMode.value) {
+        showMinervaFullPageTocOnScroll.value = false;
+        clearMinervaFullPageSectionsPanelInactivityTimer();
+        clearMinervaFullPageTocVisibilityTimer();
+      }
     }
   }
   if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value) return;
