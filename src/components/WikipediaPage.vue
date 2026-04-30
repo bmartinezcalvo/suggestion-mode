@@ -2084,6 +2084,12 @@
             </div>
 
             <div
+              v-if="showMinervaFullPageSectionsButtonUi && isMinervaFullPageTocOpen"
+              class="minerva-full-page-sections-overlay"
+              @click="hideMinervaFullPageTocUi"
+            ></div>
+
+            <div
               v-if="showMinervaFullPageSectionsButtonUi"
               class="minerva-full-page-sections-nav"
               :style="{ top: minervaFullPageSectionsNavTopOffset }"
@@ -2092,14 +2098,10 @@
               @touchstart.passive="handleMinervaFullPageSectionsPanelInteraction"
             >
               <div
-                v-if="isMinervaFullPageTocOpen || showMinervaFullPageSectionsButton"
-                class="minerva-full-page-sections-nav-gradient"
-                :class="{ 'minerva-full-page-sections-nav-gradient--panel-open': isMinervaFullPageTocOpen }"
-              ></div>
-              <div
                 v-if="isMinervaFullPageTocOpen"
                 ref="minervaFullPageSectionsPanelRef"
                 class="minerva-full-page-sections-panel"
+                :style="{ top: minervaFullPageSectionsPanelTopOffset }"
               >
                 <div
                   v-for="item in minervaFullPageSectionItems"
@@ -4931,7 +4933,9 @@ let minervaFullPageManualScrollIntentTimer = null;
 let minervaFullPageSectionsPanelInactivityTimer = null;
 let minervaFullPageSectionsButtonDragMoved = false;
 let minervaFullPageSectionsButtonOpenedOnPointerDown = false;
+let minervaFullPageSectionsButtonWasOpenOnPointerDown = false;
 let minervaFullPageSectionsButtonPendingActivation = false;
+let minervaFullPageSectionsButtonSuppressNextClick = false;
 let minervaFullPageSectionsButtonPointerId = null;
 let minervaFullPageSectionsButtonPointerOffsetY = 22;
 let minervaFullPageSectionsButtonPressStartY = 0;
@@ -5431,6 +5435,10 @@ const minervaFullPageTocTopOffset = computed(() => (
 const minervaFullPageSectionsNavTopOffset = computed(() => (
   `${editToolbarImprovementsEnabled.value ? 56 : 50}px`
 ));
+const minervaFullPageSectionsPanelTopOffset = computed(() => {
+  const topOffset = Number.parseFloat(minervaFullPageSectionsNavTopOffset.value) || 0;
+  return `${-topOffset}px`;
+});
 const minervaFullPageTocPanelTopOffset = computed(() => (
   `${editToolbarImprovementsEnabled.value ? 100 : 94}px`
 ));
@@ -8005,6 +8013,7 @@ function cleanupMinervaFullPageSectionsButtonDragState() {
   minervaFullPageSectionsButtonPressStartY = 0;
   minervaFullPageSectionsButtonDragMoved = false;
   minervaFullPageSectionsButtonOpenedOnPointerDown = false;
+  minervaFullPageSectionsButtonWasOpenOnPointerDown = false;
   window.removeEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
   window.removeEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
   window.removeEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
@@ -8050,17 +8059,26 @@ function handleMinervaFullPageSectionsButtonPointerMove(event) {
 
 function handleMinervaFullPageSectionsButtonPointerUp(event) {
   if (minervaFullPageSectionsButtonPendingActivation && !isMinervaFullPageSectionsButtonDragging.value) {
+    const shouldCloseOpenPanel = minervaFullPageSectionsButtonWasOpenOnPointerDown && isMinervaFullPageTocOpen.value;
     cleanupMinervaFullPageSectionsButtonDragState();
+    if (shouldCloseOpenPanel) {
+      minervaFullPageSectionsButtonSuppressNextClick = true;
+      hideMinervaFullPageTocUi();
+    }
     return;
   }
   if (!isMinervaFullPageSectionsButtonDragging.value) return;
   const eventPointerId = typeof event?.pointerId === 'number' ? event.pointerId : null;
   if (minervaFullPageSectionsButtonPointerId !== null && eventPointerId !== null && eventPointerId !== minervaFullPageSectionsButtonPointerId) return;
 
+  const hadDragMovement = minervaFullPageSectionsButtonDragMoved;
   if (minervaFullPageSectionsButtonDragMoved) {
     minervaFullPageSectionsButtonOpenedOnPointerDown = false;
   }
   cleanupMinervaFullPageSectionsButtonDragState();
+  if (hadDragMovement) {
+    minervaFullPageSectionsButtonSuppressNextClick = true;
+  }
   scheduleMinervaFullPageTocHideDelay();
 }
 
@@ -8069,6 +8087,7 @@ function handleMinervaFullPageSectionsButtonPointerDown(event) {
   const triggerButton = event.currentTarget instanceof Element
     ? event.currentTarget
     : getMinervaFullPageSectionsTriggerButtonElement();
+  minervaFullPageSectionsButtonWasOpenOnPointerDown = isMinervaFullPageTocOpen.value;
   markMinervaFullPageManualScrollIntent();
   minervaFullPageSectionsButtonPointerId = event.pointerId ?? null;
   if (triggerButton instanceof Element) {
@@ -8165,6 +8184,10 @@ function handleMinervaFullPageSectionsPanelInteraction() {
 }
 
 function handleMinervaFullPageSectionsButtonClick() {
+  if (minervaFullPageSectionsButtonSuppressNextClick) {
+    minervaFullPageSectionsButtonSuppressNextClick = false;
+    return;
+  }
   if (minervaFullPageSectionsButtonDragMoved) {
     minervaFullPageSectionsButtonDragMoved = false;
     return;
@@ -12911,25 +12934,17 @@ function markArticleEdited() {
   position: fixed;
   right: 0;
   bottom: 0;
-  z-index: 102;
+  z-index: 103;
   display: block;
   width: 44px;
   pointer-events: none;
 }
 
-.minerva-full-page-sections-nav-gradient {
-  position: absolute;
-  top: -8px;
-  right: 0;
-  bottom: 0;
-  width: 44px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.84) 42%, rgba(255, 255, 255, 0.96) 70%, #fff 100%);
-  pointer-events: none;
-  z-index: -1;
-}
-
-.minerva-full-page-sections-nav-gradient--panel-open {
-  background: var(--background-color-base, #fff);
+.minerva-full-page-sections-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 102;
+  background: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
 }
 
 .minerva-full-page-sections-trigger {
@@ -12972,7 +12987,6 @@ function markArticleEdited() {
 
 .minerva-full-page-sections-panel {
   position: absolute;
-  top: -8px;
   right: 44px;
   bottom: 0;
   width: fit-content;
@@ -12980,9 +12994,10 @@ function markArticleEdited() {
   max-width: 256px;
   overflow-y: auto;
   background: var(--background-color-base, #fff);
-  border-left: 1px solid var(--border-color-subtle, #c8ccd1);
+  border-left: 1px solid var(--border-color-muted, #a2a9b1);
+  border-right: 1px solid var(--border-color-muted, #a2a9b1);
   padding: 12px 0;
-  pointer-events: none;
+  pointer-events: auto;
   box-sizing: border-box;
   scrollbar-width: none;
 }
