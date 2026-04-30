@@ -6150,7 +6150,7 @@ function applyPrototypeMode(mode) {
 }
 
 function applyPreferredPrototypeSettings() {
-  selectedPrototype.value = 'option-5';
+  selectedPrototype.value = 'option-6';
   minervaToggleLocation.value = 'toolbar';
   toastsEnabled.value = true;
   editToolbarImprovementsEnabled.value = true;
