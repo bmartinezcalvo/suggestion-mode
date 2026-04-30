@@ -12829,17 +12829,21 @@ function markArticleEdited() {
 }
 
 .minerva-full-page-sections-badge {
-  width: 16px;
-  height: 12px;
-  padding: 0;
-  border-radius: 6px;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 2px;
+  border-radius: 2px;
   background: var(--background-color-progressive, #36c);
   color: #fff;
-  font-size: 10px;
-  line-height: 12px;
+  font-size: 12px;
+  line-height: 16px;
   font-weight: 700;
   text-align: center;
-  flex: 0 0 16px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 auto;
+  box-sizing: border-box;
 }
 
 .minerva-edit-menu-list {
