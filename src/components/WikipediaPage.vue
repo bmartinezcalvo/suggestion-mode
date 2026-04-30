@@ -4895,7 +4895,9 @@ let suppressMinervaFullPageTocScrollVisibilityTimer = null;
 let minervaFullPageManualScrollIntentTimer = null;
 let minervaFullPageSectionsPanelInactivityTimer = null;
 let minervaFullPageSectionsButtonDragMoved = false;
+let minervaFullPageSectionsButtonOpenedOnPointerDown = false;
 let minervaFullPageSectionsButtonPointerId = null;
+let minervaFullPageSectionsButtonPointerOffsetY = 22;
 let minervaFullPageTocScrollStartedAt = 0;
 let isMinervaFullPageTocScrolling = false;
 let autoScrollTimer = null;
@@ -7852,14 +7854,17 @@ function handleMinervaFullPageSectionsButtonPointerMove(event) {
   const buttonHeight = 44;
   const viewportHeight = window.innerHeight;
   const availableTrack = Math.max(0, viewportHeight - topOffset - buttonHeight);
-  const nextTop = Math.max(0, Math.min(availableTrack, event.clientY - topOffset - buttonHeight / 2));
+  const pointerOffsetY = Number.isFinite(minervaFullPageSectionsButtonPointerOffsetY)
+    ? minervaFullPageSectionsButtonPointerOffsetY
+    : buttonHeight / 2;
+  const nextTop = Math.max(0, Math.min(availableTrack, event.clientY - topOffset - pointerOffsetY));
   const progress = availableTrack > 0 ? nextTop / availableTrack : 0;
   const maxScroll = Math.max(0, document.documentElement.scrollHeight - viewportHeight);
 
   minervaFullPageSectionsButtonDragMoved = true;
   minervaFullPageSectionsButtonTop.value = Math.round(nextTop);
   clearMinervaFullPageSectionsPanelInactivityTimer();
-  isMinervaFullPageTocOpen.value = false;
+  isMinervaFullPageTocOpen.value = true;
   showMinervaFullPageTocOnScroll.value = true;
   window.scrollTo({ top: progress * maxScroll, behavior: 'auto' });
 }
@@ -7868,8 +7873,18 @@ function handleMinervaFullPageSectionsButtonPointerUp(event) {
   if (!isMinervaFullPageSectionsButtonDragging.value) return;
   if (minervaFullPageSectionsButtonPointerId !== null && event.pointerId !== minervaFullPageSectionsButtonPointerId) return;
 
+  const triggerButton = minervaFullPageSectionsButtonRef.value?.$el?.querySelector?.('.cdx-button__button')
+    ?? minervaFullPageSectionsButtonRef.value?.$el
+    ?? minervaFullPageSectionsButtonRef.value;
+  if (triggerButton instanceof Element && minervaFullPageSectionsButtonPointerId !== null && triggerButton.hasPointerCapture?.(minervaFullPageSectionsButtonPointerId)) {
+    triggerButton.releasePointerCapture(minervaFullPageSectionsButtonPointerId);
+  }
   isMinervaFullPageSectionsButtonDragging.value = false;
+  if (minervaFullPageSectionsButtonDragMoved) {
+    minervaFullPageSectionsButtonOpenedOnPointerDown = false;
+  }
   minervaFullPageSectionsButtonPointerId = null;
+  minervaFullPageSectionsButtonPointerOffsetY = 22;
   window.removeEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
   window.removeEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
   window.removeEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
@@ -7878,11 +7893,29 @@ function handleMinervaFullPageSectionsButtonPointerUp(event) {
 
 function handleMinervaFullPageSectionsButtonPointerDown(event) {
   if (!isMinervaFullPageSectionsButtonMode.value) return;
+  const triggerButton = event.currentTarget instanceof Element
+    ? event.currentTarget
+    : (minervaFullPageSectionsButtonRef.value?.$el?.querySelector?.('.cdx-button__button')
+      ?? minervaFullPageSectionsButtonRef.value?.$el
+      ?? null);
   markMinervaFullPageManualScrollIntent();
   isMinervaFullPageSectionsButtonDragging.value = true;
   minervaFullPageSectionsButtonDragMoved = false;
+  minervaFullPageSectionsButtonOpenedOnPointerDown = !isMinervaFullPageTocOpen.value;
   minervaFullPageSectionsButtonPointerId = event.pointerId ?? null;
+  if (triggerButton instanceof Element) {
+    const rect = triggerButton.getBoundingClientRect();
+    minervaFullPageSectionsButtonPointerOffsetY = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
+    if (minervaFullPageSectionsButtonPointerId !== null) {
+      triggerButton.setPointerCapture?.(minervaFullPageSectionsButtonPointerId);
+    }
+  } else {
+    minervaFullPageSectionsButtonPointerOffsetY = 22;
+  }
   clearMinervaFullPageSectionsPanelInactivityTimer();
+  showMinervaFullPageTocOnScroll.value = true;
+  isMinervaFullPageTocOpen.value = true;
+  updateMinervaFullPageTocActiveSection();
   window.addEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
   window.addEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
   window.addEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
@@ -7943,6 +7976,11 @@ function handleMinervaFullPageSectionsPanelInteraction() {
 function handleMinervaFullPageSectionsButtonClick() {
   if (minervaFullPageSectionsButtonDragMoved) {
     minervaFullPageSectionsButtonDragMoved = false;
+    return;
+  }
+  if (minervaFullPageSectionsButtonOpenedOnPointerDown) {
+    minervaFullPageSectionsButtonOpenedOnPointerDown = false;
+    scheduleMinervaFullPageSectionsPanelInactivityClose();
     return;
   }
   if (isMinervaFullPageTocOpen.value) {
@@ -12674,11 +12712,11 @@ function markArticleEdited() {
 
 .minerva-full-page-sections-nav-gradient {
   position: absolute;
-  top: 0;
+  top: -8px;
   right: 0;
-  bottom: 0;
-  width: 320px;
-  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.94) 18%, #fff 34%, #fff 100%);
+  bottom: -8px;
+  width: 64px;
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.84) 42%, rgba(255, 255, 255, 0.96) 70%, #fff 100%);
   pointer-events: none;
   z-index: -1;
 }
@@ -12690,6 +12728,7 @@ function markArticleEdited() {
   height: 44px;
   margin-right: 0;
   pointer-events: auto;
+  touch-action: none;
 }
 
 .minerva-full-page-sections-trigger :deep(.cdx-button__button) {
@@ -12701,6 +12740,7 @@ function markArticleEdited() {
   border-color: transparent;
   background: var(--background-color-neutral-subtle, #f8f9fa) !important;
   background-color: var(--background-color-neutral-subtle, #f8f9fa) !important;
+  touch-action: none;
 }
 
 .minerva-full-page-sections-trigger :deep(.cdx-button__button:hover) {
@@ -12721,16 +12761,19 @@ function markArticleEdited() {
 
 .minerva-full-page-sections-panel {
   position: absolute;
-  top: 0;
+  top: -8px;
   right: 44px;
-  bottom: 0;
-  width: 256px;
+  bottom: -8px;
+  width: fit-content;
+  min-width: 180px;
+  max-width: 256px;
   height: 100%;
   overflow-y: auto;
   background: var(--background-color-base, #fff);
   border-left: 1px solid var(--border-color-subtle, #c8ccd1);
   padding: 12px 0;
   pointer-events: auto;
+  box-sizing: border-box;
 }
 
 .minerva-full-page-sections-item {
@@ -12739,6 +12782,8 @@ function markArticleEdited() {
   gap: 8px;
   min-height: 44px;
   padding: 0 12px;
+  width: 100%;
+  box-sizing: border-box;
 }
 
 .minerva-full-page-sections-item--active .minerva-full-page-sections-link {
@@ -12757,6 +12802,9 @@ function markArticleEdited() {
   font-size: 16px;
   line-height: 24px;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .minerva-full-page-sections-badge {
@@ -14223,8 +14271,11 @@ function markArticleEdited() {
 .minerva-toast {
   position: fixed;
   top: calc(42px + 12px);
-  left: 16px;
-  right: 16px;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100vw - 32px);
   background: #202122;
   color: #ffffff;
   padding: 10px 16px;
@@ -14232,6 +14283,7 @@ function markArticleEdited() {
   font-size: 14px;
   line-height: 20px;
   white-space: normal;
+  box-sizing: border-box;
   z-index: 220;
   box-shadow: none;
 }
