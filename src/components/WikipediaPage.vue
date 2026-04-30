@@ -4375,6 +4375,7 @@
         </aside>
 
         <cdx-dialog
+          v-if="!hidePrototypeDialog"
           v-model:open="isPrototypeDialogOpen"
           title="Choose prototype"
           :primary-action="{ label: 'See prototype', actionType: 'progressive' }"
@@ -5096,6 +5097,7 @@ const isEditCheckHovered = ref(false);
 const isEditCheckTextHovered = ref(false);
 const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
+const hidePrototypeDialog = true;
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(false);
@@ -5110,6 +5112,7 @@ const showSuggestionInfoPreference = ref(true);
 const dontShowSuggestionInfo = ref(false);
 const minervaNoMoreSuggestionsState = ref(null);
 const pendingScrollSection = ref(null);
+const isInitialSectionPositioning = ref(false);
 const minervaEditSectionOnly = ref(null);
 const minervaSectionBannerDismissed = ref({
   'early-life': false,
@@ -5742,7 +5745,7 @@ const shouldShowBanner = computed(() => {
     const suggestionId = sectionToSuggestionId[sectionId];
     const targetRef = getSuggestionRefById(suggestionId);
     if (targetRef && targetRef.value) {
-      return !isTargetVisibleInViewport(targetRef.value);
+      return !isTargetMeaningfullyVisibleInViewport(targetRef.value);
     }
     return false;
   }
@@ -6146,11 +6149,28 @@ function applyPrototypeMode(mode) {
   showSuggestionToggle.value = true;
 }
 
+function applyPreferredPrototypeSettings() {
+  selectedPrototype.value = 'option-5';
+  minervaToggleLocation.value = 'toolbar';
+  toastsEnabled.value = true;
+  editToolbarImprovementsEnabled.value = true;
+  noMoreSuggestionsEmptyStateEnabled.value = true;
+  editFullPageImprovedEnabled.value = false;
+  minervaFullPageSuggestionNavigationEnabled.value = true;
+  minervaFullPageSuggestionNavigationMode.value = 'scroll-button';
+  savePrototypeDialogPrefs();
+}
+
 function openPrototypeDialog(fromSection = false) {
   if (isEditMode.value) return;
   if (!fromSection) {
     minervaEditSectionOnly.value = null;
     readModeReturnSectionId.value = null;
+  }
+  applyPreferredPrototypeSettings();
+  if (hidePrototypeDialog) {
+    startPrototype();
+    return;
   }
   isPrototypeDialogOpen.value = true;
 }
@@ -8316,11 +8336,25 @@ const editSectionRefs = {
   theory: editSectionTheory
 };
 
-function scrollToEditSection(sectionId) {
+function scrollToEditSection(sectionId, behavior = 'smooth') {
   const targetRef = editSectionRefs[sectionId];
-  if (targetRef && targetRef.value) {
-    targetRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+  if (!targetRef?.value || typeof window === 'undefined') return;
+  const toolbarHeight = getMinervaEditToolbarHeight();
+  const targetTop = targetRef.value.getBoundingClientRect().top + window.scrollY;
+  const topOffset = toolbarHeight + 8;
+  window.scrollTo({
+    top: Math.max(0, targetTop - topOffset),
+    behavior
+  });
+}
+
+function positionPendingEditSection(behavior = 'auto') {
+  if (!pendingScrollSection.value) return;
+  const target = pendingScrollSection.value;
+  const targetRef = editSectionRefs[target];
+  if (!targetRef?.value) return;
+  scrollToEditSection(target, behavior);
+  pendingScrollSection.value = null;
 }
 
 function getMinervaEditToolbarHeight() {
@@ -8450,13 +8484,13 @@ function updateSuggestionVisibility() {
     return visibleHeight / height >= 0.75;
   };
   anySuggestionVisible.value =
-    isVisible(highlightedTextRef.value) ||
-    isVisible(highlightedTextRef2.value) ||
-    isVisible(highlightedTextRef4.value) ||
-    isVisible(highlightedTextRef3.value) ||
-    isVisible(highlightedTextRef6.value) ||
-    isVisible(highlightedTextRef7.value) ||
-    isVisible(highlightedTextRef8.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef2.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef4.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef3.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef6.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef7.value) ||
+    isTargetMeaningfullyVisibleInViewport(highlightedTextRef8.value) ||
     isVisible(toneCheckHighlightRef.value) ||
     isVisible(pasteCheckHighlightRef.value);
   const pendingIds = getPendingSuggestionIdsForContext();
@@ -9622,6 +9656,10 @@ watch(sectionSuggestionCount, (newValue, oldValue) => {
 });
 
 watch(anySuggestionVisible, (visible) => {
+  if (isInitialSectionPositioning.value) {
+    syncMinervaArrowOnlyVisibility();
+    return;
+  }
   if (visible && isArrowOnceMode.value) {
     isBannerDismissed.value = true;
   }
@@ -9688,6 +9726,17 @@ function isTargetVisibleInViewport(target) {
   const rect = target.getBoundingClientRect();
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
   return rect.bottom > 0 && rect.top < viewportHeight;
+}
+
+function isTargetMeaningfullyVisibleInViewport(target, minimumVisibleRatio = 0.25) {
+  if (!target || typeof window === 'undefined') return false;
+  const rect = target.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const height = rect.height || 1;
+  const visibleTop = Math.max(rect.top, 0);
+  const visibleBottom = Math.min(rect.bottom, viewportHeight);
+  const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+  return visibleHeight / height >= minimumVisibleRatio;
 }
 
 function scrollToSuggestionIfNeeded(targetRef) {
@@ -10130,10 +10179,8 @@ watch(
   () => isLoading.value,
   (loading) => {
     if (!loading && pendingScrollSection.value) {
-      const target = pendingScrollSection.value;
-      pendingScrollSection.value = null;
       nextTick(() => {
-        scrollToEditSection(target);
+        positionPendingEditSection('auto');
       });
     }
   }
@@ -10401,6 +10448,22 @@ function enterEditMode() {
   hasUnsavedChanges.value = false;
   nextTick(() => {
     captureEditSnapshot();
+    if (isMinervaSkin.value && pendingScrollSection.value) {
+      isInitialSectionPositioning.value = true;
+      nextTick(() => {
+        if (typeof window !== 'undefined' && typeof window.requestAnimationFrame === 'function') {
+          window.requestAnimationFrame(() => {
+            positionPendingEditSection('auto');
+            isInitialSectionPositioning.value = false;
+            isBannerDismissed.value = false;
+          });
+          return;
+        }
+        positionPendingEditSection('auto');
+        isInitialSectionPositioning.value = false;
+        isBannerDismissed.value = false;
+      });
+    }
   });
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
