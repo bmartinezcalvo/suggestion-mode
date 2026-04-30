@@ -2092,8 +2092,9 @@
               @touchstart.passive="handleMinervaFullPageSectionsPanelInteraction"
             >
               <div
-                v-if="isMinervaFullPageTocOpen"
+                v-if="isMinervaFullPageTocOpen || showMinervaFullPageSectionsButton"
                 class="minerva-full-page-sections-nav-gradient"
+                :class="{ 'minerva-full-page-sections-nav-gradient--panel-open': isMinervaFullPageTocOpen }"
               ></div>
               <div
                 v-if="isMinervaFullPageTocOpen"
@@ -2104,7 +2105,10 @@
                   v-for="item in minervaFullPageSectionItems"
                   :key="item.id"
                   class="minerva-full-page-sections-item"
-                  :class="{ 'minerva-full-page-sections-item--active': minervaFullPageTocActivePathIds.includes(item.id) }"
+                  :class="{
+                    'minerva-full-page-sections-item--active': minervaFullPageTocActivePathIds.includes(item.id),
+                    'minerva-full-page-sections-item--child': item.level > 0
+                  }"
                 >
                   <button
                     type="button"
@@ -2662,15 +2666,20 @@
                       <span v-if="isSuggestion2Pending && isSuggestion4Pending" class="minerva-suggestion-trigger-badge">2</span>
                     </button>
                   </p>
-                  <p v-else>
+                  <p
+                    v-else
+                    :class="{ 'minerva-suggestion-target': isMinervaSkin }"
+                  >
                     In Lorde's volume
                     <span
                       v-if="!isSuggestionResolved4 && !isSuggestionDeclined4"
                       ref="highlightedTextRef4"
                       class="suggestion-target suggestion-target--inline"
                       :class="{
+                        [nonSelectedHighlightClass]: showSuggestions,
                         'highlighted-text-wrapper--hover': isHovered4 && showSuggestions && !isCardExpanded4,
-                        'highlighted-text-wrapper--selected': isCardExpanded4 && showSuggestions
+                        'highlighted-text-wrapper--selected': isCardExpanded4 && showSuggestions,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 4
                       }"
                       @mouseenter.stop="isTextHovered4 = true"
                       @mouseleave.stop="isTextHovered4 = false"
@@ -2685,6 +2694,18 @@
                     <template v-else>The Black Unicorn</template>
                     (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
                     <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
+                    <span v-if="isMinervaSkin && !isSuggestionResolved4 && !isSuggestionDeclined4" class="minerva-highlight-rail"></span>
+                    <button
+                      v-if="isMinervaSkin && !isSuggestionResolved4 && !isSuggestionDeclined4"
+                      type="button"
+                      class="minerva-suggestion-trigger"
+                      aria-label="Show suggestion"
+                      @mousedown.prevent
+                      @touchstart.stop.prevent="openMinervaSuggestion(4)"
+                      @click.stop="openMinervaSuggestion(4)"
+                    >
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
                   </p>
                   <!-- Citation Popup 2 -->
                   <div v-if="showCitationPopup2" class="citation-popup" contenteditable="false">
@@ -4910,8 +4931,10 @@ let minervaFullPageManualScrollIntentTimer = null;
 let minervaFullPageSectionsPanelInactivityTimer = null;
 let minervaFullPageSectionsButtonDragMoved = false;
 let minervaFullPageSectionsButtonOpenedOnPointerDown = false;
+let minervaFullPageSectionsButtonPendingActivation = false;
 let minervaFullPageSectionsButtonPointerId = null;
 let minervaFullPageSectionsButtonPointerOffsetY = 22;
+let minervaFullPageSectionsButtonPressStartY = 0;
 let minervaFullPageTocScrollStartedAt = 0;
 let isMinervaFullPageTocScrolling = false;
 let autoScrollTimer = null;
@@ -5634,15 +5657,27 @@ const minervaFullPageTocFlatItems = computed(() => {
   visit(minervaFullPageTocItems.value);
   return flatItems;
 });
-const minervaFullPageSectionItems = computed(() => (
-  minervaFullPageTocItems.value.map((item) => ({
-    id: item.id,
-    label: item.label,
-    count: item.count,
-    sectionId: item.sectionId,
-    hasEditCheck: item.hasEditCheck
-  }))
-));
+const minervaFullPageSectionItems = computed(() => {
+  const items = [];
+  const visit = (tocItems, level = 0) => {
+    tocItems.forEach((item) => {
+      items.push({
+        id: item.id,
+        label: item.label,
+        count: item.count,
+        sectionId: item.sectionId,
+        subsectionTitle: item.subsectionTitle,
+        hasEditCheck: item.hasEditCheck,
+        level
+      });
+      if (item.children?.length) {
+        visit(item.children, level + 1);
+      }
+    });
+  };
+  visit(minervaFullPageTocItems.value);
+  return items;
+});
 const minervaFullPageTocActivePathIds = computed(() => (
   minervaFullPageTocPathMap.value[activeMinervaFullPageTocSectionId.value] || []
 ));
@@ -6378,6 +6413,19 @@ function removeEditCheckMinervaMarkers(node) {
   });
 }
 
+function refreshEditCheckMinervaMarkers(anchor) {
+  if (!anchor || !isMinervaSkin.value) return;
+  const hasRemainingChecks = Boolean(
+    anchor.querySelector('.tone-check-highlight') ||
+    anchor.querySelector('.paste-check-highlight')
+  );
+  if (hasRemainingChecks) {
+    attachEditCheckMinervaMarkers(anchor);
+  } else {
+    removeEditCheckMinervaMarkers(anchor);
+  }
+}
+
 function attachEditCheckMinervaMarkers(anchor) {
   if (!anchor || !isMinervaSkin.value) return;
   anchor.classList.add('edit-check-minerva-target');
@@ -6736,16 +6784,16 @@ function alignPasteCheckCard() {
 function unwrapCheckHighlight(highlightNode) {
   if (!highlightNode) return;
   const anchor = getEditCheckMinervaAnchor(highlightNode);
-  removeEditCheckMinervaMarkers(anchor);
   const text = highlightNode.textContent || '';
   highlightNode.replaceWith(document.createTextNode(text));
+  refreshEditCheckMinervaMarkers(anchor);
 }
 
 function removeCheckHighlight(highlightNode) {
   if (!highlightNode) return;
   const anchor = getEditCheckMinervaAnchor(highlightNode);
-  removeEditCheckMinervaMarkers(anchor);
   highlightNode.remove();
+  refreshEditCheckMinervaMarkers(anchor);
 }
 
 function clearToneCheck(removeHighlight = false, dismiss = false) {
@@ -7938,16 +7986,23 @@ function updateMinervaFullPageSectionsButtonPosition() {
   minervaFullPageSectionsButtonTop.value = Math.round(progress * availableTrack);
 }
 
-function cleanupMinervaFullPageSectionsButtonDragState() {
-  const triggerButton = minervaFullPageSectionsButtonRef.value?.$el?.querySelector?.('.cdx-button__button')
+function getMinervaFullPageSectionsTriggerButtonElement() {
+  return minervaFullPageSectionsButtonRef.value?.$el?.querySelector?.('.cdx-button__button')
     ?? minervaFullPageSectionsButtonRef.value?.$el
-    ?? minervaFullPageSectionsButtonRef.value;
+    ?? minervaFullPageSectionsButtonRef.value
+    ?? null;
+}
+
+function cleanupMinervaFullPageSectionsButtonDragState() {
+  const triggerButton = getMinervaFullPageSectionsTriggerButtonElement();
   if (triggerButton instanceof Element && minervaFullPageSectionsButtonPointerId !== null && triggerButton.hasPointerCapture?.(minervaFullPageSectionsButtonPointerId)) {
     triggerButton.releasePointerCapture(minervaFullPageSectionsButtonPointerId);
   }
   isMinervaFullPageSectionsButtonDragging.value = false;
+  minervaFullPageSectionsButtonPendingActivation = false;
   minervaFullPageSectionsButtonPointerId = null;
   minervaFullPageSectionsButtonPointerOffsetY = 22;
+  minervaFullPageSectionsButtonPressStartY = 0;
   minervaFullPageSectionsButtonDragMoved = false;
   minervaFullPageSectionsButtonOpenedOnPointerDown = false;
   window.removeEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
@@ -7959,8 +8014,20 @@ function cleanupMinervaFullPageSectionsButtonDragState() {
 }
 
 function handleMinervaFullPageSectionsButtonPointerMove(event) {
-  if (!isMinervaFullPageSectionsButtonDragging.value || typeof window === 'undefined') return;
-  if (minervaFullPageSectionsButtonPointerId !== null && event.pointerId !== minervaFullPageSectionsButtonPointerId) return;
+  if (typeof window === 'undefined') return;
+  if (minervaFullPageSectionsButtonPointerId !== null && typeof event.pointerId === 'number' && event.pointerId !== minervaFullPageSectionsButtonPointerId) return;
+  if (minervaFullPageSectionsButtonPendingActivation && !isMinervaFullPageSectionsButtonDragging.value) {
+    if (Math.abs(event.clientY - minervaFullPageSectionsButtonPressStartY) < 4) {
+      return;
+    }
+    const triggerButton = getMinervaFullPageSectionsTriggerButtonElement();
+    if (triggerButton instanceof Element && minervaFullPageSectionsButtonPointerId !== null) {
+      triggerButton.setPointerCapture?.(minervaFullPageSectionsButtonPointerId);
+    }
+    minervaFullPageSectionsButtonPendingActivation = false;
+    isMinervaFullPageSectionsButtonDragging.value = true;
+  }
+  if (!isMinervaFullPageSectionsButtonDragging.value) return;
 
   const topOffset = Number.parseFloat(minervaFullPageSectionsNavTopOffset.value) || 0;
   const buttonHeight = 44;
@@ -7982,8 +8049,13 @@ function handleMinervaFullPageSectionsButtonPointerMove(event) {
 }
 
 function handleMinervaFullPageSectionsButtonPointerUp(event) {
+  if (minervaFullPageSectionsButtonPendingActivation && !isMinervaFullPageSectionsButtonDragging.value) {
+    cleanupMinervaFullPageSectionsButtonDragState();
+    return;
+  }
   if (!isMinervaFullPageSectionsButtonDragging.value) return;
-  if (minervaFullPageSectionsButtonPointerId !== null && event.pointerId !== minervaFullPageSectionsButtonPointerId) return;
+  const eventPointerId = typeof event?.pointerId === 'number' ? event.pointerId : null;
+  if (minervaFullPageSectionsButtonPointerId !== null && eventPointerId !== null && eventPointerId !== minervaFullPageSectionsButtonPointerId) return;
 
   if (minervaFullPageSectionsButtonDragMoved) {
     minervaFullPageSectionsButtonOpenedOnPointerDown = false;
@@ -7996,25 +8068,38 @@ function handleMinervaFullPageSectionsButtonPointerDown(event) {
   if (!isMinervaFullPageSectionsButtonMode.value) return;
   const triggerButton = event.currentTarget instanceof Element
     ? event.currentTarget
-    : (minervaFullPageSectionsButtonRef.value?.$el?.querySelector?.('.cdx-button__button')
-      ?? minervaFullPageSectionsButtonRef.value?.$el
-      ?? null);
+    : getMinervaFullPageSectionsTriggerButtonElement();
   markMinervaFullPageManualScrollIntent();
-  isMinervaFullPageSectionsButtonDragging.value = true;
-  minervaFullPageSectionsButtonDragMoved = false;
-  minervaFullPageSectionsButtonOpenedOnPointerDown = !isMinervaFullPageTocOpen.value;
   minervaFullPageSectionsButtonPointerId = event.pointerId ?? null;
   if (triggerButton instanceof Element) {
     const rect = triggerButton.getBoundingClientRect();
     minervaFullPageSectionsButtonPointerOffsetY = Math.max(0, Math.min(rect.height, event.clientY - rect.top));
-    if (minervaFullPageSectionsButtonPointerId !== null) {
-      triggerButton.setPointerCapture?.(minervaFullPageSectionsButtonPointerId);
-    }
   } else {
     minervaFullPageSectionsButtonPointerOffsetY = 22;
   }
+  minervaFullPageSectionsButtonPressStartY = event.clientY;
   clearMinervaFullPageSectionsPanelInactivityTimer();
   showMinervaFullPageTocOnScroll.value = true;
+  if (isMinervaFullPageTocOpen.value) {
+    isMinervaFullPageSectionsButtonDragging.value = false;
+    minervaFullPageSectionsButtonPendingActivation = true;
+    minervaFullPageSectionsButtonDragMoved = false;
+    minervaFullPageSectionsButtonOpenedOnPointerDown = false;
+    window.addEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
+    window.addEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
+    window.addEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
+    window.addEventListener('mouseup', handleMinervaFullPageSectionsButtonPointerUp);
+    window.addEventListener('touchend', handleMinervaFullPageSectionsButtonPointerUp);
+    window.addEventListener('touchcancel', handleMinervaFullPageSectionsButtonPointerUp);
+    return;
+  }
+  isMinervaFullPageSectionsButtonDragging.value = true;
+  minervaFullPageSectionsButtonPendingActivation = false;
+  minervaFullPageSectionsButtonDragMoved = false;
+  minervaFullPageSectionsButtonOpenedOnPointerDown = true;
+  if (triggerButton instanceof Element && minervaFullPageSectionsButtonPointerId !== null) {
+    triggerButton.setPointerCapture?.(minervaFullPageSectionsButtonPointerId);
+  }
   isMinervaFullPageTocOpen.value = true;
   updateMinervaFullPageTocActiveSection();
   window.addEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
@@ -12836,11 +12921,15 @@ function markArticleEdited() {
   position: absolute;
   top: -8px;
   right: 0;
-  bottom: -8px;
-  width: 64px;
+  bottom: 0;
+  width: 44px;
   background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 0.84) 42%, rgba(255, 255, 255, 0.96) 70%, #fff 100%);
   pointer-events: none;
   z-index: -1;
+}
+
+.minerva-full-page-sections-nav-gradient--panel-open {
+  background: var(--background-color-base, #fff);
 }
 
 .minerva-full-page-sections-trigger {
@@ -12885,17 +12974,21 @@ function markArticleEdited() {
   position: absolute;
   top: -8px;
   right: 44px;
-  bottom: -8px;
+  bottom: 0;
   width: fit-content;
   min-width: 180px;
   max-width: 256px;
-  height: 100%;
   overflow-y: auto;
   background: var(--background-color-base, #fff);
   border-left: 1px solid var(--border-color-subtle, #c8ccd1);
   padding: 12px 0;
   pointer-events: none;
   box-sizing: border-box;
+  scrollbar-width: none;
+}
+
+.minerva-full-page-sections-panel::-webkit-scrollbar {
+  display: none;
 }
 
 .minerva-full-page-sections-item {
@@ -12906,6 +12999,10 @@ function markArticleEdited() {
   padding: 0 12px;
   width: 100%;
   box-sizing: border-box;
+}
+
+.minerva-full-page-sections-item--child {
+  padding-left: 24px;
 }
 
 .minerva-full-page-sections-item--active .minerva-full-page-sections-link {
