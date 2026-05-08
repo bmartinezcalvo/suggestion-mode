@@ -4716,6 +4716,7 @@ const isBannerDismissed = ref(false);
 const isBannerDelayReady = ref(false);
 const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
+const forceEntryBannerSection = ref(null);
 const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
 const isTextStyleMenuOpen = ref(false);
@@ -5735,6 +5736,14 @@ const shouldShowToasts = computed(() => (
 ));
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
+  if (
+    isArrowOnceMode.value &&
+    isMinervaSkin.value &&
+    minervaEditSectionOnly.value === 'poetry' &&
+    forceEntryBannerSection.value === 'poetry'
+  ) {
+    return true;
+  }
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     const sectionToSuggestionId = {
       career: 1,
@@ -6220,6 +6229,7 @@ function clearEditModeUiState() {
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
+  forceEntryBannerSection.value = null;
   if (bannerDelayTimer) {
     clearTimeout(bannerDelayTimer);
     bannerDelayTimer = null;
@@ -6254,6 +6264,7 @@ function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
   readModeReturnSectionId.value = sectionId;
+  forceEntryBannerSection.value = sectionId === 'poetry' ? 'poetry' : null;
   clearMinervaNoMoreSuggestionsState();
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
@@ -7730,6 +7741,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId) {
 
 function handleBannerClose() {
   if (isBannerClosing.value || isBannerDismissed.value) return;
+  forceEntryBannerSection.value = null;
   isBannerClosing.value = true;
   if (bannerCloseTimer) {
     clearTimeout(bannerCloseTimer);
@@ -7760,6 +7772,7 @@ function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
 
 function handleBannerClick() {
   const wasSuggestionsOff = !showSuggestions.value;
+  forceEntryBannerSection.value = null;
   if (!showSuggestions.value) {
     showSuggestions.value = true;
   }
@@ -7879,7 +7892,7 @@ function updateBannerArrowDirections() {
   }
   if (typeof window === 'undefined') return;
   const ids = getPendingSuggestionIdsForContext();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportHeight = getVisibleViewportHeight();
   let hasAbove = false;
   let hasBelow = false;
   ids.forEach((id) => {
@@ -7901,7 +7914,7 @@ function updateBannerArrowDirections() {
 function updatePrimaryBannerDirection() {
   if (typeof window === 'undefined') return;
   const ids = getPendingSuggestionIdsForContext();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportHeight = getVisibleViewportHeight();
   let nearestDirection = null;
   let nearestDistance = Number.POSITIVE_INFINITY;
   ids.forEach((id) => {
@@ -8468,7 +8481,7 @@ function updateSuggestionVisibility() {
     updateMinervaSheetReturnDirection();
     return;
   }
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportHeight = getVisibleViewportHeight();
   const isVisible = (el) => {
     if (!el) return false;
     const rect = el.getBoundingClientRect();
@@ -9686,6 +9699,17 @@ watch(isLoading, (newValue) => {
     if (bannerDelayTimer) {
       clearTimeout(bannerDelayTimer);
     }
+    if (
+      isMinervaSkin.value &&
+      minervaEditSectionOnly.value === 'poetry' &&
+      forceEntryBannerSection.value === 'poetry'
+    ) {
+      updateSuggestionVisibility();
+      updateBannerArrowDirections();
+      updatePrimaryBannerDirection();
+      isBannerDelayReady.value = true;
+      return;
+    }
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && !isLoading.value) {
         updateSuggestionVisibility();
@@ -9721,17 +9745,27 @@ function clearAutoSuggestionTimer() {
   }
 }
 
+function getVisibleViewportHeight() {
+  if (typeof window === 'undefined') return 0;
+  const layoutViewportHeight = window.innerHeight || document.documentElement.clientHeight || 0;
+  const visualViewportHeight = window.visualViewport?.height || 0;
+  if (!visualViewportHeight) {
+    return layoutViewportHeight;
+  }
+  return Math.min(layoutViewportHeight, visualViewportHeight);
+}
+
 function isTargetVisibleInViewport(target) {
   if (!target || typeof window === 'undefined') return false;
   const rect = target.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportHeight = getVisibleViewportHeight();
   return rect.bottom > 0 && rect.top < viewportHeight;
 }
 
 function isTargetMeaningfullyVisibleInViewport(target, minimumVisibleRatio = 0.25) {
   if (!target || typeof window === 'undefined') return false;
   const rect = target.getBoundingClientRect();
-  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const viewportHeight = getVisibleViewportHeight();
   const height = rect.height || 1;
   const visibleTop = Math.max(rect.top, 0);
   const visibleBottom = Math.min(rect.bottom, viewportHeight);
