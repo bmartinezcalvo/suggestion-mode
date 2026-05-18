@@ -39,20 +39,12 @@
       Suggestions turned on
     </div>
     <div
-      v-if="shouldShowToasts && showMinervaMoreSuggestionsToast"
-      class="minerva-toast minerva-toast--more"
-      role="status"
-      aria-live="polite"
-    >
-      More suggestions are now available
-    </div>
-    <div
       v-if="shouldShowToasts && showMinervaZeroSuggestionsToast"
       class="minerva-toast minerva-toast--zero"
       role="status"
       aria-live="polite"
     >
-      0 suggestions available for now
+      No suggestions available for now
     </div>
     <div
       v-if="showPaginationNoSuggestionsToast"
@@ -60,7 +52,7 @@
       role="status"
       aria-live="polite"
     >
-      No more suggestions available
+      No more suggestions left
     </div>
     <div
       v-if="isMinervaSkin && toastsEnabled && showSuggestionSuccessToast"
@@ -1190,7 +1182,21 @@
                       Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
                     </p>
                     <p>
-                      In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+                      In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <span
+                        v-if="isSuggestion5Pending || isSuccessHighlightActive(5)"
+                        ref="highlightedTextRef5"
+                        class="suggestion-target suggestion-target--inline"
+                        :class="{
+                          [nonSelectedHighlightClass]: showSuggestions,
+                          'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
+                          'highlighted-text-wrapper--selected': isSuggestion5Pending && isCardExpanded5 && showSuggestions,
+                          'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
+                          'suggestion-dismiss-right': dismissedSuggestionId === 5
+                        }"
+                        @mouseenter.stop="isTextHovered5 = true"
+                        @mouseleave.stop="isTextHovered5 = false"
+                        @click.stop="isSuggestion5Pending ? (isMinervaSkin ? openMinervaSuggestion(5) : (isCardExpanded5 = true)) : null"
+                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></span></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></template>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
                     </p>
                     <p>
                       Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
@@ -2373,30 +2379,31 @@
                   </p>
                                     <!-- Highlighted Text with interactive states -->
                   <p 
-                    v-if="showSuggestionsDisplay && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+                    v-if="showSuggestionsDisplay && (isSuggestion1Pending || isSuccessHighlightActive(1))"
                     ref="highlightedTextRef"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isHovered && showSuggestions && !isCardExpanded,
-                      'highlighted-text-wrapper--selected': isCardExpanded && showSuggestions,
-                      'minerva-suggestion-target': isMinervaSkin,
+                      'highlighted-text-wrapper--hover': isSuggestion1Pending && isHovered && showSuggestions && !isCardExpanded,
+                      'highlighted-text-wrapper--selected': isSuggestion1Pending && isCardExpanded && showSuggestions,
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(1),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion1Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 1
                     }" 
                     class="suggestion-target"
                     @mouseenter="isTextHovered = true"
                     @mouseleave="isTextHovered = false"
-                    @click="isMinervaSkin ? openMinervaSuggestion(1) : (isCardExpanded = true)"
+                    @click="isSuggestion1Pending ? (isMinervaSkin ? openMinervaSuggestion(1) : (isCardExpanded = true)) : null"
                   >
-                    <span class="highlighted-text-rail"></span>
+                    <span v-if="isSuggestion1Pending" class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       <span class="highlighted-text-annotation">
                       In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.<sup v-if="showCitationPopup1 || citationNumber1" class="citation-marker" ref="citationMarker1">[{{ citationNumber1 || '...' }}]</sup>
                       </span>
                     </span>
-                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion1Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin"
+                      v-if="isMinervaSkin && isSuggestion1Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 1 }"
@@ -2529,28 +2536,29 @@
                     Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
                   </p>
                                     <p
-                    v-if="showSuggestionsDisplay && !isSuggestionResolved8 && !isSuggestionDeclined8"
+                    v-if="showSuggestionsDisplay && (isSuggestion8Pending || isSuccessHighlightActive(8))"
                     ref="highlightedTextRef8"
                     :class="{
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isHovered8 && showSuggestions && !isCardExpanded8,
-                      'highlighted-text-wrapper--selected': isCardExpanded8 && showSuggestions,
-                      'minerva-suggestion-target': isMinervaSkin,
+                      'highlighted-text-wrapper--hover': isSuggestion8Pending && isHovered8 && showSuggestions && !isCardExpanded8,
+                      'highlighted-text-wrapper--selected': isSuggestion8Pending && isCardExpanded8 && showSuggestions,
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(8),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion8Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 8
                     }"
                     class="suggestion-target"
                     @mouseenter="isTextHovered8 = true"
                     @mouseleave="isTextHovered8 = false"
-                    @click="isMinervaSkin ? openMinervaSuggestion(8) : (isCardExpanded8 = true)"
+                    @click="isSuggestion8Pending ? (isMinervaSkin ? openMinervaSuggestion(8) : (isCardExpanded8 = true)) : null"
                   >
-                    <span class="highlighted-text-rail"></span>
+                    <span v-if="isSuggestion8Pending" class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       In 1968, Lorde published <span class="highlighted-text-annotation"><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></span>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                     </span>
-                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion8Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin"
+                      v-if="isMinervaSkin && isSuggestion8Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
@@ -2574,28 +2582,29 @@
                     1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
                   </p>
                                     <p
-                    v-if="showSuggestionsDisplay && !isSuggestionResolved6 && !isSuggestionDeclined6"
+                    v-if="showSuggestionsDisplay && (isSuggestion6Pending || isSuccessHighlightActive(6))"
                     ref="highlightedTextRef6"
                     :class="{
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isHovered6 && showSuggestions && !isCardExpanded6,
-                      'highlighted-text-wrapper--selected': isCardExpanded6 && showSuggestions,
-                      'minerva-suggestion-target': isMinervaSkin,
+                      'highlighted-text-wrapper--hover': isSuggestion6Pending && isHovered6 && showSuggestions && !isCardExpanded6,
+                      'highlighted-text-wrapper--selected': isSuggestion6Pending && isCardExpanded6 && showSuggestions,
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(6),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion6Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 6
                     }"
                     class="suggestion-target"
                     @mouseenter="isTextHovered6 = true"
                     @mouseleave="isTextHovered6 = false"
-                    @click="isMinervaSkin ? openMinervaSuggestion(6) : (isCardExpanded6 = true)"
+                    @click="isSuggestion6Pending ? (isMinervaSkin ? openMinervaSuggestion(6) : (isCardExpanded6 = true)) : null"
                   >
-                    <span class="highlighted-text-rail"></span>
+                    <span v-if="isSuggestion6Pending" class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       <span class="highlighted-text-annotation"><strong class="subsection-title">Wider recognition</strong></span>
                     </span>
-                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion6Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin"
+                      v-if="isMinervaSkin && isSuggestion6Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
@@ -2611,37 +2620,39 @@
                     Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
                   </p>
                                     <p
-                    v-if="showSuggestionsDisplay && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+                    v-if="showSuggestionsDisplay && (isSuggestion2Pending || isSuccessHighlightActive(2))"
                     ref="highlightedTextRef2"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isHovered2 && showSuggestions && !isCardExpanded2,
-                      'highlighted-text-wrapper--selected': isCardExpanded2 && showSuggestions,
-                      'minerva-suggestion-target': isMinervaSkin,
+                      'highlighted-text-wrapper--hover': isSuggestion2Pending && isHovered2 && showSuggestions && !isCardExpanded2,
+                      'highlighted-text-wrapper--selected': isSuggestion2Pending && isCardExpanded2 && showSuggestions,
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(2),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion2Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 2
                     }"
                     class="suggestion-target"
                     @mouseenter="isTextHovered2 = true"
                     @mouseleave="isTextHovered2 = false"
-                    @click="isMinervaSkin ? openMinervaSuggestion(2) : (isCardExpanded2 = true)"
+                    @click="isSuggestion2Pending ? (isMinervaSkin ? openMinervaSuggestion(2) : (isCardExpanded2 = true)) : null"
                   >
-                    <span class="highlighted-text-rail"></span>
+                    <span v-if="isSuggestion2Pending" class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       <span class="highlighted-text-annotation">
                       In Lorde's volume
                       <span
-                        v-if="!isSuggestionResolved4 && !isSuggestionDeclined4"
+                        v-if="isSuggestion4Pending || isSuccessHighlightActive(4)"
                         ref="highlightedTextRef4"
                         class="suggestion-target suggestion-target--inline"
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
-                          'highlighted-text-wrapper--hover': isHovered4 && showSuggestions && !isCardExpanded4,
-                          'highlighted-text-wrapper--selected': isCardExpanded4 && showSuggestions
+                          'highlighted-text-wrapper--hover': isSuggestion4Pending && isHovered4 && showSuggestions && !isCardExpanded4,
+                          'highlighted-text-wrapper--selected': isSuggestion4Pending && isCardExpanded4 && showSuggestions,
+                          'highlighted-text-wrapper--success': isSuccessHighlightActive(4)
                         }"
                         @mouseenter.stop="isTextHovered4 = true"
                         @mouseleave.stop="isTextHovered4 = false"
-                        @click.stop="isMinervaSkin ? openMinervaSuggestion(4) : (isCardExpanded4 = true)"
+                        @click.stop="isSuggestion4Pending ? (isMinervaSkin ? openMinervaSuggestion(4) : (isCardExpanded4 = true)) : null"
                       >
                         <span class="highlighted-text-content">
                           <span class="highlighted-text-annotation">
@@ -2653,9 +2664,9 @@
                       (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker">[{{ citationNumber2 || '...' }}]</sup>
                       </span>
                     </span>
-                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion2Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin"
+                      v-if="isMinervaSkin && isSuggestion2Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 2 }"
@@ -2674,18 +2685,19 @@
                   >
                     In Lorde's volume
                     <span
-                      v-if="!isSuggestionResolved4 && !isSuggestionDeclined4"
+                      v-if="isSuggestion4Pending || isSuccessHighlightActive(4)"
                       ref="highlightedTextRef4"
                       class="suggestion-target suggestion-target--inline"
                       :class="{
                         [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isHovered4 && showSuggestions && !isCardExpanded4,
-                        'highlighted-text-wrapper--selected': isCardExpanded4 && showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion4Pending && isHovered4 && showSuggestions && !isCardExpanded4,
+                        'highlighted-text-wrapper--selected': isSuggestion4Pending && isCardExpanded4 && showSuggestions,
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(4),
                         'suggestion-dismiss-right': dismissedSuggestionId === 4
                       }"
                       @mouseenter.stop="isTextHovered4 = true"
                       @mouseleave.stop="isTextHovered4 = false"
-                      @click.stop="isMinervaSkin ? openMinervaSuggestion(4) : (isCardExpanded4 = true)"
+                      @click.stop="isSuggestion4Pending ? (isMinervaSkin ? openMinervaSuggestion(4) : (isCardExpanded4 = true)) : null"
                     >
                       <span class="highlighted-text-content">
                         <span class="highlighted-text-annotation">
@@ -2696,9 +2708,9 @@
                     <template v-else>The Black Unicorn</template>
                     (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
                     <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
-                    <span v-if="isMinervaSkin && !isSuggestionResolved4 && !isSuggestionDeclined4" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion4Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin && !isSuggestionResolved4 && !isSuggestionDeclined4"
+                      v-if="isMinervaSkin && isSuggestion4Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
@@ -2798,29 +2810,30 @@
                   </div>
                   
                   <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
-                  <p
-                    v-if="showSuggestionsDisplay && !isSuggestionResolved7 && !isSuggestionDeclined7"
+                                    <p
+                    v-if="showSuggestionsDisplay && (isSuggestion7Pending || isSuccessHighlightActive(7))"
                     ref="highlightedTextRef7"
                     :class="{
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isHovered7 && showSuggestions && !isCardExpanded7,
-                      'highlighted-text-wrapper--selected': isCardExpanded7 && showSuggestions,
-                      'minerva-suggestion-target': isMinervaSkin,
+                      'highlighted-text-wrapper--hover': isSuggestion7Pending && isHovered7 && showSuggestions && !isCardExpanded7,
+                      'highlighted-text-wrapper--selected': isSuggestion7Pending && isCardExpanded7 && showSuggestions,
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(7),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion7Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 7
                     }"
                     class="suggestion-target"
                     @mouseenter="isTextHovered7 = true"
                     @mouseleave="isTextHovered7 = false"
-                    @click="isMinervaSkin ? openMinervaSuggestion(7) : (isCardExpanded7 = true)"
+                    @click="isSuggestion7Pending ? (isMinervaSkin ? openMinervaSuggestion(7) : (isCardExpanded7 = true)) : null"
                   >
-                    <span class="highlighted-text-rail"></span>
+                    <span v-if="isSuggestion7Pending" class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       The Cancer Journals (<span class="highlighted-text-annotation"><a href="https://example.org/1980" target="_blank" rel="noopener">1980</a></span>) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                     </span>
-                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion7Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin"
+                      v-if="isMinervaSkin && isSuggestion7Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       aria-label="Show suggestion"
@@ -2857,30 +2870,31 @@
                     Those of us who stand outside the circle of this society's definition of acceptable women; those of us who have been forged in the crucibles of difference -- those of us who are poor, who are lesbians, who are Black, who are older -- know that survival is not an academic skill. It is learning how to take our differences and make them strengths. For the master's tools will never dismantle the master's house. They may allow us temporarily to beat him at his own game, but they will never enable us to bring about genuine change. And this fact is only threatening to those women who still define the master's house as their only source of support.
                   </p>
                                     <p
-                    v-if="showSuggestionsDisplay && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+                    v-if="showSuggestionsDisplay && (isSuggestion3Pending || isSuccessHighlightActive(3))"
                     ref="highlightedTextRef3"
                     :class="{ 
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isHovered3 && showSuggestions && !isCardExpanded3,
-                      'highlighted-text-wrapper--selected': isCardExpanded3 && showSuggestions,
-                      'minerva-suggestion-target': isMinervaSkin,
+                      'highlighted-text-wrapper--hover': isSuggestion3Pending && isHovered3 && showSuggestions && !isCardExpanded3,
+                      'highlighted-text-wrapper--selected': isSuggestion3Pending && isCardExpanded3 && showSuggestions,
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(3),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion3Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 3
                     }"
                     class="suggestion-target"
                     @mouseenter="isTextHovered3 = true"
                     @mouseleave="isTextHovered3 = false"
-                    @click="isMinervaSkin ? openMinervaSuggestion(3) : (isCardExpanded3 = true)"
+                    @click="isSuggestion3Pending ? (isMinervaSkin ? openMinervaSuggestion(3) : (isCardExpanded3 = true)) : null"
                   >
-                    <span class="highlighted-text-rail"></span>
+                    <span v-if="isSuggestion3Pending" class="highlighted-text-rail"></span>
                     <span class="highlighted-text-content">
                       <span class="highlighted-text-annotation">
                       — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)<sup v-if="showCitationPopup3 || citationNumber3" class="citation-marker">[{{ citationNumber3 || '...' }}]</sup>
                       </span>
                     </span>
-                    <span v-if="isMinervaSkin" class="minerva-highlight-rail"></span>
+                    <span v-if="isMinervaSkin && isSuggestion3Pending" class="minerva-highlight-rail"></span>
                     <button
-                      v-if="isMinervaSkin"
+                      v-if="isMinervaSkin && isSuggestion3Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
                       :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 3 }"
@@ -3055,7 +3069,21 @@
                       Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
                     </p>
                     <p>
-                      In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+                      In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <span
+                        v-if="isSuggestion5Pending || isSuccessHighlightActive(5)"
+                        ref="highlightedTextRef5"
+                        class="suggestion-target suggestion-target--inline"
+                        :class="{
+                          [nonSelectedHighlightClass]: showSuggestions,
+                          'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
+                          'highlighted-text-wrapper--selected': isSuggestion5Pending && isCardExpanded5 && showSuggestions,
+                          'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
+                          'suggestion-dismiss-right': dismissedSuggestionId === 5
+                        }"
+                        @mouseenter.stop="isTextHovered5 = true"
+                        @mouseleave.stop="isTextHovered5 = false"
+                        @click.stop="isSuggestion5Pending ? (isMinervaSkin ? openMinervaSuggestion(5) : (isCardExpanded5 = true)) : null"
+                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></span></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></template>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
                     </p>
                     <p>
                       Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
@@ -4269,24 +4297,28 @@
           >
             <div class="minerva-pagination-count">{{ minervaPaginationLabel }}</div>
             <div v-if="showMinervaPaginationArrows" class="minerva-pagination-actions">
-              <button
+              <cdx-button
                 class="minerva-pagination-btn"
-                type="button"
+                action="default"
+                weight="quiet"
+                size="medium"
                 :aria-label="isEditCheckSheet ? 'Previous check' : 'Previous suggestion'"
                 :disabled="isMinervaPaginationPrevDisabled"
                 @click="handleMinervaPaginationPrev"
               >
-                <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon minerva-pagination-icon--prev" />
-              </button>
-              <button
+                <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon minerva-pagination-icon--prev" />
+              </cdx-button>
+              <cdx-button
                 class="minerva-pagination-btn"
-                type="button"
+                action="default"
+                weight="quiet"
+                size="medium"
                 :aria-label="isEditCheckSheet ? 'Next check' : 'Next suggestion'"
                 :disabled="isMinervaPaginationNextDisabled"
                 @click="handleMinervaPaginationNext"
               >
-                <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon" />
-              </button>
+                <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
+              </cdx-button>
             </div>
           </div>
         </div>
@@ -4395,54 +4427,51 @@
                 </template>
                 <div class="cdx-radio-group" role="radiogroup">
                   <cdx-radio
-                    v-model="selectedPrototype"
+                    v-model="selectedNavigationGroup"
+                    name="suggestions-discoverability"
+                    input-value="pagination"
+                  >
+                    Pagination
+                  </cdx-radio>
+                  <div v-if="selectedNavigationGroup === 'pagination'" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                    <cdx-radio
+                      v-model="selectedPrototype"
+                      name="pagination-navigation-mode"
+                      input-value="option-6"
+                      class="prototype-suboption-radio"
+                    >
+                      Manual navigation
+                    </cdx-radio>
+                    <div
+                      v-if="isMinervaSkin && selectedPrototype === 'option-6' && minervaToggleLocation !== 'toolbar'"
+                      class="prototype-suboptions"
+                    >
+                      <cdx-checkbox v-model="paginationManualNavigableButtonEnabled">
+                        Enable navigable button to next suggestion
+                      </cdx-checkbox>
+                    </div>
+                    <cdx-radio
+                      v-model="selectedPrototype"
+                      name="pagination-navigation-mode"
+                      input-value="option-5"
+                      class="prototype-suboption-radio prototype-suboption-radio--last"
+                    >
+                      Automatic navigation
+                    </cdx-radio>
+                  </div>
+                  <cdx-radio
+                    v-model="selectedNavigationGroup"
                     name="suggestions-discoverability"
                     input-value="option-3"
                   >
                     Navigable arrows
                   </cdx-radio>
                   <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-6"
-                  >
-                    Pagination (no auto-advance to next suggestion)
-                  </cdx-radio>
-                  <div
-                    v-if="isMinervaSkin && selectedPrototype === 'option-6' && minervaToggleLocation !== 'toolbar'"
-                    class="prototype-suboptions"
-                  >
-                    <cdx-checkbox v-model="paginationManualNavigableButtonEnabled">
-                      Enable navigable button to next suggestion
-                    </cdx-checkbox>
-                  </div>
-                  <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-5"
-                  >
-                    Pagination (auto-advance to next suggestion)
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-1"
-                  >
-                    Navigable bar
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="selectedPrototype"
+                    v-model="selectedNavigationGroup"
                     name="suggestions-discoverability"
                     input-value="option-4"
                   >
                     Overview with list of suggestions
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="selectedPrototype"
-                    name="suggestions-discoverability"
-                    input-value="option-2"
-                  >
-                    Just navigate to 1st suggestion
                   </cdx-radio>
                 </div>
               </cdx-field>
@@ -4468,36 +4497,28 @@
                 </div>
               </cdx-field>
               <cdx-field>
-                <template #label>Others</template>
-                <cdx-checkbox v-model="toastsEnabled">
-                  Enable contextual Toasts (<a href="https://phabricator.wikimedia.org/T417827" target="_blank" rel="noopener">T417827</a>)
-                </cdx-checkbox>
+                <template #label>Other features</template>
                 <cdx-checkbox v-model="filteringEnabled">
                   Enable filtering (<a href="https://phabricator.wikimedia.org/T420648" target="_blank" rel="noopener">T420648</a>)
-                </cdx-checkbox>
-                <cdx-checkbox v-model="newSuggestionColorEnabled">
-                  New color of suggestions
-                </cdx-checkbox>
-                <cdx-checkbox v-model="nonSelectedHighlightUnderlineEnabled">
-                  Highlighted text is underlined when non selected
                 </cdx-checkbox>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="noMoreSuggestionsEmptyStateEnabled">
-                  Enable "No more suggestions" empty state
+                <cdx-checkbox v-model="successHighlightOnCompleteEnabled">
+                  Enable success highlighted when completing a suggestion (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
                 </cdx-checkbox>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="editFullPageImprovedEnabled">
-                  "Edit full page" button improved
+                <cdx-checkbox v-if="isMinervaSkin" v-model="noMoreSuggestionsEmptyStateEnabled">
+                  Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="minervaFullPageSuggestionNavigationEnabled">
                   Enable sections navigation when editing full page (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
                 </cdx-checkbox>
-                <div v-if="isMinervaSkin && minervaFullPageSuggestionNavigationEnabled" class="prototype-suboptions">
+                <div v-if="isMinervaSkin && minervaFullPageSuggestionNavigationEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
                   <cdx-radio
                     v-model="minervaFullPageSuggestionNavigationMode"
                     name="minerva-full-page-suggestion-navigation-mode"
                     input-value="toc-button"
+                    class="prototype-suboption-radio"
                   >
                     Use Table of contents button
                   </cdx-radio>
@@ -4505,11 +4526,44 @@
                     v-model="minervaFullPageSuggestionNavigationMode"
                     name="minerva-full-page-suggestion-navigation-mode"
                     input-value="scroll-button"
+                    class="prototype-suboption-radio prototype-suboption-radio--last"
                   >
                     Use scroll button with sections
                   </cdx-radio>
                 </div>
               </cdx-field>
+              <cdx-field>
+                <template #label>Visual improvements</template>
+                <cdx-checkbox v-model="newSuggestionColorEnabled">
+                  New color of suggestions
+                </cdx-checkbox>
+                <cdx-checkbox v-model="nonSelectedHighlightUnderlineEnabled">
+                  Highlighted text is underlined when non selected
+                </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="editFullPageImprovedEnabled">
+                  "Edit full page" button improved
+                </cdx-checkbox>
+              </cdx-field>
+            </div>
+          </div>
+        </cdx-dialog>
+
+        <cdx-dialog
+          v-model:open="isVectorNoMoreSuggestionsDialogOpen"
+          title="No more suggestions"
+          use-close-button
+        >
+          <div class="prototype-dialog-content">
+            <p class="vector-no-more-dialog-text">
+              {{ vectorNoMoreSuggestionsDescription }}
+            </p>
+            <div class="vector-no-more-dialog-actions">
+              <cdx-button action="default" weight="normal" @click="isVectorNoMoreSuggestionsDialogOpen = false">
+                Continue editing
+              </cdx-button>
+              <cdx-button action="progressive" weight="primary" @click="publishEdits">
+                Publish
+              </cdx-button>
             </div>
           </div>
         </cdx-dialog>
@@ -5099,11 +5153,27 @@ const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(false);
+const successHighlightOnCompleteEnabled = ref(false);
 const noMoreSuggestionsEmptyStateEnabled = ref(false);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false);
 const minervaFullPageSuggestionNavigationMode = ref('toc-button');
 const selectedPrototype = ref('option-4');
+const selectedNavigationGroup = computed({
+  get() {
+    if (selectedPrototype.value === 'option-5' || selectedPrototype.value === 'option-6') {
+      return 'pagination';
+    }
+    return selectedPrototype.value;
+  },
+  set(value) {
+    if (value === 'pagination') {
+      selectedPrototype.value = 'option-5';
+      return;
+    }
+    selectedPrototype.value = value;
+  }
+});
 const toastsEnabled = ref(true);
 const showSuggestionBadge = ref(false);
 const showSuggestionInfoPreference = ref(true);
@@ -5111,6 +5181,8 @@ const dontShowSuggestionInfo = ref(false);
 const minervaNoMoreSuggestionsState = ref(null);
 const pendingScrollSection = ref(null);
 const minervaEditSectionOnly = ref(null);
+const isVectorNoMoreSuggestionsDialogOpen = ref(false);
+const successHighlightSuggestionIds = ref([]);
 const minervaSectionBannerDismissed = ref({
   'early-life': false,
   career: false,
@@ -5142,12 +5214,15 @@ function loadPrototypeDialogPrefs() {
     const raw = window.localStorage.getItem(prototypeDialogPrefsStorageKey);
     if (!raw) return;
     const prefs = JSON.parse(raw);
-    if (typeof prefs.selectedPrototype === 'string') selectedPrototype.value = prefs.selectedPrototype;
+    if (typeof prefs.selectedPrototype === 'string') {
+      selectedPrototype.value = [ 'option-1', 'option-2' ].includes(prefs.selectedPrototype)
+        ? 'option-5'
+        : prefs.selectedPrototype;
+    }
     if (typeof prefs.minervaToggleLocation === 'string') minervaToggleLocation.value = prefs.minervaToggleLocation;
     if (typeof prefs.paginationManualNavigableButtonEnabled === 'boolean') {
       paginationManualNavigableButtonEnabled.value = prefs.paginationManualNavigableButtonEnabled;
     }
-    if (typeof prefs.toastsEnabled === 'boolean') toastsEnabled.value = prefs.toastsEnabled;
     if (typeof prefs.filteringEnabled === 'boolean') filteringEnabled.value = prefs.filteringEnabled;
     if (typeof prefs.newSuggestionColorEnabled === 'boolean') newSuggestionColorEnabled.value = prefs.newSuggestionColorEnabled;
     if (typeof prefs.nonSelectedHighlightUnderlineEnabled === 'boolean') {
@@ -5155,6 +5230,9 @@ function loadPrototypeDialogPrefs() {
     }
     if (typeof prefs.editToolbarImprovementsEnabled === 'boolean') {
       editToolbarImprovementsEnabled.value = prefs.editToolbarImprovementsEnabled;
+    }
+    if (typeof prefs.successHighlightOnCompleteEnabled === 'boolean') {
+      successHighlightOnCompleteEnabled.value = prefs.successHighlightOnCompleteEnabled;
     }
     if (typeof prefs.noMoreSuggestionsEmptyStateEnabled === 'boolean') {
       noMoreSuggestionsEmptyStateEnabled.value = prefs.noMoreSuggestionsEmptyStateEnabled;
@@ -5179,11 +5257,11 @@ function savePrototypeDialogPrefs() {
     selectedPrototype: selectedPrototype.value,
     minervaToggleLocation: minervaToggleLocation.value,
     paginationManualNavigableButtonEnabled: paginationManualNavigableButtonEnabled.value,
-    toastsEnabled: toastsEnabled.value,
     filteringEnabled: filteringEnabled.value,
     newSuggestionColorEnabled: newSuggestionColorEnabled.value,
     nonSelectedHighlightUnderlineEnabled: nonSelectedHighlightUnderlineEnabled.value,
     editToolbarImprovementsEnabled: editToolbarImprovementsEnabled.value,
+    successHighlightOnCompleteEnabled: successHighlightOnCompleteEnabled.value,
     noMoreSuggestionsEmptyStateEnabled: noMoreSuggestionsEmptyStateEnabled.value,
     editFullPageImprovedEnabled: editFullPageImprovedEnabled.value,
     minervaFullPageSuggestionNavigationEnabled: minervaFullPageSuggestionNavigationEnabled.value,
@@ -5232,6 +5310,7 @@ const allSuggestionsHandled = computed(() => {
   const suggestion2Handled = citationNumber2.value !== null || isSuggestionDeclined2.value;
   const suggestion3Handled = citationNumber3.value !== null || isSuggestionDeclined3.value;
   const suggestion4Handled = isSuggestionResolved4.value || isSuggestionDeclined4.value;
+  const suggestion5Handled = isSuggestionResolved5.value || isSuggestionDeclined5.value;
   const suggestion6Handled = isSuggestionResolved6.value || isSuggestionDeclined6.value;
   const suggestion7Handled = isSuggestionResolved7.value || isSuggestionDeclined7.value;
   const suggestion8Handled = isSuggestionResolved8.value || isSuggestionDeclined8.value;
@@ -5239,6 +5318,7 @@ const allSuggestionsHandled = computed(() => {
     suggestion2Handled &&
     suggestion3Handled &&
     suggestion4Handled &&
+    suggestion5Handled &&
     suggestion6Handled &&
     suggestion7Handled &&
     suggestion8Handled;
@@ -5250,6 +5330,7 @@ const showEmptyState = computed(() => {
   const suggestion2Done = citationNumber2.value !== null || isSuggestionDeclined2.value;
   const suggestion3Done = citationNumber3.value !== null || isSuggestionDeclined3.value;
   const suggestion4Done = isSuggestionResolved4.value || isSuggestionDeclined4.value;
+  const suggestion5Done = isSuggestionResolved5.value || isSuggestionDeclined5.value;
   const suggestion6Done = isSuggestionResolved6.value || isSuggestionDeclined6.value;
   const suggestion7Done = isSuggestionResolved7.value || isSuggestionDeclined7.value;
   const suggestion8Done = isSuggestionResolved8.value || isSuggestionDeclined8.value;
@@ -5257,6 +5338,7 @@ const showEmptyState = computed(() => {
     suggestion2Done &&
     suggestion3Done &&
     suggestion4Done &&
+    suggestion5Done &&
     suggestion6Done &&
     suggestion7Done &&
     suggestion8Done;
@@ -5274,6 +5356,9 @@ const isSuggestion3Pending = computed(() => (
 const isSuggestion4Pending = computed(() => (
   !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value
 ));
+const isSuggestion5Pending = computed(() => (
+  !isSuggestionResolved5.value && !isSuggestionDeclined5.value
+));
 const isSuggestion6Pending = computed(() => (
   !isSuggestionResolved6.value && !isSuggestionDeclined6.value
 ));
@@ -5288,6 +5373,7 @@ const availableSuggestionCount = computed(() => (
   (isSuggestion2Pending.value ? 1 : 0) +
   (isSuggestion3Pending.value ? 1 : 0) +
   (isSuggestion4Pending.value ? 1 : 0) +
+  (isSuggestion5Pending.value ? 1 : 0) +
   (isSuggestion6Pending.value ? 1 : 0) +
   (isSuggestion7Pending.value ? 1 : 0) +
   (isSuggestion8Pending.value ? 1 : 0)
@@ -5318,6 +5404,15 @@ const completedSuggestionCount = computed(() => (
   (isSuggestionResolved6.value ? 1 : 0) +
   (isSuggestionResolved7.value ? 1 : 0) +
   (isSuggestionResolved8.value ? 1 : 0)
+));
+const allSuggestionsDeclined = computed(() => (
+  isSuggestionDeclined1.value &&
+  isSuggestionDeclined2.value &&
+  isSuggestionDeclined3.value &&
+  isSuggestionDeclined4.value &&
+  isSuggestionDeclined6.value &&
+  isSuggestionDeclined7.value &&
+  isSuggestionDeclined8.value
 ));
 const otherSuggestionCount = computed(() => {
   if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
@@ -5709,6 +5804,9 @@ const minervaNoMoreSuggestionsDescription = computed(() => {
   }
   return '';
 });
+const vectorNoMoreSuggestionsDescription = computed(() => (
+  `You’ve reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`
+));
 const minervaSheetTitle = computed(() => {
   if (showMinervaNoMoreSuggestionsState.value) return 'No more suggestions';
   if (shouldShowEmptyState.value) return 'No suggestions';
@@ -5724,7 +5822,6 @@ const minervaToggleBottom = computed(() => {
 const anySuggestionVisible = ref(false);
 const shouldShowToasts = computed(() => (
   isMinervaSkin.value &&
-  toastsEnabled.value &&
   (activePrototype.value === 'option-1' ||
     activePrototype.value === 'option-2' ||
     activePrototype.value === 'option-3' ||
@@ -5736,7 +5833,8 @@ const shouldShowBanner = computed(() => {
     const sectionToSuggestionId = {
       career: 1,
       poetry: 8,
-      prose: 7
+      prose: 7,
+      theory: 5
     };
     const sectionId = minervaEditSectionOnly.value;
     const suggestionId = sectionToSuggestionId[sectionId];
@@ -6018,6 +6116,7 @@ const showMinervaSuggestionHeaderIndicator = computed(() => (
 ));
 const showMinervaSheetReturnArrow = computed(() => (
   Boolean(minervaSheetReturnDirection.value) &&
+  !isAutoScrollActive.value &&
   !(activePrototype.value === 'option-3' && !isEditCheckSheet.value)
 ));
 const isMinervaPaginationPrevDisabled = computed(() => (
@@ -6163,6 +6262,24 @@ function clearMinervaNoMoreSuggestionsState() {
   minervaNoMoreSuggestionsState.value = null;
 }
 
+function isSuccessHighlightActive(suggestionId) {
+  return successHighlightSuggestionIds.value.includes(suggestionId);
+}
+
+function activateSuccessHighlight(suggestionId) {
+  if (!successHighlightOnCompleteEnabled.value) return;
+  if (!successHighlightSuggestionIds.value.includes(suggestionId)) {
+    successHighlightSuggestionIds.value = [ ...successHighlightSuggestionIds.value, suggestionId ];
+  }
+  window.setTimeout(() => {
+    successHighlightSuggestionIds.value = successHighlightSuggestionIds.value.filter((id) => id !== suggestionId);
+  }, 4000);
+}
+
+function closeVectorNoMoreSuggestionsDialog() {
+  isVectorNoMoreSuggestionsDialogOpen.value = false;
+}
+
 function openMinervaNoMoreSuggestionsStateSheet(mode) {
   if (!noMoreSuggestionsEmptyStateEnabled.value || !isMinervaSkin.value) return false;
   minervaSheetMode.value = 'suggestion';
@@ -6171,6 +6288,32 @@ function openMinervaNoMoreSuggestionsStateSheet(mode) {
   isMinervaSheetOpen.value = true;
   updateMinervaSheetHeight();
   return true;
+}
+
+function maybeShowVectorNoMoreSuggestionsDialog() {
+  if (
+    !noMoreSuggestionsEmptyStateEnabled.value ||
+    isMinervaSkin.value ||
+    !isEditMode.value ||
+    !showSuggestions.value ||
+    completedSuggestionCount.value <= 0 ||
+    availableSuggestionCount.value !== 0
+  ) {
+    return false;
+  }
+  isVectorNoMoreSuggestionsDialogOpen.value = true;
+  return true;
+}
+
+function shouldShowNoMoreSuggestionsLeftToast() {
+  return (
+    !minervaEditSectionOnly.value &&
+    isEditMode.value &&
+    showSuggestions.value &&
+    availableSuggestionCount.value === 0 &&
+    completedSuggestionCount.value === 0 &&
+    allSuggestionsDeclined.value
+  );
 }
 
 function maybeShowMinervaNoMoreSuggestionsState() {
@@ -6196,6 +6339,7 @@ function maybeShowMinervaNoMoreSuggestionsState() {
 
 function clearEditModeUiState() {
   closeMinervaSuggestion();
+  closeVectorNoMoreSuggestionsDialog();
   isEditMode.value = false;
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
@@ -6221,6 +6365,7 @@ function publishEdits() {
   editRedoStack.value = [];
   syncMinervaRedoButtonVisibility();
   hasUnsavedChanges.value = false;
+  closeVectorNoMoreSuggestionsDialog();
   clearEditModeUiState();
 }
 
@@ -6283,19 +6428,9 @@ function expandToFullPageEdit(sectionId, { openFirstSuggestion = false } = {}) {
   if (isMinervaSkin.value && shouldShowToasts.value) {
     nextTick(() => {
       const newAvailable = availableSuggestionCount.value;
-      if (newAvailable > previousAvailable) {
-        showMinervaMoreSuggestionsToast.value = true;
-        if (showSuggestions.value) {
-          isBannerDismissed.value = false;
-          isBannerDelayReady.value = true;
-        }
-        if (minervaMoreSuggestionsToastTimer) {
-          clearTimeout(minervaMoreSuggestionsToastTimer);
-        }
-        minervaMoreSuggestionsToastTimer = setTimeout(() => {
-          showMinervaMoreSuggestionsToast.value = false;
-          minervaMoreSuggestionsToastTimer = null;
-        }, 2000);
+      if (newAvailable > previousAvailable && showSuggestions.value) {
+        isBannerDismissed.value = false;
+        isBannerDelayReady.value = true;
       }
     });
   }
@@ -7605,7 +7740,7 @@ function triggerMinervaDismiss(suggestionId) {
 }
 
 function showPaginationNoMoreSuggestionsToast() {
-  if (!isPaginationMode.value) return;
+  if (!shouldShowNoMoreSuggestionsLeftToast()) return;
   if (paginationNoSuggestionsToastTimer) {
     clearTimeout(paginationNoSuggestionsToastTimer);
   }
@@ -7626,6 +7761,10 @@ function triggerSuggestionSuccessToast() {
     showSuggestionSuccessToast.value = false;
     suggestionSuccessToastTimer = null;
   }, 4000);
+}
+
+function getSuggestionSuccessAutoAdvanceDelay(wasCompleted = false) {
+  return wasCompleted && successHighlightOnCompleteEnabled.value && shouldAutoAdvancePaginationSuggestion.value ? 1500 : 0;
 }
 
 function shouldAdvanceMinervaSuggestionAfterResolve() {
@@ -7695,17 +7834,20 @@ function advanceMinervaEditCheck(currentType) {
   });
 }
 
-function handleMinervaSuggestionResolutionAfterAction(currentId) {
-  nextTick(() => {
-    if (maybeShowMinervaNoMoreSuggestionsState()) {
-      return;
-    }
-    if (shouldAdvanceMinervaSuggestionAfterResolve()) {
-      advanceMinervaSuggestion(currentId);
-    } else {
-      closeMinervaSuggestion();
-    }
-  });
+function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
+  const delay = getSuggestionSuccessAutoAdvanceDelay(wasCompleted);
+  window.setTimeout(() => {
+    nextTick(() => {
+      if (maybeShowMinervaNoMoreSuggestionsState()) {
+        return;
+      }
+      if (shouldAdvanceMinervaSuggestionAfterResolve()) {
+        advanceMinervaSuggestion(currentId);
+      } else {
+        closeMinervaSuggestion();
+      }
+    });
+  }, delay);
 }
 
 function handleBannerClose() {
@@ -7821,9 +7963,10 @@ function getSuggestionIdsForCurrentContext() {
     if (minervaEditSectionOnly.value === 'career') return [1];
     if (minervaEditSectionOnly.value === 'poetry') return [8, 6, 2, 4];
     if (minervaEditSectionOnly.value === 'prose') return [7, 3];
+    if (minervaEditSectionOnly.value === 'theory') return [5];
     return [];
   }
-  return [1, 8, 6, 2, 4, 7, 3];
+  return [1, 8, 6, 2, 4, 7, 3, 5];
 }
 
 function getPendingSuggestionIdsForContext() {
@@ -7836,6 +7979,7 @@ function getPendingSuggestionIdsForContext() {
     if (minervaEditSectionOnly.value === 'poetry' && isSuggestion4Pending.value) ids.push(4);
     if (minervaEditSectionOnly.value === 'prose' && isSuggestion7Pending.value) ids.push(7);
     if (minervaEditSectionOnly.value === 'prose' && isSuggestion3Pending.value) ids.push(3);
+    if (minervaEditSectionOnly.value === 'theory' && isSuggestion5Pending.value) ids.push(5);
     return ids;
   }
   if (isSuggestion1Pending.value) ids.push(1);
@@ -7845,6 +7989,7 @@ function getPendingSuggestionIdsForContext() {
   if (isSuggestion4Pending.value) ids.push(4);
   if (isSuggestion7Pending.value) ids.push(7);
   if (isSuggestion3Pending.value) ids.push(3);
+  if (isSuggestion5Pending.value) ids.push(5);
   return ids;
 }
 
@@ -8316,17 +8461,32 @@ const editSectionRefs = {
   theory: editSectionTheory
 };
 
-function scrollToEditSection(sectionId) {
-  const targetRef = editSectionRefs[sectionId];
-  if (targetRef && targetRef.value) {
-    targetRef.value.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  }
+function getEditModeToolbarHeight() {
+  if (typeof document === 'undefined') return 0;
+  const toolbar = document.querySelector('.editor-toolbar');
+  return toolbar instanceof HTMLElement ? toolbar.offsetHeight : 0;
 }
 
 function getMinervaEditToolbarHeight() {
-  if (typeof document === 'undefined') return editToolbarImprovementsEnabled.value ? 48 : 42;
-  const toolbar = document.querySelector('.editor-toolbar--minerva');
-  return toolbar instanceof HTMLElement ? toolbar.offsetHeight : (editToolbarImprovementsEnabled.value ? 48 : 42);
+  return getEditModeToolbarHeight();
+}
+
+function getEditSectionHeadingElement(sectionElement) {
+  if (!(sectionElement instanceof HTMLElement)) return null;
+  return sectionElement.querySelector('.heading-text-edit');
+}
+
+function scrollToEditSection(sectionId) {
+  const targetRef = editSectionRefs[sectionId];
+  const sectionElement = targetRef?.value;
+  if (!(sectionElement instanceof HTMLElement) || typeof window === 'undefined') return;
+  const heading = getEditSectionHeadingElement(sectionElement) || sectionElement;
+  const toolbarHeight = getEditModeToolbarHeight();
+  const targetTop = window.scrollY + heading.getBoundingClientRect().top - toolbarHeight;
+  window.scrollTo({
+    top: Math.max(0, Math.round(targetTop)),
+    behavior: 'smooth'
+  });
 }
 
 function getMinervaFullPageTocTargetElement(item) {
@@ -8666,11 +8826,12 @@ function handleNoSuggestion3() {
 
 function handleYesSuggestion4() {
   isSuggestionResolved4.value = true;
+  activateSuccessHighlight(4);
   isCardExpanded4.value = false;
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(4);
     setTimeout(() => {
-      handleMinervaSuggestionResolutionAfterAction(4);
+      handleMinervaSuggestionResolutionAfterAction(4, true);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -8698,6 +8859,7 @@ function handleNoSuggestion4() {
 }
 
 function handleResolveGenericSuggestion(suggestionId) {
+  activateSuccessHighlight(suggestionId);
   if (suggestionId === 5) {
     isSuggestionResolved5.value = true;
     isCardExpanded5.value = false;
@@ -8714,7 +8876,7 @@ function handleResolveGenericSuggestion(suggestionId) {
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(suggestionId);
     setTimeout(() => {
-      handleMinervaSuggestionResolutionAfterAction(suggestionId);
+      handleMinervaSuggestionResolutionAfterAction(suggestionId, true);
     }, 260);
   } else {
     closeMinervaSuggestion();
@@ -8761,9 +8923,10 @@ function createCitation1() {
   if (citationUrl1.value.trim()) {
     citationCounter.value++;
     citationNumber1.value = citationCounter.value;
+    activateSuccessHighlight(1);
     showCitationPopup1.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      handleMinervaSuggestionResolutionAfterAction(1);
+      handleMinervaSuggestionResolutionAfterAction(1, true);
     } else {
       closeMinervaSuggestion();
     }
@@ -8780,9 +8943,10 @@ function createCitation2() {
   if (citationUrl2.value.trim()) {
     citationCounter.value++;
     citationNumber2.value = citationCounter.value;
+    activateSuccessHighlight(2);
     showCitationPopup2.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      handleMinervaSuggestionResolutionAfterAction(2);
+      handleMinervaSuggestionResolutionAfterAction(2, true);
     } else {
       closeMinervaSuggestion();
     }
@@ -8799,9 +8963,10 @@ function createCitation3() {
   if (citationUrl3.value.trim()) {
     citationCounter.value++;
     citationNumber3.value = citationCounter.value;
+    activateSuccessHighlight(3);
     showCitationPopup3.value = false;
     if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-      handleMinervaSuggestionResolutionAfterAction(3);
+      handleMinervaSuggestionResolutionAfterAction(3, true);
     } else {
       closeMinervaSuggestion();
     }
@@ -9391,6 +9556,12 @@ watch(minervaToggleLocation, (value) => {
   }
 });
 
+watch(selectedPrototype, (value) => {
+  if (isMinervaSkin.value && value === 'option-4') {
+    minervaToggleLocation.value = 'outside';
+  }
+});
+
 watch(activePrototype, (value) => {
   isMinervaOverviewSheetOpen.value = false;
   if (!['option-5', 'option-6'].includes(value)) {
@@ -9421,11 +9592,11 @@ watch(
     selectedPrototype,
     minervaToggleLocation,
     paginationManualNavigableButtonEnabled,
-    toastsEnabled,
     filteringEnabled,
     newSuggestionColorEnabled,
     nonSelectedHighlightUnderlineEnabled,
     editToolbarImprovementsEnabled,
+    successHighlightOnCompleteEnabled,
     noMoreSuggestionsEmptyStateEnabled,
     editFullPageImprovedEnabled,
     minervaFullPageSuggestionNavigationEnabled,
@@ -9574,9 +9745,11 @@ watch(availableSuggestionCount, (newValue, oldValue) => {
     maybeShowMinervaNoMoreSuggestionsState()
   ) {
     // The bottom sheet handles the no-more-suggestions state in Minerva.
-  } else if (isPaginationMode.value && oldValue > 0 && newValue === 0) {
+  } else if (oldValue > 0 && newValue === 0 && maybeShowVectorNoMoreSuggestionsDialog()) {
+    // Vector uses a dialog for the no-more-suggestions article state.
+  } else if (oldValue > 0 && newValue === 0 && shouldShowNoMoreSuggestionsLeftToast()) {
     showPaginationNoMoreSuggestionsToast();
-  } else if (shouldShowToasts.value && oldValue > 0 && newValue === 0) {
+  } else if (shouldShowToasts.value && oldValue > 0 && newValue === 0 && !noMoreSuggestionsEmptyStateEnabled.value) {
     if (minervaZeroSuggestionsToastTimer) {
       clearTimeout(minervaZeroSuggestionsToastTimer);
     }
@@ -9930,6 +10103,9 @@ function getPendingSuggestionTargets() {
   if (citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value && highlightedTextRef3.value) {
     targets.push({ id: 3, ref: highlightedTextRef3 });
   }
+  if (!isSuggestionResolved5.value && !isSuggestionDeclined5.value && highlightedTextRef5.value) {
+    targets.push({ id: 5, ref: highlightedTextRef5 });
+  }
   if (!isSuggestionResolved6.value && !isSuggestionDeclined6.value && highlightedTextRef6.value) {
     targets.push({ id: 6, ref: highlightedTextRef6 });
   }
@@ -10075,6 +10251,7 @@ function openFirstPendingSuggestion(expandAfterScroll = false, options = {}) {
   const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
   const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
   const suggestion4Pending = !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value;
+  const suggestion5Pending = !isSuggestionResolved5.value && !isSuggestionDeclined5.value;
   const suggestion6Pending = !isSuggestionResolved6.value && !isSuggestionDeclined6.value;
   const suggestion7Pending = !isSuggestionResolved7.value && !isSuggestionDeclined7.value;
   const suggestion8Pending = !isSuggestionResolved8.value && !isSuggestionDeclined8.value;
@@ -10093,6 +10270,8 @@ function openFirstPendingSuggestion(expandAfterScroll = false, options = {}) {
     openSuggestionAtTarget(7, highlightedTextRef7, expandAfterScroll, options);
   } else if (suggestion3Pending) {
     openSuggestionAtTarget(3, highlightedTextRef3, expandAfterScroll, options);
+  } else if (suggestion5Pending) {
+    openSuggestionAtTarget(5, highlightedTextRef5, expandAfterScroll, options);
   }
 }
 
@@ -12930,6 +13109,12 @@ function markArticleEdited() {
   gap: 8px;
 }
 
+.prototype-suboptions--indexed-radios {
+  margin-top: 0;
+  margin-bottom: 8px;
+  gap: 0;
+}
+
 .minerva-full-page-sections-nav {
   position: fixed;
   right: 0;
@@ -14077,6 +14262,20 @@ function markArticleEdited() {
   -webkit-box-decoration-break: clone;
 }
 
+.highlighted-text-wrapper--success {
+  cursor: default;
+}
+
+.highlighted-text-wrapper--success .highlighted-text-annotation {
+  background-color: var(--background-color-success-subtle, #dff2eb) !important;
+  text-decoration: none;
+}
+
+.minerva-skin .highlighted-text-wrapper--success .highlighted-text-annotation {
+  background-color: var(--background-color-success-subtle, #dff2eb) !important;
+  text-decoration: none;
+}
+
 .feedback-underlined-unselected .highlighted-text-annotation {
   text-decoration: underline;
   text-decoration-color: var(--border-color-subtle, #C8CCD1);
@@ -14774,12 +14973,6 @@ function markArticleEdited() {
   transform: none;
 }
 
-.minerva-sheet-icon-button--close :deep(.cdx-icon),
-.minerva-sheet-icon-button--close :deep(svg) {
-  color: var(--color-subtle, #54595d);
-  fill: var(--color-subtle, #54595d);
-}
-
 .minerva-sheet-description {
   margin-top: 0;
   font-size: 16px;
@@ -14900,8 +15093,8 @@ function markArticleEdited() {
 
 .minerva-pagination-count {
   text-align: left;
-  font-size: 14px;
-  line-height: 20px;
+  font-size: 16px;
+  line-height: 24px;
   color: var(--color-subtle, #54595d);
 }
 
@@ -14912,20 +15105,24 @@ function markArticleEdited() {
 }
 
 .minerva-pagination-btn {
-  width: 28px;
-  height: 28px;
-  border: none;
-  background: transparent;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
+}
+
+.minerva-pagination-btn :deep(.cdx-button__button) {
+  min-width: 32px;
+  min-height: 32px;
   color: var(--color-base, #202122);
 }
 
 .minerva-pagination-btn:disabled {
   color: var(--color-disabled, #a2a9b1);
   cursor: not-allowed;
+}
+
+.minerva-pagination-btn:disabled :deep(.cdx-button__button) {
+  color: var(--color-disabled, #a2a9b1);
 }
 
 .minerva-pagination-btn:disabled :deep(.cdx-icon),
@@ -14940,6 +15137,12 @@ function markArticleEdited() {
 
 .minerva-pagination-icon--prev {
   transform: rotate(180deg);
+}
+
+.minerva-sheet-more-actions :deep(.cdx-icon),
+.minerva-sheet-more-actions :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
 }
 
 .minerva-sheet-btn {
@@ -16575,6 +16778,22 @@ function markArticleEdited() {
   gap: 8px;
 }
 
+.prototype-suboption-radio :deep(.cdx-radio--status-default) {
+  padding-bottom: 0;
+}
+
+.prototype-suboption-radio {
+  margin: 0;
+}
+
+.prototype-suboption-radio + .prototype-suboption-radio {
+  margin-top: 4px;
+}
+
+.prototype-suboption-radio--last :deep(.cdx-radio--status-default) {
+  padding-bottom: 12px;
+}
+
 .prototype-dialog-checkboxes {
   display: flex;
   flex-direction: column;
@@ -16586,6 +16805,18 @@ function markArticleEdited() {
 .prototype-dialog-checkboxes :deep(.cdx-checkbox) {
   padding-bottom: 0;
   margin-bottom: 0;
+}
+
+.vector-no-more-dialog-text {
+  margin: 0;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.vector-no-more-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
 }
 
 .vector-skin :deep(.cdx-dialog__body) {
