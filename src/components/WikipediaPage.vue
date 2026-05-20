@@ -3233,15 +3233,6 @@
               >
                 <cdx-icon :icon="cdxIconExpand" size="small" class="vector-pagination-icon" />
               </button>
-              <button
-                v-if="showDesktopPaginationFilterButton"
-                class="vector-pagination-btn vector-pagination-btn--filter"
-                type="button"
-                aria-label="Filter suggestions"
-                @click="handleFilterSuggestionsClick"
-              >
-                <cdx-icon :icon="cdxIconConfigure" size="small" class="vector-pagination-icon" />
-              </button>
             </div>
           </div>
           <!-- First Add Citation Suggestion Card -->
@@ -4849,14 +4840,40 @@ const desktopPaginationIndex = computed(() => {
 const desktopPaginationLabel = computed(() => (
   `${desktopPaginationIndex.value + 1} of ${desktopPaginationIds.value.length} suggestions`
 ));
+const desktopSingleSuggestionDirection = computed(() => {
+  if (desktopPaginationIds.value.length !== 1) return null;
+  const onlyId = desktopPaginationIds.value[0];
+  const targetRef = getSuggestionRefById(onlyId);
+  const target = targetRef?.value;
+  if (!target || typeof window === 'undefined') return null;
+  const rect = target.getBoundingClientRect();
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  if (rect.bottom <= 0) return 'up';
+  if (rect.top >= viewportHeight) return 'down';
+  if (!isTargetVisibleInViewport(target)) {
+    const targetMiddle = rect.top + (rect.height / 2);
+    return targetMiddle < viewportHeight / 2 ? 'up' : 'down';
+  }
+  return null;
+});
 const isDesktopPaginationPrevDisabled = computed(() => (
-  desktopPaginationIds.value.length <= 1
+  desktopPaginationIds.value.length === 0 ||
+  (
+    desktopPaginationIds.value.length === 1
+      ? desktopSingleSuggestionDirection.value !== 'up'
+      : desktopPaginationIndex.value <= 0
+  )
 ));
 const isDesktopPaginationNextDisabled = computed(() => (
-  desktopPaginationIds.value.length <= 1
+  desktopPaginationIds.value.length === 0 ||
+  (
+    desktopPaginationIds.value.length === 1
+      ? desktopSingleSuggestionDirection.value !== 'down'
+      : desktopPaginationIndex.value >= desktopPaginationIds.value.length - 1
+  )
 ));
 const showDesktopPaginationArrows = computed(() => (
-  desktopPaginationIds.value.length > 1
+  desktopPaginationIds.value.length > 0
 ));
 const showDesktopPaginationControls = computed(
   () => !isMinervaSkin.value &&
@@ -4964,6 +4981,7 @@ const isMinervaSheetOpen = ref(false);
 const activeMinervaSuggestion = ref(1);
 const minervaSheetRef = ref(null);
 const minervaSheetReturnDirection = ref(null);
+const hasManualMinervaSheetScrollSinceTargetSelection = ref(false);
 const minervaSheetHeight = ref(0);
 const minervaLastScrollY = ref(0);
 const suppressMinervaSheetReturnDirection = ref(false);
@@ -6024,13 +6042,14 @@ const showMinervaSheetReturnArrow = computed(() => (
   !(activePrototype.value === 'option-3' && !isEditCheckSheet.value)
 ));
 const isMinervaPaginationPrevDisabled = computed(() => (
-  minervaPaginationTotal.value <= 1
+  minervaPaginationTotal.value === 0 || minervaPaginationIndex.value <= 0
 ));
 const isMinervaPaginationNextDisabled = computed(() => (
-  minervaPaginationTotal.value <= 1
+  minervaPaginationTotal.value === 0 ||
+  minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
 ));
 const showMinervaPaginationArrows = computed(() => (
-  minervaPaginationTotal.value > 1
+  minervaPaginationTotal.value > 0
 ));
 const showMinervaPagination = computed(() => {
   if (showMinervaNoMoreSuggestionsState.value) {
@@ -6572,6 +6591,7 @@ function createEditCheckTriggerButton() {
       closeMinervaSuggestion();
       return;
     }
+    resetMinervaSheetReturnArrowState();
     minervaSheetMode.value = 'edit-check';
     isMinervaSheetOpen.value = true;
     updateMinervaSheetHeight();
@@ -7212,6 +7232,7 @@ function handleMinervaRailArrowClick(direction) {
 
 function suppressMinervaReturnDirectionDuringAutoScroll(duration = 1200) {
   suppressMinervaSheetReturnDirection.value = true;
+  hasManualMinervaSheetScrollSinceTargetSelection.value = false;
   minervaSheetReturnDirection.value = null;
   if (suppressMinervaSheetReturnDirectionTimer) {
     clearTimeout(suppressMinervaSheetReturnDirectionTimer);
@@ -7228,6 +7249,19 @@ function suppressMinervaReturnDirectionDuringPaginationScroll() {
   suppressMinervaReturnDirectionDuringAutoScroll(1400);
 }
 
+function resetMinervaSheetReturnArrowState() {
+  hasManualMinervaSheetScrollSinceTargetSelection.value = false;
+  minervaSheetReturnDirection.value = null;
+}
+
+function handleMinervaSheetManualScroll() {
+  if (!isMinervaSkin.value || !isMinervaSheetOpen.value) return;
+  if (suppressMinervaSheetReturnDirection.value) return;
+  if (!getCurrentMinervaSheetTarget()) return;
+  hasManualMinervaSheetScrollSinceTargetSelection.value = true;
+  updateMinervaSheetReturnDirection();
+}
+
 function handleMinervaRailFilterClick() {
   if (isMinervaSkin.value && isMinervaSheetOpen.value && !isEditCheckSheet.value) {
     closeMinervaSuggestion();
@@ -7241,8 +7275,17 @@ function handleMinervaRailFilterClick() {
 
 function handleDesktopPaginationPrev() {
   if (isDesktopPaginationPrevDisabled.value) return;
-  const nextIndex = (desktopPaginationIndex.value - 1 + desktopPaginationIds.value.length) % desktopPaginationIds.value.length;
+  if (desktopPaginationIds.value.length === 1) {
+    const onlyId = desktopPaginationIds.value[0];
+    const targetRef = getSuggestionRefById(onlyId);
+    if (targetRef) {
+      openSuggestionAtTarget(onlyId, targetRef, true, { keepDesktopPaginationClear: true });
+    }
+    return;
+  }
+  const nextIndex = desktopPaginationIndex.value - 1;
   const nextId = desktopPaginationIds.value[nextIndex];
+  if (nextId === undefined) return;
   const targetRef = getSuggestionRefById(nextId);
   if (targetRef) {
     openSuggestionAtTarget(nextId, targetRef, true, { keepDesktopPaginationClear: true });
@@ -7251,8 +7294,17 @@ function handleDesktopPaginationPrev() {
 
 function handleDesktopPaginationNext() {
   if (isDesktopPaginationNextDisabled.value) return;
-  const nextIndex = (desktopPaginationIndex.value + 1) % desktopPaginationIds.value.length;
+  if (desktopPaginationIds.value.length === 1) {
+    const onlyId = desktopPaginationIds.value[0];
+    const targetRef = getSuggestionRefById(onlyId);
+    if (targetRef) {
+      openSuggestionAtTarget(onlyId, targetRef, true, { keepDesktopPaginationClear: true });
+    }
+    return;
+  }
+  const nextIndex = desktopPaginationIndex.value + 1;
   const nextId = desktopPaginationIds.value[nextIndex];
+  if (nextId === undefined) return;
   const targetRef = getSuggestionRefById(nextId);
   if (targetRef) {
     openSuggestionAtTarget(nextId, targetRef, true, { keepDesktopPaginationClear: true });
@@ -7479,6 +7531,7 @@ function openEditCheckFromSelection(selectionContainer) {
 
   activeEditCheckTypeOverride.value = isInToneCheck ? 'tone' : 'paste';
   if (isMinervaSkin.value) {
+    resetMinervaSheetReturnArrowState();
     minervaSheetMode.value = 'edit-check';
     isMinervaSheetOpen.value = true;
     updateMinervaSheetHeight();
@@ -7564,8 +7617,9 @@ function getSuggestionRefById(suggestionId) {
 
 function handleMinervaPaginationPrev() {
   if (isMinervaPaginationPrevDisabled.value) return;
-  const nextIndex = (minervaPaginationIndex.value - 1 + minervaPaginationItems.value.length) % minervaPaginationItems.value.length;
+  const nextIndex = minervaPaginationIndex.value - 1;
   const nextId = minervaPaginationItems.value[nextIndex];
+  if (nextId === undefined) return;
   if (isEditCheckSheet.value) {
     openEditCheckAtType(nextId);
     return;
@@ -7579,8 +7633,9 @@ function handleMinervaPaginationPrev() {
 
 function handleMinervaPaginationNext() {
   if (isMinervaPaginationNextDisabled.value) return;
-  const nextIndex = (minervaPaginationIndex.value + 1) % minervaPaginationItems.value.length;
+  const nextIndex = minervaPaginationIndex.value + 1;
   const nextId = minervaPaginationItems.value[nextIndex];
+  if (nextId === undefined) return;
   if (isEditCheckSheet.value) {
     openEditCheckAtType(nextId);
     return;
@@ -7603,6 +7658,7 @@ function openEditCheckAtType(type, expandAfterScroll = true) {
   clearMinervaNoMoreSuggestionsState();
   const target = getEditCheckTargetByType(type);
   if (!target) return;
+  resetMinervaSheetReturnArrowState();
   activeEditCheckTypeOverride.value = type;
   minervaSheetMode.value = 'edit-check';
   isMinervaSheetOpen.value = true;
@@ -9743,6 +9799,9 @@ function scrollToSuggestionIfNeeded(targetRef) {
   nextTick(() => {
     const target = targetRef.value;
     if (target && !isTargetVisibleInViewport(target)) {
+      if (isMinervaSkin.value) {
+        suppressMinervaReturnDirectionDuringAutoScroll(1400);
+      }
       startAutoScrollIndicator();
       target.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
@@ -10210,6 +10269,7 @@ onMounted(() => {
     window.addEventListener('resize', updateMinervaSheetHeight);
     window.addEventListener('resize', updateMinervaViewportWidth);
     window.addEventListener('scroll', updateSuggestionVisibility, true);
+    window.addEventListener('scroll', handleMinervaSheetManualScroll, true);
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
     window.addEventListener('scroll', handleScrollReappear, true);
@@ -10238,6 +10298,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateMinervaSheetHeight);
     window.removeEventListener('resize', updateMinervaViewportWidth);
     window.removeEventListener('scroll', updateSuggestionVisibility, true);
+    window.removeEventListener('scroll', handleMinervaSheetManualScroll, true);
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
     window.removeEventListener('scroll', handleScrollReappear, true);
@@ -10513,6 +10574,7 @@ function openMinervaSuggestion(suggestionId) {
     closeMinervaSuggestion();
     return;
   }
+  resetMinervaSheetReturnArrowState();
   clearMinervaNoMoreSuggestionsState();
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = suggestionId;
@@ -10632,6 +10694,10 @@ function updateMinervaSheetReturnDirection() {
     minervaSheetReturnDirection.value = null;
     return;
   }
+  if (!hasManualMinervaSheetScrollSinceTargetSelection.value) {
+    minervaSheetReturnDirection.value = null;
+    return;
+  }
   if (suppressMinervaSheetReturnDirection.value) {
     minervaSheetReturnDirection.value = null;
     return;
@@ -10679,6 +10745,7 @@ function handleFilterSuggestionsClick() {
 function closeMinervaSuggestion() {
   clearMinervaNoMoreSuggestionsState();
   isMinervaSheetOpen.value = false;
+  hasManualMinervaSheetScrollSinceTargetSelection.value = false;
   minervaSheetReturnDirection.value = null;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
