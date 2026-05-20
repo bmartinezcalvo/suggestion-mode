@@ -1986,7 +1986,7 @@
             </div>
 
             <div
-              v-if="showMinervaFullPageTocButtonUi"
+              v-if="showMinervaFullPageTocFloatingButtonUi"
               class="minerva-full-page-toc"
               :style="{ top: minervaFullPageTocTopOffset }"
               @mouseenter="handleMinervaFullPageTocInteraction"
@@ -1998,17 +1998,40 @@
                 class="minerva-full-page-toc-trigger"
                 action="default"
                 weight="normal"
+                size="medium"
                 aria-label="Open table of contents"
                 @click.stop="toggleMinervaFullPageToc"
               >
                 <cdx-icon :icon="cdxIconListBullet" size="medium" />
               </cdx-button>
-              <div
-                v-if="isMinervaFullPageTocOpen"
-                ref="minervaFullPageTocPanelRef"
-                class="minerva-full-page-toc-panel"
-                :style="{ top: minervaFullPageTocPanelTopOffset }"
-              >
+            </div>
+
+            <div
+              v-if="showMinervaFullPageTocDrawerUi"
+              class="minerva-full-page-toc-overlay"
+              @click="hideMinervaFullPageTocUi"
+            ></div>
+
+            <div
+              v-if="showMinervaFullPageTocDrawerUi"
+              ref="minervaFullPageTocPanelRef"
+              class="minerva-full-page-toc-panel minerva-full-page-toc-panel--drawer"
+              :style="{ top: minervaFullPageTocDrawerTopOffset }"
+              @click.stop
+            >
+              <div class="minerva-full-page-toc-header">
+                <span class="minerva-full-page-toc-title">Contents</span>
+                <cdx-button
+                  class="minerva-full-page-toc-close"
+                  action="default"
+                  weight="quiet"
+                  aria-label="Close table of contents"
+                  @click.stop="hideMinervaFullPageTocUi"
+                >
+                  <cdx-icon :icon="cdxIconArrowNext" size="medium" />
+                </cdx-button>
+              </div>
+              <div class="minerva-full-page-toc-list">
                 <div
                   v-for="item in minervaFullPageTocItems"
                   :key="item.id"
@@ -2042,19 +2065,11 @@
                       {{ item.label }}
                     </button>
                     <span
-                      v-if="item.count > 0 && !isMinervaFullPageTocItemOpen(item.id)"
-                      class="minerva-full-page-toc-item-badge"
-                      :title="`${item.count} suggestion${item.count === 1 ? '' : 's'}`"
-                    >
-                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      <span class="minerva-full-page-toc-item-badge-count">{{ item.count }}</span>
-                    </span>
-                    <span
                       v-if="item.hasEditCheck"
                       class="minerva-full-page-toc-item-warning"
                       title="Section has edit check"
                     >
-                      <cdx-icon :icon="cdxIconAlert" size="medium" />
+                      <cdx-icon :icon="cdxIconAlert" size="small" />
                     </span>
                   </div>
                   <div
@@ -2076,12 +2091,11 @@
                         {{ child.label }}
                       </button>
                       <span
-                        v-if="child.count > 0"
-                        class="minerva-full-page-toc-item-badge"
-                        :title="`${child.count} suggestion${child.count === 1 ? '' : 's'}`"
+                        v-if="child.hasEditCheck"
+                        class="minerva-full-page-toc-item-warning"
+                        title="Section has edit check"
                       >
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                        <span class="minerva-full-page-toc-item-badge-count">{{ child.count }}</span>
+                        <cdx-icon :icon="cdxIconAlert" size="small" />
                       </span>
                     </div>
                   </div>
@@ -3793,6 +3807,18 @@
             v-if="showMinervaTopRailControls"
             class="minerva-suggestions-rail-controls"
           >
+            <cdx-button
+              v-if="showMinervaFullPageTocRailButtonUi"
+              ref="minervaFullPageTocButtonRef"
+              class="minerva-suggestions-rail-toc-button"
+              action="default"
+              weight="quiet"
+              size="medium"
+              aria-label="Open table of contents"
+              @click.stop="toggleMinervaFullPageToc"
+            >
+              <cdx-icon :icon="cdxIconListBullet" size="medium" />
+            </cdx-button>
             <cdx-toggle-button
               v-if="showMinervaTopRailToggle"
               ref="minervaRailToggleRef"
@@ -4421,6 +4447,27 @@
               </a>.
             </cdx-message>
             <div class="prototype-dialog-options">
+              <cdx-field v-if="isMinervaSkin">
+                <template #label>
+                  Mobile ToggleButton (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
+                </template>
+                <div class="cdx-radio-group" role="radiogroup">
+                  <cdx-radio
+                    v-model="minervaToggleLocation"
+                    name="minerva-toggle-location"
+                    input-value="toolbar"
+                  >
+                    Within the toolbar
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="minervaToggleLocation"
+                    name="minerva-toggle-location"
+                    input-value="outside"
+                  >
+                    Outside the toolbar
+                  </cdx-radio>
+                </div>
+              </cdx-field>
               <cdx-field>
                 <template #label>
                   Navigation of suggestions (<a href="https://phabricator.wikimedia.org/T417821" target="_blank" rel="noopener">T417821</a>)
@@ -4475,27 +4522,6 @@
                   </cdx-radio>
                 </div>
               </cdx-field>
-              <cdx-field v-if="isMinervaSkin">
-                <template #label>
-                  Mobile ToggleButton (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
-                </template>
-                <div class="cdx-radio-group" role="radiogroup">
-                  <cdx-radio
-                    v-model="minervaToggleLocation"
-                    name="minerva-toggle-location"
-                    input-value="toolbar"
-                  >
-                    Within the toolbar
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="minervaToggleLocation"
-                    name="minerva-toggle-location"
-                    input-value="outside"
-                  >
-                    Outside the toolbar
-                  </cdx-radio>
-                </div>
-              </cdx-field>
               <cdx-field>
                 <template #label>Other features</template>
                 <cdx-checkbox v-model="filteringEnabled">
@@ -4511,7 +4537,7 @@
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="minervaFullPageSuggestionNavigationEnabled">
-                  Enable sections navigation when editing full page (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
+                  Enable ToC when editing full page (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
                 </cdx-checkbox>
                 <div v-if="isMinervaSkin && minervaFullPageSuggestionNavigationEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
                   <cdx-radio
@@ -4520,7 +4546,7 @@
                     input-value="toc-button"
                     class="prototype-suboption-radio"
                   >
-                    Use Table of contents button
+                    Right panel
                   </cdx-radio>
                   <cdx-radio
                     v-model="minervaFullPageSuggestionNavigationMode"
@@ -4528,7 +4554,7 @@
                     input-value="scroll-button"
                     class="prototype-suboption-radio prototype-suboption-radio--last"
                   >
-                    Use scroll button with sections
+                    Scroll button
                   </cdx-radio>
                 </div>
               </cdx-field>
@@ -4701,6 +4727,7 @@ import {
   cdxIconExpand,
   cdxIconPrevious,
   cdxIconNext,
+  cdxIconArrowNext,
   cdxIconCollapse,
   cdxIconArrowUp,
   cdxIconArrowDown,
@@ -4848,8 +4875,14 @@ const showMinervaBottomRailToggleControl = computed(
 const showMinervaTopRailToggle = computed(
   () => showMinervaStandardRailToggle.value && !showMinervaBottomRailToggleControl.value
 );
+const showMinervaFullPageTocRailButtonUi = computed(() => (
+  showMinervaFullPageSuggestionNavigation.value &&
+  isMinervaFullPageTocReady.value &&
+  isMinervaFullPageTocButtonMode.value &&
+  showSuggestions.value
+));
 const showMinervaTopRailControls = computed(
-  () => showMinervaTopRailToggle.value
+  () => showMinervaTopRailToggle.value || showMinervaFullPageTocRailButtonUi.value
 );
 const showMinervaBottomRailControls = computed(
   () => showMinervaBottomRailToggleControl.value ||
@@ -5205,6 +5238,29 @@ const minervaFullPageTocButtonRef = ref(null);
 const minervaFullPageTocPanelRef = ref(null);
 const minervaFullPageSectionsButtonRef = ref(null);
 const minervaFullPageSectionsPanelRef = ref(null);
+const minervaTocSubsectionTargets = {
+  poetry: [
+    { id: 'poetry-early-works', subsectionTitle: 'Early works' },
+    { id: 'poetry-wider-recognition', subsectionTitle: 'Wider recognition' }
+  ],
+  prose: [
+    { id: 'prose-sister-outsider', subsectionTitle: 'Sister Outsider' }
+  ],
+  film: [
+    { id: 'film-berlin-years', subsectionTitle: 'The Berlin Years: 1984–1992' },
+    { id: 'film-body-of-a-poet', subsectionTitle: 'Body of a Poet: 1995' }
+  ],
+  theory: [
+    { id: 'theory-feminist-thought', subsectionTitle: 'Feminist thought' },
+    { id: 'theory-lorde-comments', subsectionTitle: "Lorde's comments on feminism" },
+    { id: 'theory-black-feminism', subsectionTitle: 'Influences on black feminism' },
+    { id: 'theory-personal-identity', subsectionTitle: 'Personal identity' },
+    { id: 'theory-third-wave', subsectionTitle: 'Contributions to the third-wave feminist discourse' },
+    { id: 'theory-essay', subsectionTitle: 'Essay' },
+    { id: 'theory-speeches', subsectionTitle: 'Speeches' },
+    { id: 'theory-interview', subsectionTitle: 'Interview' }
+  ]
+};
 const prototypeDialogPrefsStorageKey = 'suggestion-mode.prototype-dialog-prefs';
 const minervaScrollIcon = scrollIcon;
 
@@ -5507,8 +5563,7 @@ const showMinervaFullPageSuggestionNavigation = computed(() => (
 ));
 const showMinervaFullPageSuggestionNavigationUi = computed(() => (
   showMinervaFullPageSuggestionNavigation.value &&
-  isMinervaFullPageTocReady.value &&
-  showMinervaFullPageTocOnScroll.value
+  isMinervaFullPageTocReady.value
 ));
 const hasMinervaExpandedSheet = computed(() => (
   isMinervaSkin.value &&
@@ -5516,12 +5571,25 @@ const hasMinervaExpandedSheet = computed(() => (
   (minervaSheetMode.value === 'suggestion' || minervaSheetMode.value === 'edit-check')
 ));
 const showMinervaFullPageTocButtonUi = computed(() => (
+  showMinervaFullPageTocRailButtonUi.value ||
+  showMinervaFullPageTocFloatingButtonUi.value
+));
+const showMinervaFullPageTocFloatingButtonUi = computed(() => (
   showMinervaFullPageSuggestionNavigationUi.value &&
-  isMinervaFullPageTocButtonMode.value
+  isMinervaFullPageTocButtonMode.value &&
+  !showSuggestions.value &&
+  showMinervaFullPageTocOnScroll.value &&
+  !hasMinervaExpandedSheet.value
+));
+const showMinervaFullPageTocDrawerUi = computed(() => (
+  isMinervaFullPageTocButtonMode.value &&
+  isMinervaFullPageTocOpen.value &&
+  showMinervaFullPageSuggestionNavigation.value
 ));
 const showMinervaFullPageSectionsButtonUi = computed(() => (
   showMinervaFullPageSuggestionNavigationUi.value &&
   isMinervaFullPageSectionsButtonMode.value &&
+  showMinervaFullPageTocOnScroll.value &&
   !hasMinervaExpandedSheet.value
 ));
 const minervaFullPageTocTopOffset = computed(() => (
@@ -5534,8 +5602,8 @@ const minervaFullPageSectionsPanelTopOffset = computed(() => {
   const topOffset = Number.parseFloat(minervaFullPageSectionsNavTopOffset.value) || 0;
   return `${-topOffset}px`;
 });
-const minervaFullPageTocPanelTopOffset = computed(() => (
-  `${editToolbarImprovementsEnabled.value ? 100 : 94}px`
+const minervaFullPageTocDrawerTopOffset = computed(() => (
+  `${editToolbarImprovementsEnabled.value ? 48 : 44}px`
 ));
 const minervaFullPageSectionsButtonTopOffset = computed(() => (
   `${minervaFullPageSectionsButtonTop.value}px`
@@ -5557,6 +5625,33 @@ function getMinervaTocSectionIdFromNode(node) {
   }
   return null;
 }
+function getMinervaFullPageTocItemIdFromNode(node) {
+  const element = node instanceof HTMLElement
+    ? node
+    : node?.parentElement;
+  if (!(element instanceof HTMLElement)) return null;
+  const sectionId = getMinervaTocSectionIdFromNode(element);
+  if (!sectionId || sectionId === 'top') {
+    return sectionId;
+  }
+  const sectionChildren = minervaTocSubsectionTargets[sectionId] || [];
+  if (!sectionChildren.length || typeof window === 'undefined') {
+    return sectionId;
+  }
+  const elementTop = element.getBoundingClientRect().top + window.scrollY;
+  let activeChildId = null;
+  let activeChildTop = Number.NEGATIVE_INFINITY;
+  sectionChildren.forEach((child) => {
+    const target = getMinervaFullPageTocTargetElement(child);
+    if (!(target instanceof HTMLElement)) return;
+    const targetTop = target.getBoundingClientRect().top + window.scrollY;
+    if (targetTop <= elementTop && targetTop > activeChildTop) {
+      activeChildTop = targetTop;
+      activeChildId = child.id;
+    }
+  });
+  return activeChildId ?? sectionId;
+}
 const minervaSectionSuggestionCounts = computed(() => {
   const counts = {
     top: 0,
@@ -5576,21 +5671,21 @@ const minervaSectionSuggestionCounts = computed(() => {
   });
   return counts;
 });
-const minervaSectionIdsWithEditChecks = computed(() => {
-  const sectionIds = new Set();
-  const collectSectionId = (node) => {
-    const sectionId = getMinervaTocSectionIdFromNode(node);
-    if (sectionId) {
-      sectionIds.add(sectionId);
+const minervaTocItemIdsWithEditChecks = computed(() => {
+  const itemIds = new Set();
+  const collectItemId = (node) => {
+    const itemId = getMinervaFullPageTocItemIdFromNode(node);
+    if (itemId) {
+      itemIds.add(itemId);
     }
   };
   if (toneCheckActive.value && toneCheckHighlightRef.value?.isConnected) {
-    collectSectionId(toneCheckHighlightRef.value);
+    collectItemId(toneCheckHighlightRef.value);
   }
   if (pasteCheckActive.value && pasteCheckHighlightRef.value?.isConnected) {
-    collectSectionId(pasteCheckHighlightRef.value);
+    collectItemId(pasteCheckHighlightRef.value);
   }
-  return sectionIds;
+  return itemIds;
 });
 const minervaFullPageTocItems = computed(() => {
   const sectionCounts = minervaSectionSuggestionCounts.value;
@@ -5599,7 +5694,7 @@ const minervaFullPageTocItems = computed(() => {
     .filter(Boolean)
     .length;
   const proseSisterOutsiderCount = [ isSuggestion3Pending.value ].filter(Boolean).length;
-  const hasEditCheck = (sectionId) => minervaSectionIdsWithEditChecks.value.has(sectionId);
+  const hasEditCheck = (itemId) => minervaTocItemIdsWithEditChecks.value.has(itemId);
   return [
     { id: 'top', label: '(Top)', count: sectionCounts.top, sectionId: 'top', hasEditCheck: hasEditCheck('top') },
     { id: 'early-life', label: 'Early life', count: sectionCounts['early-life'], sectionId: 'early-life', hasEditCheck: hasEditCheck('early-life') },
@@ -5616,14 +5711,16 @@ const minervaFullPageTocItems = computed(() => {
           label: 'Early works',
           count: poetryEarlyWorksCount,
           sectionId: 'poetry',
-          subsectionTitle: 'Early works'
+          subsectionTitle: 'Early works',
+          hasEditCheck: hasEditCheck('poetry-early-works')
         },
         {
           id: 'poetry-wider-recognition',
           label: 'Wider recognition',
           count: poetryWiderRecognitionCount,
           sectionId: 'poetry',
-          subsectionTitle: 'Wider recognition'
+          subsectionTitle: 'Wider recognition',
+          hasEditCheck: hasEditCheck('poetry-wider-recognition')
         }
       ]
     },
@@ -5639,7 +5736,8 @@ const minervaFullPageTocItems = computed(() => {
           label: 'Sister Outsider',
           count: proseSisterOutsiderCount,
           sectionId: 'prose',
-          subsectionTitle: 'Sister Outsider'
+          subsectionTitle: 'Sister Outsider',
+          hasEditCheck: hasEditCheck('prose-sister-outsider')
         }
       ]
     },
@@ -5655,14 +5753,16 @@ const minervaFullPageTocItems = computed(() => {
           label: 'The Berlin years',
           count: 0,
           sectionId: 'film',
-          subsectionTitle: 'The Berlin Years: 1984–1992'
+          subsectionTitle: 'The Berlin Years: 1984–1992',
+          hasEditCheck: hasEditCheck('film-berlin-years')
         },
         {
           id: 'film-body-of-a-poet',
           label: 'Body of a Poet',
           count: 0,
           sectionId: 'film',
-          subsectionTitle: 'Body of a Poet: 1995'
+          subsectionTitle: 'Body of a Poet: 1995',
+          hasEditCheck: hasEditCheck('film-body-of-a-poet')
         }
       ]
     },
@@ -5678,56 +5778,64 @@ const minervaFullPageTocItems = computed(() => {
           label: 'Feminist thought',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Feminist thought'
+          subsectionTitle: 'Feminist thought',
+          hasEditCheck: hasEditCheck('theory-feminist-thought')
         },
         {
           id: 'theory-lorde-comments',
           label: "Lorde's comments on feminism",
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: "Lorde's comments on feminism"
+          subsectionTitle: "Lorde's comments on feminism",
+          hasEditCheck: hasEditCheck('theory-lorde-comments')
         },
         {
           id: 'theory-black-feminism',
           label: 'Influences on black feminism',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Influences on black feminism'
+          subsectionTitle: 'Influences on black feminism',
+          hasEditCheck: hasEditCheck('theory-black-feminism')
         },
         {
           id: 'theory-personal-identity',
           label: 'Personal identity',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Personal identity'
+          subsectionTitle: 'Personal identity',
+          hasEditCheck: hasEditCheck('theory-personal-identity')
         },
         {
           id: 'theory-third-wave',
           label: 'Contributions to the third-wave feminist discourse',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Contributions to the third-wave feminist discourse'
+          subsectionTitle: 'Contributions to the third-wave feminist discourse',
+          hasEditCheck: hasEditCheck('theory-third-wave')
         },
         {
           id: 'theory-essay',
           label: 'Essay',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Essay'
+          subsectionTitle: 'Essay',
+          hasEditCheck: hasEditCheck('theory-essay')
         },
         {
           id: 'theory-speeches',
           label: 'Speeches',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Speeches'
+          subsectionTitle: 'Speeches',
+          hasEditCheck: hasEditCheck('theory-speeches')
         },
         {
           id: 'theory-interview',
           label: 'Interview',
           count: 0,
           sectionId: 'theory',
-          subsectionTitle: 'Interview'
+          subsectionTitle: 'Interview',
+          hasEditCheck: hasEditCheck('theory-interview')
         }
       ]
     }
@@ -8279,7 +8387,9 @@ function hideMinervaFullPageTocUi() {
   clearMinervaFullPageManualScrollIntent();
   clearMinervaFullPageTocVisibilityTimer();
   clearMinervaFullPageSectionsPanelInactivityTimer();
-  showMinervaFullPageTocOnScroll.value = false;
+  if (isMinervaFullPageSectionsButtonMode.value || !showSuggestions.value) {
+    showMinervaFullPageTocOnScroll.value = false;
+  }
   isMinervaFullPageTocOpen.value = false;
 }
 
@@ -8294,7 +8404,7 @@ function suppressMinervaFullPageTocScrollVisibility(duration = 1400) {
 }
 
 function scheduleMinervaFullPageTocHideDelay() {
-  if (!showMinervaFullPageTocOnScroll.value || isMinervaFullPageTocOpen.value) return;
+  if (!showMinervaFullPageTocOnScroll.value || isMinervaFullPageTocOpen.value || showSuggestions.value) return;
   if (minervaFullPageTocHideTimer) {
     clearTimeout(minervaFullPageTocHideTimer);
   }
@@ -8313,12 +8423,16 @@ function handleMinervaFullPageTocInteraction() {
   if (!showMinervaFullPageSuggestionNavigation.value || isLoading.value || !isMinervaFullPageTocReady.value) {
     return;
   }
-  showMinervaFullPageTocOnScroll.value = true;
+  if (!showSuggestions.value || isMinervaFullPageSectionsButtonMode.value) {
+    showMinervaFullPageTocOnScroll.value = true;
+  }
   if (minervaFullPageTocShowTimer) {
     clearTimeout(minervaFullPageTocShowTimer);
     minervaFullPageTocShowTimer = null;
   }
-  scheduleMinervaFullPageTocHideDelay();
+  if (!showSuggestions.value || isMinervaFullPageSectionsButtonMode.value) {
+    scheduleMinervaFullPageTocHideDelay();
+  }
 }
 
 function handleMinervaFullPageSectionsPanelInteraction() {
@@ -8364,6 +8478,9 @@ function handleMinervaFullPageTocScrollVisibility() {
     return;
   }
   updateMinervaFullPageSectionsButtonPosition();
+  if (isMinervaFullPageTocButtonMode.value && showSuggestions.value) {
+    return;
+  }
   if (isMinervaFullPageSectionsButtonMode.value && !isMinervaFullPageManualScrollIntent.value) {
     if (isMinervaFullPageTocOpen.value) {
       scheduleMinervaFullPageSectionsPanelInactivityClose();
@@ -8581,9 +8698,13 @@ function scrollToMinervaFullPageTocSection(item) {
 function handleMinervaFullPageTocItemClick(item) {
   if (!item) return;
   activeMinervaFullPageTocSectionId.value = item.id;
-  isMinervaFullPageTocOpen.value = false;
-  clearMinervaFullPageManualScrollIntent();
-  suppressMinervaFullPageTocScrollVisibility();
+  hideMinervaFullPageTocUi();
+  if (isMinervaFullPageTocButtonMode.value && showSuggestions.value) {
+    showMinervaFullPageTocOnScroll.value = true;
+  } else {
+    clearMinervaFullPageManualScrollIntent();
+    suppressMinervaFullPageTocScrollVisibility();
+  }
   scrollToMinervaFullPageTocSection(item);
 }
 
@@ -9694,7 +9815,9 @@ watch(isMinervaFullPageTocOpen, (isOpen) => {
       clearTimeout(minervaFullPageTocHideTimer);
       minervaFullPageTocHideTimer = null;
     }
-    showMinervaFullPageTocOnScroll.value = true;
+    if (isMinervaFullPageSectionsButtonMode.value || !showSuggestions.value) {
+      showMinervaFullPageTocOnScroll.value = true;
+    }
     if (isMinervaFullPageSectionsButtonMode.value) {
       scheduleMinervaFullPageSectionsPanelInactivityClose();
     }
@@ -9711,7 +9834,7 @@ watch(isMinervaFullPageTocOpen, (isOpen) => {
     showMinervaFullPageTocOnScroll.value = false;
     return;
   }
-  if (showMinervaFullPageTocOnScroll.value) {
+  if (!showSuggestions.value && showMinervaFullPageTocOnScroll.value) {
     scheduleMinervaFullPageTocHideDelay();
   }
 });
@@ -12932,34 +13055,93 @@ function markArticleEdited() {
 
 .minerva-full-page-toc {
   position: fixed;
-  left: 6px;
-  z-index: 102;
+  right: 10px;
+  z-index: 104;
 }
 
 .minerva-full-page-toc-trigger {
-  min-width: 44px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
 }
 
 .minerva-full-page-toc-trigger :deep(.cdx-button__button) {
-  width: 44px;
-  height: 44px;
-  min-width: 44px;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
   padding: 0;
   border-color: var(--border-color-subtle, #c8ccd1);
   box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
 }
 
+.minerva-full-page-toc-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
+  z-index: 103;
+}
+
 .minerva-full-page-toc-panel {
   position: fixed;
-  left: 6px;
-  width: min(256px, calc(100vw - 12px));
-  max-height: min(76vh, 720px);
+  right: 0;
+  width: min(220px, 100vw);
+  max-width: 220px;
+  bottom: 0;
   overflow-y: auto;
   background: var(--background-color-base, #fff);
-  border: 1px solid var(--border-color-subtle, #c8ccd1);
-  border-radius: 2px;
+  border-left: 1px solid var(--border-color-muted, #c8ccd1);
+  border-right: 1px solid var(--border-color-muted, #c8ccd1);
+  border-radius: 0;
   box-shadow: var(--box-shadow-medium, 0 4px 8px 0 rgba(0, 0, 0, 0.12));
-  padding: 12px 0;
+  padding: 0;
+  z-index: 104;
+  scrollbar-width: none;
+}
+
+.minerva-full-page-toc-panel::-webkit-scrollbar {
+  display: none;
+}
+
+.minerva-full-page-toc-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 44px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border-color-muted, #c8ccd1);
+  background: var(--background-color-base, #fff);
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
+
+.minerva-full-page-toc-title {
+  color: var(--color-subtle, #54595d);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-full-page-toc-close {
+  flex: 0 0 auto;
+}
+
+.minerva-full-page-toc-close :deep(.cdx-button__button) {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.minerva-full-page-toc-close :deep(.cdx-icon),
+.minerva-full-page-toc-close :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
+}
+
+.minerva-full-page-toc-list {
+  display: flex;
+  flex-direction: column;
 }
 
 .minerva-full-page-toc-node {
@@ -13029,20 +13211,18 @@ function markArticleEdited() {
 .minerva-full-page-toc-link {
   flex: 1 1 auto;
   min-width: 0;
-  color: var(--color-progressive, #36c);
+  color: var(--color-base, #202122);
   text-align: left;
   font-size: 16px;
   line-height: 24px;
   cursor: pointer;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .minerva-full-page-toc-link--top {
-  color: var(--color-progressive, #36c);
-}
-
-.minerva-full-page-toc-link--child {
-  font-size: 16px;
-  line-height: 24px;
+  color: var(--color-base, #202122);
 }
 
 .minerva-full-page-toc-item--active .minerva-full-page-toc-link {
@@ -13050,54 +13230,20 @@ function markArticleEdited() {
   font-weight: 700;
 }
 
-.minerva-full-page-toc-item-badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  color: var(--color-subtle, #72777d);
-  flex: 0 0 auto;
-}
-
-.minerva-full-page-toc-item-badge :deep(.cdx-icon),
-.minerva-full-page-toc-item-badge :deep(svg) {
-  color: var(--color-subtle, #72777d);
-  fill: var(--color-subtle, #72777d);
-}
-
-.minerva-full-page-toc-item-badge-count {
-  position: absolute;
-  right: -2px;
-  bottom: -2px;
-  min-width: 12px;
-  height: 12px;
-  padding: 0 2px;
-  border-radius: 3px;
-  background: var(--background-color-progressive, #36c);
-  border: 1px solid var(--background-color-base, #fff);
-  color: #fff;
-  font-size: 10px;
-  line-height: 8px;
-  font-weight: 700;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .minerva-full-page-toc-item-warning {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
   color: var(--color-icon-warning, #ab7f2a);
-  flex: 0 0 auto;
+  flex: 0 0 16px;
 }
 
 .minerva-full-page-toc-item-warning :deep(.cdx-icon),
 .minerva-full-page-toc-item-warning :deep(svg) {
+  width: 16px;
+  height: 16px;
   color: var(--color-icon-warning, #ab7f2a);
   fill: var(--color-icon-warning, #ab7f2a);
 }
@@ -14579,6 +14725,33 @@ function markArticleEdited() {
   z-index: 70;
   background: var(--background-color-neutral-subtle, #f8f9fa);
   margin-top: 2px;
+}
+
+.minerva-suggestions-rail-toc-button {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 0;
+  border-top: 0;
+  margin-top: 0;
+}
+
+.minerva-suggestions-rail-toc-button :deep(.cdx-button__button) {
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+}
+
+.minerva-suggestions-rail-toc-button :deep(.cdx-icon),
+.minerva-suggestions-rail-toc-button :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
 }
 
 .minerva-suggestions-rail {
