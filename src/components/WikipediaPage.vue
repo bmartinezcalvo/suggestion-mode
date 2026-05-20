@@ -8,6 +8,8 @@
       isMinervaSkin && editToolbarImprovementsEnabled ? 'minerva-edit-toolbar-improved' : '',
       isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRail ? 'minerva-suggestions-on' : '',
       isMinervaSkin && isEditMode && showMinervaRail ? 'minerva-suggestions-on--rail' : '',
+      isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailMode ? 'minerva-expandable-rail-mode' : '',
+      isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailOpen ? 'minerva-expandable-rail-open' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -2167,6 +2169,55 @@
               >
                 <img :src="minervaScrollIcon" alt="" class="minerva-full-page-sections-trigger-icon">
               </cdx-button>
+            </div>
+
+            <div
+              v-if="showMinervaFullPageExpandableRailUi"
+              ref="minervaFullPageTocPanelRef"
+              class="minerva-expandable-rail-panel"
+              @click.stop
+            >
+              <div class="minerva-expandable-rail-header">
+                <cdx-button
+                  class="minerva-expandable-rail-close"
+                  action="default"
+                  weight="quiet"
+                  aria-label="Close table of contents"
+                  @click.stop="hideMinervaFullPageTocUi"
+                >
+                  <cdx-icon :icon="cdxIconPrevious" size="medium" />
+                </cdx-button>
+                <span class="minerva-expandable-rail-title">Contents</span>
+              </div>
+              <div class="minerva-expandable-rail-list">
+                <div
+                  v-for="item in minervaExpandableRailItems"
+                  :key="item.id"
+                  class="minerva-expandable-rail-item"
+                  :class="{ 'minerva-expandable-rail-item--active': minervaFullPageTocActivePathIds.includes(item.id) }"
+                >
+                  <button
+                    type="button"
+                    class="minerva-expandable-rail-link"
+                    @click="handleMinervaExpandableRailItemClick(item)"
+                  >
+                    {{ item.id === 'top' ? 'Top' : item.label }}
+                  </button>
+                  <div
+                    v-if="minervaFullPageTocActivePathIds.includes(item.id) && (item.count > 0 || item.checkCount > 0)"
+                    class="minerva-expandable-rail-meta"
+                  >
+                    <div v-if="item.count > 0" class="minerva-expandable-rail-meta-row minerva-expandable-rail-meta-row--suggestions">
+                      <cdx-icon :icon="cdxIconLightbulb" size="small" />
+                      <span>{{ item.count }} {{ item.count === 1 ? 'suggestion' : 'suggestions' }}</span>
+                    </div>
+                    <div v-if="item.checkCount > 0" class="minerva-expandable-rail-meta-row minerva-expandable-rail-meta-row--checks">
+                      <cdx-icon :icon="cdxIconAlert" size="small" />
+                      <span>{{ item.checkCount }} {{ item.checkCount === 1 ? 'check' : 'checks' }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
 
             <!-- Loading Overlay (only covers content below toolbar) -->
@@ -4551,6 +4602,14 @@
                   <cdx-radio
                     v-model="minervaFullPageSuggestionNavigationMode"
                     name="minerva-full-page-suggestion-navigation-mode"
+                    input-value="expandable-rail"
+                    class="prototype-suboption-radio"
+                  >
+                    Expandable rail
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="minervaFullPageSuggestionNavigationMode"
+                    name="minerva-full-page-suggestion-navigation-mode"
                     input-value="scroll-button"
                     class="prototype-suboption-radio prototype-suboption-radio--last"
                   >
@@ -4796,6 +4855,7 @@ const isBannerDismissed = ref(false);
 const isBannerDelayReady = ref(false);
 const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
+const forceEntryBannerSection = ref(null);
 const isEditToolbarScrolled = ref(false);
 const isSuggestionLightFlash = ref(false);
 const isTextStyleMenuOpen = ref(false);
@@ -4878,8 +4938,10 @@ const showMinervaTopRailToggle = computed(
 const showMinervaFullPageTocRailButtonUi = computed(() => (
   showMinervaFullPageSuggestionNavigation.value &&
   isMinervaFullPageTocReady.value &&
-  isMinervaFullPageTocButtonMode.value &&
-  showSuggestions.value
+  (
+    (isMinervaFullPageTocButtonMode.value && showSuggestions.value) ||
+    isMinervaFullPageExpandableRailMode.value
+  )
 ));
 const showMinervaTopRailControls = computed(
   () => showMinervaTopRailToggle.value || showMinervaFullPageTocRailButtonUi.value
@@ -4894,6 +4956,7 @@ const showMinervaBottomRailControls = computed(
 const showMinervaRail = computed(
   () => isMinervaSkin.value &&
     isEditMode.value &&
+    !(isMinervaFullPageExpandableRailMode.value && isMinervaFullPageTocOpen.value) &&
     (showMinervaTopRailControls.value || showMinervaBottomRailControls.value)
 );
 const showMinervaEditMenuTriggerDotBadge = computed(
@@ -5552,6 +5615,9 @@ const minervaFullPageTocExpandedItems = ref({
 const isMinervaFullPageTocButtonMode = computed(() => (
   minervaFullPageSuggestionNavigationMode.value === 'toc-button'
 ));
+const isMinervaFullPageExpandableRailMode = computed(() => (
+  minervaFullPageSuggestionNavigationMode.value === 'expandable-rail'
+));
 const isMinervaFullPageSectionsButtonMode = computed(() => (
   minervaFullPageSuggestionNavigationMode.value === 'scroll-button'
 ));
@@ -5570,6 +5636,11 @@ const hasMinervaExpandedSheet = computed(() => (
   isMinervaSheetOpen.value &&
   (minervaSheetMode.value === 'suggestion' || minervaSheetMode.value === 'edit-check')
 ));
+const isMinervaFullPageExpandableRailOpen = computed(() => (
+  showMinervaFullPageSuggestionNavigation.value &&
+  isMinervaFullPageExpandableRailMode.value &&
+  isMinervaFullPageTocOpen.value
+));
 const showMinervaFullPageTocButtonUi = computed(() => (
   showMinervaFullPageTocRailButtonUi.value ||
   showMinervaFullPageTocFloatingButtonUi.value
@@ -5580,6 +5651,11 @@ const showMinervaFullPageTocFloatingButtonUi = computed(() => (
   !showSuggestions.value &&
   showMinervaFullPageTocOnScroll.value &&
   !hasMinervaExpandedSheet.value
+));
+const showMinervaFullPageExpandableRailUi = computed(() => (
+  showMinervaFullPageSuggestionNavigation.value &&
+  isMinervaFullPageExpandableRailMode.value &&
+  isMinervaFullPageTocOpen.value
 ));
 const showMinervaFullPageTocDrawerUi = computed(() => (
   isMinervaFullPageTocButtonMode.value &&
@@ -5889,6 +5965,15 @@ const minervaFullPageSectionItems = computed(() => {
   visit(minervaFullPageTocItems.value);
   return items;
 });
+const minervaExpandableRailItems = computed(() => (
+  minervaFullPageTocItems.value.map((item) => ({
+    ...item,
+    checkCount: [
+      item.hasEditCheck ? 1 : 0,
+      ...(item.children || []).map((child) => (child.hasEditCheck ? 1 : 0))
+    ].reduce((sum, count) => sum + count, 0)
+  }))
+));
 const minervaFullPageTocActivePathIds = computed(() => (
   minervaFullPageTocPathMap.value[activeMinervaFullPageTocSectionId.value] || []
 ));
@@ -5937,6 +6022,14 @@ const shouldShowToasts = computed(() => (
 ));
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
+  if (
+    isArrowOnceMode.value &&
+    isMinervaSkin.value &&
+    minervaEditSectionOnly.value === 'poetry' &&
+    forceEntryBannerSection.value === 'poetry'
+  ) {
+    return true;
+  }
   if (isArrowOnceMode.value && isMinervaSkin.value && minervaEditSectionOnly.value) {
     const sectionToSuggestionId = {
       career: 1,
@@ -6452,6 +6545,7 @@ function clearEditModeUiState() {
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
+  forceEntryBannerSection.value = null;
   if (bannerDelayTimer) {
     clearTimeout(bannerDelayTimer);
     bannerDelayTimer = null;
@@ -6487,6 +6581,7 @@ function openEditAtSection(sectionId) {
   pendingScrollSection.value = sectionId;
   minervaEditSectionOnly.value = isMinervaSkin.value ? sectionId : null;
   readModeReturnSectionId.value = sectionId;
+  forceEntryBannerSection.value = sectionId === 'poetry' ? 'poetry' : null;
   clearMinervaNoMoreSuggestionsState();
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
@@ -7754,7 +7849,9 @@ function handleDocumentClick(event) {
       sectionsPanelElement?.contains(target) ||
       sectionsButtonElement?.contains(target);
     if (!clickedInsideTocButtonMode && !clickedInsideSectionsButtonMode) {
-      if (isMinervaFullPageSectionsButtonMode.value) {
+      if (isMinervaFullPageExpandableRailMode.value) {
+        // No outside-click close in expandable rail mode.
+      } else if (isMinervaFullPageSectionsButtonMode.value) {
         hideMinervaFullPageTocUi();
       } else {
         isMinervaFullPageTocOpen.value = false;
@@ -7960,6 +8057,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
 
 function handleBannerClose() {
   if (isBannerClosing.value || isBannerDismissed.value) return;
+  forceEntryBannerSection.value = null;
   isBannerClosing.value = true;
   if (bannerCloseTimer) {
     clearTimeout(bannerCloseTimer);
@@ -7990,6 +8088,7 @@ function scheduleBannerReappear(delayMs = bannerReappearDelayMs) {
 
 function handleBannerClick() {
   const wasSuggestionsOff = !showSuggestions.value;
+  forceEntryBannerSection.value = null;
   if (!showSuggestions.value) {
     showSuggestions.value = true;
   }
@@ -8705,6 +8804,12 @@ function handleMinervaFullPageTocItemClick(item) {
     clearMinervaFullPageManualScrollIntent();
     suppressMinervaFullPageTocScrollVisibility();
   }
+  scrollToMinervaFullPageTocSection(item);
+}
+
+function handleMinervaExpandableRailItemClick(item) {
+  if (!item) return;
+  activeMinervaFullPageTocSectionId.value = item.id;
   scrollToMinervaFullPageTocSection(item);
 }
 
@@ -9943,6 +10048,17 @@ watch(isLoading, (newValue) => {
   if (!newValue && isEditMode.value) {
     if (bannerDelayTimer) {
       clearTimeout(bannerDelayTimer);
+    }
+    if (
+      isMinervaSkin.value &&
+      minervaEditSectionOnly.value === 'poetry' &&
+      forceEntryBannerSection.value === 'poetry'
+    ) {
+      updateSuggestionVisibility();
+      updateBannerArrowDirections();
+      updatePrimaryBannerDirection();
+      isBannerDelayReady.value = true;
+      return;
     }
     bannerDelayTimer = setTimeout(() => {
       if (isEditMode.value && !isLoading.value) {
@@ -11344,6 +11460,12 @@ function markArticleEdited() {
 .minerva-skin .main-content-area {
   padding: 0 16px;
   gap: 0;
+  transition: padding 180ms ease, transform 180ms ease;
+}
+
+.minerva-expandable-rail-mode .main-content-area,
+.minerva-expandable-rail-open .main-content-area {
+  transform: none;
 }
 
 .minerva-suggestions-on .main-content-area {
@@ -13411,6 +13533,126 @@ function markArticleEdited() {
   fill: var(--color-icon-warning, #ab7f2a);
 }
 
+.minerva-expandable-rail-panel {
+  position: fixed;
+  top: 42px;
+  right: 0;
+  bottom: 0;
+  width: 318px;
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+  border-left: 1px solid var(--border-color-muted, #DADDE3);
+  z-index: 82;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  pointer-events: auto;
+}
+
+.minerva-expandable-rail-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  padding: 0 12px;
+  border-bottom: 1px solid var(--border-color-muted, #DADDE3);
+  flex: 0 0 auto;
+}
+
+.minerva-expandable-rail-close {
+  flex: 0 0 auto;
+}
+
+.minerva-expandable-rail-close :deep(.cdx-button__button) {
+  min-width: 32px;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.minerva-expandable-rail-close :deep(.cdx-icon),
+.minerva-expandable-rail-close :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
+}
+
+.minerva-expandable-rail-title {
+  color: var(--color-subtle, #54595d);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-expandable-rail-list {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  scrollbar-width: none;
+  padding: 12px 0;
+}
+
+.minerva-expandable-rail-list::-webkit-scrollbar {
+  display: none;
+}
+
+.minerva-expandable-rail-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 16px 8px;
+}
+
+.minerva-expandable-rail-link {
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  padding: 0;
+  color: var(--color-base, #202122);
+  text-align: left;
+  font-family: "Linux Libertine", Georgia, "Times New Roman", serif;
+  font-size: 18px;
+  line-height: 28px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+}
+
+.minerva-expandable-rail-item--active .minerva-expandable-rail-link {
+  font-weight: 700;
+}
+
+.minerva-expandable-rail-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-left: 16px;
+}
+
+.minerva-expandable-rail-meta-row {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 20px;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-base, #202122);
+}
+
+.minerva-expandable-rail-meta-row--suggestions :deep(.cdx-icon),
+.minerva-expandable-rail-meta-row--suggestions :deep(svg) {
+  width: 12px;
+  height: 12px;
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.minerva-expandable-rail-meta-row--checks :deep(.cdx-icon),
+.minerva-expandable-rail-meta-row--checks :deep(svg) {
+  width: 12px;
+  height: 12px;
+  color: var(--color-icon-warning, #ab7f2a);
+  fill: var(--color-icon-warning, #ab7f2a);
+}
+
 .minerva-edit-menu-list {
   list-style: none;
   margin: 0;
@@ -14669,6 +14911,14 @@ function markArticleEdited() {
   padding-right: var(--minerva-suggestion-gutter);
 }
 
+.minerva-expandable-rail-open .article-content-edit {
+  padding-right: calc(var(--minerva-suggestion-gutter, 44px) + 16px);
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-expandable-rail-open .article-content-edit {
+  padding-right: var(--minerva-suggestion-gutter, 44px);
+}
+
 .minerva-suggestions-on .minerva-suggestion-target,
 .minerva-suggestions-on--rail .minerva-suggestion-target {
   padding-right: 0;
@@ -14769,6 +15019,26 @@ function markArticleEdited() {
   padding-top: 1px;
   z-index: 79;
   pointer-events: none;
+  transition: width 180ms ease;
+  overflow: hidden;
+}
+
+.minerva-expandable-rail-mode .minerva-suggestions-rail {
+  width: 56px;
+}
+
+.minerva-expandable-rail-mode .minerva-suggestions-rail-controls,
+.minerva-expandable-rail-mode .minerva-suggestions-rail-toggle,
+.minerva-expandable-rail-mode .minerva-suggestions-rail-toggle :deep(button),
+.minerva-expandable-rail-mode .minerva-suggestions-rail-toggle :deep(.cdx-button__button),
+.minerva-expandable-rail-mode .minerva-suggestions-rail-toc-button,
+.minerva-expandable-rail-mode .minerva-suggestions-rail-toc-button :deep(.cdx-button__button) {
+  width: 56px;
+  min-width: 56px;
+}
+
+.minerva-expandable-rail-mode .article-content-edit {
+  --minerva-suggestion-gutter: 56px;
 }
 
 .minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-suggestions-rail {
@@ -14784,6 +15054,16 @@ function markArticleEdited() {
   position: relative;
   z-index: 81;
   pointer-events: auto;
+}
+
+.minerva-expandable-rail-open .minerva-suggestions-rail {
+  width: 56px;
+  right: 318px;
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+}
+
+.minerva-expandable-rail-open .minerva-suggestions-rail-controls {
+  border-left: 1px solid var(--border-color-muted, #DADDE3);
 }
 
 .minerva-suggestions-rail-controls--bottom {
