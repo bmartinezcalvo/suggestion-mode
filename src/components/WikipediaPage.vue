@@ -2466,7 +2466,11 @@
                       In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.<sup v-if="showCitationPopup1 || citationNumber1" class="citation-marker" ref="citationMarker1">[{{ citationNumber1 || '...' }}]</sup>
                       </span>
                     </span>
-                    <span v-if="isMinervaSkin && isSuggestion1Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion1Pending || isSuccessHighlightActive(1))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(1) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion1Pending"
                       type="button"
@@ -2479,6 +2483,13 @@
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(1)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
 
                   <!-- Citation Popup 1 -->
@@ -2621,7 +2632,11 @@
                     <span class="highlighted-text-content">
                       In 1968, Lorde published <span class="highlighted-text-annotation"><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></span>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                     </span>
-                    <span v-if="isMinervaSkin && isSuggestion8Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion8Pending || isSuccessHighlightActive(8))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(8) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion8Pending"
                       type="button"
@@ -2633,6 +2648,13 @@
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(8)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
                                     <p v-else>
                     In 1968, Lorde published <a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
@@ -2667,7 +2689,11 @@
                     <span class="highlighted-text-content">
                       <span class="highlighted-text-annotation"><strong class="subsection-title">Wider recognition</strong></span>
                     </span>
-                    <span v-if="isMinervaSkin && isSuggestion6Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion6Pending || isSuccessHighlightActive(6))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(6) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion6Pending"
                       type="button"
@@ -2679,6 +2705,13 @@
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(6)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
                                     <h3 v-else class="subsection-title">Wider recognition</h3>
                                     <p>
@@ -2729,7 +2762,11 @@
                       (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".<sup v-if="showCitationPopup2 || citationNumber2" class="citation-marker">[{{ citationNumber2 || '...' }}]</sup>
                       </span>
                     </span>
-                    <span v-if="isMinervaSkin && isSuggestion2Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion2Pending || isSuccessHighlightActive(2))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(2) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion2Pending"
                       type="button"
@@ -2743,6 +2780,13 @@
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       <span v-if="isSuggestion2Pending && isSuggestion4Pending" class="minerva-suggestion-trigger-badge">2</span>
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(2)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
                   <p
                     v-else
@@ -2773,7 +2817,11 @@
                     <template v-else>The Black Unicorn</template>
                     (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
                     <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
-                    <span v-if="isMinervaSkin && isSuggestion4Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion4Pending || isSuccessHighlightActive(4))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(4) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion4Pending"
                       type="button"
@@ -2785,6 +2833,13 @@
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(4)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
                   <!-- Citation Popup 2 -->
                   <div v-if="showCitationPopup2" class="citation-popup" contenteditable="false">
@@ -2896,7 +2951,11 @@
                     <span class="highlighted-text-content">
                       The Cancer Journals (<span class="highlighted-text-annotation"><a href="https://example.org/1980" target="_blank" rel="noopener">1980</a></span>) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                     </span>
-                    <span v-if="isMinervaSkin && isSuggestion7Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion7Pending || isSuccessHighlightActive(7))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(7) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion7Pending"
                       type="button"
@@ -2908,6 +2967,13 @@
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(7)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
                   <p v-else>
                     The Cancer Journals (<a href="https://example.org/1980" target="_blank" rel="noopener">1980</a>) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
@@ -2957,7 +3023,11 @@
                       — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)<sup v-if="showCitationPopup3 || citationNumber3" class="citation-marker">[{{ citationNumber3 || '...' }}]</sup>
                       </span>
                     </span>
-                    <span v-if="isMinervaSkin && isSuggestion3Pending" class="minerva-highlight-rail"></span>
+                    <span
+                      v-if="isMinervaSkin && (isSuggestion3Pending || isSuccessHighlightActive(3))"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(3) }"
+                    ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion3Pending"
                       type="button"
@@ -2970,6 +3040,13 @@
                     >
                       <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     </button>
+                    <span
+                      v-else-if="isMinervaSkin && isSuccessHighlightActive(3)"
+                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
+                      aria-hidden="true"
+                    >
+                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                    </span>
                   </p>
                   <p v-else>
                     — Audre Lorde, The Master's Tools Will Never Dismantle the Master's House, Sister Outsider: Essays and Speeches (1984)
@@ -4045,12 +4122,13 @@
         </div>
 
         <div
-          v-if="isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState)"
+          v-if="isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState || isMinervaSuggestionSuccessState)"
           class="minerva-bottom-sheet"
             :class="{
               'minerva-bottom-sheet--edit-check': isEditCheckSheet,
               'minerva-bottom-sheet--suggestion': !isEditCheckSheet,
-              'minerva-bottom-sheet--rail-offset': !isEditCheckSheet && activePrototype === 'option-3'
+              'minerva-bottom-sheet--rail-offset': !isEditCheckSheet && activePrototype === 'option-3',
+              'minerva-bottom-sheet--success-exit': isMinervaSuggestionSuccessExiting || isMinervaSheetClosing
             }"
             role="dialog"
             aria-label="Suggestion"
@@ -4064,11 +4142,15 @@
               class="minerva-sheet-header"
               :class="{
                 'minerva-sheet-header--empty': shouldShowEmptyState && !showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
-                'minerva-sheet-header--no-more': showMinervaNoMoreSuggestionsState && !isEditCheckSheet
+                'minerva-sheet-header--no-more': showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
+                'minerva-sheet-header--success': isMinervaSuggestionSuccessState && !isEditCheckSheet
               }"
             >
-              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : cdxIconLightbulb" size="medium" />
-              <div class="minerva-sheet-title">
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaSuggestionSuccessState ? cdxIconSuccess : cdxIconLightbulb)" size="medium" />
+              <div
+                class="minerva-sheet-title"
+                :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState }"
+              >
                 {{ isEditCheckSheet ? editCheckTitle : minervaSheetTitle }}
               </div>
               <div
@@ -4112,6 +4194,9 @@
               copyright violation or plagiarism
             </a>
             and may result in your content being removed or your account being blocked.
+          </p>
+          <p v-else-if="isMinervaSuggestionSuccessState" class="minerva-sheet-description minerva-sheet-description--success">
+            {{ minervaSuggestionSuccessDescription }}
           </p>
           <p v-else-if="showMinervaNoMoreSuggestionsState" class="minerva-sheet-description">
             {{ minervaNoMoreSuggestionsDescription }}
@@ -4178,6 +4263,7 @@
               No, remove it
             </cdx-button>
           </div>
+            <template v-else-if="isMinervaSuggestionSuccessState"></template>
             <div v-else-if="showMinervaNoMoreSuggestionsState" class="minerva-sheet-actions">
             <cdx-button
               v-if="isMinervaNoMoreSuggestionsSectionState"
@@ -4372,7 +4458,12 @@
             v-if="showMinervaPagination && !showMinervaNoMoreSuggestionsState"
             class="minerva-sheet-pagination"
           >
-            <div class="minerva-pagination-count">{{ minervaPaginationLabel }}</div>
+            <div
+              class="minerva-pagination-count"
+              :class="{ 'minerva-pagination-count--loading': isMinervaSuggestionSuccessState }"
+            >
+              {{ minervaPaginationLabel }}
+            </div>
             <div v-if="showMinervaPaginationArrows" class="minerva-pagination-actions">
               <cdx-button
                 class="minerva-pagination-btn"
@@ -4400,7 +4491,7 @@
           </div>
         </div>
         <div
-          v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && availableSuggestionCount > 0"
+          v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && (availableSuggestionCount > 0 || isMinervaSuggestionSuccessState)"
           class="minerva-sheet-backdrop"
           :class="{ 'minerva-sheet-backdrop--suggestion': activePrototype === 'option-3' && !isEditCheckSheet }"
           @click="closeMinervaSuggestion"
@@ -4582,7 +4673,7 @@
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
                 <cdx-checkbox v-model="successHighlightOnCompleteEnabled">
-                  Enable success highlighted when completing a suggestion (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
+                  Enable success state when completing suggestions (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="noMoreSuggestionsEmptyStateEnabled">
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
@@ -5074,6 +5165,9 @@ let minervaMoreSuggestionsToastTimer = null;
 let minervaZeroSuggestionsToastTimer = null;
 let paginationNoSuggestionsToastTimer = null;
 let suggestionSuccessToastTimer = null;
+let minervaSuggestionSuccessTimer = null;
+let minervaSuggestionSuccessExitTimer = null;
+let minervaNoMoreSuggestionsOpenTimer = null;
 let scrollReappearTimer = null;
 let minervaFullPageTocShowTimer = null;
 let minervaFullPageTocHideTimer = null;
@@ -5215,6 +5309,9 @@ const showSuccessMessage1 = ref(false); // Show success message after citation i
 const showSuccessMessage2 = ref(false);
 const showSuccessMessage3 = ref(false);
 const showSuccessMessage4 = ref(false);
+const minervaSuggestionSuccessState = ref(null);
+const isMinervaSuggestionSuccessExiting = ref(false);
+const isMinervaSheetClosing = ref(false);
 const isSuggestionDeclined1 = ref(false); // Track if suggestion was declined/skipped
 const isSuggestionDeclined2 = ref(false);
 const isSuggestionDeclined3 = ref(false);
@@ -6000,7 +6097,55 @@ const minervaNoMoreSuggestionsDescription = computed(() => {
 const vectorNoMoreSuggestionsDescription = computed(() => (
   `You’ve reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`
 ));
+const minervaSuggestionSuccessCopy = {
+  1: {
+    title: 'Citation added',
+    description: 'This information now has a reliable source. Thank you for improving this article.'
+  },
+  2: {
+    title: 'Citation added',
+    description: 'This information now has a reliable source. Thank you for improving this article.'
+  },
+  3: {
+    title: 'Citation added',
+    description: 'This information now has a reliable source. Thank you for improving this article.'
+  },
+  4: {
+    title: 'External link removed',
+    description: 'This article now stays focused on encyclopedic content. Thank you for improving this article.'
+  },
+  5: {
+    title: 'Link updated',
+    description: 'This link now points readers to the intended topic. Thank you for improving this article.'
+  },
+  6: {
+    title: 'Heading adjusted',
+    description: 'This heading now fits the article structure better. Thank you for improving this article.'
+  },
+  7: {
+    title: 'Year link fixed',
+    description: 'This year now stays as plain text to keep the article focused. Thank you for improving this article.'
+  },
+  8: {
+    title: 'Redirect link fixed',
+    description: 'This link now points directly to the intended page. Thank you for improving this article.'
+  }
+};
+const isMinervaSuggestionSuccessState = computed(() => (
+  isMinervaSkin.value &&
+  minervaSheetMode.value === 'suggestion' &&
+  isMinervaSheetOpen.value &&
+  Boolean(minervaSuggestionSuccessState.value) &&
+  minervaSuggestionSuccessState.value.id === activeMinervaSuggestion.value
+));
+const minervaSuggestionSuccessTitle = computed(() => (
+  minervaSuggestionSuccessState.value?.title || ''
+));
+const minervaSuggestionSuccessDescription = computed(() => (
+  minervaSuggestionSuccessState.value?.description || ''
+));
 const minervaSheetTitle = computed(() => {
+  if (isMinervaSuggestionSuccessState.value) return minervaSuggestionSuccessTitle.value;
   if (showMinervaNoMoreSuggestionsState.value) return 'No more suggestions';
   if (shouldShowEmptyState.value) return 'No suggestions';
   if (activeMinervaSuggestion.value === 4) return 'Remove external link';
@@ -6299,7 +6444,9 @@ const minervaPaginationIndex = computed(() => {
   return index >= 0 ? index : 0;
 });
 const minervaPaginationLabel = computed(() => (
-  `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value} ${isEditCheckSheet.value ? 'checks' : 'suggestions'}`
+  isMinervaSuggestionSuccessState.value
+    ? 'Moving to next suggestion...'
+    : `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value} ${isEditCheckSheet.value ? 'checks' : 'suggestions'}`
 ));
 const minervaSuggestionHeaderIndicatorLabel = computed(() => {
   const ids = getPendingSuggestionIdsForContext();
@@ -6311,25 +6458,30 @@ const showMinervaSuggestionHeaderIndicator = computed(() => (
   isMinervaSkin.value &&
   isMinervaSheetOpen.value &&
   !isEditCheckSheet.value &&
+  !isMinervaSuggestionSuccessState.value &&
   !showMinervaNoMoreSuggestionsState.value &&
   activePrototype.value === 'option-3' &&
   getPendingSuggestionIdsForContext().length > 0
 ));
 const showMinervaSheetReturnArrow = computed(() => (
   Boolean(minervaSheetReturnDirection.value) &&
+  !isMinervaSuggestionSuccessState.value &&
   !isAutoScrollActive.value &&
   !(activePrototype.value === 'option-3' && !isEditCheckSheet.value)
 ));
 const isMinervaPaginationPrevDisabled = computed(() => (
-  minervaPaginationTotal.value <= 1
+  isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1
 ));
 const isMinervaPaginationNextDisabled = computed(() => (
-  minervaPaginationTotal.value <= 1
+  isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1
 ));
 const showMinervaPaginationArrows = computed(() => (
-  minervaPaginationTotal.value > 1
+  !isMinervaSuggestionSuccessState.value && minervaPaginationTotal.value > 1
 ));
 const showMinervaPagination = computed(() => {
+  if (isMinervaSuggestionSuccessState.value) {
+    return true;
+  }
   if (showMinervaNoMoreSuggestionsState.value) {
     return false;
   }
@@ -6350,6 +6502,8 @@ const showMinervaPagination = computed(() => {
 
 function resetSuggestionState() {
   clearMinervaNoMoreSuggestionsState();
+  clearMinervaSuggestionSuccessState();
+  clearMinervaSheetClosingState();
   showCitationPopup1.value = false;
   showCitationPopup2.value = false;
   citationUrl1.value = '';
@@ -6463,6 +6617,26 @@ function clearMinervaNoMoreSuggestionsState() {
   minervaNoMoreSuggestionsState.value = null;
 }
 
+function clearMinervaSuggestionSuccessState(options = {}) {
+  const { keepExit = false } = options;
+  if (minervaSuggestionSuccessTimer) {
+    clearTimeout(minervaSuggestionSuccessTimer);
+    minervaSuggestionSuccessTimer = null;
+  }
+  if (minervaSuggestionSuccessExitTimer) {
+    clearTimeout(minervaSuggestionSuccessExitTimer);
+    minervaSuggestionSuccessExitTimer = null;
+  }
+  minervaSuggestionSuccessState.value = null;
+  if (!keepExit) {
+    isMinervaSuggestionSuccessExiting.value = false;
+  }
+}
+
+function clearMinervaSheetClosingState() {
+  isMinervaSheetClosing.value = false;
+}
+
 function isSuccessHighlightActive(suggestionId) {
   return successHighlightSuggestionIds.value.includes(suggestionId);
 }
@@ -6477,17 +6651,82 @@ function activateSuccessHighlight(suggestionId) {
   }, 4000);
 }
 
+function getNextMinervaSuggestionId(currentId) {
+  const ids = getPendingSuggestionIdsForContext();
+  if (!ids.length) {
+    return null;
+  }
+  const contextIds = getSuggestionIdsForCurrentContext();
+  const currentOrderIndex = contextIds.indexOf(currentId);
+  return ids.find((id) => contextIds.indexOf(id) > currentOrderIndex) ?? ids[0] ?? null;
+}
+
+function queueMinervaSuccessState(currentId) {
+  const successCopy = minervaSuggestionSuccessCopy[currentId];
+  if (!successCopy) {
+    return false;
+  }
+  clearMinervaSuggestionSuccessState();
+  minervaSheetMode.value = 'suggestion';
+  activeMinervaSuggestion.value = currentId;
+  isMinervaSheetOpen.value = true;
+  minervaSheetReturnDirection.value = null;
+  minervaSuggestionSuccessState.value = {
+    id: currentId,
+    ...successCopy
+  };
+  updateMinervaSheetHeight();
+  minervaSuggestionSuccessTimer = window.setTimeout(() => {
+    isMinervaSuggestionSuccessExiting.value = true;
+    minervaSuggestionSuccessExitTimer = window.setTimeout(() => {
+      clearMinervaSuggestionSuccessState({ keepExit: true });
+      if (maybeShowMinervaNoMoreSuggestionsState()) {
+        nextTick(() => {
+          updateMinervaSheetHeight();
+          window.requestAnimationFrame(() => {
+            isMinervaSuggestionSuccessExiting.value = false;
+          });
+        });
+        return;
+      }
+      const nextId = getNextMinervaSuggestionId(currentId);
+      if (!nextId) {
+        closeMinervaSuggestion();
+        return;
+      }
+      openMinervaSuggestion(nextId, { keepSuccessExit: true });
+    }, 220);
+  }, 2000);
+  return true;
+}
+
 function closeVectorNoMoreSuggestionsDialog() {
   isVectorNoMoreSuggestionsDialogOpen.value = false;
 }
 
 function openMinervaNoMoreSuggestionsStateSheet(mode) {
   if (!noMoreSuggestionsEmptyStateEnabled.value || !isMinervaSkin.value) return false;
-  minervaSheetMode.value = 'suggestion';
-  minervaSheetReturnDirection.value = null;
-  minervaNoMoreSuggestionsState.value = mode;
-  isMinervaSheetOpen.value = true;
-  updateMinervaSheetHeight();
+  clearMinervaSuggestionSuccessState();
+  if (minervaNoMoreSuggestionsOpenTimer) {
+    clearTimeout(minervaNoMoreSuggestionsOpenTimer);
+    minervaNoMoreSuggestionsOpenTimer = null;
+  }
+  isMinervaSheetClosing.value = true;
+  minervaNoMoreSuggestionsOpenTimer = window.setTimeout(() => {
+    isMinervaSheetOpen.value = false;
+    minervaSheetHeight.value = 0;
+    minervaSheetMode.value = 'suggestion';
+    minervaSheetReturnDirection.value = null;
+    minervaNoMoreSuggestionsState.value = mode;
+    isMinervaSheetOpen.value = true;
+    updateMinervaSheetHeight();
+    nextTick(() => {
+      window.requestAnimationFrame(() => {
+        clearMinervaSheetClosingState();
+      });
+    });
+    minervaNoMoreSuggestionsOpenTimer = null;
+  }, 220);
   return true;
 }
 
@@ -7969,7 +8208,7 @@ function triggerSuggestionSuccessToast() {
 }
 
 function getSuggestionSuccessAutoAdvanceDelay(wasCompleted = false) {
-  return wasCompleted && successHighlightOnCompleteEnabled.value && shouldAutoAdvancePaginationSuggestion.value ? 1500 : 0;
+  return 0;
 }
 
 function shouldAdvanceMinervaSuggestionAfterResolve() {
@@ -8040,6 +8279,9 @@ function advanceMinervaEditCheck(currentType) {
 }
 
 function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
+  if (wasCompleted && isMinervaSkin.value && successHighlightOnCompleteEnabled.value && queueMinervaSuccessState(currentId)) {
+    return;
+  }
   const delay = getSuggestionSuccessAutoAdvanceDelay(wasCompleted);
   window.setTimeout(() => {
     nextTick(() => {
@@ -9054,11 +9296,8 @@ function handleYesSuggestion4() {
   isSuggestionResolved4.value = true;
   activateSuccessHighlight(4);
   isCardExpanded4.value = false;
-  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-    triggerMinervaDismiss(4);
-    setTimeout(() => {
-      handleMinervaSuggestionResolutionAfterAction(4, true);
-    }, 260);
+  if (isMinervaSkin.value) {
+    handleMinervaSuggestionResolutionAfterAction(4, true);
   } else {
     closeMinervaSuggestion();
   }
@@ -9099,11 +9338,8 @@ function handleResolveGenericSuggestion(suggestionId) {
     isSuggestionResolved8.value = true;
     isCardExpanded8.value = false;
   }
-  if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
-    triggerMinervaDismiss(suggestionId);
-    setTimeout(() => {
-      handleMinervaSuggestionResolutionAfterAction(suggestionId, true);
-    }, 260);
+  if (isMinervaSkin.value) {
+    handleMinervaSuggestionResolutionAfterAction(suggestionId, true);
   } else {
     closeMinervaSuggestion();
   }
@@ -9151,7 +9387,7 @@ function createCitation1() {
     citationNumber1.value = citationCounter.value;
     activateSuccessHighlight(1);
     showCitationPopup1.value = false;
-    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
+    if (isMinervaSkin.value) {
       handleMinervaSuggestionResolutionAfterAction(1, true);
     } else {
       closeMinervaSuggestion();
@@ -9171,7 +9407,7 @@ function createCitation2() {
     citationNumber2.value = citationCounter.value;
     activateSuccessHighlight(2);
     showCitationPopup2.value = false;
-    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
+    if (isMinervaSkin.value) {
       handleMinervaSuggestionResolutionAfterAction(2, true);
     } else {
       closeMinervaSuggestion();
@@ -9191,7 +9427,7 @@ function createCitation3() {
     citationNumber3.value = citationCounter.value;
     activateSuccessHighlight(3);
     showCitationPopup3.value = false;
-    if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
+    if (isMinervaSkin.value) {
       handleMinervaSuggestionResolutionAfterAction(3, true);
     } else {
       closeMinervaSuggestion();
@@ -10674,6 +10910,18 @@ onBeforeUnmount(() => {
     clearTimeout(suggestionSuccessToastTimer);
     suggestionSuccessToastTimer = null;
   }
+  if (minervaSuggestionSuccessTimer) {
+    clearTimeout(minervaSuggestionSuccessTimer);
+    minervaSuggestionSuccessTimer = null;
+  }
+  if (minervaSuggestionSuccessExitTimer) {
+    clearTimeout(minervaSuggestionSuccessExitTimer);
+    minervaSuggestionSuccessExitTimer = null;
+  }
+  if (minervaNoMoreSuggestionsOpenTimer) {
+    clearTimeout(minervaNoMoreSuggestionsOpenTimer);
+    minervaNoMoreSuggestionsOpenTimer = null;
+  }
   if (suppressMinervaSheetReturnDirectionTimer) {
     clearTimeout(suppressMinervaSheetReturnDirectionTimer);
     suppressMinervaSheetReturnDirectionTimer = null;
@@ -10863,12 +11111,15 @@ function isMinervaSectionOpen(sectionId) {
   return Boolean(minervaOpenSections.value[sectionId]);
 }
 
-function openMinervaSuggestion(suggestionId) {
+function openMinervaSuggestion(suggestionId, options = {}) {
+  const { keepSuccessExit = false } = options;
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === suggestionId) {
     closeMinervaSuggestion();
     return;
   }
   clearMinervaNoMoreSuggestionsState();
+  clearMinervaSuggestionSuccessState({ keepExit: keepSuccessExit });
+  clearMinervaSheetClosingState();
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = suggestionId;
   isMinervaSheetOpen.value = true;
@@ -10951,6 +11202,11 @@ function openMinervaSuggestion(suggestionId) {
     window.requestAnimationFrame(() => {
       const target = getSuggestionRefById(suggestionId)?.value;
       ensureTargetVisibleAboveMinervaSheet(target);
+      if (keepSuccessExit) {
+        window.requestAnimationFrame(() => {
+          isMinervaSuggestionSuccessExiting.value = false;
+        });
+      }
       nextTick(() => {
         updateMinervaSheetReturnDirection();
       });
@@ -10959,6 +11215,8 @@ function openMinervaSuggestion(suggestionId) {
 }
 
 function openMinervaSuggestionSheet(suggestionId) {
+  clearMinervaSuggestionSuccessState();
+  clearMinervaSheetClosingState();
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = suggestionId;
   isMinervaSheetOpen.value = true;
@@ -11033,6 +11291,8 @@ function handleFilterSuggestionsClick() {
 
 function closeMinervaSuggestion() {
   clearMinervaNoMoreSuggestionsState();
+  clearMinervaSuggestionSuccessState();
+  clearMinervaSheetClosingState();
   isMinervaSheetOpen.value = false;
   minervaSheetReturnDirection.value = null;
   isCardExpanded.value = false;
@@ -14809,6 +15069,12 @@ function markArticleEdited() {
   background-color: var(--color-icon-warning, #AB7F2A);
 }
 
+.minerva-highlight-rail--success,
+:deep(.minerva-highlight-rail--success) {
+  background-color: var(--color-success, #14866d);
+  z-index: 22;
+}
+
 .minerva-suggestions-on--rail .minerva-highlight-rail {
   z-index: 21;
 }
@@ -14890,6 +15156,18 @@ function markArticleEdited() {
 
 .minerva-suggestion-trigger:active {
   background-color: transparent;
+}
+
+.minerva-suggestion-trigger--success {
+  color: var(--color-success, #14866d);
+  cursor: default;
+  z-index: 22;
+}
+
+.minerva-suggestion-trigger--success :deep(.cdx-icon),
+.minerva-suggestion-trigger--success :deep(svg) {
+  color: var(--color-success, #14866d);
+  fill: var(--color-success, #14866d);
 }
 
 .minerva-suggestions-on .article-content-edit {
@@ -15024,7 +15302,7 @@ function markArticleEdited() {
 }
 
 .minerva-expandable-rail-mode .minerva-suggestions-rail {
-  width: 56px;
+  width: 44px;
 }
 
 .minerva-expandable-rail-mode .minerva-suggestions-rail-controls,
@@ -15033,12 +15311,12 @@ function markArticleEdited() {
 .minerva-expandable-rail-mode .minerva-suggestions-rail-toggle :deep(.cdx-button__button),
 .minerva-expandable-rail-mode .minerva-suggestions-rail-toc-button,
 .minerva-expandable-rail-mode .minerva-suggestions-rail-toc-button :deep(.cdx-button__button) {
-  width: 56px;
-  min-width: 56px;
+  width: 44px;
+  min-width: 44px;
 }
 
 .minerva-expandable-rail-mode .article-content-edit {
-  --minerva-suggestion-gutter: 56px;
+  --minerva-suggestion-gutter: 44px;
 }
 
 .minerva-skin.edit-mode.minerva-edit-full-page-improved .minerva-suggestions-rail {
@@ -15057,7 +15335,7 @@ function markArticleEdited() {
 }
 
 .minerva-expandable-rail-open .minerva-suggestions-rail {
-  width: 56px;
+  width: 44px;
   right: 318px;
   background: var(--background-color-neutral-subtle, #f8f9fa);
 }
@@ -15285,6 +15563,8 @@ function markArticleEdited() {
   box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   z-index: 80;
   padding: 0 16px 0;
+  transform: translateY(0);
+  transition: transform 220ms ease;
 }
 
 .minerva-bottom-sheet--suggestion {
@@ -15356,6 +15636,12 @@ function markArticleEdited() {
   color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
+.minerva-sheet-header--success :deep(.cdx-icon),
+.minerva-sheet-header--success :deep(svg) {
+  color: var(--color-success, #14866d);
+  fill: var(--color-success, #14866d);
+}
+
 .minerva-sheet-backdrop {
   position: fixed;
   inset: 0;
@@ -15391,6 +15677,10 @@ function markArticleEdited() {
   font-size: 16px;
   font-weight: 600;
   color: #202122;
+}
+
+.minerva-sheet-title--success {
+  color: var(--color-base, #202122);
 }
 
 .minerva-sheet-header-indicator {
@@ -15431,6 +15721,11 @@ function markArticleEdited() {
   font-size: 16px;
   line-height: 24px;
   color: #54595d;
+}
+
+.minerva-sheet-description--success {
+  color: var(--color-subtle, #54595d);
+  margin-bottom: 16px;
 }
 
 .minerva-sheet-actions {
@@ -15551,6 +15846,10 @@ function markArticleEdited() {
   color: var(--color-subtle, #54595d);
 }
 
+.minerva-pagination-count--loading {
+  color: var(--color-disabled, #a2a9b1);
+}
+
 .minerva-pagination-actions {
   display: inline-flex;
   align-items: center;
@@ -15586,6 +15885,10 @@ function markArticleEdited() {
 
 .minerva-pagination-btn :deep(svg) {
   fill: currentColor;
+}
+
+.minerva-bottom-sheet--success-exit {
+  transform: translateY(100%);
 }
 
 .minerva-pagination-icon--prev {
@@ -17467,6 +17770,12 @@ function markArticleEdited() {
 .minerva-sheet-header--no-more :deep(svg) {
   color: var(--color-disabled, #a2a9b1);
   fill: var(--color-disabled, #a2a9b1);
+}
+
+.minerva-sheet-header--no-more .minerva-sheet-icon-button--close :deep(.cdx-icon),
+.minerva-sheet-header--no-more .minerva-sheet-icon-button--close :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
 }
 
 .minerva-sheet-header--empty .minerva-sheet-title {
