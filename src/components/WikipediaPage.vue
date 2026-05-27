@@ -2171,55 +2171,6 @@
               </cdx-button>
             </div>
 
-            <div
-              v-if="showMinervaFullPageExpandableRailUi"
-              ref="minervaFullPageTocPanelRef"
-              class="minerva-expandable-rail-panel"
-              @click.stop
-            >
-              <div class="minerva-expandable-rail-header">
-                <cdx-button
-                  class="minerva-expandable-rail-close"
-                  action="default"
-                  weight="quiet"
-                  aria-label="Close table of contents"
-                  @click.stop="hideMinervaFullPageTocUi"
-                >
-                  <cdx-icon :icon="cdxIconPrevious" size="medium" />
-                </cdx-button>
-                <span class="minerva-expandable-rail-title">Contents</span>
-              </div>
-              <div class="minerva-expandable-rail-list">
-                <div
-                  v-for="item in minervaExpandableRailItems"
-                  :key="item.id"
-                  class="minerva-expandable-rail-item"
-                  :class="{ 'minerva-expandable-rail-item--active': minervaFullPageTocActivePathIds.includes(item.id) }"
-                >
-                  <button
-                    type="button"
-                    class="minerva-expandable-rail-link"
-                    @click="handleMinervaExpandableRailItemClick(item)"
-                  >
-                    {{ item.id === 'top' ? 'Top' : item.label }}
-                  </button>
-                  <div
-                    v-if="minervaFullPageTocActivePathIds.includes(item.id) && (item.count > 0 || item.checkCount > 0)"
-                    class="minerva-expandable-rail-meta"
-                  >
-                    <div v-if="item.count > 0" class="minerva-expandable-rail-meta-row minerva-expandable-rail-meta-row--suggestions">
-                      <cdx-icon :icon="cdxIconLightbulb" size="small" />
-                      <span>{{ item.count }} {{ item.count === 1 ? 'suggestion' : 'suggestions' }}</span>
-                    </div>
-                    <div v-if="item.checkCount > 0" class="minerva-expandable-rail-meta-row minerva-expandable-rail-meta-row--checks">
-                      <cdx-icon :icon="cdxIconAlert" size="small" />
-                      <span>{{ item.checkCount }} {{ item.checkCount === 1 ? 'check' : 'checks' }}</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <!-- Loading Overlay (only covers content below toolbar) -->
             <div v-if="isLoading" class="loading-overlay"></div>
 
@@ -3928,7 +3879,241 @@
         </aside>
 
         <div
-          v-if="showMinervaRail"
+          v-if="showMinervaFullPageSuggestionNavigation && isMinervaFullPageExpandableRailMode"
+          class="minerva-suggestions-rail minerva-suggestions-rail--expandable-shell"
+          :class="{ 'minerva-suggestions-rail--expandable-open': isMinervaFullPageTocOpen }"
+        >
+          <div
+            v-if="showMinervaTopRailControls"
+            class="minerva-suggestions-rail-controls"
+          >
+              <cdx-button
+                v-if="showMinervaFullPageTocRailButtonUi"
+                ref="minervaFullPageTocButtonRef"
+                class="minerva-suggestions-rail-toc-button"
+                action="default"
+                weight="quiet"
+                size="medium"
+                :aria-label="isMinervaFullPageTocOpen ? 'Close table of contents' : 'Open table of contents'"
+                @click.stop="toggleMinervaFullPageToc"
+              >
+                <cdx-icon :icon="isMinervaFullPageTocOpen ? cdxIconArrowPrevious : cdxIconListBullet" size="medium" />
+              </cdx-button>
+              <cdx-toggle-button
+                v-if="showMinervaTopRailToggle"
+                ref="minervaRailToggleRef"
+                :model-value="showSuggestions"
+                quiet
+                aria-label="Toggle suggestions"
+                class="minerva-suggestions-rail-toggle"
+                :class="{ 'minerva-suggestions-rail-toggle--active': showSuggestions }"
+                @update:model-value="handleMinervaRailControlsToggleChange"
+              >
+                <span class="lightbulb-icon-wrapper">
+                  <span v-if="activePrototype !== 'option-4' && showSuggestions" class="bulb-rays">
+                    <span class="ray ray-1"></span>
+                    <span class="ray ray-2"></span>
+                    <span class="ray ray-3"></span>
+                    <span class="ray ray-4"></span>
+                    <span class="ray ray-5"></span>
+                  </span>
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  <span
+                    v-if="showToggleBadge || isPaginationMode"
+                    class="suggestions-badge"
+                    :class="{
+                      'suggestions-badge--zero': showToggleBadgeZero,
+                      'suggestions-badge--pulse': badgePulse,
+                      'suggestions-badge--rail-active': isPaginationMode
+                    }"
+                  >
+                    {{ toggleBadgeCount }}
+                  </span>
+                </span>
+              </cdx-toggle-button>
+          </div>
+          <div
+            v-if="showMinervaBottomRailControls"
+            class="minerva-suggestions-rail-controls minerva-suggestions-rail-controls--bottom"
+          >
+              <cdx-toggle-button
+                v-if="showMinervaBottomRailToggleControl"
+                ref="minervaRailToggleRef"
+                :model-value="showSuggestions"
+                quiet
+                aria-label="Toggle suggestions"
+                class="minerva-suggestions-rail-toggle"
+                :class="{ 'minerva-suggestions-rail-toggle--active': showSuggestions }"
+                @update:model-value="handleMinervaRailControlsToggleChange"
+              >
+                <span class="lightbulb-icon-wrapper">
+                  <span v-if="activePrototype !== 'option-4' && showSuggestions" class="bulb-rays">
+                    <span class="ray ray-1"></span>
+                    <span class="ray ray-2"></span>
+                    <span class="ray ray-3"></span>
+                    <span class="ray ray-4"></span>
+                    <span class="ray ray-5"></span>
+                  </span>
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  <span
+                    v-if="showToggleBadge || isPaginationMode"
+                    class="suggestions-badge"
+                    :class="{
+                      'suggestions-badge--zero': showToggleBadgeZero,
+                      'suggestions-badge--pulse': badgePulse,
+                      'suggestions-badge--rail-active': isPaginationMode
+                    }"
+                  >
+                    {{ toggleBadgeCount }}
+                  </span>
+                </span>
+              </cdx-toggle-button>
+              <cdx-toggle-button
+                v-if="showMinervaCollapsedCountRailToggle"
+                :model-value="true"
+                quiet
+                aria-label="Show suggestions"
+                class="minerva-suggestions-rail-toggle minerva-suggestions-rail-toggle--count-collapsed minerva-suggestions-rail-toggle--active"
+                @update:model-value="handleMinervaCollapsedRailToggleControlsChange"
+              >
+                <span class="lightbulb-icon-wrapper">
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  <span
+                    class="suggestions-badge"
+                    :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                  >
+                    {{ toggleBadgeCount }}
+                  </span>
+                </span>
+              </cdx-toggle-button>
+              <cdx-button
+                v-if="showMinervaFilterButton"
+                class="suggestions-filter-btn minerva-suggestions-filter-btn"
+                action="default"
+                weight="quiet"
+                size="large"
+                aria-label="Filter suggestions"
+                @click="handleMinervaRailFilterClick"
+              >
+                <cdx-icon :icon="cdxIconConfigure" size="medium" />
+              </cdx-button>
+              <div
+                v-if="showMinervaRailArrows"
+                class="minerva-suggestions-rail-arrows"
+              >
+                <cdx-button
+                  class="suggestions-banner-arrow-btn"
+                  action="default"
+                  weight="quiet"
+                  size="small"
+                  :disabled="!showBannerArrowUp"
+                  aria-label="View previous suggestions"
+                  @click="handleMinervaRailArrowClick('up')"
+                  @keydown="handleBannerKeydown($event)"
+                >
+                  <cdx-icon :icon="cdxIconCollapse" size="medium" />
+                </cdx-button>
+                <cdx-button
+                  class="suggestions-banner-arrow-btn"
+                  action="default"
+                  weight="quiet"
+                  size="small"
+                  :disabled="!showBannerArrowDown"
+                  aria-label="View next suggestions"
+                  @click="handleMinervaRailArrowClick('down')"
+                  @keydown="handleBannerKeydown($event)"
+                >
+                  <cdx-icon :icon="cdxIconExpand" size="medium" />
+                </cdx-button>
+              </div>
+              <cdx-toggle-button
+                v-if="showMinervaBottomRailToggle"
+                ref="minervaRailToggleRef"
+                :model-value="activePrototype === 'option-4'
+                  ? isMinervaOverviewSheetOpen
+                  : isPaginationManualMode
+                    ? (isMinervaSheetOpen && !isEditCheckSheet)
+                    : showSuggestions"
+                :disabled="isPaginationManualMode && toggleBadgeCount === 0"
+                quiet
+                aria-label="Toggle suggestions"
+                class="minerva-suggestions-rail-toggle"
+                :class="{
+                  'minerva-suggestions-rail-toggle--active': activePrototype === 'option-4'
+                    ? isMinervaOverviewSheetOpen
+                    : isPaginationManualMode
+                      ? (isMinervaSheetOpen && !isEditCheckSheet)
+                      : showSuggestions,
+                  'minerva-suggestions-rail-toggle--overview': activePrototype === 'option-4' || isPaginationManualMode
+                }"
+                @update:model-value="handleMinervaRailControlsToggleChange"
+              >
+                <span class="lightbulb-icon-wrapper">
+                  <span v-if="activePrototype !== 'option-4' && !isPaginationManualMode && showSuggestions" class="bulb-rays">
+                    <span class="ray ray-1"></span>
+                    <span class="ray ray-2"></span>
+                    <span class="ray ray-3"></span>
+                    <span class="ray ray-4"></span>
+                    <span class="ray ray-5"></span>
+                  </span>
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                  <span
+                    v-if="showToggleBadge || isPaginationMode"
+                    class="suggestions-badge"
+                    :class="{
+                      'suggestions-badge--zero': showToggleBadgeZero,
+                      'suggestions-badge--pulse': badgePulse,
+                      'suggestions-badge--rail-active': isPaginationMode
+                    }"
+                  >
+                    {{ toggleBadgeCount }}
+                  </span>
+                </span>
+              </cdx-toggle-button>
+          </div>
+
+          <div
+            ref="minervaFullPageTocPanelRef"
+            class="minerva-expandable-rail-panel"
+            @click.stop
+          >
+            <div class="minerva-expandable-rail-header">
+              <span class="minerva-expandable-rail-title">Contents</span>
+            </div>
+            <div class="minerva-expandable-rail-list">
+              <div
+                v-for="item in minervaExpandableRailItems"
+                :key="item.id"
+                class="minerva-expandable-rail-item"
+                :class="{ 'minerva-expandable-rail-item--active': minervaFullPageTocActivePathIds.includes(item.id) }"
+              >
+                <button
+                  type="button"
+                  class="minerva-expandable-rail-link"
+                  @click="handleMinervaExpandableRailItemClick(item)"
+                >
+                  {{ item.id === 'top' ? 'Top' : item.label }}
+                </button>
+                <div
+                  v-if="minervaFullPageTocActivePathIds.includes(item.id) && (item.count > 0 || item.checkCount > 0)"
+                  class="minerva-expandable-rail-meta"
+                >
+                  <div v-if="item.count > 0" class="minerva-expandable-rail-meta-row minerva-expandable-rail-meta-row--suggestions">
+                    <cdx-icon :icon="cdxIconLightbulb" size="small" />
+                    <span>{{ item.count }} {{ item.count === 1 ? 'suggestion' : 'suggestions' }}</span>
+                  </div>
+                  <div v-if="item.checkCount > 0" class="minerva-expandable-rail-meta-row minerva-expandable-rail-meta-row--checks">
+                    <cdx-icon :icon="cdxIconAlert" size="small" />
+                    <span>{{ item.checkCount }} {{ item.checkCount === 1 ? 'check' : 'checks' }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div
+          v-else-if="showMinervaRail"
           class="minerva-suggestions-rail"
         >
           <div
@@ -4875,6 +5060,7 @@ import {
   cdxIconWatchlist,
   cdxIconUserAvatar,
   cdxIconExpand,
+  cdxIconArrowPrevious,
   cdxIconPrevious,
   cdxIconNext,
   cdxIconArrowNext,
@@ -9052,7 +9238,10 @@ function handleMinervaFullPageTocItemClick(item) {
 function handleMinervaExpandableRailItemClick(item) {
   if (!item) return;
   activeMinervaFullPageTocSectionId.value = item.id;
-  scrollToMinervaFullPageTocSection(item);
+  hideMinervaFullPageTocUi();
+  window.setTimeout(() => {
+    scrollToMinervaFullPageTocSection(item);
+  }, 180);
 }
 
 function updateSuggestionVisibility() {
@@ -11725,7 +11914,17 @@ function markArticleEdited() {
 
 .minerva-expandable-rail-mode .main-content-area,
 .minerva-expandable-rail-open .main-content-area {
-  transform: none;
+  align-items: stretch;
+  gap: 0;
+  width: calc(100% + 274px);
+  min-width: calc(100% + 274px);
+  transform: translateX(0);
+  transition: transform 180ms ease;
+  overflow: hidden;
+}
+
+.minerva-expandable-rail-open .main-content-area {
+  transform: translateX(-274px);
 }
 
 .minerva-suggestions-on .main-content-area {
@@ -11743,6 +11942,14 @@ function markArticleEdited() {
 
 .minerva-skin .article {
   max-width: 100%;
+}
+
+.minerva-expandable-rail-mode .article,
+.minerva-expandable-rail-open .article {
+  flex: 0 0 calc(100% - 318px);
+  width: calc(100% - 318px);
+  max-width: none;
+  min-width: 0;
 }
 
 /* ===== TABLE OF CONTENTS (LEFT SIDEBAR) ===== */
@@ -13793,15 +14000,46 @@ function markArticleEdited() {
   fill: var(--color-icon-warning, #ab7f2a);
 }
 
-.minerva-expandable-rail-panel {
-  position: fixed;
+.minerva-suggestions-rail--expandable-shell {
+  position: relative;
+  flex: 0 0 318px;
+  width: 318px;
+  min-width: 318px;
+  background: transparent;
+  overflow: hidden;
   top: 42px;
+  height: calc(100% - 42px);
+  align-self: stretch;
+  border-left: 1px solid var(--border-color-muted, #DADDE3);
+}
+
+.minerva-suggestions-rail--expandable-shell.minerva-suggestions-rail {
+  position: relative;
+  right: auto;
+  width: 318px;
+  min-width: 318px;
+  height: calc(100% - 42px);
+  background: var(--background-color-neutral-subtle, #f8f9fa);
+  padding-top: 0;
+  pointer-events: auto;
+  overflow: hidden;
+}
+
+.minerva-suggestions-rail--expandable-shell .minerva-suggestions-rail-controls {
+  pointer-events: auto;
+  z-index: 3;
+}
+
+.minerva-expandable-rail-panel {
+  position: absolute;
+  top: 0;
   right: 0;
   bottom: 0;
-  width: 318px;
+  left: 44px;
+  width: 274px;
   background: var(--background-color-neutral-subtle, #f8f9fa);
   border-left: 1px solid var(--border-color-muted, #DADDE3);
-  z-index: 82;
+  z-index: 1;
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -13811,28 +14049,10 @@ function markArticleEdited() {
 .minerva-expandable-rail-header {
   display: flex;
   align-items: center;
-  gap: 8px;
   min-height: 44px;
   padding: 0 12px;
   border-bottom: 1px solid var(--border-color-muted, #DADDE3);
   flex: 0 0 auto;
-}
-
-.minerva-expandable-rail-close {
-  flex: 0 0 auto;
-}
-
-.minerva-expandable-rail-close :deep(.cdx-button__button) {
-  min-width: 32px;
-  width: 32px;
-  height: 32px;
-  padding: 0;
-}
-
-.minerva-expandable-rail-close :deep(.cdx-icon),
-.minerva-expandable-rail-close :deep(svg) {
-  color: var(--color-base, #202122);
-  fill: var(--color-base, #202122);
 }
 
 .minerva-expandable-rail-title {
@@ -15334,14 +15554,14 @@ function markArticleEdited() {
   pointer-events: auto;
 }
 
-.minerva-expandable-rail-open .minerva-suggestions-rail {
-  width: 44px;
-  right: 318px;
-  background: var(--background-color-neutral-subtle, #f8f9fa);
-}
-
-.minerva-expandable-rail-open .minerva-suggestions-rail-controls {
-  border-left: 1px solid var(--border-color-muted, #DADDE3);
+.minerva-expandable-rail-mode .minerva-suggestions-rail--expandable,
+.minerva-expandable-rail-open .minerva-suggestions-rail--expandable {
+  position: absolute;
+  top: 42px;
+  right: auto;
+  left: 0;
+  height: calc(100% - 42px);
+  background: transparent;
 }
 
 .minerva-suggestions-rail-controls--bottom {
