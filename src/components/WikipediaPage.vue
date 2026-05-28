@@ -301,7 +301,7 @@
           <cdx-icon :icon="cdxIconHelp" size="medium" />
         </button>
         <div
-          v-if="showMinervaBanner || showMinervaHelpButton || showMinervaArrowOnly"
+          v-if="showMinervaSuggestionsBar"
           class="minerva-suggestions-bar"
           :class="{ 'minerva-suggestions-bar--arrow-only': showMinervaArrowOnly }"
         >
@@ -4376,6 +4376,7 @@
                     'minerva-carousel-card--success': isMinervaSuggestionSuccessState && item.id === activeMinervaSuggestion,
                     'minerva-carousel-card--empty': item.kind === 'empty'
                   }"
+                  @click="handleMinervaCarouselCardClick($event, item)"
                 >
                   <div class="minerva-carousel-card-header">
                     <cdx-icon
@@ -6750,6 +6751,7 @@ const suggestionColorStyles = computed(() => {
       '--suggestion-color-subtle': '#F7E5FF',
       '--suggestion-color-subtle-hover': '#F7E5FF',
       '--suggestion-color-subtle-active': '#F7E5FF',
+      '--background-color-progressive-subtle': '#E8EEFF',
       '--suggestion-border-hover': '#A70EEB',
       '--suggestion-border-active': '#A70EEB',
       '--suggestion-border-selected': '#A70EEB'
@@ -6760,6 +6762,7 @@ const suggestionColorStyles = computed(() => {
     '--suggestion-color-subtle': '#E8EEFF',
     '--suggestion-color-subtle-hover': '#DBE8FF',
     '--suggestion-color-subtle-active': '#C5D7FF',
+    '--background-color-progressive-subtle': '#E8EEFF',
     '--suggestion-border-hover': '#3056A9',
     '--suggestion-border-active': '#233566',
     '--suggestion-border-selected': '#6485D1'
@@ -6806,6 +6809,7 @@ const showMinervaHelpButton = computed(() => (
   isEditMode.value &&
   activePrototype.value !== 'option-1' && !isPaginationMode.value && !isArrowOnceMode.value
 ));
+const showMinervaSuggestionsBar = computed(() => false);
 const minervaToolbarSlotCount = computed(() => {
   const availableWidth = minervaToolbarAvailableWidth.value || Math.max(0, minervaViewportWidth.value - 88);
   return Math.floor(availableWidth / 44);
@@ -11775,12 +11779,55 @@ function isMinervaSectionOpen(sectionId) {
   return Boolean(minervaOpenSections.value[sectionId]);
 }
 
+function ensureMinervaCarouselSuggestionRevealed(suggestionId) {
+  if (!suggestionId || minervaCarouselRevealedSuggestionIds.value.includes(suggestionId)) return;
+  minervaCarouselRevealedSuggestionIds.value = [
+    ...minervaCarouselRevealedSuggestionIds.value,
+    suggestionId
+  ];
+  minervaCarouselVisibleLimit.value = minervaCarouselRevealedSuggestionIds.value.length;
+}
+
+function getVisibleMinervaSuggestionId() {
+  if (typeof window === 'undefined') return null;
+  const overlay = minervaSuggestionCarouselRef.value || minervaSheetRef.value;
+  const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+  const availableBottom = overlay ? overlay.getBoundingClientRect().top : viewportHeight;
+  const visibleSuggestions = getPendingSuggestionIdsForContext()
+    .map((id) => {
+      const target = getSuggestionRefById(id)?.value;
+      if (!target) return null;
+      const rect = target.getBoundingClientRect();
+      if (rect.bottom <= 0 || rect.top >= availableBottom) return null;
+      return { id, rect };
+    })
+    .filter(Boolean)
+    .sort((a, b) => a.rect.top - b.rect.top);
+  if (!visibleSuggestions.length) return null;
+  const activeVisible = visibleSuggestions.find((item) => item.id === activeMinervaSuggestion.value);
+  return activeVisible?.id || visibleSuggestions[0].id;
+}
+
+function syncMinervaCarouselToVisibleSuggestion() {
+  const visibleSuggestionId = getVisibleMinervaSuggestionId();
+  const fallbackId = activeMinervaSuggestion.value || minervaCarouselVisibleSuggestionIds.value[0];
+  const targetId = visibleSuggestionId || fallbackId;
+  if (!targetId) return;
+  ensureMinervaCarouselSuggestionRevealed(targetId);
+  activeMinervaSuggestion.value = targetId;
+  nextTick(() => {
+    scrollMinervaCarouselToSuggestion(targetId, false);
+    const target = getSuggestionRefById(targetId)?.value;
+    ensureTargetVisibleAboveMinervaSheet(target);
+  });
+}
+
 function expandMinervaCarousel() {
   if (minervaCarouselCollapsed.value) {
     minervaCarouselCollapsed.value = false;
     isMinervaSheetOpen.value = true;
     minervaSheetMode.value = 'suggestion';
-    scrollMinervaCarouselToSuggestion(activeMinervaSuggestion.value, false);
+    syncMinervaCarouselToVisibleSuggestion();
   }
 }
 
@@ -11789,8 +11836,21 @@ function toggleMinervaCarouselCollapsed() {
   if (!minervaCarouselCollapsed.value) {
     isMinervaSheetOpen.value = true;
     minervaSheetMode.value = 'suggestion';
-    scrollMinervaCarouselToSuggestion(activeMinervaSuggestion.value, false);
+    syncMinervaCarouselToVisibleSuggestion();
   }
+}
+
+function handleMinervaCarouselCardClick(event, item) {
+  if (!item || item.kind !== 'suggestion') return;
+  if (event?.target?.closest?.('button, a, input, select, textarea, [role="button"], [role="menuitem"]')) return;
+  ensureMinervaCarouselSuggestionRevealed(item.id);
+  const targetRef = getSuggestionRefById(item.id);
+  if (targetRef?.value) {
+    openSuggestionAtTarget(item.id, targetRef, true, { keepMinervaSheetClear: true });
+  } else {
+    activateMinervaCarouselSuggestion(item.id);
+  }
+  nextTick(() => scrollMinervaCarouselToSuggestion(item.id, false));
 }
 
 function handleMinervaCarouselMoreClick(action) {
@@ -14061,7 +14121,7 @@ function markArticleEdited() {
 }
 
 .text-style-menu-button--selected {
-  background: var(--background-color-progressive-subtle, #e8eeff);
+  background: var(--background-color-progressive-subtle, #E8EEFF);
   color: var(--color-progressive, #36c);
 }
 
@@ -14806,7 +14866,7 @@ function markArticleEdited() {
 }
 
 .minerva-edit-menu-button--active {
-  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
   color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
@@ -14819,7 +14879,7 @@ function markArticleEdited() {
 }
 
 .minerva-edit-menu-button--active:not([aria-pressed="true"]) {
-  background: var(--background-color-progressive-subtle, #e8eeff);
+  background: var(--background-color-progressive-subtle, #E8EEFF);
   color: var(--color-progressive, #36c);
 }
 
@@ -15808,7 +15868,7 @@ function markArticleEdited() {
 
 .minerva-skin .feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation,
 .minerva-skin .feedback-underlined-unselected.highlighted-text-wrapper--hover .highlighted-text-annotation {
-  background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff)) !important;
+  background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF)) !important;
 }
 
 .feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation,
@@ -15834,12 +15894,12 @@ function markArticleEdited() {
 
 /* Hover state - blue background per line */
 .highlighted-text-wrapper--hover .highlighted-text-annotation {
-  background-color: var(--suggestion-color-subtle, #e8eeff);
+  background-color: var(--suggestion-color-subtle, #E8EEFF);
 }
 
 /* Selected state - blue background per line */
 .highlighted-text-wrapper--selected .highlighted-text-annotation {
-  background-color: var(--suggestion-color-subtle, #e8eeff);
+  background-color: var(--suggestion-color-subtle, #E8EEFF);
 }
 
 .minerva-skin .highlighted-text-wrapper .highlighted-text-annotation {
@@ -15855,7 +15915,7 @@ function markArticleEdited() {
 
 .minerva-skin .highlighted-text-wrapper--hover .highlighted-text-annotation,
 .minerva-skin .highlighted-text-wrapper--selected .highlighted-text-annotation {
-  background-color: var(--background-color-progressive-subtle, #e8eeff);
+  background-color: var(--background-color-progressive-subtle, #E8EEFF);
 }
 
 /* Links inside highlighted text */
@@ -16468,6 +16528,7 @@ function markArticleEdited() {
 
 .minerva-suggestion-carousel--collapsed {
   min-height: 0;
+  background: var(--background-color-progressive-subtle, #E8EEFF);
   box-shadow: none;
 }
 
@@ -16575,11 +16636,12 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   position: relative;
-  background: var(--background-color-progressive-subtle, #e8eeff);
+  background: var(--background-color-progressive-subtle, #E8EEFF);
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: var(--border-radius-base, 2px);
   box-shadow: none;
   padding: 12px 16px 16px;
+  cursor: pointer;
 }
 
 .minerva-carousel-card--success {
@@ -16922,8 +16984,8 @@ function markArticleEdited() {
 .minerva-suggestions-rail-toggle--overview.minerva-suggestions-rail-toggle--active,
 .minerva-suggestions-rail-toggle--overview.minerva-suggestions-rail-toggle--active :deep(button),
 .minerva-suggestions-rail-toggle--overview.minerva-suggestions-rail-toggle--active :deep(.cdx-button__button) {
-  background: var(--background-color-progressive-subtle, #e8eeff) !important;
-  background-color: var(--background-color-progressive-subtle, #e8eeff) !important;
+  background: var(--background-color-progressive-subtle, #E8EEFF) !important;
+  background-color: var(--background-color-progressive-subtle, #E8EEFF) !important;
 }
 
 .minerva-sheet-pagination {
@@ -17040,11 +17102,11 @@ function markArticleEdited() {
   --feedback-border-hover: var(--suggestion-border-hover, #3056a9);
   --feedback-border-active: var(--suggestion-border-active, #233566);
   --feedback-border-selected: var(--suggestion-border-selected, #6485d1);
-  --feedback-highlight-selected: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  --feedback-highlight-selected: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
   --feedback-highlight-unselected: rgba(234, 236, 240, 0.65);
   --feedback-header-collapsed-default: var(--background-color-base, #ffffff);
-  --feedback-header-collapsed-hover: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
-  --feedback-header-expanded: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  --feedback-header-collapsed-hover: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
+  --feedback-header-expanded: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
   --feedback-icon-color: var(--suggestion-color, var(--color-progressive, #36c));
   background-color: white;
   border-radius: 2px;
@@ -17217,7 +17279,7 @@ function markArticleEdited() {
 
 .suggestion-header--expanded {
   cursor: pointer;
-  background-color: var(--suggestion-color-subtle, #e8eeff);
+  background-color: var(--suggestion-color-subtle, #E8EEFF);
 }
 
 .suggestion-header:focus {
@@ -17678,7 +17740,7 @@ function markArticleEdited() {
   height: 44px;
   padding: 0 12px;
   border: 1px solid var(--border-color-muted, #c8ccd1);
-  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #eaf3ff));
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
   border-radius: 2px;
   font-family: 'Inter', sans-serif;
   color: var(--suggestion-color, var(--color-progressive, #36c));
@@ -18080,7 +18142,7 @@ function markArticleEdited() {
 
 .suggestions-banner--option-2 {
   border-radius: 9999px;
-  background: var(--suggestion-color-subtle, var(--background-color-progressive--subtle, #e8eeff));
+  background: var(--suggestion-color-subtle, var(--background-color-progressive--subtle, #E8EEFF));
   box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   border-color: var(--border-color-muted, #dadde3);
 }
@@ -18339,7 +18401,7 @@ function markArticleEdited() {
 .minerva-suggestions-rail-toggle--active .suggestions-badge,
 .minerva-suggestions-toggle--active .suggestions-badge,
 .suggestions-badge--rail-active {
-  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
   color: var(--suggestion-color, var(--color-progressive, #36c));
   border-color: var(--suggestion-color, var(--border-color-progressive, #36c));
 }
@@ -18349,7 +18411,7 @@ function markArticleEdited() {
 .minerva-suggestions-rail-toggle--active .suggestions-badge--zero,
 .minerva-suggestions-toggle--active .suggestions-badge--zero,
 .suggestions-badge--rail-active.suggestions-badge--zero {
-  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #E8EEFF));
   color: var(--suggestion-color, var(--color-progressive, #36c));
   border-color: var(--suggestion-color, var(--border-color-progressive, #36c));
 }
