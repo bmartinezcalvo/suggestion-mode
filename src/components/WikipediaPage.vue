@@ -6,8 +6,8 @@
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
       isMinervaSkin && editFullPageImprovedEnabled ? 'minerva-edit-full-page-improved' : '',
       isMinervaSkin && editToolbarImprovementsEnabled ? 'minerva-edit-toolbar-improved' : '',
-      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRail ? 'minerva-suggestions-on' : '',
-      isMinervaSkin && isEditMode && showMinervaRail ? 'minerva-suggestions-on--rail' : '',
+      isMinervaSkin && isEditMode && isEditCheckMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRail ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && isEditCheckMode && showMinervaRail ? 'minerva-suggestions-on--rail' : '',
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailMode ? 'minerva-expandable-rail-mode' : '',
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailOpen ? 'minerva-expandable-rail-open' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
@@ -347,7 +347,7 @@
                 'suggestions-banner--contextual-up': showBannerPrimaryArrowUp &&
                   (activePrototype === 'option-1' || isFirstSuggestionNavigationMode),
                 'suggestions-banner--hidden': !showSuggestionToggle && !showSuggestions,
-                'suggestions-banner--clickable': showSuggestions,
+                'suggestions-banner--clickable': true,
                 'suggestions-banner--closing': isBannerClosing,
                 'suggestions-banner--opening': isBannerOpening,
                 'suggestions-banner--scrolled': isEditToolbarScrolled
@@ -1191,7 +1191,7 @@
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
-                          'highlighted-text-wrapper--selected': isSuggestion5Pending && isCardExpanded5 && showSuggestions,
+                          'highlighted-text-wrapper--selected': isSuggestion5Pending && (isCardExpanded5 || (isMinervaSkin && activeMinervaSuggestion === 5 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
                           'suggestion-dismiss-right': dismissedSuggestionId === 5
                         }"
@@ -1459,7 +1459,7 @@
                     </span>
                     <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     <span
-                      v-if="showToggleBadge"
+                      v-if="showToggleBadge || (!showSuggestions && toggleBadgeCount > 0)"
                       class="suggestions-badge"
                       :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
                     >
@@ -1646,7 +1646,7 @@
                   </span>
                   <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                   <span
-                    v-if="showToggleBadge"
+                    v-if="showToggleBadge || (!showSuggestions && toggleBadgeCount > 0)"
                     class="suggestions-badge"
                     :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
                   >
@@ -2401,7 +2401,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion1Pending && isHovered && showSuggestions && !isCardExpanded,
-                      'highlighted-text-wrapper--selected': isSuggestion1Pending && isCardExpanded && showSuggestions,
+                      'highlighted-text-wrapper--selected': isSuggestion1Pending && (isCardExpanded || (isMinervaSkin && activeMinervaSuggestion === 1 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(1),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion1Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 1
@@ -2569,7 +2569,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion8Pending && isHovered8 && showSuggestions && !isCardExpanded8,
-                      'highlighted-text-wrapper--selected': isSuggestion8Pending && isCardExpanded8 && showSuggestions,
+                      'highlighted-text-wrapper--selected': isSuggestion8Pending && (isCardExpanded8 || (isMinervaSkin && activeMinervaSuggestion === 8 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(8),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion8Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 8
@@ -2626,7 +2626,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion6Pending && isHovered6 && showSuggestions && !isCardExpanded6,
-                      'highlighted-text-wrapper--selected': isSuggestion6Pending && isCardExpanded6 && showSuggestions,
+                      'highlighted-text-wrapper--selected': isSuggestion6Pending && (isCardExpanded6 || (isMinervaSkin && activeMinervaSuggestion === 6 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(6),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion6Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 6
@@ -2675,7 +2675,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion2Pending && isHovered2 && showSuggestions && !isCardExpanded2,
-                      'highlighted-text-wrapper--selected': isSuggestion2Pending && isCardExpanded2 && showSuggestions,
+                      'highlighted-text-wrapper--selected': isSuggestion2Pending && (isCardExpanded2 || (isMinervaSkin && activeMinervaSuggestion === 2 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(2),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion2Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 2
@@ -2696,7 +2696,7 @@
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion4Pending && isHovered4 && showSuggestions && !isCardExpanded4,
-                          'highlighted-text-wrapper--selected': isSuggestion4Pending && isCardExpanded4 && showSuggestions,
+                          'highlighted-text-wrapper--selected': isSuggestion4Pending && (isCardExpanded4 || (isMinervaSkin && activeMinervaSuggestion === 4 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(4)
                         }"
                         @mouseenter.stop="isTextHovered4 = true"
@@ -2751,7 +2751,7 @@
                       :class="{
                         [nonSelectedHighlightClass]: showSuggestions,
                         'highlighted-text-wrapper--hover': isSuggestion4Pending && isHovered4 && showSuggestions && !isCardExpanded4,
-                        'highlighted-text-wrapper--selected': isSuggestion4Pending && isCardExpanded4 && showSuggestions,
+                        'highlighted-text-wrapper--selected': isSuggestion4Pending && (isCardExpanded4 || (isMinervaSkin && activeMinervaSuggestion === 4 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                         'highlighted-text-wrapper--success': isSuccessHighlightActive(4),
                         'suggestion-dismiss-right': dismissedSuggestionId === 4
                       }"
@@ -2888,7 +2888,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion7Pending && isHovered7 && showSuggestions && !isCardExpanded7,
-                      'highlighted-text-wrapper--selected': isSuggestion7Pending && isCardExpanded7 && showSuggestions,
+                      'highlighted-text-wrapper--selected': isSuggestion7Pending && (isCardExpanded7 || (isMinervaSkin && activeMinervaSuggestion === 7 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(7),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion7Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 7
@@ -2958,7 +2958,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion3Pending && isHovered3 && showSuggestions && !isCardExpanded3,
-                      'highlighted-text-wrapper--selected': isSuggestion3Pending && isCardExpanded3 && showSuggestions,
+                      'highlighted-text-wrapper--selected': isSuggestion3Pending && (isCardExpanded3 || (isMinervaSkin && activeMinervaSuggestion === 3 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(3),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion3Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 3
@@ -3169,7 +3169,7 @@
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
-                          'highlighted-text-wrapper--selected': isSuggestion5Pending && isCardExpanded5 && showSuggestions,
+                          'highlighted-text-wrapper--selected': isSuggestion5Pending && (isCardExpanded5 || (isMinervaSkin && activeMinervaSuggestion === 5 && showMinervaSuggestionCarousel && !minervaCarouselCollapsed)) && showSuggestions,
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
                           'suggestion-dismiss-right': dismissedSuggestionId === 5
                         }"
@@ -3768,10 +3768,10 @@
                 'suggestions-banner--opening': isBannerOpening,
                   'suggestions-banner--scrolled': isEditToolbarScrolled
                 }"
-                :role="showSuggestions ? 'button' : undefined"
-                :tabindex="showSuggestions ? 0 : undefined"
-                @click="showSuggestions ? handleBannerClick() : null"
-                @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                role="button"
+                tabindex="0"
+                @click="handleBannerClick()"
+                @keydown="handleBannerKeydown($event)"
               >
                 <div class="suggestions-banner-center">
                   <div
@@ -3796,8 +3796,8 @@
                         action="progressive"
                         weight="quiet"
                         :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
-                        @click.stop="showSuggestions ? scrollToSuggestionByDirection(showBannerPrimaryArrowUp ? 'up' : 'down') : null"
-                        @keydown="showSuggestions ? handleBannerKeydown($event) : null"
+                        @click.stop="showSuggestions ? scrollToSuggestionByDirection(showBannerPrimaryArrowUp ? 'up' : 'down') : handleBannerClick()"
+                        @keydown="handleBannerKeydown($event)"
                       >
                         <cdx-icon :icon="showBannerPrimaryArrowUp ? cdxIconArrowUp : cdxIconArrowDown" size="medium" />
                       </cdx-button>
@@ -4307,7 +4307,232 @@
         </div>
 
         <div
-          v-if="isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState || isMinervaSuggestionSuccessState)"
+          v-if="showMinervaSuggestionCarousel"
+          class="minerva-suggestion-carousel"
+          :class="{
+            'minerva-suggestion-carousel--success': isMinervaSuggestionSuccessState,
+            'minerva-suggestion-carousel--collapsed': minervaCarouselCollapsed
+          }"
+          ref="minervaSuggestionCarouselRef"
+          @click.self="expandMinervaCarousel"
+        >
+          <div class="minerva-carousel-head" @click="expandMinervaCarousel">
+            <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-carousel-head-icon" />
+            <div class="minerva-carousel-head-title">Suggestions</div>
+            <cdx-button
+              class="minerva-carousel-collapse-btn"
+              action="default"
+              weight="quiet"
+              size="medium"
+              aria-label="Toggle suggestions carousel"
+              @click.stop="toggleMinervaCarouselCollapsed"
+            >
+              <cdx-icon :icon="minervaCarouselCollapsed ? cdxIconCollapse : cdxIconExpand" size="medium" />
+            </cdx-button>
+          </div>
+          <template v-if="!minervaCarouselCollapsed">
+            <div class="minerva-carousel-filters">
+              <cdx-select
+                v-model:selected="minervaCarouselTypeFilter"
+                :menu-items="minervaCarouselTypeFilterItems"
+                default-label="Select type"
+              />
+              <cdx-select
+                v-model:selected="minervaCarouselImpactFilter"
+                :menu-items="minervaCarouselImpactFilterItems"
+                default-label="Select impact"
+              />
+            </div>
+            <div
+              class="minerva-carousel-track"
+              ref="minervaSuggestionCarouselTrackRef"
+              @scroll.passive="handleMinervaCarouselScroll"
+            >
+              <div
+                v-for="(item, index) in minervaCarouselLoopItems"
+                :key="item.key"
+                :ref="(el) => setMinervaCarouselCardRef(el, index)"
+                class="minerva-carousel-slide"
+                :class="{
+                  'minerva-carousel-slide--active': item.id === activeMinervaSuggestion,
+                  'minerva-carousel-slide--success': isMinervaSuggestionSuccessState && item.id === activeMinervaSuggestion,
+                  'suggestion-dismiss-right': dismissedSuggestionId === item.id
+                }"
+                :data-suggestion-id="item.id"
+                :data-carousel-kind="item.kind"
+                :data-carousel-clone="item.clone || ''"
+              >
+                <div
+                  v-if="item.kind === 'more'"
+                  class="minerva-carousel-more-card"
+                >
+                  <cdx-button action="default" weight="normal" @click="handleMinervaCarouselMoreClick(item.moreAction)">
+                    {{ item.label }}
+                  </cdx-button>
+                </div>
+                <div
+                  v-else
+                  class="minerva-carousel-card"
+                  :class="{
+                    'minerva-carousel-card--success': isMinervaSuggestionSuccessState && item.id === activeMinervaSuggestion,
+                    'minerva-carousel-card--empty': item.kind === 'empty'
+                  }"
+                >
+                  <div class="minerva-carousel-card-header">
+                    <cdx-icon
+                      v-if="isMinervaSuggestionSuccessState && item.id === activeMinervaSuggestion"
+                      :icon="cdxIconSuccess"
+                      size="medium"
+                      class="minerva-carousel-success-icon"
+                    />
+                    <div class="minerva-sheet-title">
+                      {{ getMinervaSuggestionCardTitle(item.id) }}
+                    </div>
+                    <div v-if="item.kind !== 'empty' && minervaCarouselVisibleSuggestionIds.length > 0" class="minerva-carousel-card-count">
+                      {{ getMinervaCarouselItemIndex(item.id) }} of {{ minervaCarouselVisibleSuggestionIds.length }}
+                    </div>
+                  </div>
+                  <p class="minerva-sheet-description">
+                    {{ getMinervaSuggestionCardDescription(item.id) }}
+                  </p>
+                  <div
+                    v-if="item.kind !== 'empty' && !(isMinervaSuggestionSuccessState && item.id === activeMinervaSuggestion)"
+                    class="minerva-sheet-actions"
+                  >
+                <cdx-button
+                  v-if="item.id === 1"
+                  class="minerva-sheet-btn minerva-sheet-btn-primary"
+                  action="progressive"
+                  weight="normal"
+                  :disabled="showCitationPopup1"
+                  @click="handleYesSuggestion1"
+                >
+                  Add citation
+                </cdx-button>
+                <cdx-button
+                  v-if="item.id === 1"
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup1"
+                  @click="handleNoSuggestion1"
+                >
+                  Dismiss
+                </cdx-button>
+                <cdx-button
+                  v-if="item.id === 2"
+                  class="minerva-sheet-btn minerva-sheet-btn-primary"
+                  action="progressive"
+                  weight="normal"
+                  :disabled="showCitationPopup2"
+                  @click="handleYesSuggestion2"
+                >
+                  Add citation
+                </cdx-button>
+                <cdx-button
+                  v-if="item.id === 2"
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup2"
+                  @click="handleNoSuggestion2"
+                >
+                  Dismiss
+                </cdx-button>
+                <cdx-button
+                  v-if="item.id === 3"
+                  class="minerva-sheet-btn minerva-sheet-btn-primary"
+                  action="progressive"
+                  weight="normal"
+                  :disabled="showCitationPopup3"
+                  @click="handleYesSuggestion3"
+                >
+                  Add citation
+                </cdx-button>
+                <cdx-button
+                  v-if="item.id === 3"
+                  class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                  action="default"
+                  weight="normal"
+                  :disabled="showCitationPopup3"
+                  @click="handleNoSuggestion3"
+                >
+                  Dismiss
+                </cdx-button>
+                <cdx-button v-if="item.id === 4" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleYesSuggestion4">
+                  Remove link
+                </cdx-button>
+                <cdx-button v-if="item.id === 4" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleNoSuggestion4">
+                  Dismiss
+                </cdx-button>
+                <cdx-button v-if="item.id === 5" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(5)">
+                  Link specifically
+                </cdx-button>
+                <cdx-button v-if="item.id === 5" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(5)">
+                  Dismiss
+                </cdx-button>
+                <cdx-button v-if="item.id === 6" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(6)">
+                  Adjust heading
+                </cdx-button>
+                <cdx-button v-if="item.id === 6" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(6)">
+                  Dismiss
+                </cdx-button>
+                <cdx-button v-if="item.id === 7" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(7)">
+                  Fix year link
+                </cdx-button>
+                <cdx-button v-if="item.id === 7" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(7)">
+                  Dismiss
+                </cdx-button>
+                <cdx-button v-if="item.id === 8" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(8)">
+                  Update link
+                </cdx-button>
+                <cdx-button v-if="item.id === 8" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(8)">
+                  Dismiss
+                </cdx-button>
+                <cdx-button class="minerva-sheet-btn minerva-sheet-more-actions" action="default" weight="quiet" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+                  </div>
+                  <div
+                    v-else-if="item.kind === 'empty'"
+                    class="minerva-sheet-actions"
+                  >
+                <cdx-button
+                  v-if="isMinervaNoMoreSuggestionsSectionState"
+                  class="minerva-sheet-btn"
+                  action="default"
+                  weight="normal"
+                  @click="handleMinervaViewMoreSuggestions"
+                >
+                  View more suggestions
+                </cdx-button>
+                <template v-else>
+                  <cdx-button
+                    class="minerva-sheet-btn minerva-sheet-btn-secondary"
+                    action="default"
+                    weight="normal"
+                    @click="handleMinervaContinueEditing"
+                  >
+                    Continue editing
+                  </cdx-button>
+                  <cdx-button
+                    class="minerva-sheet-btn"
+                    action="progressive"
+                    weight="primary"
+                    @click="publishEdits"
+                  >
+                    Publish
+                  </cdx-button>
+                </template>
+                  </div>
+                </div>
+            </div>
+          </div>
+          </template>
+        </div>
+
+        <div
+          v-if="!showMinervaSuggestionCarousel && isMinervaSkin && isEditMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState || isMinervaSuggestionSuccessState)"
           class="minerva-bottom-sheet"
             :class="{
               'minerva-bottom-sheet--edit-check': isEditCheckSheet,
@@ -4760,6 +4985,7 @@
         </aside>
 
         <cdx-dialog
+          v-if="false"
           v-model:open="isPrototypeDialogOpen"
           title="Choose prototype"
           :primary-action="{ label: 'See prototype', actionType: 'progressive' }"
@@ -5051,7 +5277,8 @@ import {
   CdxTextInput,
   CdxMessage,
   CdxRadio,
-  CdxDialog
+  CdxDialog,
+  CdxSelect
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -5142,7 +5369,7 @@ const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
-const minervaToggleLocation = ref('outside');
+const minervaToggleLocation = ref('toolbar');
 const paginationManualNavigableButtonEnabled = ref(false);
 const minervaOutsideMenuEnabled = ref(true);
 const minervaOutsideRailEnabled = ref(true);
@@ -5233,6 +5460,7 @@ const showMinervaBottomRailControls = computed(
 const showMinervaRail = computed(
   () => isMinervaSkin.value &&
     isEditMode.value &&
+    isEditCheckMode.value &&
     !(isMinervaFullPageExpandableRailMode.value && isMinervaFullPageTocOpen.value) &&
     (showMinervaTopRailControls.value || showMinervaBottomRailControls.value)
 );
@@ -5334,7 +5562,7 @@ const inlineTextStyleState = ref({
   strikethrough: false,
   underline: false
 });
-const activePrototype = ref('option-1');
+const activePrototype = ref('option-5');
 const dismissedSuggestionId = ref(null);
 let bannerDelayTimer = null;
 let bannerCloseTimer = null;
@@ -5468,9 +5696,31 @@ const sidebarTopOffset8 = ref(0);
 const vectorSuggestionsControlsRef = ref(null);
 const desktopSuggestionsControlsHidden = ref(false);
 const hasOpenedDesktopPagination = ref(false);
+const minervaSuggestionCarouselRef = ref(null);
+const minervaSuggestionCarouselTrackRef = ref(null);
+const minervaCarouselCardRefs = ref([]);
+const minervaCarouselCollapsed = ref(false);
+const minervaCarouselVisibleLimit = ref(3);
+const minervaCarouselTypeFilter = ref(null);
+const minervaCarouselImpactFilter = ref(null);
+let minervaCarouselScrollTimer = null;
+let minervaCarouselObservedSuggestionId = null;
+let suppressMinervaCarouselScroll = false;
 const minervaToolbarScrollAreaRef = ref(null);
 const textStyleMenuTriggerRef = ref(null);
 const textStyleMenuPanelRef = ref(null);
+const minervaCarouselTypeFilterItems = [
+  { label: 'Select type', value: null },
+  { label: 'Citation', value: 'citation' },
+  { label: 'Links', value: 'links' },
+  { label: 'Structure', value: 'structure' }
+];
+const minervaCarouselImpactFilterItems = [
+  { label: 'Select impact', value: null },
+  { label: 'High impact', value: 'high' },
+  { label: 'Medium impact', value: 'medium' },
+  { label: 'Low impact', value: 'low' }
+];
 
 // Computed: sincronizar hover entre texto y card (third suggestion)
 const isHovered3 = computed(() => isCardHovered3.value || isTextHovered3.value);
@@ -5531,13 +5781,13 @@ const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
-const editToolbarImprovementsEnabled = ref(false);
-const successHighlightOnCompleteEnabled = ref(false);
-const noMoreSuggestionsEmptyStateEnabled = ref(false);
-const editFullPageImprovedEnabled = ref(true);
+const editToolbarImprovementsEnabled = ref(true);
+const successHighlightOnCompleteEnabled = ref(true);
+const noMoreSuggestionsEmptyStateEnabled = ref(true);
+const editFullPageImprovedEnabled = ref(false);
 const minervaFullPageSuggestionNavigationEnabled = ref(false);
 const minervaFullPageSuggestionNavigationMode = ref('toc-button');
-const selectedPrototype = ref('option-4');
+const selectedPrototype = ref('option-5');
 const selectedNavigationGroup = computed({
   get() {
     if (selectedPrototype.value === 'option-5' || selectedPrototype.value === 'option-6') {
@@ -5609,6 +5859,21 @@ const minervaTocSubsectionTargets = {
 };
 const prototypeDialogPrefsStorageKey = 'suggestion-mode.prototype-dialog-prefs';
 const minervaScrollIcon = scrollIcon;
+
+function applyOffsiteSuggestionDefaults() {
+  selectedPrototype.value = 'option-5';
+  minervaToggleLocation.value = 'toolbar';
+  paginationManualNavigableButtonEnabled.value = false;
+  filteringEnabled.value = false;
+  newSuggestionColorEnabled.value = false;
+  nonSelectedHighlightUnderlineEnabled.value = false;
+  editToolbarImprovementsEnabled.value = true;
+  successHighlightOnCompleteEnabled.value = true;
+  noMoreSuggestionsEmptyStateEnabled.value = true;
+  editFullPageImprovedEnabled.value = false;
+  minervaFullPageSuggestionNavigationEnabled.value = false;
+  minervaFullPageSuggestionNavigationMode.value = 'toc-button';
+}
 
 function loadPrototypeDialogPrefs() {
   if (typeof window === 'undefined') return;
@@ -6340,6 +6605,42 @@ const minervaSheetTitle = computed(() => {
   if (activeMinervaSuggestion.value === 8) return 'Redirect link';
   return 'Add a citation';
 });
+
+function getMinervaSuggestionCardTitle(suggestionId) {
+  if (suggestionId === 'empty') return 'No more suggestions';
+  if (isMinervaSuggestionSuccessState.value && suggestionId === activeMinervaSuggestion.value) {
+    return minervaSuggestionSuccessTitle.value;
+  }
+  if (suggestionId === 4) return 'Remove external link';
+  if (suggestionId === 5) return 'Link specifically';
+  if (suggestionId === 6) return 'Adjust heading level';
+  if (suggestionId === 7) return 'Fix year link';
+  if (suggestionId === 8) return 'Redirect link';
+  return 'Add a citation';
+}
+
+function getMinervaSuggestionCardDescription(suggestionId) {
+  if (suggestionId === 'empty') return minervaNoMoreSuggestionsDescription.value;
+  if (isMinervaSuggestionSuccessState.value && suggestionId === activeMinervaSuggestion.value) {
+    return minervaSuggestionSuccessDescription.value;
+  }
+  if (suggestionId === 4) {
+    return 'This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the External links section, or converting it into a citation if appropriate.';
+  }
+  if (suggestionId === 5) {
+    return 'This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.';
+  }
+  if (suggestionId === 6) {
+    return 'This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.';
+  }
+  if (suggestionId === 7) {
+    return 'This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.';
+  }
+  if (suggestionId === 8) {
+    return 'This link points to a redirect. Help readers get to the right destination by linking directly to the target page.';
+  }
+  return 'This information has no source. Help readers understand where this information is coming from by adding a citation.';
+}
 const minervaToggleBottom = computed(() => {
   return '16px';
 });
@@ -6378,7 +6679,6 @@ const shouldShowBanner = computed(() => {
   }
   if (!isArrowOnceMode.value) {
     if (!showSuggestionToggle.value && !showSuggestions.value) return false;
-    if (showSuggestionToggle.value && !showSuggestions.value) return false;
   }
   if (isPaginationMode.value) {
     return !isAnyPendingSuggestionVisibleInViewport();
@@ -6634,6 +6934,68 @@ const minervaPaginationLabel = computed(() => (
     ? 'Moving to next suggestion...'
     : `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value} ${isEditCheckSheet.value ? 'checks' : 'suggestions'}`
 ));
+const minervaCarouselItems = computed(() => {
+  const ids = [...getPendingSuggestionIdsForContext()].sort((a, b) => a - b);
+  if (
+    isMinervaSuggestionSuccessState.value &&
+    minervaSuggestionSuccessState.value?.id &&
+    !ids.includes(minervaSuggestionSuccessState.value.id)
+  ) {
+    const orderedIds = [...ids, minervaSuggestionSuccessState.value.id].sort((a, b) => a - b);
+    return orderedIds.map((id) => ({ id, kind: 'suggestion' }));
+  }
+  if (!ids.length && showMinervaNoMoreSuggestionsState.value) {
+    return [{ id: 'empty', kind: 'empty' }];
+  }
+  return ids.map((id) => ({ id, kind: 'suggestion' }));
+});
+const minervaCarouselLoopItems = computed(() => {
+  const items = minervaCarouselItems.value;
+  if (!items.length || items[0]?.kind === 'empty' || isMinervaSuggestionSuccessState.value) {
+    return items.map((item) => ({ ...item, key: `real-${item.id}` }));
+  }
+  const visibleItems = items.slice(0, minervaCarouselVisibleLimit.value);
+  const mapped = visibleItems.map((item) => ({ ...item, key: `real-${item.id}` }));
+  if (items.length > minervaCarouselVisibleLimit.value) {
+    mapped.push({
+      id: `more-${minervaCarouselVisibleLimit.value}`,
+      kind: 'more',
+      key: `more-${minervaCarouselVisibleLimit.value}`,
+      label: minervaCarouselVisibleLimit.value <= 3 ? 'Show 3 more' : 'Show all suggestions',
+      moreAction: minervaCarouselVisibleLimit.value <= 3 ? 'show-3-more' : 'show-all'
+    });
+  }
+  return mapped;
+});
+const minervaCarouselTotal = computed(() => (
+  isMinervaSuggestionSuccessState.value
+    ? minervaSuggestionSuccessState.value?.total || getPendingSuggestionIdsForContext().length
+    : getPendingSuggestionIdsForContext().length
+));
+const minervaCarouselVisibleSuggestionIds = computed(() => (
+  minervaCarouselLoopItems.value
+    .filter((item) => item.kind === 'suggestion')
+    .map((item) => item.id)
+));
+const minervaCarouselIndex = computed(() => {
+  if (isMinervaSuggestionSuccessState.value && typeof minervaSuggestionSuccessState.value?.index === 'number') {
+    return minervaSuggestionSuccessState.value.index;
+  }
+  const ids = [...getPendingSuggestionIdsForContext()].sort((a, b) => a - b);
+  if (!ids.length) return 0;
+  const index = ids.indexOf(activeMinervaSuggestion.value);
+  return index >= 0 ? index : 0;
+});
+const minervaCarouselPaginationLabel = computed(() => (
+  `${Math.min(minervaCarouselIndex.value + 1, Math.max(minervaCarouselTotal.value, 1))} of ${minervaCarouselTotal.value} suggestions`
+));
+const showMinervaSuggestionCarousel = computed(() => (
+  isMinervaSkin.value &&
+  isEditMode.value &&
+  showSuggestions.value &&
+  !isEditCheckSheet.value &&
+  minervaCarouselItems.value.length > 0
+));
 const minervaSuggestionHeaderIndicatorLabel = computed(() => {
   const ids = getPendingSuggestionIdsForContext();
   if (!ids.length) return '';
@@ -6723,6 +7085,8 @@ function resetSuggestionState() {
   isCardExpanded7.value = false;
   isCardExpanded8.value = false;
   hasOpenedDesktopPagination.value = false;
+  minervaCarouselCollapsed.value = false;
+  minervaCarouselVisibleLimit.value = 3;
   isCardHovered.value = false;
   isCardHovered2.value = false;
   isCardHovered3.value = false;
@@ -6782,7 +7146,7 @@ function applyPrototypeMode(mode) {
   dontShowSuggestionInfo.value = false;
   isBannerDelayReady.value = false;
   enableAutoScroll.value = false;
-  showSuggestions.value = modeShowsSuggestions;
+  showSuggestions.value = false;
   showSuggestionToggle.value = true;
 }
 
@@ -6792,7 +7156,9 @@ function openPrototypeDialog(fromSection = false) {
     minervaEditSectionOnly.value = null;
     readModeReturnSectionId.value = null;
   }
-  isPrototypeDialogOpen.value = true;
+  applyOffsiteSuggestionDefaults();
+  applyPrototypeMode(selectedPrototype.value);
+  enterEditMode();
 }
 
 function closePrototypeDialog() {
@@ -6838,13 +7204,11 @@ function activateSuccessHighlight(suggestionId) {
 }
 
 function getNextMinervaSuggestionId(currentId) {
-  const ids = getPendingSuggestionIdsForContext();
+  const ids = [...getPendingSuggestionIdsForContext()].sort((a, b) => a - b);
   if (!ids.length) {
     return null;
   }
-  const contextIds = getSuggestionIdsForCurrentContext();
-  const currentOrderIndex = contextIds.indexOf(currentId);
-  return ids.find((id) => contextIds.indexOf(id) > currentOrderIndex) ?? ids[0] ?? null;
+  return ids.find((id) => id > currentId) ?? ids[ids.length - 1] ?? null;
 }
 
 function queueMinervaSuccessState(currentId) {
@@ -6853,15 +7217,22 @@ function queueMinervaSuccessState(currentId) {
     return false;
   }
   clearMinervaSuggestionSuccessState();
+  const successOrderIds = [...getPendingSuggestionIdsForContext(), currentId]
+    .filter((id, index, ids) => ids.indexOf(id) === index)
+    .sort((a, b) => a - b);
+  const successIndex = Math.max(0, successOrderIds.indexOf(currentId));
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = currentId;
   isMinervaSheetOpen.value = true;
   minervaSheetReturnDirection.value = null;
   minervaSuggestionSuccessState.value = {
     id: currentId,
+    index: successIndex,
+    total: successOrderIds.length,
     ...successCopy
   };
   updateMinervaSheetHeight();
+  scrollMinervaCarouselToSuggestion(currentId, false);
   minervaSuggestionSuccessTimer = window.setTimeout(() => {
     isMinervaSuggestionSuccessExiting.value = true;
     minervaSuggestionSuccessExitTimer = window.setTimeout(() => {
@@ -8369,6 +8740,19 @@ function triggerMinervaDismiss(suggestionId) {
   }, 260);
 }
 
+function dismissMinervaSuggestionWithExit(suggestionId, applyDismissState) {
+  triggerMinervaDismiss(suggestionId);
+  setTimeout(() => {
+    applyDismissState();
+    handleMinervaSuggestionResolutionAfterAction(suggestionId);
+    nextTick(() => {
+      alignBothSuggestions();
+      updateSuggestionVisibility();
+      scheduleBannerReappear();
+    });
+  }, 260);
+}
+
 function showPaginationNoMoreSuggestionsToast() {
   if (!shouldShowNoMoreSuggestionsLeftToast()) return;
   if (paginationNoSuggestionsToastTimer) {
@@ -8382,6 +8766,7 @@ function showPaginationNoMoreSuggestionsToast() {
 }
 
 function triggerSuggestionSuccessToast() {
+  if (isMinervaSkin.value) return;
   if (!toastsEnabled.value) return;
   if (suggestionSuccessToastTimer) {
     clearTimeout(suggestionSuccessToastTimer);
@@ -8410,7 +8795,7 @@ function shouldAdvanceMinervaSuggestionAfterResolve() {
 function advanceMinervaSuggestion(currentId) {
   nextTick(() => {
     const ids = isPaginationMode.value
-      ? getPendingSuggestionIdsForContext()
+      ? [...getPendingSuggestionIdsForContext()].sort((a, b) => a - b)
       : (currentId === 2 || currentId === 4)
         ? minervaPaginationIds.value.filter((id) => id === 2 || id === 4)
         : minervaPaginationIds.value;
@@ -8419,10 +8804,8 @@ function advanceMinervaSuggestion(currentId) {
       showPaginationNoMoreSuggestionsToast();
       return;
     }
-    const contextIds = getSuggestionIdsForCurrentContext();
-    const currentOrderIndex = contextIds.indexOf(currentId);
     const nextId = isPaginationMode.value
-      ? ids.find((id) => contextIds.indexOf(id) > currentOrderIndex) ?? ids[0]
+      ? ids.find((id) => id > currentId) ?? ids[ids.length - 1]
       : ids[Math.max(0, Math.min(ids.indexOf(currentId), ids.length - 1))];
     const targetRef = getSuggestionRefById(nextId);
     if (targetRef) {
@@ -9438,6 +9821,13 @@ function handleYesSuggestion3() {
 
 // Function to handle "No" click on suggestion 1 (decline/skip)
 function handleNoSuggestion1() {
+  if (isMinervaSkin.value) {
+    dismissMinervaSuggestionWithExit(1, () => {
+      isSuggestionDeclined1.value = true;
+      isCardExpanded.value = false;
+    });
+    return;
+  }
   isSuggestionDeclined1.value = true;
   isCardExpanded.value = false;
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
@@ -9453,6 +9843,13 @@ function handleNoSuggestion1() {
 
 // Function to handle "No" click on suggestion 2 (decline/skip)
 function handleNoSuggestion2() {
+  if (isMinervaSkin.value) {
+    dismissMinervaSuggestionWithExit(2, () => {
+      isSuggestionDeclined2.value = true;
+      isCardExpanded2.value = false;
+    });
+    return;
+  }
   isSuggestionDeclined2.value = true;
   isCardExpanded2.value = false;
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
@@ -9468,6 +9865,13 @@ function handleNoSuggestion2() {
 
 // Function to handle "No" click on suggestion 3 (decline/skip)
 function handleNoSuggestion3() {
+  if (isMinervaSkin.value) {
+    dismissMinervaSuggestionWithExit(3, () => {
+      isSuggestionDeclined3.value = true;
+      isCardExpanded3.value = false;
+    });
+    return;
+  }
   isSuggestionDeclined3.value = true;
   isCardExpanded3.value = false;
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
@@ -9482,6 +9886,7 @@ function handleNoSuggestion3() {
 }
 
 function handleYesSuggestion4() {
+  hasUnsavedChanges.value = true;
   isSuggestionResolved4.value = true;
   activateSuccessHighlight(4);
   isCardExpanded4.value = false;
@@ -9499,6 +9904,13 @@ function handleYesSuggestion4() {
 }
 
 function handleNoSuggestion4() {
+  if (isMinervaSkin.value) {
+    dismissMinervaSuggestionWithExit(4, () => {
+      isSuggestionDeclined4.value = true;
+      isCardExpanded4.value = false;
+    });
+    return;
+  }
   isSuggestionDeclined4.value = true;
   isCardExpanded4.value = false;
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
@@ -9513,6 +9925,7 @@ function handleNoSuggestion4() {
 }
 
 function handleResolveGenericSuggestion(suggestionId) {
+  hasUnsavedChanges.value = true;
   activateSuccessHighlight(suggestionId);
   if (suggestionId === 5) {
     isSuggestionResolved5.value = true;
@@ -9541,6 +9954,24 @@ function handleResolveGenericSuggestion(suggestionId) {
 }
 
 function handleDeclineGenericSuggestion(suggestionId) {
+  if (isMinervaSkin.value) {
+    dismissMinervaSuggestionWithExit(suggestionId, () => {
+      if (suggestionId === 5) {
+        isSuggestionDeclined5.value = true;
+        isCardExpanded5.value = false;
+      } else if (suggestionId === 6) {
+        isSuggestionDeclined6.value = true;
+        isCardExpanded6.value = false;
+      } else if (suggestionId === 7) {
+        isSuggestionDeclined7.value = true;
+        isCardExpanded7.value = false;
+      } else if (suggestionId === 8) {
+        isSuggestionDeclined8.value = true;
+        isCardExpanded8.value = false;
+      }
+    });
+    return;
+  }
   if (suggestionId === 5) {
     isSuggestionDeclined5.value = true;
     isCardExpanded5.value = false;
@@ -9572,6 +10003,7 @@ function handleDeclineGenericSuggestion(suggestionId) {
 // Function to create citation for suggestion 1
 function createCitation1() {
   if (citationUrl1.value.trim()) {
+    hasUnsavedChanges.value = true;
     citationCounter.value++;
     citationNumber1.value = citationCounter.value;
     activateSuccessHighlight(1);
@@ -9592,6 +10024,7 @@ function createCitation1() {
 // Function to create citation for suggestion 2
 function createCitation2() {
   if (citationUrl2.value.trim()) {
+    hasUnsavedChanges.value = true;
     citationCounter.value++;
     citationNumber2.value = citationCounter.value;
     activateSuccessHighlight(2);
@@ -9612,6 +10045,7 @@ function createCitation2() {
 // Function to create citation for suggestion 3
 function createCitation3() {
   if (citationUrl3.value.trim()) {
+    hasUnsavedChanges.value = true;
     citationCounter.value++;
     citationNumber3.value = citationCounter.value;
     activateSuccessHighlight(3);
@@ -10148,6 +10582,7 @@ watch(showSuggestions, (newValue, oldValue) => {
     }, 500);
   }
   if (newValue && !oldValue) {
+    minervaCarouselCollapsed.value = true;
     showSuggestionsDisplay.value = true;
     isSuggestionsFadingOut.value = false;
     isSuggestionMarkersVisible.value = false;
@@ -10532,9 +10967,29 @@ function scrollToSuggestionIfNeeded(targetRef) {
     const target = targetRef.value;
     if (target && !isTargetVisibleInViewport(target)) {
       startAutoScrollIndicator();
-      target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+      const targetTop = target.getBoundingClientRect().top + window.scrollY;
+      smoothScrollWindowTo(Math.max(0, targetTop - viewportHeight * 0.35));
     }
   });
+}
+
+function smoothScrollWindowTo(top, duration = 980) {
+  if (typeof window === 'undefined') return;
+  const start = window.scrollY;
+  const change = top - start;
+  if (Math.abs(change) < 1) return;
+  const startTime = window.performance.now();
+  const easeOutQuint = (t) => 1 - Math.pow(1 - t, 5);
+  const animate = (currentTime) => {
+    const elapsed = currentTime - startTime;
+    const progress = Math.min(elapsed / duration, 1);
+    window.scrollTo(0, start + change * easeOutQuint(progress));
+    if (progress < 1) {
+      window.requestAnimationFrame(animate);
+    }
+  };
+  window.requestAnimationFrame(animate);
 }
 
 function scrollTargetClearOfDesktopPagination(target) {
@@ -10542,32 +10997,29 @@ function scrollTargetClearOfDesktopPagination(target) {
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
   const desiredTop = Math.max(96, Math.min(180, viewportHeight * 0.28));
   const targetTop = target.getBoundingClientRect().top + window.scrollY;
-  window.scrollTo({
-    top: Math.max(0, targetTop - desiredTop),
-    behavior: 'smooth'
-  });
+  smoothScrollWindowTo(Math.max(0, targetTop - desiredTop));
 }
 
 function scrollTargetAboveMinervaSheet(target) {
   if (!target || typeof window === 'undefined') return;
   const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
-  const sheetHeight = minervaSheetRef.value?.offsetHeight || minervaSheetHeight.value || 0;
+  const sheetHeight = minervaSuggestionCarouselRef.value?.offsetHeight ||
+    minervaSheetRef.value?.offsetHeight ||
+    minervaSheetHeight.value ||
+    0;
   const usableHeight = Math.max(160, viewportHeight - sheetHeight);
   const desiredTop = Math.max(72, Math.min(usableHeight * 0.36, usableHeight - 96));
   const targetTop = target.getBoundingClientRect().top + window.scrollY;
-  window.scrollTo({
-    top: Math.max(0, targetTop - desiredTop),
-    behavior: 'smooth'
-  });
+  smoothScrollWindowTo(Math.max(0, targetTop - desiredTop), 980);
 }
 
 function ensureTargetVisibleAboveMinervaSheet(target) {
   if (!target || typeof window === 'undefined' || !isMinervaSheetOpen.value) return;
-  const sheet = minervaSheetRef.value;
-  if (!sheet) return;
+  const overlay = minervaSuggestionCarouselRef.value || minervaSheetRef.value;
+  if (!overlay) return;
 
   const rect = target.getBoundingClientRect();
-  const sheetRect = sheet.getBoundingClientRect();
+  const sheetRect = overlay.getBoundingClientRect();
   const visibleTop = 56;
   const visibleBottom = sheetRect.top - 16;
   const isFullyVisible = rect.top >= visibleTop && rect.bottom <= visibleBottom;
@@ -10725,10 +11177,10 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false, option
         if (openMinervaAfterScroll) {
           closeMinervaSuggestion();
           startAutoScrollIndicator();
-          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          scrollTargetAboveMinervaSheet(target);
           setTimeout(() => {
             openSuggestion(id);
-          }, 1000);
+          }, 760);
           return;
         }
         openSuggestion(id);
@@ -10984,7 +11436,7 @@ watch(
 
 // Align on mount and add event listeners
 onMounted(() => {
-  loadPrototypeDialogPrefs();
+  applyOffsiteSuggestionDefaults();
   if (typeof window !== 'undefined') {
     const isMobile = window.matchMedia('(max-width: 640px)').matches;
     selectedSkin.value = isMobile ? 'minerva' : 'vector22';
@@ -11110,6 +11562,10 @@ onBeforeUnmount(() => {
   if (minervaNoMoreSuggestionsOpenTimer) {
     clearTimeout(minervaNoMoreSuggestionsOpenTimer);
     minervaNoMoreSuggestionsOpenTimer = null;
+  }
+  if (minervaCarouselScrollTimer) {
+    clearTimeout(minervaCarouselScrollTimer);
+    minervaCarouselScrollTimer = null;
   }
   if (suppressMinervaSheetReturnDirectionTimer) {
     clearTimeout(suppressMinervaSheetReturnDirectionTimer);
@@ -11300,10 +11756,143 @@ function isMinervaSectionOpen(sectionId) {
   return Boolean(minervaOpenSections.value[sectionId]);
 }
 
+function expandMinervaCarousel() {
+  if (minervaCarouselCollapsed.value) {
+    minervaCarouselCollapsed.value = false;
+    isMinervaSheetOpen.value = true;
+    minervaSheetMode.value = 'suggestion';
+    scrollMinervaCarouselToSuggestion(activeMinervaSuggestion.value, false);
+  }
+}
+
+function toggleMinervaCarouselCollapsed() {
+  minervaCarouselCollapsed.value = !minervaCarouselCollapsed.value;
+  if (!minervaCarouselCollapsed.value) {
+    isMinervaSheetOpen.value = true;
+    minervaSheetMode.value = 'suggestion';
+    scrollMinervaCarouselToSuggestion(activeMinervaSuggestion.value, false);
+  }
+}
+
+function handleMinervaCarouselMoreClick(action) {
+  if (action === 'show-3-more') {
+    minervaCarouselVisibleLimit.value = Math.min(minervaCarouselVisibleLimit.value + 3, minervaCarouselItems.value.length);
+    return;
+  }
+  minervaCarouselVisibleLimit.value = minervaCarouselItems.value.length;
+}
+
+function setMinervaCarouselCardRef(el, index) {
+  if (el) {
+    minervaCarouselCardRefs.value[index] = el;
+  }
+}
+
+function getMinervaCarouselRealIndex(suggestionId) {
+  const ids = minervaCarouselItems.value.map((item) => item.id);
+  const index = ids.indexOf(suggestionId);
+  return index >= 0 ? index : 0;
+}
+
+function getMinervaCarouselItemIndex(suggestionId) {
+  const ids = minervaCarouselVisibleSuggestionIds.value;
+  if (isMinervaSuggestionSuccessState.value && minervaSuggestionSuccessState.value?.id === suggestionId) {
+    const successIndex = ids.indexOf(suggestionId);
+    return successIndex >= 0 ? successIndex + 1 : minervaCarouselIndex.value + 1;
+  }
+  const index = ids.indexOf(suggestionId);
+  return index >= 0 ? index + 1 : 1;
+}
+
+function scrollMinervaCarouselToSuggestion(suggestionId, smooth = true) {
+  nextTick(() => {
+    const carousel = minervaSuggestionCarouselTrackRef.value;
+    if (!carousel) return;
+    const index = getMinervaCarouselRealIndex(suggestionId);
+    const slide = minervaCarouselCardRefs.value[index];
+    if (!slide) return;
+    suppressMinervaCarouselScroll = true;
+    carousel.scrollTo({
+      left: slide.offsetLeft - 16,
+      behavior: smooth ? 'smooth' : 'auto'
+    });
+    window.setTimeout(() => {
+      suppressMinervaCarouselScroll = false;
+    }, smooth ? 320 : 40);
+  });
+}
+
+function openFirstAvailableMinervaSuggestion() {
+  if (!isMinervaSkin.value || !isEditMode.value || !showSuggestions.value || isEditCheckSheet.value) return;
+  const pendingIds = [...getPendingSuggestionIdsForContext()].sort((a, b) => a - b);
+  const currentId = pendingIds.includes(activeMinervaSuggestion.value)
+    ? activeMinervaSuggestion.value
+    : pendingIds[0];
+  if (!currentId) return;
+  const targetRef = getSuggestionRefById(currentId);
+  if (targetRef?.value) {
+    openSuggestionAtTarget(currentId, targetRef, true, { openMinervaAfterScroll: true });
+  } else {
+    openMinervaSuggestion(currentId);
+  }
+}
+
+function activateMinervaCarouselSuggestion(suggestionId) {
+  if (!suggestionId || suggestionId === activeMinervaSuggestion.value) return;
+  clearMinervaSuggestionSuccessState();
+  clearMinervaSheetClosingState();
+  minervaCarouselCollapsed.value = false;
+  minervaSheetMode.value = 'suggestion';
+  activeMinervaSuggestion.value = suggestionId;
+  isMinervaSheetOpen.value = true;
+  const target = getSuggestionRefById(suggestionId)?.value;
+  ensureTargetVisibleAboveMinervaSheet(target);
+}
+
+function getNearestMinervaCarouselSlide() {
+  const carousel = minervaSuggestionCarouselTrackRef.value;
+  const slides = minervaCarouselCardRefs.value.filter(Boolean);
+  if (!carousel || !slides.length) return null;
+  const targetLeft = carousel.scrollLeft + 16;
+  return slides.reduce((best, slide) => {
+    const distance = Math.abs(slide.offsetLeft - targetLeft);
+    return distance < best.distance ? { slide, distance } : best;
+  }, { slide: slides[0], distance: Number.POSITIVE_INFINITY }).slide;
+}
+
+function settleMinervaCarouselScroll() {
+  const nearest = getNearestMinervaCarouselSlide();
+  if (!nearest) return;
+  const suggestionId = Number(nearest.dataset.suggestionId);
+  const kind = nearest.dataset.carouselKind;
+  if (kind !== 'suggestion' || !suggestionId) return;
+  activateMinervaCarouselSuggestion(suggestionId);
+  scrollMinervaCarouselToSuggestion(suggestionId, true);
+}
+
+function handleMinervaCarouselScroll() {
+  if (suppressMinervaCarouselScroll) return;
+  const nearest = getNearestMinervaCarouselSlide();
+  if (nearest?.dataset.carouselKind === 'suggestion') {
+    const suggestionId = Number(nearest.dataset.suggestionId);
+    if (suggestionId && suggestionId !== minervaCarouselObservedSuggestionId) {
+      minervaCarouselObservedSuggestionId = suggestionId;
+      activateMinervaCarouselSuggestion(suggestionId);
+    }
+  }
+  if (minervaCarouselScrollTimer) {
+    clearTimeout(minervaCarouselScrollTimer);
+  }
+  minervaCarouselScrollTimer = window.setTimeout(() => {
+    settleMinervaCarouselScroll();
+    minervaCarouselScrollTimer = null;
+  }, 120);
+}
+
 function openMinervaSuggestion(suggestionId, options = {}) {
   const { keepSuccessExit = false } = options;
+  minervaCarouselCollapsed.value = false;
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === suggestionId) {
-    closeMinervaSuggestion();
     return;
   }
   clearMinervaNoMoreSuggestionsState();
@@ -11398,6 +11987,7 @@ function openMinervaSuggestion(suggestionId, options = {}) {
       }
       nextTick(() => {
         updateMinervaSheetReturnDirection();
+        scrollMinervaCarouselToSuggestion(suggestionId, false);
       });
     });
   });
@@ -11411,6 +12001,7 @@ function openMinervaSuggestionSheet(suggestionId) {
   isMinervaSheetOpen.value = true;
   minervaLastScrollY.value = window.scrollY;
   updateMinervaSheetHeight();
+  scrollMinervaCarouselToSuggestion(suggestionId, false);
 }
 
 function getCurrentMinervaSheetTarget() {
@@ -11501,7 +12092,7 @@ function updateMinervaSheetHeight() {
     return;
   }
   nextTick(() => {
-    const sheet = minervaSheetRef.value;
+    const sheet = minervaSheetRef.value || minervaSuggestionCarouselRef.value;
     if (sheet) {
       minervaSheetHeight.value = sheet.offsetHeight;
     }
@@ -14321,6 +14912,27 @@ function markArticleEdited() {
   fill: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
+.minerva-toolbar-toggle .suggestions-badge {
+  width: 6px;
+  min-width: 6px;
+  height: 6px;
+  min-height: 6px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  font-size: 0;
+  line-height: 0;
+  position: absolute;
+  top: -1px;
+  right: -1px;
+  background: var(--background-color-progressive, #36c);
+  background-color: var(--background-color-progressive, #36c);
+}
+
+.minerva-toolbar-toggle--active .suggestions-badge {
+  display: none;
+}
+
 .minerva-suggestions-toggle :deep(button) {
   background: var(--background-color-base, #ffffff);
 }
@@ -15204,7 +15816,7 @@ function markArticleEdited() {
 
 .minerva-skin .highlighted-text-wrapper--hover .highlighted-text-annotation,
 .minerva-skin .highlighted-text-wrapper--selected .highlighted-text-annotation {
-  background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
+  background-color: var(--background-color-progressive-subtle, #e8eeff);
 }
 
 /* Links inside highlighted text */
@@ -15438,6 +16050,12 @@ function markArticleEdited() {
   background-color: var(--background-color-neutral-subtle, #f8f9fa);
   border-left: 1px solid var(--border-color-muted, #DADDE3);
   pointer-events: none;
+}
+
+.minerva-skin.edit-mode .minerva-suggestion-target .minerva-highlight-rail,
+.minerva-skin.edit-mode .minerva-suggestion-target .highlighted-text-rail,
+.minerva-skin.edit-mode .minerva-suggestion-target .minerva-suggestion-trigger:not(.minerva-suggestion-trigger--success) {
+  display: none;
 }
 
 .minerva-skin.edit-mode.minerva-edit-full-page-improved.minerva-suggestions-on .article-content-edit::after,
@@ -15793,6 +16411,195 @@ function markArticleEdited() {
 
 .minerva-bottom-sheet--rail-offset {
   right: 44px;
+}
+
+.minerva-suggestion-carousel {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 80;
+  min-height: 216px;
+  box-sizing: border-box;
+  padding: 0 16px 16px;
+  background: var(--background-color-base, #ffffff);
+  border-top: 1px solid var(--border-color-base, #a2a9b1);
+}
+
+.minerva-suggestion-carousel--collapsed {
+  min-height: 0;
+}
+
+.minerva-carousel-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.minerva-carousel-head-icon {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+  flex: 0 0 var(--icon-size-medium, 20px);
+}
+
+.minerva-carousel-head-title {
+  color: var(--color-base, #202122);
+  font-size: 18px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.minerva-carousel-collapse-btn {
+  margin-left: auto;
+}
+
+.minerva-carousel-collapse-btn :deep(button),
+.minerva-carousel-collapse-btn :deep(.cdx-button__button) {
+  min-width: 32px;
+  width: 32px;
+  min-height: 32px;
+  height: 32px;
+  padding: 0;
+}
+
+.minerva-carousel-filters {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 12px;
+  margin: 8px 0 12px;
+}
+
+.minerva-carousel-filters :deep(.cdx-select),
+.minerva-carousel-filters :deep(.cdx-select-vue),
+.minerva-carousel-filters :deep(.cdx-select-vue__handle),
+.minerva-carousel-filters :deep(.cdx-toggle-button),
+.minerva-carousel-filters :deep(.cdx-toggle-button__button),
+.minerva-carousel-filters :deep(button) {
+  min-width: 0;
+  width: 100%;
+}
+
+.minerva-carousel-track {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-start;
+  gap: 10px;
+  overflow-x: auto;
+  overflow-y: hidden;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scroll-padding-left: 16px;
+  padding-bottom: 16px;
+  min-height: 132px;
+  scrollbar-width: none;
+}
+
+.minerva-carousel-track::-webkit-scrollbar {
+  display: none;
+}
+
+.minerva-carousel-slide {
+  flex: 0 0 calc(100vw - 32px);
+  display: grid;
+  scroll-snap-align: start;
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.minerva-carousel-slide.suggestion-dismiss-right {
+  animation: minerva-carousel-dismiss 260ms ease forwards;
+}
+
+@keyframes minerva-carousel-dismiss {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+.minerva-carousel-card {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: var(--border-radius-base, 2px);
+  box-shadow: none;
+  padding: 12px 16px 16px;
+}
+
+.minerva-carousel-card--success {
+  background: var(--background-color-success-subtle, #d5fdf4);
+  border-color: var(--border-color-success, #14866d);
+}
+
+.minerva-carousel-card--empty {
+  background: var(--background-color-base, #ffffff);
+}
+
+.minerva-carousel-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: 28px;
+}
+
+.minerva-carousel-card-count {
+  margin-left: auto;
+  color: var(--color-subtle, #54595d);
+  font-size: 14px;
+  line-height: 20px;
+  white-space: nowrap;
+}
+
+.minerva-carousel-success-icon {
+  color: var(--color-icon-success);
+  fill: var(--color-icon-success);
+  flex: 0 0 var(--icon-size-medium, 20px);
+}
+
+.minerva-carousel-card .minerva-sheet-description {
+  margin: 8px 0 0;
+  color: var(--color-base, #202122);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.minerva-carousel-card--success .minerva-sheet-description {
+  margin-top: 8px;
+}
+
+.minerva-carousel-card .minerva-sheet-actions {
+  margin-bottom: 0;
+}
+
+.minerva-carousel-card .minerva-sheet-btn-secondary :deep(button),
+.minerva-carousel-card .minerva-sheet-btn-secondary :deep(.cdx-button__button),
+.minerva-carousel-card .minerva-sheet-btn-secondary.cdx-button--weight-normal :deep(button),
+.minerva-carousel-card .minerva-sheet-btn-secondary.cdx-button--weight-normal :deep(.cdx-button__button),
+.minerva-carousel-more-card :deep(button),
+.minerva-carousel-more-card :deep(.cdx-button__button) {
+  background-color: transparent !important;
+}
+
+.minerva-carousel-more-card {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  height: 100%;
+  min-height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: var(--border-radius-base, 2px);
+  padding: 16px;
 }
 
 .minerva-info-sheet {
