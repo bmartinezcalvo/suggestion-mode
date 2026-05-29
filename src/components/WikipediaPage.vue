@@ -5243,6 +5243,10 @@
             <span class="confetti confetti--red confetti--triangle confetti--6"></span>
             <span class="confetti confetti--yellow confetti--circle confetti--7"></span>
             <span class="confetti confetti--green confetti--rect confetti--8"></span>
+            <span class="confetti confetti--blue confetti--tiny confetti--9"></span>
+            <span class="confetti confetti--red confetti--tiny confetti--10"></span>
+            <span class="confetti confetti--yellow confetti--tiny confetti--11"></span>
+            <span class="confetti confetti--green confetti--tiny confetti--12"></span>
           </div>
           <div class="minerva-post-publish-header">
             <div>
@@ -6685,9 +6689,8 @@ const completedSuggestionSummaryItems = computed(() => {
   return items;
 });
 const postPublishSuggestionItems = computed(() => (
-  [...getPendingSuggestionIdsForContext()]
+  getPostPublishSuggestionIds()
     .sort((a, b) => a - b)
-    .slice(0, 6)
     .map((id) => ({ id }))
 ));
 const minervaNoMoreSuggestionsDescription = computed(() => {
@@ -9241,6 +9244,27 @@ function getSuggestionIdsForCurrentContext() {
     if (minervaEditSectionOnly.value === 'prose') return [7, 3];
     if (minervaEditSectionOnly.value === 'theory') return [5];
     return [];
+  }
+  return [1, 8, 6, 2, 4, 7, 3, 5];
+}
+
+function getPendingSuggestionIdsForArticle() {
+  const ids = [];
+  if (isSuggestion1Pending.value) ids.push(1);
+  if (isSuggestion8Pending.value) ids.push(8);
+  if (isSuggestion6Pending.value) ids.push(6);
+  if (isSuggestion2Pending.value) ids.push(2);
+  if (isSuggestion4Pending.value) ids.push(4);
+  if (isSuggestion7Pending.value) ids.push(7);
+  if (isSuggestion3Pending.value) ids.push(3);
+  if (isSuggestion5Pending.value) ids.push(5);
+  return ids;
+}
+
+function getPostPublishSuggestionIds() {
+  const pendingIds = getPendingSuggestionIdsForArticle();
+  if (pendingIds.length) {
+    return pendingIds;
   }
   return [1, 8, 6, 2, 4, 7, 3, 5];
 }
@@ -19244,16 +19268,16 @@ function markArticleEdited() {
 .minerva-post-publish-confetti {
   position: absolute;
   inset: 0 0 auto;
-  height: 92px;
+  height: 76px;
   pointer-events: none;
   overflow: hidden;
 }
 
 .confetti {
   position: absolute;
-  top: -16px;
+  top: -10px;
   display: block;
-  animation: minerva-confetti-drop 1800ms ease-in-out infinite alternate;
+  animation: minerva-confetti-drop 1600ms ease-in-out infinite alternate;
 }
 
 .confetti--blue {
@@ -19274,19 +19298,19 @@ function markArticleEdited() {
 
 .confetti--square,
 .confetti--rect {
-  width: 28px;
-  height: 28px;
+  width: 10px;
+  height: 10px;
   transform: rotate(9deg);
 }
 
 .confetti--rect {
-  width: 10px;
-  height: 32px;
+  width: 5px;
+  height: 18px;
 }
 
 .confetti--circle {
-  width: 30px;
-  height: 30px;
+  width: 13px;
+  height: 13px;
   border-radius: 50%;
 }
 
@@ -19294,9 +19318,15 @@ function markArticleEdited() {
   width: 0;
   height: 0;
   background: transparent;
-  border-left: 12px solid transparent;
-  border-right: 12px solid transparent;
-  border-bottom: 22px solid #d73333;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 11px solid #d73333;
+}
+
+.confetti--tiny {
+  width: 4px;
+  height: 14px;
+  transform: rotate(26deg);
 }
 
 .confetti--1 { left: 16%; animation-delay: 0ms; }
@@ -19307,13 +19337,17 @@ function markArticleEdited() {
 .confetti--6 { left: 43%; animation-delay: 360ms; }
 .confetti--7 { left: 86%; animation-delay: 220ms; }
 .confetti--8 { left: 62%; animation-delay: 300ms; }
+.confetti--9 { left: 25%; animation-delay: 140ms; }
+.confetti--10 { left: 53%; animation-delay: 420ms; }
+.confetti--11 { left: 74%; animation-delay: 40ms; }
+.confetti--12 { left: 91%; animation-delay: 340ms; }
 
 @keyframes minerva-confetti-drop {
   from {
-    transform: translateY(-18px) rotate(-12deg);
+    transform: translateY(-12px) rotate(-16deg);
   }
   to {
-    transform: translateY(46px) rotate(18deg);
+    transform: translateY(42px) rotate(28deg);
   }
 }
 
@@ -19332,7 +19366,7 @@ function markArticleEdited() {
 }
 
 .minerva-post-publish-header p {
-  margin: 28px 0 0;
+  margin: 12px 0 0;
   color: var(--color-base, #202122);
   font-family: 'Inter', sans-serif;
   font-size: 16px;
@@ -19353,20 +19387,20 @@ function markArticleEdited() {
 }
 
 .minerva-post-publish-card {
-  flex: 0 0 calc(100vw - 128px);
+  flex: 0 0 calc(100vw - 76px);
   box-sizing: border-box;
-  display: grid;
-  grid-template-columns: 48px 1fr;
-  column-gap: 16px;
-  row-gap: 12px;
-  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 12px 16px 16px;
   background: var(--background-color-base, #ffffff);
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: var(--border-radius-base, 2px);
 }
 
 .minerva-post-publish-card-icon {
-  grid-row: 1 / span 2;
+  display: none;
+  grid-row: auto;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -19390,7 +19424,6 @@ function markArticleEdited() {
 }
 
 .minerva-post-publish-card p {
-  grid-column: 2;
   margin: 0;
   color: var(--color-subtle, #54595d);
   font-size: 16px;
@@ -19398,7 +19431,6 @@ function markArticleEdited() {
 }
 
 .minerva-post-publish-actions {
-  grid-column: 1 / -1;
   display: flex;
   align-items: center;
   gap: 12px;
