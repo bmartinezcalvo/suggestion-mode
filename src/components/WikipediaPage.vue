@@ -504,10 +504,10 @@
                   <cdx-icon :icon="cdxIconLanguage" size="medium" />
                 </button>
                 <button class="minerva-action-btn" aria-label="Watch">
-                  <cdx-icon :icon="cdxIconWatchlist" size="medium" />
+                  <cdx-icon :icon="cdxIconStar" size="medium" />
                 </button>
-                <button class="minerva-action-btn" aria-label="Edit" @click="toggleEditMode">
-                  <cdx-icon :icon="cdxIconEdit" size="medium" />
+                <button class="minerva-action-btn" aria-label="History">
+                  <cdx-icon :icon="cdxIconHistory" size="medium" />
                 </button>
                 <button class="minerva-action-btn minerva-read-suggestions-btn" aria-label="Suggestions" @click="handleReadModeSuggestionsClick">
                   <span class="lightbulb-icon-wrapper">
@@ -515,8 +515,8 @@
                     <span class="suggestions-badge"></span>
                   </span>
                 </button>
-                <button class="minerva-action-btn" aria-label="History">
-                  <cdx-icon :icon="cdxIconHistory" size="medium" />
+                <button class="minerva-action-btn" aria-label="Edit" @click="toggleEditMode">
+                  <cdx-icon :icon="cdxIconEdit" size="medium" />
                 </button>
                 <button class="minerva-action-btn" aria-label="More actions">
                   <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-ellipsis-icon" />
@@ -3622,7 +3622,7 @@
               <div class="suggestion-title">Remove external link</div>
             </button>
             <div v-if="isCardExpanded4" class="suggestion-content">
-              <p class="suggestion-description">This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the <a href="https://en.wikipedia.org/wiki/Wikipedia:External_links" target="_blank" rel="noopener">External links</a> section, or converting it into a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a> if appropriate.</p>
+              <p class="suggestion-description">This link points to an external website. Help readers stay focused on the content by removing this link.</p>
               <div class="suggestion-actions">
                 <button class="suggestion-btn" @click="handleYesSuggestion4">
                   Remove link
@@ -4630,11 +4630,7 @@
             There are no suggestions to improve this article yet.
           </p>
           <p v-else-if="activeMinervaSuggestion === 4" class="minerva-sheet-description">
-            This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the
-            <a href="https://en.wikipedia.org/wiki/Wikipedia:External_links" target="_blank" rel="noopener">External links</a>
-            section, or converting it into a
-            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>
-            if appropriate.
+            This link points to an external website. Help readers stay focused on the content by removing this link.
           </p>
           <p v-else-if="activeMinervaSuggestion === 5" class="minerva-sheet-description">
             This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.
@@ -5178,13 +5174,27 @@
           aria-label="Publish your changes"
         >
           <div class="minerva-publish-header">
-            <button class="minerva-publish-close" aria-label="Cancel publish" @click="closePublishDialog">
+            <cdx-button
+              class="minerva-publish-close"
+              action="default"
+              weight="quiet"
+              size="medium"
+              aria-label="Cancel publish"
+              @click="closePublishDialog"
+            >
               <cdx-icon :icon="cdxIconClose" size="medium" />
-            </button>
+            </cdx-button>
             <h2 class="minerva-publish-title">Publish changes</h2>
-            <button class="minerva-publish-confirm" aria-label="Publish changes" @click="confirmPublishChanges">
+            <cdx-button
+              class="minerva-publish-confirm"
+              action="progressive"
+              weight="primary"
+              size="medium"
+              aria-label="Publish changes"
+              @click="confirmPublishChanges"
+            >
               <cdx-icon :icon="cdxIconCheck" size="medium" />
-            </button>
+            </cdx-button>
           </div>
           <div class="minerva-publish-content">
             <div class="minerva-publish-count">{{ completedSuggestionCountLabel }}</div>
@@ -5194,14 +5204,15 @@
                 <span>{{ item.label }}</span>
               </li>
             </ul>
-            <label class="minerva-publish-field">
-              <span class="minerva-publish-field-label">Describe changes <span>(optional)</span></span>
-              <textarea
+            <cdx-field class="minerva-publish-field">
+              <template #label>Describe changes <span>(optional)</span></template>
+              <cdx-text-area
                 v-model="publishSummaryText"
                 class="minerva-publish-textarea"
                 placeholder="Explain what you changed"
-              ></textarea>
-            </label>
+                :rows="6"
+              />
+            </cdx-field>
             <div class="minerva-publish-notice">
               Your changes are published immediately. Other editors may review them.
             </div>
@@ -5210,10 +5221,9 @@
             <p>
               By publishing changes, you agree to the <a href="#">Terms of Use</a>, and you irrevocably agree to release your...
             </p>
-            <label class="minerva-publish-watch">
-              <input type="checkbox" v-model="watchPublishedPage" />
-              <span>Watch this page</span>
-            </label>
+            <cdx-checkbox v-model="watchPublishedPage" class="minerva-publish-watch">
+              Watch this page
+            </cdx-checkbox>
           </div>
         </div>
 
@@ -5224,9 +5234,19 @@
           aria-live="polite"
           aria-label="Edit published"
         >
+          <div class="minerva-post-publish-confetti" aria-hidden="true">
+            <span class="confetti confetti--blue confetti--square confetti--1"></span>
+            <span class="confetti confetti--red confetti--triangle confetti--2"></span>
+            <span class="confetti confetti--yellow confetti--circle confetti--3"></span>
+            <span class="confetti confetti--green confetti--rect confetti--4"></span>
+            <span class="confetti confetti--blue confetti--rect confetti--5"></span>
+            <span class="confetti confetti--red confetti--triangle confetti--6"></span>
+            <span class="confetti confetti--yellow confetti--circle confetti--7"></span>
+            <span class="confetti confetti--green confetti--rect confetti--8"></span>
+          </div>
           <div class="minerva-post-publish-header">
             <div>
-              <h2>Edit published! Keep improving this article.</h2>
+              <h2>Edit published!<br />Keep improving this article.</h2>
               <p>There are some more suggestions to improve this article. Ready for the next improvement?</p>
             </div>
             <button aria-label="Close" @click="showPostPublishSuggestionPopup = false">
@@ -5238,10 +5258,18 @@
               v-for="item in postPublishSuggestionItems"
               :key="item.id"
               class="minerva-post-publish-card"
-              @click="handlePostPublishSuggestionClick(item.id)"
             >
+              <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-post-publish-card-icon" />
               <div class="minerva-post-publish-card-title">{{ getMinervaSuggestionCardTitle(item.id) }}</div>
               <p>{{ getMinervaSuggestionCardDescription(item.id) }}</p>
+              <div class="minerva-post-publish-actions">
+                <cdx-button action="progressive" weight="normal" @click="handlePostPublishSuggestionClick(item.id)">
+                  {{ getMinervaSuggestionPrimaryActionLabel(item.id) }}
+                </cdx-button>
+                <cdx-button action="default" weight="quiet">
+                  Skip
+                </cdx-button>
+              </div>
             </div>
           </div>
         </div>
@@ -5366,6 +5394,7 @@ import {
   CdxCheckbox,
   CdxField,
   CdxTextInput,
+  CdxTextArea,
   CdxMessage,
   CdxRadio,
   CdxDialog,
@@ -6744,13 +6773,23 @@ function getMinervaSuggestionCardTitle(suggestionId) {
   return 'Add a citation';
 }
 
+function getMinervaSuggestionPrimaryActionLabel(suggestionId) {
+  if (suggestionId === 1 || suggestionId === 2 || suggestionId === 3) return 'Add citation';
+  if (suggestionId === 4) return 'Remove link';
+  if (suggestionId === 5) return 'Link specifically';
+  if (suggestionId === 6) return 'Adjust heading';
+  if (suggestionId === 7) return 'Fix year link';
+  if (suggestionId === 8) return 'Update link';
+  return 'Review';
+}
+
 function getMinervaSuggestionCardDescription(suggestionId) {
   if (suggestionId === 'empty') return minervaNoMoreSuggestionsDescription.value;
   if (isMinervaSuggestionSuccessState.value && suggestionId === activeMinervaSuggestion.value) {
     return minervaSuggestionSuccessDescription.value;
   }
   if (suggestionId === 4) {
-    return 'This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the External links section, or converting it into a citation if appropriate.';
+    return 'This link points to an external website. Help readers stay focused on the content by removing this link.';
   }
   if (suggestionId === 5) {
     return 'This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.';
@@ -7509,6 +7548,7 @@ function clearEditModeUiState() {
 }
 
 function publishEdits() {
+  const shouldShowPostPublishPopup = isMinervaSkin.value;
   const currentSnapshot = getCurrentEditSnapshot();
   editSnapshot.value = cloneEditSnapshot(currentSnapshot);
   editUndoStack.value = [cloneEditSnapshot(currentSnapshot)];
@@ -7518,8 +7558,10 @@ function publishEdits() {
   isMinervaPublishDialogOpen.value = false;
   closeVectorNoMoreSuggestionsDialog();
   clearEditModeUiState();
-  if (isMinervaSkin.value && availableSuggestionCount.value > 0) {
-    showPostPublishSuggestionPopup.value = true;
+  if (shouldShowPostPublishPopup) {
+    nextTick(() => {
+      showPostPublishSuggestionPopup.value = true;
+    });
   }
 }
 
@@ -16805,7 +16847,7 @@ function markArticleEdited() {
   display: flex;
   flex-wrap: nowrap;
   align-items: flex-start;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
@@ -16821,10 +16863,14 @@ function markArticleEdited() {
 }
 
 .minerva-carousel-slide {
-  flex: 0 0 calc(100vw - 32px);
+  flex: 0 0 calc(100vw - 76px);
   display: grid;
   scroll-snap-align: start;
   transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.minerva-carousel-slide:has(.minerva-carousel-card--empty) {
+  flex-basis: calc(100vw - 32px);
 }
 
 .minerva-carousel-slide.suggestion-dismiss-right {
@@ -16847,7 +16893,7 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   position: relative;
-  background: var(--background-color-progressive-subtle, #E8EEFF);
+  background: var(--background-color-base, #ffffff);
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: var(--border-radius-base, 2px);
   box-shadow: none;
@@ -16855,14 +16901,19 @@ function markArticleEdited() {
   cursor: pointer;
 }
 
+.minerva-carousel-slide--active .minerva-carousel-card {
+  background: var(--background-color-progressive-subtle, #E8EEFF);
+}
+
 .minerva-carousel-card--success {
-  background: var(--background-color-success-subtle, #d5fdf4);
+  background: var(--background-color-success-subtle, #d5fdf4) !important;
   border-color: var(--border-color-success, #14866d);
 }
 
 .minerva-carousel-card--empty {
   background: var(--background-color-base, #ffffff);
   border-color: transparent;
+  width: 100%;
 }
 
 .minerva-carousel-card--empty::before {
@@ -16893,9 +16944,16 @@ function markArticleEdited() {
 }
 
 .minerva-carousel-success-icon {
-  color: var(--color-icon-success);
-  fill: var(--color-icon-success);
+  color: var(--color-icon-success, #14866d) !important;
+  fill: var(--color-icon-success, #14866d) !important;
   flex: 0 0 var(--icon-size-medium, 20px);
+}
+
+.minerva-carousel-success-icon :deep(.cdx-icon),
+.minerva-carousel-success-icon :deep(svg),
+.minerva-carousel-card--success .minerva-carousel-success-icon :deep(svg) {
+  color: var(--color-icon-success, #14866d) !important;
+  fill: var(--color-icon-success, #14866d) !important;
 }
 
 .minerva-carousel-card .minerva-sheet-description {
@@ -18643,6 +18701,7 @@ function markArticleEdited() {
   max-height: 6px !important;
   padding: 0 !important;
   border: 0 !important;
+  box-shadow: 0 0 0 1px var(--border-color-inverted, #ffffff) !important;
   border-radius: 50% !important;
   font-size: 0 !important;
   line-height: 0 !important;
@@ -18669,6 +18728,7 @@ function markArticleEdited() {
   min-height: 6px !important;
   padding: 0 !important;
   border: 0 !important;
+  box-shadow: 0 0 0 1px var(--border-color-inverted, #ffffff) !important;
   border-radius: 50% !important;
   background: var(--background-color-progressive, #36c) !important;
   background-color: var(--background-color-progressive, #36c) !important;
@@ -19016,18 +19076,19 @@ function markArticleEdited() {
   flex-direction: column;
   background: var(--background-color-base, #ffffff);
   color: var(--color-base, #202122);
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .minerva-publish-header {
   display: grid;
-  grid-template-columns: 56px 1fr 56px;
+  grid-template-columns: 44px 1fr 44px;
   align-items: center;
-  min-height: 56px;
+  height: 44px;
+  min-height: 44px;
   border-bottom: 1px solid var(--border-color-base, #a2a9b1);
 }
 
-.minerva-publish-close,
-.minerva-publish-confirm,
 .minerva-post-publish-header button {
   border: 0;
   background: transparent;
@@ -19037,34 +19098,51 @@ function markArticleEdited() {
   cursor: pointer;
 }
 
-.minerva-publish-close {
-  color: var(--color-base, #202122);
+.minerva-publish-close,
+.minerva-publish-close :deep(button),
+.minerva-publish-close :deep(.cdx-button__button),
+.minerva-publish-confirm,
+.minerva-publish-confirm :deep(button),
+.minerva-publish-confirm :deep(.cdx-button__button) {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 0;
 }
 
-.minerva-publish-confirm {
-  align-self: stretch;
+.minerva-publish-close :deep(.cdx-icon),
+.minerva-publish-close :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
+}
+
+.minerva-publish-confirm :deep(.cdx-icon),
+.minerva-publish-confirm :deep(svg) {
   color: var(--color-inverted, #ffffff);
-  background: var(--background-color-progressive, #36c);
+  fill: var(--color-inverted, #ffffff);
 }
 
 .minerva-publish-title {
   margin: 0;
   text-align: center;
-  font-size: 20px;
-  line-height: 28px;
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 700;
 }
 
 .minerva-publish-content {
   flex: 1;
-  padding: 28px 32px;
+  padding: 16px;
   overflow-y: auto;
 }
 
 .minerva-publish-count {
-  font-size: 22px;
-  line-height: 30px;
-  margin-bottom: 20px;
+  font-size: 16px;
+  line-height: 24px;
+  padding: 12px;
+  margin: 0;
 }
 
 .minerva-publish-summary-list {
@@ -19072,16 +19150,16 @@ function markArticleEdited() {
   flex-direction: column;
   gap: 18px;
   list-style: none;
-  padding: 0;
-  margin: 0 0 40px;
+  padding: 12px;
+  margin: 0 0 28px;
 }
 
 .minerva-publish-summary-item {
   display: flex;
   align-items: center;
   gap: 12px;
-  font-size: 22px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .minerva-publish-summary-item :deep(.cdx-icon),
@@ -19090,52 +19168,45 @@ function markArticleEdited() {
   fill: var(--color-progressive, #36c);
 }
 
-.minerva-publish-field {
-  display: block;
-}
-
-.minerva-publish-field-label {
-  display: block;
-  margin-bottom: 8px;
-  font-size: 20px;
-  line-height: 28px;
+.minerva-publish-field :deep(.cdx-label),
+.minerva-publish-field :deep(.cdx-label__label),
+.minerva-publish-field :deep(.cdx-field__label) {
+  font-size: 16px;
+  line-height: 24px;
   font-weight: 700;
 }
 
-.minerva-publish-field-label span {
+.minerva-publish-field :deep(.cdx-label span),
+.minerva-publish-field :deep(.cdx-field__label span) {
   color: var(--color-subtle, #54595d);
   font-weight: 400;
 }
 
-.minerva-publish-textarea {
+.minerva-publish-textarea,
+.minerva-publish-textarea :deep(textarea),
+.minerva-publish-textarea :deep(.cdx-text-area__textarea) {
   width: 100%;
   min-height: 160px;
-  box-sizing: border-box;
-  padding: 12px 16px;
-  border: 1px solid var(--border-color-base, #a2a9b1);
-  border-radius: var(--border-radius-base, 2px);
-  font: inherit;
-  font-size: 20px;
-  line-height: 28px;
-  resize: vertical;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .minerva-publish-notice {
   margin-top: 32px;
-  padding: 24px;
+  padding: 12px;
   background: var(--background-color-progressive-subtle, #E8EEFF);
   border: 1px solid var(--border-color-progressive, #36c);
   border-radius: var(--border-radius-base, 2px);
-  font-size: 20px;
-  line-height: 30px;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .minerva-publish-footer {
   border-top: 1px solid var(--border-color-subtle, #c8ccd1);
-  padding: 28px 32px 24px;
+  padding: 16px;
   color: var(--color-subtle, #54595d);
-  font-size: 18px;
-  line-height: 28px;
+  font-size: 14px;
+  line-height: 22px;
 }
 
 .minerva-publish-footer p {
@@ -19147,27 +19218,103 @@ function markArticleEdited() {
 }
 
 .minerva-publish-watch {
-  display: flex;
-  align-items: center;
-  gap: 12px;
+  font-size: 16px;
+  line-height: 24px;
 }
 
-.minerva-publish-watch input {
-  width: 24px;
-  height: 24px;
-  accent-color: var(--background-color-progressive, #36c);
+.minerva-publish-watch :deep(.cdx-checkbox__label) {
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .minerva-post-publish-popup {
   position: fixed;
-  left: 12px;
-  right: 12px;
-  bottom: 16px;
+  left: 0;
+  right: 0;
+  bottom: 0;
   z-index: 180;
-  padding: 16px;
+  box-sizing: border-box;
+  padding: 72px 16px 28px;
   background: var(--background-color-base, #ffffff);
-  border: 1px solid var(--border-color-base, #a2a9b1);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.18);
+  border-top: 1px solid var(--border-color-base, #a2a9b1);
+  box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+}
+
+.minerva-post-publish-confetti {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 92px;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.confetti {
+  position: absolute;
+  top: -16px;
+  display: block;
+  animation: minerva-confetti-drop 1800ms ease-in-out infinite alternate;
+}
+
+.confetti--blue {
+  background: #36c;
+}
+
+.confetti--red {
+  background: #d73333;
+}
+
+.confetti--yellow {
+  background: #ffcc33;
+}
+
+.confetti--green {
+  background: #00af89;
+}
+
+.confetti--square,
+.confetti--rect {
+  width: 28px;
+  height: 28px;
+  transform: rotate(9deg);
+}
+
+.confetti--rect {
+  width: 10px;
+  height: 32px;
+}
+
+.confetti--circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.confetti--triangle {
+  width: 0;
+  height: 0;
+  background: transparent;
+  border-left: 12px solid transparent;
+  border-right: 12px solid transparent;
+  border-bottom: 22px solid #d73333;
+}
+
+.confetti--1 { left: 16%; animation-delay: 0ms; }
+.confetti--2 { left: 8%; animation-delay: 180ms; }
+.confetti--3 { left: 31%; animation-delay: 80ms; }
+.confetti--4 { left: 50%; animation-delay: 240ms; }
+.confetti--5 { left: 71%; animation-delay: 120ms; }
+.confetti--6 { left: 43%; animation-delay: 360ms; }
+.confetti--7 { left: 86%; animation-delay: 220ms; }
+.confetti--8 { left: 62%; animation-delay: 300ms; }
+
+@keyframes minerva-confetti-drop {
+  from {
+    transform: translateY(-18px) rotate(-12deg);
+  }
+  to {
+    transform: translateY(46px) rotate(18deg);
+  }
 }
 
 .minerva-post-publish-header {
@@ -19178,22 +19325,25 @@ function markArticleEdited() {
 
 .minerva-post-publish-header h2 {
   margin: 0;
-  font-size: 18px;
-  line-height: 24px;
+  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: 400;
 }
 
 .minerva-post-publish-header p {
-  margin: 8px 0 0;
-  color: var(--color-subtle, #54595d);
-  font-size: 14px;
-  line-height: 20px;
+  margin: 28px 0 0;
+  color: var(--color-base, #202122);
+  font-family: 'Inter', sans-serif;
+  font-size: 16px;
+  line-height: 24px;
 }
 
 .minerva-post-publish-carousel {
   display: flex;
-  gap: 10px;
+  gap: 12px;
   overflow-x: auto;
-  margin-top: 16px;
+  margin-top: 32px;
   padding-bottom: 4px;
   scrollbar-width: none;
 }
@@ -19203,13 +19353,34 @@ function markArticleEdited() {
 }
 
 .minerva-post-publish-card {
-  flex: 0 0 80%;
+  flex: 0 0 calc(100vw - 128px);
   box-sizing: border-box;
-  padding: 12px;
+  display: grid;
+  grid-template-columns: 48px 1fr;
+  column-gap: 16px;
+  row-gap: 12px;
+  padding: 16px;
+  background: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: var(--border-radius-base, 2px);
+}
+
+.minerva-post-publish-card-icon {
+  grid-row: 1 / span 2;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
   background: var(--background-color-progressive-subtle, #E8EEFF);
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: var(--border-radius-base, 2px);
-  cursor: pointer;
+}
+
+.minerva-post-publish-card-icon :deep(.cdx-icon),
+.minerva-post-publish-card-icon :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 .minerva-post-publish-card-title {
@@ -19219,9 +19390,19 @@ function markArticleEdited() {
 }
 
 .minerva-post-publish-card p {
-  margin: 8px 0 0;
-  font-size: 14px;
-  line-height: 20px;
+  grid-column: 2;
+  margin: 0;
+  color: var(--color-subtle, #54595d);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-post-publish-actions {
+  grid-column: 1 / -1;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
 }
 
 .link-dialog-backdrop {
