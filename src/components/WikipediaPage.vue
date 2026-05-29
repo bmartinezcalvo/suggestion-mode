@@ -5234,20 +5234,7 @@
           aria-live="polite"
           aria-label="Edit published"
         >
-          <div class="minerva-post-publish-confetti" aria-hidden="true">
-            <span class="confetti confetti--blue confetti--square confetti--1"></span>
-            <span class="confetti confetti--red confetti--triangle confetti--2"></span>
-            <span class="confetti confetti--yellow confetti--circle confetti--3"></span>
-            <span class="confetti confetti--green confetti--rect confetti--4"></span>
-            <span class="confetti confetti--blue confetti--rect confetti--5"></span>
-            <span class="confetti confetti--red confetti--triangle confetti--6"></span>
-            <span class="confetti confetti--yellow confetti--circle confetti--7"></span>
-            <span class="confetti confetti--green confetti--rect confetti--8"></span>
-            <span class="confetti confetti--blue confetti--tiny confetti--9"></span>
-            <span class="confetti confetti--red confetti--tiny confetti--10"></span>
-            <span class="confetti confetti--yellow confetti--tiny confetti--11"></span>
-            <span class="confetti confetti--green confetti--tiny confetti--12"></span>
-          </div>
+          <canvas ref="postPublishConfettiCanvas" class="minerva-post-publish-confetti" aria-hidden="true"></canvas>
           <div class="minerva-post-publish-header">
             <div>
               <h2>Edit published!<br />Keep improving this article.</h2>
@@ -5263,8 +5250,10 @@
               :key="item.id"
               class="minerva-post-publish-card"
             >
-              <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-post-publish-card-icon" />
-              <div class="minerva-post-publish-card-title">{{ getMinervaSuggestionCardTitle(item.id) }}</div>
+              <div class="minerva-post-publish-card-header">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-post-publish-card-icon" />
+                <div class="minerva-post-publish-card-title">{{ getMinervaSuggestionCardTitle(item.id) }}</div>
+              </div>
               <p>{{ getMinervaSuggestionCardDescription(item.id) }}</p>
               <div class="minerva-post-publish-actions">
                 <cdx-button action="progressive" weight="normal" @click="handlePostPublishSuggestionClick(item.id)">
@@ -5479,6 +5468,7 @@ const isMinervaPublishDialogOpen = ref(false);
 const publishSummaryText = ref('');
 const watchPublishedPage = ref(true);
 const showPostPublishSuggestionPopup = ref(false);
+const postPublishConfettiCanvas = ref(null);
 const showSuggestions = ref(true);
 const enableAutoScroll = ref(false);
 const showSuggestionNotification = ref(false);
@@ -6693,6 +6683,16 @@ const postPublishSuggestionItems = computed(() => (
     .sort((a, b) => a - b)
     .map((id) => ({ id }))
 ));
+const postPublishConfettiColors = [
+  '#36c',
+  '#d33',
+  '#fc3',
+  '#14866d'
+];
+let postPublishConfettiAnimationFrame = null;
+let postPublishConfettiParticles = [];
+let postPublishConfettiLastTime = 0;
+let postPublishConfettiStopTimer = null;
 const minervaNoMoreSuggestionsDescription = computed(() => {
   if (isMinervaNoMoreSuggestionsSectionState.value) {
     return 'You’ve reviewed all suggestions in this section. Continue completing suggestions in other sections of this article.';
@@ -6705,6 +6705,172 @@ const minervaNoMoreSuggestionsDescription = computed(() => {
 const vectorNoMoreSuggestionsDescription = computed(() => (
   `You’ve reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`
 ));
+
+function randomRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function getRandomConfettiColor() {
+  return postPublishConfettiColors[Math.floor(Math.random() * postPublishConfettiColors.length)];
+}
+
+function createConfetto(canvas) {
+  const size = randomRange(5, 9);
+  return {
+    type: 'rect',
+    color: getRandomConfettiColor(),
+    position: {
+      x: randomRange(0, canvas.width),
+      y: randomRange(-canvas.height * 0.45, canvas.height * 0.2)
+    },
+    dimensions: {
+      x: size,
+      y: randomRange(8, 16)
+    },
+    rotation: randomRange(0, 2 * Math.PI),
+    scale: {
+      x: 1,
+      y: 1
+    },
+    velocity: {
+      x: randomRange(-10, 10),
+      y: randomRange(22, 56)
+    }
+  };
+}
+
+function createSequin(canvas) {
+  return {
+    type: 'circle',
+    color: getRandomConfettiColor(),
+    position: {
+      x: randomRange(0, canvas.width),
+      y: randomRange(-canvas.height * 0.45, canvas.height * 0.15)
+    },
+    radius: randomRange(2, 4),
+    velocity: {
+      x: randomRange(-7, 7),
+      y: randomRange(18, 48)
+    }
+  };
+}
+
+function resizePostPublishConfettiCanvas(canvas) {
+  const rect = canvas.getBoundingClientRect();
+  const pixelRatio = window.devicePixelRatio || 1;
+  const width = Math.max(1, Math.round(rect.width * pixelRatio));
+  const height = Math.max(1, Math.round(rect.height * pixelRatio));
+  if (canvas.width !== width || canvas.height !== height) {
+    canvas.width = width;
+    canvas.height = height;
+  }
+  return pixelRatio;
+}
+
+function drawPostPublishConfettiParticle(context, particle) {
+  context.fillStyle = particle.color;
+  if (particle.type === 'circle') {
+    context.beginPath();
+    context.arc(particle.position.x, particle.position.y, particle.radius, 0, 2 * Math.PI);
+    context.fill();
+    return;
+  }
+
+  const width = particle.dimensions.x * particle.scale.x;
+  const height = particle.dimensions.y * particle.scale.y;
+  context.save();
+  context.translate(particle.position.x, particle.position.y);
+  context.rotate(particle.rotation);
+  context.fillRect(-width / 2, -height / 2, width, height);
+  context.restore();
+}
+
+function updatePostPublishConfettiParticle(particle, delta, canvas) {
+  const gravity = particle.type === 'circle' ? 58 : 72;
+  const drag = particle.type === 'circle' ? 0.996 : 0.994;
+  particle.velocity.x *= drag;
+  particle.velocity.y += gravity * delta;
+  particle.position.x += particle.velocity.x * delta;
+  particle.position.y += particle.velocity.y * delta;
+  if (particle.type === 'rect') {
+    particle.rotation += randomRange(1.8, 3.6) * delta;
+    particle.scale.y = Math.cos((particle.position.y + particle.rotation * 22) * 0.035);
+  }
+
+  return particle.position.y < canvas.height + 24;
+}
+
+function animatePostPublishConfetti(timestamp) {
+  const canvas = postPublishConfettiCanvas.value;
+  if (!canvas) {
+    stopPostPublishConfetti();
+    return;
+  }
+  const context = canvas.getContext('2d');
+  if (!context) return;
+  const pixelRatio = resizePostPublishConfettiCanvas(canvas);
+  const delta = Math.min(0.033, (timestamp - postPublishConfettiLastTime) / 1000 || 0.016);
+  postPublishConfettiLastTime = timestamp;
+  context.clearRect(0, 0, canvas.width, canvas.height);
+  context.save();
+  context.scale(pixelRatio, pixelRatio);
+  const cssWidth = canvas.width / pixelRatio;
+  const cssHeight = canvas.height / pixelRatio;
+  postPublishConfettiParticles = postPublishConfettiParticles.filter((particle) => {
+    const shouldKeep = updatePostPublishConfettiParticle(particle, delta, { width: cssWidth, height: cssHeight });
+    if (shouldKeep) drawPostPublishConfettiParticle(context, particle);
+    return shouldKeep;
+  });
+  while (showPostPublishSuggestionPopup.value && postPublishConfettiParticles.length < 58) {
+    postPublishConfettiParticles.push(
+      postPublishConfettiParticles.length % 3 === 0
+        ? createSequin({ width: cssWidth, height: cssHeight })
+        : createConfetto({ width: cssWidth, height: cssHeight })
+    );
+  }
+  context.restore();
+
+  if (showPostPublishSuggestionPopup.value || postPublishConfettiParticles.length) {
+    postPublishConfettiAnimationFrame = window.requestAnimationFrame(animatePostPublishConfetti);
+  } else {
+    stopPostPublishConfetti();
+  }
+}
+
+function startPostPublishConfetti() {
+  if (typeof window === 'undefined') return;
+  const canvas = postPublishConfettiCanvas.value;
+  if (!canvas) return;
+  stopPostPublishConfetti();
+  resizePostPublishConfettiCanvas(canvas);
+  const rect = canvas.getBoundingClientRect();
+  const canvasSize = {
+    width: rect.width,
+    height: rect.height
+  };
+  postPublishConfettiParticles = Array.from({ length: 52 }, (_, index) => (
+    index % 3 === 0 ? createSequin(canvasSize) : createConfetto(canvasSize)
+  ));
+  postPublishConfettiLastTime = performance.now();
+  postPublishConfettiAnimationFrame = window.requestAnimationFrame(animatePostPublishConfetti);
+}
+
+function stopPostPublishConfetti() {
+  if (typeof window !== 'undefined' && postPublishConfettiAnimationFrame) {
+    window.cancelAnimationFrame(postPublishConfettiAnimationFrame);
+  }
+  postPublishConfettiAnimationFrame = null;
+  if (postPublishConfettiStopTimer) {
+    clearTimeout(postPublishConfettiStopTimer);
+    postPublishConfettiStopTimer = null;
+  }
+  postPublishConfettiParticles = [];
+  const canvas = postPublishConfettiCanvas.value;
+  const context = canvas?.getContext('2d');
+  if (canvas && context) {
+    context.clearRect(0, 0, canvas.width, canvas.height);
+  }
+}
 const minervaSuggestionSuccessCopy = {
   1: {
     title: 'Citation added',
@@ -6792,21 +6958,21 @@ function getMinervaSuggestionCardDescription(suggestionId) {
     return minervaSuggestionSuccessDescription.value;
   }
   if (suggestionId === 4) {
-    return 'This link points to an external website. Help readers stay focused on the content by removing this link.';
+    return 'Help readers stay focused on the content by removing this link.';
   }
   if (suggestionId === 5) {
-    return 'This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.';
+    return 'Help readers reach the intended topic by linking to a more specific page.';
   }
   if (suggestionId === 6) {
-    return 'This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.';
+    return 'Help readers navigate the article by adjusting this heading level.';
   }
   if (suggestionId === 7) {
-    return 'This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.';
+    return 'Help readers stay focused on the article by fixing this year link.';
   }
   if (suggestionId === 8) {
-    return 'This link points to a redirect. Help readers get to the right destination by linking directly to the target page.';
+    return 'Help readers get to the right destination by linking directly to the target page.';
   }
-  return 'This information has no source. Help readers understand where this information is coming from by adding a citation.';
+  return 'Help readers understand where this information is coming from by adding a citation.';
 }
 const minervaToggleBottom = computed(() => {
   return '16px';
@@ -7563,6 +7729,9 @@ function publishEdits() {
   clearEditModeUiState();
   if (shouldShowPostPublishPopup) {
     nextTick(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      }
       showPostPublishSuggestionPopup.value = true;
     });
   }
@@ -11703,6 +11872,14 @@ watch(
   }
 );
 
+watch(showPostPublishSuggestionPopup, (isOpen) => {
+  if (isOpen) {
+    nextTick(() => startPostPublishConfetti());
+  } else {
+    stopPostPublishConfetti();
+  }
+});
+
 watch(
   () => isLoading.value,
   (loading) => {
@@ -11877,6 +12054,7 @@ onBeforeUnmount(() => {
     clearTimeout(minervaFullPageSectionsPanelInactivityTimer);
     minervaFullPageSectionsPanelInactivityTimer = null;
   }
+  stopPostPublishConfetti();
   window.removeEventListener('pointermove', handleMinervaFullPageSectionsButtonPointerMove);
   window.removeEventListener('pointerup', handleMinervaFullPageSectionsButtonPointerUp);
   window.removeEventListener('pointercancel', handleMinervaFullPageSectionsButtonPointerUp);
@@ -16797,7 +16975,7 @@ function markArticleEdited() {
   z-index: 80;
   min-height: 216px;
   box-sizing: border-box;
-  padding: 0 16px;
+  padding: 0;
   background: var(--background-color-base, #ffffff);
   border-top: 1px solid var(--border-color-base, #a2a9b1);
   box-shadow: 0 -3px 10px rgba(0, 0, 0, 0.08);
@@ -16814,6 +16992,7 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   min-height: 44px;
+  padding: 0 16px;
   cursor: pointer;
 }
 
@@ -16854,7 +17033,7 @@ function markArticleEdited() {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
-  margin: 8px 0 12px;
+  margin: 8px 16px 12px;
 }
 
 .minerva-carousel-filters :deep(.cdx-select),
@@ -16870,14 +17049,14 @@ function markArticleEdited() {
 .minerva-carousel-track {
   display: flex;
   flex-wrap: nowrap;
-  align-items: flex-start;
+  align-items: stretch;
   gap: 12px;
   overflow-x: auto;
   overflow-y: hidden;
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-left: 16px;
-  padding-bottom: 16px;
+  padding: 0 16px 16px;
   min-height: 132px;
   scrollbar-width: none;
 }
@@ -16888,7 +17067,7 @@ function markArticleEdited() {
 
 .minerva-carousel-slide {
   flex: 0 0 calc(100vw - 76px);
-  display: grid;
+  display: flex;
   scroll-snap-align: start;
   transition: opacity 180ms ease, transform 180ms ease;
 }
@@ -16917,6 +17096,8 @@ function markArticleEdited() {
   display: flex;
   flex-direction: column;
   position: relative;
+  width: 100%;
+  min-height: 100%;
   background: var(--background-color-base, #ffffff);
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: var(--border-radius-base, 2px);
@@ -16926,7 +17107,7 @@ function markArticleEdited() {
 }
 
 .minerva-carousel-slide--active .minerva-carousel-card {
-  background: var(--background-color-progressive-subtle, #E8EEFF);
+  background: #F4F7FF;
 }
 
 .minerva-carousel-card--success {
@@ -19258,7 +19439,7 @@ function markArticleEdited() {
   bottom: 0;
   z-index: 180;
   box-sizing: border-box;
-  padding: 72px 16px 28px;
+  padding: 48px 16px 16px;
   background: var(--background-color-base, #ffffff);
   border-top: 1px solid var(--border-color-base, #a2a9b1);
   box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.16);
@@ -19269,86 +19450,9 @@ function markArticleEdited() {
   position: absolute;
   inset: 0 0 auto;
   height: 76px;
+  width: 100%;
   pointer-events: none;
   overflow: hidden;
-}
-
-.confetti {
-  position: absolute;
-  top: -10px;
-  display: block;
-  animation: minerva-confetti-drop 1600ms ease-in-out infinite alternate;
-}
-
-.confetti--blue {
-  background: #36c;
-}
-
-.confetti--red {
-  background: #d73333;
-}
-
-.confetti--yellow {
-  background: #ffcc33;
-}
-
-.confetti--green {
-  background: #00af89;
-}
-
-.confetti--square,
-.confetti--rect {
-  width: 10px;
-  height: 10px;
-  transform: rotate(9deg);
-}
-
-.confetti--rect {
-  width: 5px;
-  height: 18px;
-}
-
-.confetti--circle {
-  width: 13px;
-  height: 13px;
-  border-radius: 50%;
-}
-
-.confetti--triangle {
-  width: 0;
-  height: 0;
-  background: transparent;
-  border-left: 6px solid transparent;
-  border-right: 6px solid transparent;
-  border-bottom: 11px solid #d73333;
-}
-
-.confetti--tiny {
-  width: 4px;
-  height: 14px;
-  transform: rotate(26deg);
-}
-
-.confetti--1 { left: 16%; animation-delay: 0ms; }
-.confetti--2 { left: 8%; animation-delay: 180ms; }
-.confetti--3 { left: 31%; animation-delay: 80ms; }
-.confetti--4 { left: 50%; animation-delay: 240ms; }
-.confetti--5 { left: 71%; animation-delay: 120ms; }
-.confetti--6 { left: 43%; animation-delay: 360ms; }
-.confetti--7 { left: 86%; animation-delay: 220ms; }
-.confetti--8 { left: 62%; animation-delay: 300ms; }
-.confetti--9 { left: 25%; animation-delay: 140ms; }
-.confetti--10 { left: 53%; animation-delay: 420ms; }
-.confetti--11 { left: 74%; animation-delay: 40ms; }
-.confetti--12 { left: 91%; animation-delay: 340ms; }
-
-@keyframes minerva-confetti-drop {
-  from {
-    transform: translateY(-12px) rotate(-16deg);
-  }
-  to {
-    transform: translateY(42px) rotate(28deg);
-  }
 }
 
 .minerva-post-publish-header {
@@ -19377,7 +19481,7 @@ function markArticleEdited() {
   display: flex;
   gap: 12px;
   overflow-x: auto;
-  margin-top: 32px;
+  margin-top: 12px;
   padding-bottom: 4px;
   scrollbar-width: none;
 }
@@ -19398,14 +19502,20 @@ function markArticleEdited() {
   border-radius: var(--border-radius-base, 2px);
 }
 
+.minerva-post-publish-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
 .minerva-post-publish-card-icon {
-  display: none;
-  grid-row: auto;
   display: inline-flex;
+  flex: 0 0 32px;
   align-items: center;
   justify-content: center;
-  width: 48px;
-  height: 48px;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
   background: var(--background-color-progressive-subtle, #E8EEFF);
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: var(--border-radius-base, 2px);
