@@ -4332,7 +4332,7 @@
           @click.self="expandMinervaCarousel"
         >
           <div class="minerva-carousel-head" @click="expandMinervaCarousel">
-            <div class="minerva-carousel-head-title">{{ minervaCarouselVisibleSuggestionIds.length }} suggestions</div>
+            <div class="minerva-carousel-head-title">{{ minervaCarouselVisibleSuggestionIds.length }} suggestions left</div>
             <cdx-button
               class="minerva-carousel-collapse-btn"
               action="default"
@@ -4404,7 +4404,7 @@
                       {{ getMinervaSuggestionCardTitle(item.id) }}
                     </div>
                     <div v-if="item.kind !== 'empty' && minervaCarouselVisibleSuggestionIds.length > 0" class="minerva-carousel-card-count">
-                      {{ getMinervaCarouselItemIndex(item.id) }} of {{ minervaCarouselVisibleSuggestionIds.length }}
+                      {{ getMinervaCarouselItemIndex(item.id) }}/{{ minervaCarouselVisibleSuggestionIds.length }}
                     </div>
                   </div>
                   <p class="minerva-sheet-description">
@@ -4541,8 +4541,18 @@
                 </template>
                   </div>
                 </div>
+              </div>
             </div>
-          </div>
+            <div class="minerva-carousel-completed-counter" aria-live="polite">
+              <div
+                class="minerva-carousel-completed-spinner"
+                :class="{ 'minerva-carousel-completed-spinner--zero': completedSuggestionCount === 0 }"
+                :style="minervaCompletedSuggestionProgressStyle"
+              >
+                <span>{{ completedSuggestionCount }}</span>
+              </div>
+              <span>suggestions completed</span>
+            </div>
           </template>
         </div>
 
@@ -6192,6 +6202,14 @@ const completedSuggestionCount = computed(() => (
   (isSuggestionResolved7.value ? 1 : 0) +
   (isSuggestionResolved8.value ? 1 : 0)
 ));
+const minervaCompletedSuggestionProgressStyle = computed(() => {
+  const totalSuggestions = 8;
+  const completed = Math.max(0, Math.min(completedSuggestionCount.value, totalSuggestions));
+  const progress = totalSuggestions > 0 ? (completed / totalSuggestions) * 360 : 0;
+  return {
+    '--minerva-completed-progress': `${progress}deg`
+  };
+});
 const allSuggestionsDeclined = computed(() => (
   isSuggestionDeclined1.value &&
   isSuggestionDeclined2.value &&
@@ -7584,6 +7602,7 @@ function queueMinervaSuccessState(currentId) {
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = currentId;
   isMinervaSheetOpen.value = true;
+  minervaCarouselCollapsed.value = false;
   minervaSheetReturnDirection.value = null;
   minervaSuggestionSuccessState.value = {
     id: currentId,
@@ -9075,6 +9094,17 @@ function handleDocumentClick(event) {
         isMinervaFullPageTocOpen.value = false;
       }
     }
+  }
+  if (
+    isMinervaSkin.value &&
+    isEditMode.value &&
+    showMinervaSuggestionCarousel.value &&
+    !minervaCarouselCollapsed.value &&
+    !isMinervaSuggestionSuccessState.value &&
+    minervaSuggestionCarouselRef.value &&
+    !minervaSuggestionCarouselRef.value.contains(target)
+  ) {
+    minervaCarouselCollapsed.value = true;
   }
   if (!isMinervaAddMenuOpen.value && !isMinervaEditMenuOpen.value && !isTextStyleMenuOpen.value) return;
   if (minervaAddMenuPanelRef.value?.contains(target)) return;
@@ -16296,12 +16326,12 @@ function markArticleEdited() {
 }
 
 .highlighted-text-wrapper--success .highlighted-text-annotation {
-  background-color: var(--color-success-subtle, var(--background-color-success-subtle, #D5FDF4)) !important;
+  background-color: var(--color-green100, #D5FDF4) !important;
   text-decoration: none;
 }
 
 .minerva-skin .highlighted-text-wrapper--success .highlighted-text-annotation {
-  background-color: var(--color-success-subtle, var(--background-color-success-subtle, #D5FDF4)) !important;
+  background-color: var(--color-green100, #D5FDF4) !important;
   text-decoration: none;
 }
 
@@ -16988,12 +17018,16 @@ function markArticleEdited() {
 }
 
 .minerva-carousel-head {
-  display: flex;
+  display: none;
   align-items: center;
   gap: 8px;
   min-height: 44px;
   padding: 0 16px;
   cursor: pointer;
+}
+
+.minerva-suggestion-carousel--collapsed .minerva-carousel-head {
+  display: flex;
 }
 
 .minerva-carousel-head-icon {
@@ -17033,7 +17067,7 @@ function markArticleEdited() {
   display: grid;
   grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
   gap: 12px;
-  margin: 8px 16px 12px;
+  padding: 16px;
 }
 
 .minerva-carousel-filters :deep(.cdx-select),
@@ -17056,7 +17090,7 @@ function markArticleEdited() {
   overscroll-behavior-x: contain;
   scroll-snap-type: x mandatory;
   scroll-padding-left: 16px;
-  padding: 0 16px 16px;
+  padding: 0 16px;
   min-height: 132px;
   scrollbar-width: none;
 }
@@ -17099,7 +17133,7 @@ function markArticleEdited() {
   width: 100%;
   min-height: 100%;
   background: var(--background-color-base, #ffffff);
-  border: 1px solid var(--border-color-base, #a2a9b1);
+  border: 1px solid var(--border-color-muted, #dadde3);
   border-radius: var(--border-radius-base, 2px);
   box-shadow: none;
   padding: 12px 16px 16px;
@@ -17108,11 +17142,12 @@ function markArticleEdited() {
 
 .minerva-carousel-slide--active .minerva-carousel-card {
   background: #F4F7FF;
+  border-color: var(--color-blue100, #cfe3ff);
 }
 
 .minerva-carousel-card--success {
-  background: var(--background-color-success-subtle, #d5fdf4) !important;
-  border-color: var(--border-color-success, #14866d);
+  background: #F0F9F6 !important;
+  border-color: var(--color-green200, #b5f5e1) !important;
 }
 
 .minerva-carousel-card--empty {
@@ -17208,9 +17243,55 @@ function markArticleEdited() {
   width: 100%;
   box-sizing: border-box;
   background: var(--background-color-base, #ffffff);
-  border: 1px solid var(--border-color-base, #a2a9b1);
+  border: 1px solid var(--border-color-muted, #dadde3);
   border-radius: var(--border-radius-base, 2px);
   padding: 16px;
+}
+
+.minerva-carousel-completed-counter {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 16px;
+  color: var(--color-subtle, #54595d);
+  font-size: 14px;
+  line-height: 20px;
+}
+
+.minerva-carousel-completed-spinner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  border-radius: 50%;
+  background: conic-gradient(
+    var(--border-color-progressive, #36c) 0 var(--minerva-completed-progress),
+    var(--border-color-muted, #dadde3) var(--minerva-completed-progress) 360deg
+  );
+  color: var(--color-progressive, #36c);
+  font-size: 14px;
+  line-height: 20px;
+  font-weight: 700;
+}
+
+.minerva-carousel-completed-spinner::before {
+  content: '';
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  background: var(--background-color-base, #ffffff);
+}
+
+.minerva-carousel-completed-spinner span {
+  position: relative;
+  z-index: 1;
+}
+
+.minerva-carousel-completed-spinner--zero {
+  color: var(--color-subtle, #54595d);
 }
 
 .minerva-info-sheet {
