@@ -432,6 +432,12 @@
                     <cdx-icon :icon="cdxIconListBullet" size="medium" />
                   </button>
                   <h1 class="article-title">Audre Lorde</h1>
+                  <button v-if="!isEditMode" class="tab-icon-btn read-suggestions-tab-btn" aria-label="Suggestions" @click="handleReadModeSuggestionsClick">
+                    <span class="lightbulb-icon-wrapper">
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      <span class="suggestions-badge"></span>
+                    </span>
+                  </button>
                   <button class="language-button">
                     <cdx-icon :icon="cdxIconLanguage" size="medium" class="language-icon" />
                     <span class="language-text">95 Languages</span>
@@ -462,12 +468,6 @@
                       <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
-                    <button class="tab-icon-btn read-suggestions-tab-btn" aria-label="Suggestions" @click="handleReadModeSuggestionsClick">
-                      <span class="lightbulb-icon-wrapper">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                        <span class="suggestions-badge"></span>
-                      </span>
-                    </button>
                     <div class="tab">
                       <span class="tab-text tab-link">View history</span>
                     </div>
@@ -3741,6 +3741,25 @@
             </div>
           </div>
 
+          <div
+            v-for="item in vectorSuggestionSuccessCards"
+            :key="`vector-success-${item.id}`"
+            class="suggestion-card suggestion-card-positioned suggestion-card--expanded suggestion-card--success-message"
+            :style="{ top: `${item.top}px` }"
+            role="status"
+            aria-live="polite"
+          >
+            <div class="suggestion-header suggestion-header--expanded suggestion-header--success">
+              <div class="suggestion-icon suggestion-icon--success">
+                <cdx-icon :icon="cdxIconSuccess" size="medium" />
+              </div>
+              <div class="suggestion-title">{{ getVectorSuggestionSuccessTitle(item.id) }}</div>
+            </div>
+            <div class="suggestion-content">
+              <p class="suggestion-description">{{ getVectorSuggestionSuccessDescription(item.id) }}</p>
+            </div>
+          </div>
+
           <!-- Empty State - Show when all suggestions are completed or declined -->
           <div 
             v-if="isMinervaSkin && ((showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge))"
@@ -5941,6 +5960,19 @@ const pendingScrollSection = ref(null);
 const minervaEditSectionOnly = ref(null);
 const isVectorNoMoreSuggestionsDialogOpen = ref(false);
 const successHighlightSuggestionIds = ref([]);
+const vectorSuggestionSuccessCards = computed(() => {
+  if (isMinervaSkin.value || !showSuggestionsDisplay.value) return [];
+  return [
+    { id: 1, top: sidebarTopOffset.value },
+    { id: 2, top: sidebarTopOffset2.value },
+    { id: 3, top: sidebarTopOffset3.value },
+    { id: 4, top: sidebarTopOffset4.value },
+    { id: 5, top: sidebarTopOffset5.value },
+    { id: 6, top: sidebarTopOffset6.value },
+    { id: 7, top: sidebarTopOffset7.value },
+    { id: 8, top: sidebarTopOffset8.value }
+  ].filter((item) => successHighlightSuggestionIds.value.includes(item.id));
+});
 const minervaSectionBannerDismissed = ref({
   'early-life': false,
   career: false,
@@ -6923,6 +6955,14 @@ const minervaSuggestionSuccessCopy = {
     description: 'This link now points directly to the intended page. Thank you for improving this article.'
   }
 };
+
+function getVectorSuggestionSuccessTitle(suggestionId) {
+  return minervaSuggestionSuccessCopy[suggestionId]?.title || 'Suggestion completed';
+}
+
+function getVectorSuggestionSuccessDescription(suggestionId) {
+  return minervaSuggestionSuccessCopy[suggestionId]?.description || 'Thank you for improving this article.';
+}
 const isMinervaSuggestionSuccessState = computed(() => (
   isMinervaSkin.value &&
   minervaSheetMode.value === 'suggestion' &&
@@ -9218,16 +9258,7 @@ function showPaginationNoMoreSuggestionsToast() {
 }
 
 function triggerSuggestionSuccessToast() {
-  if (isMinervaSkin.value) return;
-  if (!toastsEnabled.value) return;
-  if (suggestionSuccessToastTimer) {
-    clearTimeout(suggestionSuccessToastTimer);
-  }
-  showSuggestionSuccessToast.value = true;
-  suggestionSuccessToastTimer = setTimeout(() => {
-    showSuggestionSuccessToast.value = false;
-    suggestionSuccessToastTimer = null;
-  }, 4000);
+  showSuggestionSuccessToast.value = false;
 }
 
 function getSuggestionSuccessAutoAdvanceDelay(wasCompleted = false) {
@@ -17718,6 +17749,37 @@ function markArticleEdited() {
 
 .suggestion-card--expanded.suggestion-card--hover {
   border: 1px solid var(--feedback-border-hover);
+}
+
+.suggestion-card--success-message {
+  border-color: var(--border-color-success, #14866d);
+  background: var(--background-color-success-subtle, #F0F9F6);
+  box-shadow: none;
+}
+
+.suggestion-card--success-message .suggestion-header,
+.suggestion-card--success-message .suggestion-header--success,
+.suggestion-card--success-message .suggestion-content {
+  background: var(--background-color-success-subtle, #F0F9F6);
+  cursor: default;
+}
+
+.suggestion-card--success-message .suggestion-title {
+  font-weight: 700;
+  cursor: default;
+}
+
+.suggestion-card--success-message .suggestion-icon,
+.suggestion-icon--success {
+  color: var(--color-icon-success, #14866d);
+}
+
+.suggestion-card--success-message .suggestion-icon :deep(.cdx-icon),
+.suggestion-card--success-message .suggestion-icon :deep(svg),
+.suggestion-icon--success :deep(.cdx-icon),
+.suggestion-icon--success :deep(svg) {
+  color: var(--color-icon-success, #14866d);
+  fill: var(--color-icon-success, #14866d);
 }
 
 /* Expanded state - active */
