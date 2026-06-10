@@ -5452,7 +5452,7 @@ function sectionHasSuggestions(sectionId) {
 const articleLockToEdit = ref(false);
 
 // Pulsating dot
-const pulsatingDotEnabled = ref(false);
+const pulsatingDotEnabled = ref(true);
 const hasSeenEditMode = ref(false);
 const showPulsatingDot = computed(() =>
   pulsatingDotEnabled.value &&
