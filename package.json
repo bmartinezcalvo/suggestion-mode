@@ -10,9 +10,9 @@
   },
   "dependencies": {
     "vue": "^3.4.0",
-    "@wikimedia/codex": "^1.2.0",
-    "@wikimedia/codex-design-tokens": "^1.2.0",
-    "@wikimedia/codex-icons": "^1.2.0"
+    "@wikimedia/codex": "^2.6.0",
+    "@wikimedia/codex-design-tokens": "^2.6.0",
+    "@wikimedia/codex-icons": "^2.6.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^5.0.0",

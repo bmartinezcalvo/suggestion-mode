@@ -1607,7 +1607,7 @@
                           <div
                             class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
                           >
-                            <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                            <cdx-icon :icon="cdxIconWikitext" size="medium" />
                             <span>Source editing</span>
                             <button
                               type="button"
@@ -1663,7 +1663,7 @@
                         </li>
                         <li class="minerva-edit-menu-item" role="none">
                           <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                            <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                            <cdx-icon :icon="cdxIconWikitext" size="medium" />
                             <span>Source editing</span>
                           </button>
                         </li>
@@ -1801,7 +1801,7 @@
                         <div
                           class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
                         >
-                          <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                          <cdx-icon :icon="cdxIconWikitext" size="medium" />
                           <span>Source editing</span>
                           <button
                             type="button"
@@ -1857,7 +1857,7 @@
                       </li>
                       <li class="minerva-edit-menu-item" role="none">
                         <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                          <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                          <cdx-icon :icon="cdxIconWikitext" size="medium" />
                           <span>Source editing</span>
                         </button>
                       </li>
@@ -1936,7 +1936,7 @@
                         <div
                           class="minerva-edit-menu-button minerva-edit-menu-button--switch-row"
                         >
-                          <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                          <cdx-icon :icon="cdxIconWikitext" size="medium" />
                           <span>Source editing</span>
                           <button
                             type="button"
@@ -1992,7 +1992,7 @@
                       </li>
                       <li class="minerva-edit-menu-item" role="none">
                         <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                          <cdx-icon :icon="cdxIconWikiText" size="medium" />
+                          <cdx-icon :icon="cdxIconWikitext" size="medium" />
                           <span>Source editing</span>
                         </button>
                       </li>
@@ -5047,7 +5047,7 @@ import {
   cdxIconSuccess,
   cdxIconCheck,
   cdxIconInfo,
-  cdxIconWikiText,
+  cdxIconWikitext,
   cdxIconBold,
   cdxIconItalic,
   cdxIconStrikethrough,
