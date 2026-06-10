@@ -83,6 +83,9 @@
         class="fixed-header"
         aria-label="Fixed navigation"
       >
+        <button class="fixed-header__btn fixed-header__btn--search" aria-label="Search">
+          <cdx-icon :icon="cdxIconSearch" size="medium" />
+        </button>
         <span class="fixed-header__title">Audre Lorde</span>
         <div class="fixed-header__actions">
           <!-- Comments -->
@@ -102,11 +105,13 @@
             <cdx-icon v-if="readModeSuggestionsEntry !== 'badge'" :icon="cdxIconEdit" size="medium" />
             <span v-else class="fixed-header__edit-badge">
               <cdx-icon :icon="cdxIconEdit" size="medium" />
-              <cdx-icon
-                v-tooltip="'Suggestions available in this article'"
-                :icon="cdxIconLightbulb"
-                class="fixed-header__lightbulb"
-              />
+              <span class="fixed-header__lightbulb-bg">
+                <cdx-icon
+                  v-tooltip="'Suggestions available in this article'"
+                  :icon="cdxIconLightbulb"
+                  class="fixed-header__lightbulb"
+                />
+              </span>
             </span>
           </button>
           <!-- Languages -->
@@ -137,17 +142,20 @@
                 Icon's modifier in edit action
               </cdx-radio>
               <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry" input-value="toast">
-                Navigable banner
+                Navigable banner [DISCARDED]
               </cdx-radio>
             </cdx-field>
-            <div class="menu-popup__toggle-row">
-              <cdx-toggle-switch v-model="pulsatingDotEnabled" />
-              <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
-            </div>
-            <div class="menu-popup__toggle-row">
-              <cdx-toggle-switch v-model="articleLockToEdit" />
-              <span class="menu-popup__toggle-label">Article lock to edit</span>
-            </div>
+            <cdx-field is-fieldset class="menu-popup__other-fieldset">
+              <template #label>Other customization</template>
+              <div class="menu-popup__toggle-row">
+                <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
+                <cdx-toggle-switch v-model="pulsatingDotEnabled" />
+              </div>
+              <div class="menu-popup__toggle-row">
+                <span class="menu-popup__toggle-label">Article lock to edit</span>
+                <cdx-toggle-switch v-model="articleLockToEdit" />
+              </div>
+            </cdx-field>
           </div>
 
           <!-- Wikipedia Logo -->
@@ -228,17 +236,20 @@
                   Icon's modifier in edit action
                 </cdx-radio>
                 <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry-minerva" input-value="toast">
-                  Navigable banner
+                  Navigable banner [DISCARDED]
                 </cdx-radio>
               </cdx-field>
-              <div class="menu-popup__toggle-row">
-                <cdx-toggle-switch v-model="pulsatingDotEnabled" />
-                <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
-              </div>
-              <div class="menu-popup__toggle-row">
-                <cdx-toggle-switch v-model="articleLockToEdit" />
-                <span class="menu-popup__toggle-label">Article lock to edit</span>
-              </div>
+              <cdx-field is-fieldset class="menu-popup__other-fieldset">
+                <template #label>Other customization</template>
+                <div class="menu-popup__toggle-row">
+                  <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
+                  <cdx-toggle-switch v-model="pulsatingDotEnabled" />
+                </div>
+                <div class="menu-popup__toggle-row">
+                  <span class="menu-popup__toggle-label">Article lock to edit</span>
+                  <cdx-toggle-switch v-model="articleLockToEdit" />
+                </div>
+              </cdx-field>
             </div>
 
             <div class="minerva-brand">
@@ -1439,7 +1450,7 @@
               </div>
             </div>
 
-            <div v-if="showEndBanner" class="end-banner end-banner--minerva">
+            <div v-if="false" class="end-banner end-banner--minerva">
               <div class="end-banner__icon-row">
                 <cdx-icon :icon="cdxIconLightbulb" class="end-banner__icon" />
                 <span class="end-banner__title">Do you know you can edit this article?</span>
@@ -4063,7 +4074,7 @@
           class="minerva-suggestions-rail"
         >
           <div
-            v-if="showMinervaTopRailControls"
+            v-if="showMinervaTopRailControls && !isEditMode"
             class="minerva-suggestions-rail-controls"
           >
             <cdx-button
@@ -4112,7 +4123,7 @@
             </cdx-toggle-button>
           </div>
           <div
-            v-if="showMinervaBottomRailControls"
+            v-if="showMinervaBottomRailControls && !isEditMode"
             class="minerva-suggestions-rail-controls minerva-suggestions-rail-controls--bottom"
           >
             <cdx-toggle-button
@@ -18439,10 +18450,20 @@ function markArticleEdited() {
   align-items: center;
 }
 
-.fixed-header__lightbulb {
+.fixed-header__lightbulb-bg {
   position: absolute;
-  top: -6px;
-  right: -8px;
+  top: -7px;
+  right: -9px;
+  width: 14px;
+  height: 14px;
+  background-color: var(--background-color-base, #fff);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fixed-header__lightbulb {
   width: 12px;
   height: 12px;
   color: var(--color-progressive, #36c);
@@ -18458,14 +18479,26 @@ function markArticleEdited() {
 .menu-popup__toggle-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: var(--spacing-75, 12px);
-  margin-top: var(--spacing-150, 24px);
+  padding: 4px 0;
 }
 
 .menu-popup__toggle-label {
   font-size: var(--font-size-medium, 1rem);
   color: var(--color-base, #202122);
   line-height: var(--line-height-small, 1.375);
+  flex: 1;
+}
+
+.menu-popup__other-fieldset {
+  margin-top: 8px;
+}
+
+.menu-popup :deep(.menu-popup__other-fieldset .cdx-field__fieldset) {
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 
 /* ── Icon img helper ─────────────────────────────────────────── */
@@ -18551,6 +18584,20 @@ function markArticleEdited() {
   flex-wrap: wrap;
 }
 
+/* ── Accordion: keep bottom divider when open ────────────────── */
+
+.minerva-accordion-item {
+  border-bottom: 1px solid #c8ccd1;
+}
+
+/* ── Section-edit: no gap between "edit" and lightbulb ───────── */
+
+.section-edit-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
 /* ── Pulsating dot ────────────────────────────────────────────── */
 
 .pulsating-dot-wrapper {
@@ -18561,7 +18608,7 @@ function markArticleEdited() {
 
 .pulsating-dot {
   position: absolute;
-  bottom: -4px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 12px;
@@ -18571,10 +18618,12 @@ function markArticleEdited() {
   box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.2);
   animation: pulsate 1.5s ease-out infinite;
   pointer-events: none;
+  z-index: 1;
 }
 
+/* Vector22 tab: centered on the tab-row bottom border */
 .pulsating-dot--tab {
-  bottom: -6px;
+  bottom: -7px;
 }
 
 @keyframes pulsate {
