@@ -83,9 +83,6 @@
         class="fixed-header"
         aria-label="Fixed navigation"
       >
-        <button class="menu-button fixed-header__menu" aria-label="Menu" @click="toggleSkinMenu">
-          <cdx-icon :icon="cdxIconMenu" size="medium" />
-        </button>
         <button class="fixed-header__search-btn" aria-label="Search">
           <cdx-icon :icon="cdxIconSearch" size="medium" />
         </button>
@@ -598,16 +595,18 @@
                     <div class="section-heading-row">
                       <h2 class="heading-text">Early life</h2>
                       <span v-if="!articleLockToEdit" class="section-edit">
-                        <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit</a><span class="section-edit-bracket">]</span>
-                        <img
-                          v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
-                          :src="iconLightbulb"
-                          width="16"
-                          height="16"
-                          class="section-edit-lightbulb"
-                          title="Suggestions available in this section"
-                          alt="Suggestions available in this section"
-                        />
+                        <span class="section-edit-inner">
+                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit</a><span class="section-edit-bracket">]</span>
+                          <img
+                            v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                            :src="iconLightbulb"
+                            width="16"
+                            height="16"
+                            class="section-edit-lightbulb"
+                            title="Suggestions available in this section"
+                            alt="Suggestions available in this section"
+                          />
+                        </span>
                       </span>
                     </div>
                     <div class="heading-divider"></div>
@@ -691,16 +690,18 @@
               <div class="section-heading-row">
                 <h2 class="heading-text">Career</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
-                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit</a><span class="section-edit-bracket">]</span>
-                  <img
-                    v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
-                    :src="iconLightbulb"
-                    width="16"
-                    height="16"
-                    class="section-edit-lightbulb"
-                    title="Suggestions available in this section"
-                    alt="Suggestions available in this section"
-                  />
+                  <span class="section-edit-inner">
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit</a><span class="section-edit-bracket">]</span>
+                    <img
+                      v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                      :src="iconLightbulb"
+                      width="16"
+                      height="16"
+                      class="section-edit-lightbulb"
+                      title="Suggestions available in this section"
+                      alt="Suggestions available in this section"
+                    />
+                  </span>
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -738,16 +739,18 @@
               <div class="section-heading-row">
                 <h2 class="heading-text">Poetry</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
-                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit</a><span class="section-edit-bracket">]</span>
-                  <img
-                    v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
-                    :src="iconLightbulb"
-                    width="16"
-                    height="16"
-                    class="section-edit-lightbulb"
-                    title="Suggestions available in this section"
-                    alt="Suggestions available in this section"
-                  />
+                  <span class="section-edit-inner">
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit</a><span class="section-edit-bracket">]</span>
+                    <img
+                      v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                      :src="iconLightbulb"
+                      width="16"
+                      height="16"
+                      class="section-edit-lightbulb"
+                      title="Suggestions available in this section"
+                      alt="Suggestions available in this section"
+                    />
+                  </span>
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -4971,6 +4974,7 @@
       <div
         v-if="showReadModeToast"
         class="read-mode-toast"
+        :style="!isMinervaSkin && isHeaderFixed ? 'top: 48px' : 'top: 0'"
         role="button"
         tabindex="0"
         aria-label="There are suggestions to improve this article. Click to edit."
@@ -5358,7 +5362,8 @@ const showReadModeToast = computed(() =>
   !isEditMode.value &&
   readModeSuggestionsEntry.value === 'toast' &&
   hasScrolledForToast.value &&
-  !isReadModeToastDismissed.value
+  !isReadModeToastDismissed.value &&
+  !articleLockToEdit.value
 );
 const minervaOpenSections = ref({
   'early-life': false,
@@ -18033,17 +18038,19 @@ function markArticleEdited() {
 
 /* ── Entry lightbulb (Vector22 section [edit]) ────────────────── */
 
+.section-edit-inner {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
 .section-edit-lightbulb {
-  color: var(--color-progressive, #36c);
+  position: absolute;
+  top: -8px;
+  right: -8px;
   width: 16px;
   height: 16px;
   flex-shrink: 0;
-  margin-left: 12px;
-}
-
-.section-edit-lightbulb :deep(svg) {
-  width: 16px;
-  height: 16px;
 }
 
 /* ── Read mode toast ──────────────────────────────────────────── */
@@ -18056,7 +18063,8 @@ function markArticleEdited() {
   z-index: 100;
   display: flex;
   align-items: center;
-  gap: var(--spacing-75, 12px);
+  justify-content: center;
+  gap: 8px;
   padding: var(--spacing-75, 12px) var(--spacing-100, 16px);
   background-color: #E8EEFF;
   border-bottom: 1px solid var(--border-color-subtle, #c8ccd1);
@@ -18078,11 +18086,11 @@ function markArticleEdited() {
 .read-mode-toast__icon :deep(svg) {
   width: 16px;
   height: 16px;
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
 }
 
 .read-mode-toast__text {
-  flex: 1;
-  min-width: 0;
   font-size: var(--font-size-small, 14px);
 }
 
@@ -18120,15 +18128,10 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   gap: 0;
-  padding: 0 var(--spacing-100, 16px) 0 var(--spacing-50, 8px);
+  padding: 0 44px;
   background-color: var(--background-color-base, #fff);
   border-bottom: 1px solid var(--border-color-subtle, #c8ccd1);
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
-}
-
-.fixed-header__menu {
-  flex-shrink: 0;
-  margin-right: var(--spacing-50, 8px);
 }
 
 .fixed-header__search-btn {
