@@ -13013,6 +13013,7 @@ function markArticleEdited() {
 .section-edit-link {
   color: var(--color-progressive, #36c);
   text-decoration: none;
+  padding: 0 4px;
 }
 
 .section-edit-link:hover {
@@ -18617,7 +18618,7 @@ function markArticleEdited() {
 
 .pulsating-dot {
   position: absolute;
-  bottom: -6px;
+  bottom: -16px;
   left: 50%;
   transform: translateX(-50%);
   width: 12px;
@@ -18632,7 +18633,7 @@ function markArticleEdited() {
 
 /* Vector22 tab: centered on the tab-row bottom border */
 .pulsating-dot--tab {
-  bottom: -7px;
+  bottom: -17px;
 }
 
 @keyframes pulsate {
@@ -18654,7 +18655,7 @@ function markArticleEdited() {
   height: 12px;
   color: var(--color-progressive, #36c);
   vertical-align: middle;
-  margin-left: 3px;
+  margin-left: 0;
 }
 
 .section-edit-lightbulb-icon :deep(svg) {
