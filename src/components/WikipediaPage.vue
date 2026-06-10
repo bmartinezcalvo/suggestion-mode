@@ -102,7 +102,7 @@
           </button>
           <!-- Edit (with lightbulb modifier if badge mode) -->
           <button v-if="!articleLockToEdit" class="fixed-header__btn" aria-label="Edit" @click="toggleEditMode">
-            <cdx-icon v-if="readModeSuggestionsEntry !== 'badge'" :icon="cdxIconEdit" size="medium" />
+            <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
             <span v-else class="fixed-header__edit-badge">
               <cdx-icon :icon="cdxIconEdit" size="medium" />
               <span class="fixed-header__lightbulb-bg">
@@ -146,7 +146,11 @@
               </cdx-radio>
             </cdx-field>
             <cdx-field is-fieldset class="menu-popup__other-fieldset">
-              <template #label>Other customization</template>
+              <template #label></template>
+              <div class="menu-popup__toggle-row">
+                <span class="menu-popup__toggle-label">Lightbulb modifier en edit action</span>
+                <cdx-toggle-switch v-model="lightbulbModifierEnabled" />
+              </div>
               <div class="menu-popup__toggle-row">
                 <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
                 <cdx-toggle-switch v-model="pulsatingDotEnabled" />
@@ -240,7 +244,11 @@
                 </cdx-radio>
               </cdx-field>
               <cdx-field is-fieldset class="menu-popup__other-fieldset">
-                <template #label>Other customization</template>
+                <template #label></template>
+                <div class="menu-popup__toggle-row">
+                  <span class="menu-popup__toggle-label">Lightbulb modifier en edit action</span>
+                  <cdx-toggle-switch v-model="lightbulbModifierEnabled" />
+                </div>
                 <div class="menu-popup__toggle-row">
                   <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
                   <cdx-toggle-switch v-model="pulsatingDotEnabled" />
@@ -602,7 +610,7 @@
                 <button v-else class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
                   <div class="pulsating-dot-wrapper">
                     <img
-                      v-if="readModeSuggestionsEntry === 'badge'"
+                      v-if="lightbulbModifierEnabled"
                       :src="iconModifierV2"
                       width="18"
                       height="18"
@@ -646,7 +654,7 @@
                       <span v-if="!articleLockToEdit" class="section-edit">
                         <span class="section-edit-inner">
                           <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit<cdx-icon
-                            v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                            v-if="!isEditMode && lightbulbModifierEnabled"
                             v-tooltip="'Suggestions available in this section'"
                             :icon="cdxIconLightbulb"
                             class="section-edit-lightbulb-icon"
@@ -737,7 +745,7 @@
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
                     <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<cdx-icon
-                      v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                      v-if="!isEditMode && lightbulbModifierEnabled"
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
@@ -782,7 +790,7 @@
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
                     <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<cdx-icon
-                      v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                      v-if="!isEditMode && lightbulbModifierEnabled"
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
@@ -1103,7 +1111,7 @@
                   <button v-if="isMinervaSectionOpen('early-life') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
                     <div class="pulsating-dot-wrapper">
                       <img
-                        v-if="readModeSuggestionsEntry === 'badge'"
+                        v-if="lightbulbModifierEnabled"
                         :src="iconModifierV2"
                         width="18"
                         height="18"
@@ -1142,7 +1150,7 @@
                   <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
                     <div class="pulsating-dot-wrapper">
                       <img
-                        v-if="readModeSuggestionsEntry === 'badge'"
+                        v-if="lightbulbModifierEnabled"
                         :src="iconModifierV2"
                         width="18"
                         height="18"
@@ -1193,7 +1201,7 @@
                   <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
                     <div class="pulsating-dot-wrapper">
                       <img
-                        v-if="readModeSuggestionsEntry === 'badge'"
+                        v-if="lightbulbModifierEnabled"
                         :src="iconModifierV2"
                         width="18"
                         height="18"
@@ -5427,6 +5435,7 @@ const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
 const readModeSuggestionsEntry = ref('badge');
+const lightbulbModifierEnabled = ref(true);
 const isReadModeToastDismissed = ref(false);
 const hasScrolledForToast = ref(false);
 
@@ -5446,7 +5455,7 @@ const showPulsatingDot = computed(() =>
   pulsatingDotEnabled.value &&
   !articleLockToEdit.value &&
   !hasSeenEditMode.value &&
-  readModeSuggestionsEntry.value === 'badge'
+  lightbulbModifierEnabled.value
 );
 
 // End-of-article suggestions banner
