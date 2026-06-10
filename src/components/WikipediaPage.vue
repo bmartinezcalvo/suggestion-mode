@@ -86,7 +86,7 @@
         <button class="fixed-header__btn fixed-header__btn--search" aria-label="Search">
           <cdx-icon :icon="cdxIconSearch" size="medium" />
         </button>
-        <span class="fixed-header__title">Audre Lorde</span>
+        <span class="fixed-header__title fixed-header__title--left">Audre Lorde</span>
         <div class="fixed-header__actions">
           <!-- Comments -->
           <button class="fixed-header__btn" aria-label="Comments">
@@ -103,16 +103,14 @@
           <!-- Edit (with lightbulb modifier if badge mode) -->
           <button v-if="!articleLockToEdit" class="fixed-header__btn" aria-label="Edit" @click="toggleEditMode">
             <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
-            <span v-else class="fixed-header__edit-badge">
-              <cdx-icon :icon="cdxIconEdit" size="medium" />
-              <span class="fixed-header__lightbulb-bg">
-                <cdx-icon
-                  v-tooltip="'Suggestions available in this article'"
-                  :icon="cdxIconLightbulb"
-                  class="fixed-header__lightbulb"
-                />
-              </span>
-            </span>
+            <img
+              v-else
+              :src="iconEditLightbulbFixedHeader"
+              width="20"
+              height="21"
+              alt=""
+              aria-hidden="true"
+            />
           </button>
           <!-- Languages -->
           <button class="fixed-header__btn fixed-header__btn--languages" aria-label="95 languages">
@@ -5165,6 +5163,7 @@ import scrollIcon from '../assets/scroll.svg';
 import iconEditLightbulb from '../assets/icon-edit-lightbulb.svg';
 import iconModifierV2 from '../assets/icon-modifier-v2.svg';
 import iconLightbulb from '../assets/icon-lightbulb.svg';
+import iconEditLightbulbFixedHeader from '../assets/edit-lightbulb-fixed-header.svg';
 import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
 
 const cdxIconConfigure = '<path fill-rule="evenodd" d="M3 4.17V2h2v2.17a3.001 3.001 0 010 5.66V18H3V9.83a3.001 3.001 0 010-5.66M4 6a1 1 0 110 2 1 1 0 010-2m11 12v-6.17a3.001 3.001 0 010-5.66V2h2v4.17a3.001 3.001 0 010 5.66V18zm2-9a1 1 0 10-2 0 1 1 0 002 0"/><path fill-rule="evenodd" d="M11 11.17a3.001 3.001 0 010 5.66V18H9v-1.17a3.001 3.001 0 010-5.66V2h2zM10 13a1 1 0 110 2 1 1 0 010-2"/>';
@@ -18421,6 +18420,11 @@ function markArticleEdited() {
   overflow: hidden;
   text-overflow: ellipsis;
   max-width: 40%;
+}
+
+.fixed-header__title--left {
+  margin-left: 24px;
+  margin-right: auto;
 }
 
 .fixed-header__actions {
