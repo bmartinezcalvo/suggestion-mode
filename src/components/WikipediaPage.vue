@@ -77,7 +77,34 @@
     
     <!-- Page Container -->
     <div class="page-container">
-      
+      <!-- Fixed header (Vector22, scroll > 150px, read mode only) -->
+      <header
+        v-if="!isMinervaSkin && isHeaderFixed && !isEditMode"
+        class="fixed-header"
+        aria-label="Fixed navigation"
+      >
+        <button class="menu-button fixed-header__menu" aria-label="Menu" @click="toggleSkinMenu">
+          <cdx-icon :icon="cdxIconMenu" size="medium" />
+        </button>
+        <button class="fixed-header__search-btn" aria-label="Search">
+          <cdx-icon :icon="cdxIconSearch" size="medium" />
+        </button>
+        <div class="fixed-header__divider" aria-hidden="true"></div>
+        <span class="fixed-header__title">Audre Lorde</span>
+        <div class="fixed-header__end">
+          <div class="user-tools">
+            <a href="#" class="user-link">User1234</a>
+            <button class="icon-btn" aria-label="Notifications"><cdx-icon :icon="cdxIconBell" size="medium" /></button>
+            <button class="icon-btn" aria-label="Messages"><cdx-icon :icon="cdxIconTray" size="medium" /></button>
+            <button class="icon-btn" aria-label="Watchlist"><cdx-icon :icon="cdxIconWatchlist" size="medium" /></button>
+            <button class="user-menu-btn" aria-label="User menu">
+              <cdx-icon :icon="cdxIconUserAvatar" size="medium" />
+              <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
+            </button>
+          </div>
+        </div>
+      </header>
+
       <!-- Header -->
       <header class="header-section" :class="{ 'header-section--minerva': isMinervaSkin }">
         <div v-if="!isMinervaSkin" class="header">
@@ -85,24 +112,38 @@
           <button class="menu-button" aria-label="Menu" @click="toggleSkinMenu">
             <cdx-icon :icon="cdxIconMenu" size="medium" />
           </button>
-          <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup" role="dialog" aria-label="Skin menu">
-            <label class="menu-radio">
-              <input type="radio" name="skin" value="vector22" v-model="selectedSkin" @change="isSkinMenuOpen = false">
-              <span>Vector22</span>
-            </label>
-            <label class="menu-radio">
-              <input type="radio" name="skin" value="minerva" v-model="selectedSkin" @change="isSkinMenuOpen = false">
-              <span>Minerva (mobile skin)</span>
-            </label>
+          <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup" role="dialog" aria-label="Settings menu" style="padding: 16px;">
+            <cdx-field is-fieldset>
+              <template #label>Suggestions entry point</template>
+              <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry" input-value="badge">
+                Icon's modifier in edit action
+              </cdx-radio>
+              <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry" input-value="toast">
+                Navigable banner
+              </cdx-radio>
+            </cdx-field>
+            <div class="menu-popup__toggle-row">
+              <cdx-toggle-switch v-model="articleLockToEdit" />
+              <span class="menu-popup__toggle-label">Article lock to edit</span>
+            </div>
           </div>
 
           <!-- Wikipedia Logo -->
           <div class="wikipedia-logo">
-            <img :src="wikipediaGlobe" alt="Wikipedia globe" class="wikipedia-globe" />
-            <div class="wikipedia-text">
-              <div class="wikipedia-title">WIKIPEDIA</div>
-              <div class="wikipedia-tagline">The Free Encyclopedia</div>
-            </div>
+            <img
+              class="wikipedia-wordmark-img"
+              :src="wikipediaWordmark"
+              width="120"
+              height="18"
+              alt="Wikipedia"
+            />
+            <img
+              class="wikipedia-tagline-img"
+              src="https://en.wikipedia.org/static/images/mobile/copyright/wikipedia-tagline-en-25.svg"
+              width="120"
+              height="14"
+              alt=""
+            />
           </div>
 
           <!-- Search -->
@@ -158,19 +199,28 @@
             <button class="menu-button menu-button--minerva" aria-label="Menu" @click="toggleSkinMenu">
               <cdx-icon :icon="cdxIconMenu" size="medium" />
             </button>
-            <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup menu-popup--minerva" role="dialog" aria-label="Skin menu">
-              <label class="menu-radio">
-                <input type="radio" name="skin" value="vector22" v-model="selectedSkin" @change="isSkinMenuOpen = false">
-                <span>Vector22</span>
-              </label>
-              <label class="menu-radio">
-                <input type="radio" name="skin" value="minerva" v-model="selectedSkin" @change="isSkinMenuOpen = false">
-                <span>Minerva (mobile skin)</span>
-              </label>
+            <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup menu-popup--minerva" role="dialog" aria-label="Settings menu" style="padding: 16px;">
+              <cdx-field is-fieldset>
+                <template #label>Suggestions entry point</template>
+                <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry-minerva" input-value="badge">
+                  Icon's modifier in edit action
+                </cdx-radio>
+                <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry-minerva" input-value="toast">
+                  Navigable banner
+                </cdx-radio>
+              </cdx-field>
+              <div class="menu-popup__toggle-row">
+                <cdx-toggle-switch v-model="articleLockToEdit" />
+                <span class="menu-popup__toggle-label">Article lock to edit</span>
+              </div>
             </div>
 
             <div class="minerva-brand">
-              <span class="minerva-brand-text">Wikipedia</span>
+              <img
+                class="minerva-wordmark-img"
+                :src="wikipediaWordmark"
+                alt="Wikipedia"
+              />
             </div>
           </div>
 
@@ -180,6 +230,9 @@
             </button>
             <button class="icon-btn" aria-label="Notifications">
               <cdx-icon :icon="cdxIconBell" size="medium" />
+            </button>
+            <button class="icon-btn" aria-label="User account">
+              <cdx-icon :icon="cdxIconUserActive" size="medium" />
             </button>
           </div>
         </div>
@@ -458,7 +511,7 @@
                       <span class="tab-text" :class="{ 'tab-link': isEditMode }">Read</span>
                       <div v-if="!isEditMode" class="tab-indicator"></div>
                     </div>
-                    <div class="tab" :class="{ 'tab-selected': isEditMode }" @click="toggleEditMode">
+                    <div v-if="!articleLockToEdit" class="tab" :class="{ 'tab-selected': isEditMode }" @click="toggleEditMode">
                       <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
@@ -503,8 +556,17 @@
                 <button class="minerva-action-btn" aria-label="History">
                   <cdx-icon :icon="cdxIconHistory" size="medium" />
                 </button>
-                <button class="minerva-action-btn" aria-label="Edit" @click="toggleEditMode">
-                  <cdx-icon :icon="cdxIconEdit" size="medium" />
+                <button v-if="!articleLockToEdit" class="minerva-action-btn" aria-label="Edit" @click="toggleEditMode">
+                  <img
+                    v-if="readModeSuggestionsEntry === 'badge'"
+                    :src="iconEditLightbulb"
+                    width="24"
+                    height="24"
+                    alt=""
+                    aria-hidden="true"
+                    class="minerva-action-icon-img"
+                  />
+                  <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                 </button>
                 <button class="minerva-action-btn" aria-label="More actions">
                   <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-ellipsis-icon" />
@@ -535,8 +597,17 @@
                   <div class="section-heading" data-read-section="early-life">
                     <div class="section-heading-row">
                       <h2 class="heading-text">Early life</h2>
-                      <span class="section-edit">
+                      <span v-if="!articleLockToEdit" class="section-edit">
                         <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit</a><span class="section-edit-bracket">]</span>
+                        <img
+                          v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                          :src="iconLightbulb"
+                          width="16"
+                          height="16"
+                          class="section-edit-lightbulb"
+                          title="Suggestions available in this section"
+                          alt="Suggestions available in this section"
+                        />
                       </span>
                     </div>
                     <div class="heading-divider"></div>
@@ -619,8 +690,17 @@
             <div class="section-heading" data-read-section="career">
               <div class="section-heading-row">
                 <h2 class="heading-text">Career</h2>
-                <span class="section-edit">
+                <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit</a><span class="section-edit-bracket">]</span>
+                  <img
+                    v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                    :src="iconLightbulb"
+                    width="16"
+                    height="16"
+                    class="section-edit-lightbulb"
+                    title="Suggestions available in this section"
+                    alt="Suggestions available in this section"
+                  />
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -657,8 +737,17 @@
             <div class="section-heading" data-read-section="poetry">
               <div class="section-heading-row">
                 <h2 class="heading-text">Poetry</h2>
-                <span class="section-edit">
+                <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit</a><span class="section-edit-bracket">]</span>
+                  <img
+                    v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
+                    :src="iconLightbulb"
+                    width="16"
+                    height="16"
+                    class="section-edit-lightbulb"
+                    title="Suggestions available in this section"
+                    alt="Suggestions available in this section"
+                  />
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -703,7 +792,7 @@
             <div class="section-heading" data-read-section="prose">
               <div class="section-heading-row">
                 <h2 class="heading-text">Prose</h2>
-                <span class="section-edit">
+                <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('prose')">edit</a><span class="section-edit-bracket">]</span>
                 </span>
               </div>
@@ -745,7 +834,7 @@
             <div class="section-heading" data-read-section="film">
               <div class="section-heading-row">
                 <h2 class="heading-text">Film</h2>
-                <span class="section-edit">
+                <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('film')">edit</a><span class="section-edit-bracket">]</span>
                 </span>
               </div>
@@ -772,7 +861,7 @@
             <div class="section-heading" data-read-section="theory">
               <div class="section-heading-row">
                 <h2 class="heading-text">Theory</h2>
-                <span class="section-edit">
+                <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('theory')">edit</a><span class="section-edit-bracket">]</span>
                 </span>
               </div>
@@ -960,8 +1049,17 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('early-life') }" />
                     <span>Early life</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
-                    <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  <button v-if="isMinervaSectionOpen('early-life') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
+                    <img
+                      v-if="readModeSuggestionsEntry === 'badge'"
+                      :src="iconEditLightbulb"
+                      width="20"
+                      height="20"
+                      alt=""
+                      aria-hidden="true"
+                      class="minerva-action-icon-img"
+                    />
+                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
@@ -988,8 +1086,17 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('career') }" />
                     <span>Career</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('career')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('career')">
-                    <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
+                    <img
+                      v-if="readModeSuggestionsEntry === 'badge'"
+                      :src="iconEditLightbulb"
+                      width="20"
+                      height="20"
+                      alt=""
+                      aria-hidden="true"
+                      class="minerva-action-icon-img"
+                    />
+                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('career')" class="minerva-accordion-panel">
@@ -1028,8 +1135,17 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('poetry') }" />
                     <span>Poetry</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
-                    <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
+                    <img
+                      v-if="readModeSuggestionsEntry === 'badge'"
+                      :src="iconEditLightbulb"
+                      width="20"
+                      height="20"
+                      alt=""
+                      aria-hidden="true"
+                      class="minerva-action-icon-img"
+                    />
+                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-panel">
@@ -1076,7 +1192,7 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('prose') }" />
                     <span>Prose</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('prose')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('prose')">
+                  <button v-if="isMinervaSectionOpen('prose') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('prose')">
                     <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
@@ -1120,7 +1236,7 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('film') }" />
                     <span>Film</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('film')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('film')">
+                  <button v-if="isMinervaSectionOpen('film') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('film')">
                     <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
@@ -1148,7 +1264,7 @@
                     <cdx-icon :icon="cdxIconExpand" size="small" :class="{'minerva-accordion-icon--open': isMinervaSectionOpen('theory') }" />
                     <span>Theory</span>
                   </button>
-                  <button v-if="isMinervaSectionOpen('theory')" class="minerva-accordion-edit" aria-label="Edit section" @click.stop="openEditAtSection('theory')">
+                  <button v-if="isMinervaSectionOpen('theory') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('theory')">
                     <cdx-icon :icon="cdxIconEdit" size="medium" />
                   </button>
                 </div>
@@ -4849,6 +4965,30 @@
 
       </div>
     </div>
+
+    <!-- Read mode: suggestions entry toast -->
+    <transition name="read-mode-toast">
+      <div
+        v-if="showReadModeToast"
+        class="read-mode-toast"
+        role="button"
+        tabindex="0"
+        aria-label="There are suggestions to improve this article. Click to edit."
+        @click="handleReadModeToastClick"
+        @keydown.enter="handleReadModeToastClick"
+        @keydown.space.prevent="handleReadModeToastClick"
+      >
+        <cdx-icon :icon="cdxIconLightbulb" class="read-mode-toast__icon" />
+        <span class="read-mode-toast__text">There are suggestions to improve this article. No prior experience needed.</span>
+        <button
+          class="read-mode-toast__close"
+          aria-label="Dismiss"
+          @click.stop="isReadModeToastDismissed = true"
+        >
+          <cdx-icon :icon="cdxIconClose" />
+        </button>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -4866,7 +5006,8 @@ import {
   CdxTextInput,
   CdxMessage,
   CdxRadio,
-  CdxDialog
+  CdxDialog,
+  CdxToggleSwitch
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -4915,10 +5056,14 @@ import {
   cdxIconImage,
   cdxIconTable,
   cdxIconSpeechBubble,
-  cdxIconHieroglyph
+  cdxIconHieroglyph,
+  cdxIconUserActive
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
 import scrollIcon from '../assets/scroll.svg';
+import iconEditLightbulb from '../assets/icon-edit-lightbulb.svg';
+import iconLightbulb from '../assets/icon-lightbulb.svg';
+import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
 
 const cdxIconConfigure = '<path fill-rule="evenodd" d="M3 4.17V2h2v2.17a3.001 3.001 0 010 5.66V18H3V9.83a3.001 3.001 0 010-5.66M4 6a1 1 0 110 2 1 1 0 010-2m11 12v-6.17a3.001 3.001 0 010-5.66V2h2v4.17a3.001 3.001 0 010 5.66V18zm2-9a1 1 0 10-2 0 1 1 0 002 0"/><path fill-rule="evenodd" d="M11 11.17a3.001 3.001 0 010 5.66V18H9v-1.17a3.001 3.001 0 010-5.66V2h2zM10 13a1 1 0 110 2 1 1 0 010-2"/>';
 
@@ -4956,7 +5101,7 @@ const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
-const minervaToggleLocation = ref('outside');
+const minervaToggleLocation = ref('toolbar');
 const paginationManualNavigableButtonEnabled = ref(false);
 const minervaOutsideMenuEnabled = ref(true);
 const minervaOutsideRailEnabled = ref(true);
@@ -5191,6 +5336,30 @@ let lastArticleEditableElement = null;
 const isSkinMenuOpen = ref(false);
 const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
+const readModeSuggestionsEntry = ref('badge');
+const isReadModeToastDismissed = ref(false);
+const hasScrolledForToast = ref(false);
+
+// Sections that have suggestions available
+const SECTIONS_WITH_SUGGESTIONS = new Set(['early-life', 'career', 'poetry']);
+function sectionHasSuggestions(sectionId) {
+  return SECTIONS_WITH_SUGGESTIONS.has(sectionId);
+}
+
+// Article lock to edit
+const articleLockToEdit = ref(false);
+
+// Fixed header (Vector22 only, scroll > 150px)
+const isHeaderFixed = ref(false);
+
+// Current read section (for toast click navigation)
+const currentReadSection = ref(null);
+const showReadModeToast = computed(() =>
+  !isEditMode.value &&
+  readModeSuggestionsEntry.value === 'toast' &&
+  hasScrolledForToast.value &&
+  !isReadModeToastDismissed.value
+);
 const minervaOpenSections = ref({
   'early-life': false,
   career: false,
@@ -5345,13 +5514,13 @@ const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
-const editToolbarImprovementsEnabled = ref(false);
+const editToolbarImprovementsEnabled = ref(true);
 const successHighlightOnCompleteEnabled = ref(false);
-const noMoreSuggestionsEmptyStateEnabled = ref(false);
+const noMoreSuggestionsEmptyStateEnabled = ref(true);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false);
 const minervaFullPageSuggestionNavigationMode = ref('toc-button');
-const selectedPrototype = ref('option-4');
+const selectedPrototype = ref('option-5');
 const selectedNavigationGroup = computed({
   get() {
     if (selectedPrototype.value === 'option-5' || selectedPrototype.value === 'option-6') {
@@ -6825,7 +6994,7 @@ function openEditAtSection(sectionId) {
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
-  openPrototypeDialog(true);
+  startPrototype();
 }
 
 function getEditSectionRefById(sectionId) {
@@ -8064,6 +8233,15 @@ function handleSelectionChange() {
 
 function handleDocumentClick(event) {
   const target = event.target;
+  if (isSkinMenuOpen.value) {
+    const menuBtn = pageRoot.value?.querySelector('.menu-button');
+    const menuPopup = pageRoot.value?.querySelector('.menu-popup');
+    if (menuBtn && menuPopup) {
+      if (!menuBtn.contains(target) && !menuPopup.contains(target)) {
+        isSkinMenuOpen.value = false;
+      }
+    }
+  }
   const getRefElement = (refValue) => {
     if (!refValue) return null;
     if (refValue instanceof HTMLElement) return refValue;
@@ -9223,6 +9401,35 @@ function syncMinervaSheetToVisibleSuggestion(viewportHeight = window.innerHeight
 function updateEditToolbarScrolled() {
   if (typeof window === 'undefined') return;
   isEditToolbarScrolled.value = window.scrollY > 0;
+}
+
+function handleReadModeScroll() {
+  const y = window.scrollY;
+  hasScrolledForToast.value = y > 150;
+  isHeaderFixed.value = y > 150;
+  // Track current read section
+  if (!isEditMode.value) {
+    const sections = ['early-life', 'career', 'poetry', 'prose', 'film', 'theory'];
+    for (let i = sections.length - 1; i >= 0; i--) {
+      const el = document.querySelector(`[data-read-section="${sections[i]}"]`);
+      if (el && el.getBoundingClientRect().top <= 120) {
+        currentReadSection.value = sections[i];
+        break;
+      }
+      if (i === 0) currentReadSection.value = null;
+    }
+  }
+}
+
+function handleReadModeToastClick() {
+  isReadModeToastDismissed.value = true;
+  // Navigate to section in edit mode
+  const section = currentReadSection.value;
+  if (section) {
+    openEditAtSection(section);
+  } else {
+    startPrototype();
+  }
 }
 
 function handleReadClick() {
@@ -10826,6 +11033,7 @@ onMounted(() => {
     window.addEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
     window.addEventListener('resize', updateMinervaFullPageTocActiveSection);
     window.addEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
+    window.addEventListener('scroll', handleReadModeScroll, { passive: true });
     updateEditToolbarScrolled();
     updateMinervaFullPageTocActiveSection();
     if (showMinervaFullPageSuggestionNavigation.value && !isLoading.value) {
@@ -10854,6 +11062,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
     window.removeEventListener('resize', updateMinervaFullPageTocActiveSection);
     window.removeEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
+    window.removeEventListener('scroll', handleReadModeScroll);
   }
   document.removeEventListener('click', handleDocumentClick);
   document.removeEventListener('selectionchange', handleSelectionChange);
@@ -11063,6 +11272,7 @@ function enterEditMode() {
   // Activating edit mode: switch to edit mode immediately and show loading overlay
   isEditMode.value = true;
   isSkinMenuOpen.value = false;
+  isHeaderFixed.value = false;
   isLoading.value = true;
   hasUnsavedChanges.value = false;
   nextTick(() => {
@@ -11090,7 +11300,9 @@ function exitEditMode() {
 
 function toggleEditMode() {
   if (!isEditMode.value) {
-    openPrototypeDialog();
+    minervaEditSectionOnly.value = null;
+    readModeReturnSectionId.value = null;
+    startPrototype();
     return;
   }
   exitEditMode();
@@ -11527,8 +11739,13 @@ function markArticleEdited() {
 .minerva-brand {
   display: flex;
   align-items: center;
-  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
-  color: #54595d;
+}
+
+.minerva-wordmark-img {
+  display: block;
+  height: 21px;
+  width: auto;
+  opacity: 0.67;
 }
 
 .minerva-brand-text {
@@ -11555,7 +11772,7 @@ function markArticleEdited() {
   background-color: #ffffff;
   border: 1px solid #a2a9b1;
   border-radius: 4px;
-  padding: 10px 12px;
+  padding: 16px;
   display: grid;
   gap: 8px;
   min-width: 220px;
@@ -11586,35 +11803,25 @@ function markArticleEdited() {
   top: 50%;
   transform: translateY(-50%);
   display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.wikipedia-globe {
-  height: 50px;
-  width: auto;
-}
-
-.wikipedia-text {
-  display: flex;
   flex-direction: column;
-  gap: 0;
+  justify-content: space-between;
+  gap: 2px;
+  padding-block: 3px;
+  padding-inline-start: 12px;
+  margin-inline-start: 8px;
+  width: 152px;
+  min-height: 44px;
 }
 
-.wikipedia-title {
-  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
-  font-size: 20px;
-  font-weight: 500;
-  line-height: 1;
-  color: #202122;
-  letter-spacing: 0.5px;
+.wikipedia-wordmark-img,
+.wikipedia-tagline-img {
+  display: block;
+  width: auto;
+  max-width: 100%;
 }
 
-.wikipedia-tagline {
-  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
-  font-size: 14px;
-  line-height: 1.2;
-  color: #202122;
+.wikipedia-wordmark-img {
+  margin-inline-start: -3px;
 }
 
 /* Search */
@@ -12324,6 +12531,7 @@ function markArticleEdited() {
   color: var(--color-subtle, #54595d);
   padding: 4px;
   cursor: pointer;
+  position: relative;
 }
 
 .minerva-accordion-edit :deep(svg) {
@@ -12516,6 +12724,9 @@ function markArticleEdited() {
 .section-edit {
   font-size: 12px;
   margin-left: 8px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .section-edit-bracket {
@@ -17787,5 +17998,206 @@ function markArticleEdited() {
   font-size: 16px;
   line-height: 22px;
   color: var(--color-placeholder, #72777d);
+}
+
+/* ── Entry badge (Minerva edit buttons) ───────────────────────── */
+
+.minerva-action-btn--edit-entry {
+  position: relative;
+}
+
+.entry-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--background-color-progressive, #36c);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.entry-badge .entry-badge__icon {
+  color: var(--color-inverted, #fff);
+  width: 8px;
+  height: 8px;
+}
+
+.entry-badge__icon :deep(svg) {
+  width: 8px;
+  height: 8px;
+}
+
+/* ── Entry lightbulb (Vector22 section [edit]) ────────────────── */
+
+.section-edit-lightbulb {
+  color: var(--color-progressive, #36c);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  margin-left: 12px;
+}
+
+.section-edit-lightbulb :deep(svg) {
+  width: 16px;
+  height: 16px;
+}
+
+/* ── Read mode toast ──────────────────────────────────────────── */
+
+.read-mode-toast {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-75, 12px);
+  padding: var(--spacing-75, 12px) var(--spacing-100, 16px);
+  background-color: #E8EEFF;
+  border-bottom: 1px solid var(--border-color-subtle, #c8ccd1);
+  font-size: var(--font-size-small, 14px);
+  line-height: var(--line-height-small, 1.375);
+  color: var(--color-base, #202122);
+  cursor: pointer;
+}
+
+.read-mode-toast__icon {
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 2px;
+  color: var(--color-progressive, #36c);
+  width: 16px;
+  height: 16px;
+}
+
+.read-mode-toast__icon :deep(svg) {
+  width: 16px;
+  height: 16px;
+}
+
+.read-mode-toast__text {
+  flex: 1;
+  min-width: 0;
+  font-size: var(--font-size-small, 14px);
+}
+
+.read-mode-toast__close {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: none;
+  padding: 0;
+  color: var(--color-subtle, #54595d);
+  cursor: pointer;
+}
+
+.read-mode-toast-enter-active,
+.read-mode-toast-leave-active {
+  transition: transform 200ms ease, opacity 200ms ease;
+}
+
+.read-mode-toast-enter-from,
+.read-mode-toast-leave-to {
+  transform: translateY(-100%);
+  opacity: 0;
+}
+
+/* ── Fixed header (Vector22, scroll > 150px) ─────────────────── */
+.fixed-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 0 var(--spacing-100, 16px) 0 var(--spacing-50, 8px);
+  background-color: var(--background-color-base, #fff);
+  border-bottom: 1px solid var(--border-color-subtle, #c8ccd1);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+}
+
+.fixed-header__menu {
+  flex-shrink: 0;
+  margin-right: var(--spacing-50, 8px);
+}
+
+.fixed-header__search-btn {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-base, #202122);
+  border-radius: var(--border-radius-base, 2px);
+}
+
+.fixed-header__search-btn:hover {
+  background-color: var(--background-color-button-quiet--hover, rgba(0,24,73,0.027));
+}
+
+.fixed-header__divider {
+  width: 1px;
+  height: 24px;
+  background-color: var(--border-color-subtle, #c8ccd1);
+  flex-shrink: 0;
+  margin: 0 var(--spacing-75, 12px);
+}
+
+.fixed-header__title {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-family-serif, 'Linux Libertine', Georgia, serif);
+  font-size: 1.125rem;
+  font-weight: var(--font-weight-normal, 400);
+  color: var(--color-base, #202122);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fixed-header__end {
+  flex-shrink: 0;
+  margin-left: auto;
+}
+
+/* ── Menu popup toggle row ─────────────────────────────────────── */
+.menu-popup__toggle-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-75, 12px);
+  margin-top: var(--spacing-150, 24px);
+}
+
+.menu-popup__toggle-label {
+  font-size: var(--font-size-medium, 1rem);
+  color: var(--color-base, #202122);
+  line-height: var(--line-height-small, 1.375);
+}
+
+/* ── Icon img helper ─────────────────────────────────────────── */
+.minerva-action-icon-img {
+  display: block;
+}
+
+/* ── Menu popup fieldset reset ────────────────────────────────── */
+
+.menu-popup :deep(.cdx-field__fieldset) {
+  border: none;
+  padding: 0;
+  margin: 0;
 }
 </style>
