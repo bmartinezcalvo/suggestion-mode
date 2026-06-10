@@ -18626,7 +18626,7 @@ function markArticleEdited() {
 
 .pulsating-dot {
   position: absolute;
-  bottom: -16px;
+  bottom: -20px;
   left: 50%;
   transform: translateX(-50%);
   width: 12px;
@@ -18641,7 +18641,7 @@ function markArticleEdited() {
 
 /* Vector22 tab: centered on the tab-row bottom border */
 .pulsating-dot--tab {
-  bottom: -17px;
+  bottom: -13px;
 }
 
 @keyframes pulsate {
