@@ -120,6 +120,10 @@
               </cdx-radio>
             </cdx-field>
             <div class="menu-popup__toggle-row">
+              <cdx-toggle-switch v-model="pulsatingDotEnabled" />
+              <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
+            </div>
+            <div class="menu-popup__toggle-row">
               <cdx-toggle-switch v-model="articleLockToEdit" />
               <span class="menu-popup__toggle-label">Article lock to edit</span>
             </div>
@@ -206,6 +210,10 @@
                   Navigable banner
                 </cdx-radio>
               </cdx-field>
+              <div class="menu-popup__toggle-row">
+                <cdx-toggle-switch v-model="pulsatingDotEnabled" />
+                <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
+              </div>
               <div class="menu-popup__toggle-row">
                 <cdx-toggle-switch v-model="articleLockToEdit" />
                 <span class="menu-popup__toggle-label">Article lock to edit</span>
@@ -509,7 +517,10 @@
                       <div v-if="!isEditMode" class="tab-indicator"></div>
                     </div>
                     <div v-if="!articleLockToEdit" class="tab" :class="{ 'tab-selected': isEditMode }" @click="toggleEditMode">
-                      <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
+                      <div class="pulsating-dot-wrapper">
+                        <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
+                        <span v-if="showPulsatingDot" class="pulsating-dot pulsating-dot--tab"></span>
+                      </div>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
                     <div class="tab">
@@ -553,17 +564,23 @@
                 <button class="minerva-action-btn" aria-label="History">
                   <cdx-icon :icon="cdxIconHistory" size="medium" />
                 </button>
-                <button v-if="!articleLockToEdit" class="minerva-action-btn" aria-label="Edit" @click="toggleEditMode">
-                  <img
-                    v-if="readModeSuggestionsEntry === 'badge'"
-                    :src="iconEditLightbulb"
-                    width="24"
-                    height="24"
-                    alt=""
-                    aria-hidden="true"
-                    class="minerva-action-icon-img"
-                  />
-                  <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                <button v-if="articleLockToEdit" class="minerva-action-btn" aria-label="Edit (locked)" disabled>
+                  <cdx-icon :icon="cdxIconEditLock" size="medium" />
+                </button>
+                <button v-else class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
+                  <div class="pulsating-dot-wrapper">
+                    <img
+                      v-if="readModeSuggestionsEntry === 'badge'"
+                      :src="iconModifierV2"
+                      width="18"
+                      height="18"
+                      alt=""
+                      aria-hidden="true"
+                      class="minerva-action-icon-img"
+                    />
+                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                    <span v-if="showPulsatingDot" class="pulsating-dot"></span>
+                  </div>
                 </button>
                 <button class="minerva-action-btn" aria-label="More actions">
                   <cdx-icon :icon="cdxIconEllipsis" size="medium" class="minerva-ellipsis-icon" />
@@ -596,16 +613,12 @@
                       <h2 class="heading-text">Early life</h2>
                       <span v-if="!articleLockToEdit" class="section-edit">
                         <span class="section-edit-inner">
-                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit</a><span class="section-edit-bracket">]</span>
-                          <img
+                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit<cdx-icon
                             v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
-                            :src="iconLightbulb"
-                            width="16"
-                            height="16"
-                            class="section-edit-lightbulb"
-                            title="Suggestions available in this section"
-                            alt="Suggestions available in this section"
-                          />
+                            v-tooltip="'Suggestions available in this section'"
+                            :icon="cdxIconLightbulb"
+                            class="section-edit-lightbulb-icon"
+                          /></a><span class="section-edit-bracket">]</span>
                         </span>
                       </span>
                     </div>
@@ -691,16 +704,12 @@
                 <h2 class="heading-text">Career</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit</a><span class="section-edit-bracket">]</span>
-                    <img
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<cdx-icon
                       v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
-                      :src="iconLightbulb"
-                      width="16"
-                      height="16"
-                      class="section-edit-lightbulb"
-                      title="Suggestions available in this section"
-                      alt="Suggestions available in this section"
-                    />
+                      v-tooltip="'Suggestions available in this section'"
+                      :icon="cdxIconLightbulb"
+                      class="section-edit-lightbulb-icon"
+                    /></a><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -740,16 +749,12 @@
                 <h2 class="heading-text">Poetry</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit</a><span class="section-edit-bracket">]</span>
-                    <img
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<cdx-icon
                       v-if="!isEditMode && readModeSuggestionsEntry === 'badge'"
-                      :src="iconLightbulb"
-                      width="16"
-                      height="16"
-                      class="section-edit-lightbulb"
-                      title="Suggestions available in this section"
-                      alt="Suggestions available in this section"
-                    />
+                      v-tooltip="'Suggestions available in this section'"
+                      :icon="cdxIconLightbulb"
+                      class="section-edit-lightbulb-icon"
+                    /></a><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -977,7 +982,7 @@
                 Miriam Kraft summarized Lorde's position when reflecting on the interview; "Yes, we have different historical, social, and cultural backgrounds, different sexual orientations; different aspirations and visions; different skin colors and ages. But we share common experiences and a common goal. Our experiences are rooted in the oppressive forces of racism in various societies, and our goal is our mutual concern to work toward 'a future which has not yet been' in Audre's words."<sup class="citation-marker">[90]</sup>
               </p>
             </div>
-            <div v-if="showEndBanner" class="end-banner end-banner--vector">
+            <div v-if="false" class="end-banner end-banner--vector">
               <div class="end-banner__icon-row">
                 <cdx-icon :icon="cdxIconLightbulb" class="end-banner__icon" />
                 <span class="end-banner__title">Do you know you can edit this article?</span>
@@ -1064,16 +1069,18 @@
                     <span>Early life</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('early-life') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
-                    <img
-                      v-if="readModeSuggestionsEntry === 'badge'"
-                      :src="iconEditLightbulb"
-                      width="20"
-                      height="20"
-                      alt=""
-                      aria-hidden="true"
-                      class="minerva-action-icon-img"
-                    />
-                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                    <div class="pulsating-dot-wrapper">
+                      <img
+                        v-if="readModeSuggestionsEntry === 'badge'"
+                        :src="iconModifierV2"
+                        width="18"
+                        height="18"
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                      <span v-if="showPulsatingDot" class="pulsating-dot"></span>
+                    </div>
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
@@ -1101,16 +1108,18 @@
                     <span>Career</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
-                    <img
-                      v-if="readModeSuggestionsEntry === 'badge'"
-                      :src="iconEditLightbulb"
-                      width="20"
-                      height="20"
-                      alt=""
-                      aria-hidden="true"
-                      class="minerva-action-icon-img"
-                    />
-                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                    <div class="pulsating-dot-wrapper">
+                      <img
+                        v-if="readModeSuggestionsEntry === 'badge'"
+                        :src="iconModifierV2"
+                        width="18"
+                        height="18"
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                      <span v-if="showPulsatingDot" class="pulsating-dot"></span>
+                    </div>
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('career')" class="minerva-accordion-panel">
@@ -1150,16 +1159,18 @@
                     <span>Poetry</span>
                   </button>
                   <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
-                    <img
-                      v-if="readModeSuggestionsEntry === 'badge'"
-                      :src="iconEditLightbulb"
-                      width="20"
-                      height="20"
-                      alt=""
-                      aria-hidden="true"
-                      class="minerva-action-icon-img"
-                    />
-                    <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                    <div class="pulsating-dot-wrapper">
+                      <img
+                        v-if="readModeSuggestionsEntry === 'badge'"
+                        :src="iconModifierV2"
+                        width="18"
+                        height="18"
+                        alt=""
+                        aria-hidden="true"
+                      />
+                      <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
+                      <span v-if="showPulsatingDot" class="pulsating-dot"></span>
+                    </div>
                   </button>
                 </div>
                 <div v-if="isMinervaSectionOpen('poetry')" class="minerva-accordion-panel">
@@ -5082,6 +5093,7 @@ import {
   cdxIconHelp,
   cdxIconAlert,
   cdxIconEdit,
+  cdxIconEditLock,
   cdxIconEye,
   cdxIconPuzzle,
   cdxIconLightbulb,
@@ -5106,6 +5118,7 @@ import {
 import lordeImage from '../assets/lorde-1980.png';
 import scrollIcon from '../assets/scroll.svg';
 import iconEditLightbulb from '../assets/icon-edit-lightbulb.svg';
+import iconModifierV2 from '../assets/icon-modifier-v2.svg';
 import iconLightbulb from '../assets/icon-lightbulb.svg';
 import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
 
@@ -5392,6 +5405,16 @@ function sectionHasSuggestions(sectionId) {
 
 // Article lock to edit
 const articleLockToEdit = ref(false);
+
+// Pulsating dot
+const pulsatingDotEnabled = ref(false);
+const hasSeenEditMode = ref(false);
+const showPulsatingDot = computed(() =>
+  pulsatingDotEnabled.value &&
+  !articleLockToEdit.value &&
+  !hasSeenEditMode.value &&
+  readModeSuggestionsEntry.value === 'badge'
+);
 
 // End-of-article suggestions banner
 const isEndBannerDismissed = ref(false);
@@ -7048,6 +7071,7 @@ function openEditAtSection(sectionId) {
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
+  hasSeenEditMode.value = true;
   startPrototype();
 }
 
@@ -11356,6 +11380,7 @@ function toggleEditMode() {
   if (!isEditMode.value) {
     minervaEditSectionOnly.value = null;
     readModeReturnSectionId.value = null;
+    hasSeenEditMode.value = true;
     startPrototype();
     return;
   }
@@ -18477,5 +18502,59 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   flex-wrap: wrap;
+}
+
+/* ── Pulsating dot ────────────────────────────────────────────── */
+
+.pulsating-dot-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.pulsating-dot {
+  position: absolute;
+  bottom: -4px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background-color: var(--background-color-progressive, #36c);
+  box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.2);
+  animation: pulsate 1.5s ease-out infinite;
+  pointer-events: none;
+}
+
+.pulsating-dot--tab {
+  bottom: -6px;
+}
+
+@keyframes pulsate {
+  0% {
+    box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(51, 102, 204, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(51, 102, 204, 0);
+  }
+}
+
+/* ── section-edit lightbulb icon (Vector22) ──────────────────── */
+
+.section-edit-lightbulb-icon {
+  width: 12px;
+  height: 12px;
+  color: var(--color-progressive, #36c);
+  vertical-align: middle;
+  margin-left: 3px;
+}
+
+.section-edit-lightbulb-icon :deep(svg) {
+  width: 12px;
+  height: 12px;
+  fill: var(--color-progressive, #36c);
 }
 </style>
