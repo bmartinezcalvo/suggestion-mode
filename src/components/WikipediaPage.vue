@@ -988,32 +988,6 @@
                 <cdx-button weight="normal" action="progressive" @click="handleEndBannerComplete">Complete suggestions</cdx-button>
               </div>
             </div>
-            <footer class="vector-footer">
-              <div class="vector-footer__inner">
-                <div class="vector-footer__info">
-                  <p class="vector-footer__lastmod">This page was last edited on 2 June 2026, at 18:29.</p>
-                  <p class="vector-footer__license">Text is available under the <a href="#">Creative Commons Attribution-ShareAlike 4.0 License</a>; additional terms may apply. By using this site, you agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a href="#">Wikimedia Foundation, Inc.</a>, a non-profit organization.</p>
-                </div>
-                <div class="vector-footer__bottom">
-                  <nav class="vector-footer__links" aria-label="Footer">
-                    <a href="#">Privacy policy</a>
-                    <a href="#">About Wikipedia</a>
-                    <a href="#">Disclaimers</a>
-                    <a href="#">Contact Wikipedia</a>
-                    <a href="#">Legal &amp; safety contacts</a>
-                    <a href="#">Code of Conduct</a>
-                    <a href="#">Developers</a>
-                    <a href="#">Statistics</a>
-                    <a href="#">Cookie statement</a>
-                    <a href="#">Mobile view</a>
-                  </nav>
-                  <div class="vector-footer__logos">
-                    <div class="vector-footer__logo-box vector-footer__logo-box--wikimedia"></div>
-                    <div class="vector-footer__logo-box vector-footer__logo-box--mediawiki"></div>
-                  </div>
-                </div>
-              </div>
-            </footer>
           </div>
 
           <div v-else-if="!isEditMode && isMinervaSkin" class="article-content-section minerva-article-content">
@@ -1433,42 +1407,6 @@
               </div>
             </div>
 
-            <div class="minerva-last-edited">
-              <cdx-icon :icon="cdxIconClock" size="small" />
-              <div class="minerva-last-edited-text">
-                <div class="minerva-last-edited-title">Last edited 1 month ago</div>
-                <div class="minerva-last-edited-subtitle">Unreviewed</div>
-              </div>
-              <cdx-icon :icon="cdxIconNext" size="small" class="minerva-last-edited-arrow" />
-            </div>
-
-            <div class="minerva-related">
-              <div class="minerva-related-title">RELATED PAGES</div>
-              <div class="minerva-related-list">
-                <div class="minerva-related-card">
-                  <cdx-icon :icon="cdxIconArticle" size="small" />
-                  <div class="minerva-related-content">
-                    <div class="minerva-related-name">Article title (max 2 lines)</div>
-                    <div class="minerva-related-meta">Wikipedia article (more) 1 mo</div>
-                  </div>
-                </div>
-                <div class="minerva-related-card">
-                  <cdx-icon :icon="cdxIconArticle" size="small" />
-                  <div class="minerva-related-content">
-                    <div class="minerva-related-name">Article title (max 2 lines)</div>
-                    <div class="minerva-related-meta">Wikipedia article (more) 1 mo</div>
-                  </div>
-                </div>
-                <div class="minerva-related-card">
-                  <cdx-icon :icon="cdxIconArticle" size="small" />
-                  <div class="minerva-related-content">
-                    <div class="minerva-related-name">Article title (max 2 lines)</div>
-                    <div class="minerva-related-meta">Wikipedia article (more) 1 mo</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
             <div v-if="showEndBanner" class="end-banner end-banner--minerva">
               <div class="end-banner__icon-row">
                 <cdx-icon :icon="cdxIconLightbulb" class="end-banner__icon" />
@@ -1480,36 +1418,6 @@
                 <cdx-button weight="normal" action="progressive" @click="handleEndBannerComplete">Complete suggestions</cdx-button>
               </div>
             </div>
-            <footer class="minerva-footer">
-              <div class="minerva-footer-top">
-                <div class="minerva-footer-wordmark-row">
-                  <span class="minerva-footer-brand">Wikipedia</span>
-                  <span class="minerva-footer-puzzle-badge">25</span>
-                </div>
-                <div class="minerva-footer-badges">
-                  <div class="minerva-footer-badge-box minerva-footer-badge-box--wikimedia"></div>
-                  <div class="minerva-footer-badge-box minerva-footer-badge-box--mediawiki"></div>
-                </div>
-              </div>
-              <div class="minerva-footer-divider"></div>
-              <div class="minerva-footer-meta">
-                <p>Page was rendered with <a href="#">Parsoid</a>.</p>
-                <p>Content is available under <a href="#">CC BY-SA 4.0</a> unless otherwise noted.</p>
-              </div>
-              <div class="minerva-footer-links">
-                <a href="#">Privacy policy</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Contact Wikipedia</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Legal &amp; safety contacts</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Code of Conduct</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Developers</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Statistics</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Cookie statement</a>
-              </div>
-              <div class="minerva-footer-links">
-                <a href="#">Terms of Use</a> <span class="minerva-footer-sep">•</span>
-                <a href="#">Desktop view</a>
-              </div>
-            </footer>
           </div>
 
           <!-- Edit Mode Content -->
@@ -5040,6 +4948,66 @@
 
       </div>
     </div>
+
+    <!-- Vector22 footer (full-width, outside page-container) -->
+    <footer v-if="!isEditMode && !isMinervaSkin" class="vector-footer">
+      <div class="vector-footer__inner">
+        <div class="vector-footer__info">
+          <p class="vector-footer__lastmod">This page was last edited on 2 June 2026, at 18:29.</p>
+          <p class="vector-footer__license">Text is available under the <a href="#">Creative Commons Attribution-ShareAlike 4.0 License</a>; additional terms may apply. By using this site, you agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a href="#">Wikimedia Foundation, Inc.</a>, a non-profit organization.</p>
+        </div>
+        <div class="vector-footer__bottom">
+          <nav class="vector-footer__links" aria-label="Footer">
+            <a href="#">Privacy policy</a>
+            <a href="#">About Wikipedia</a>
+            <a href="#">Disclaimers</a>
+            <a href="#">Contact Wikipedia</a>
+            <a href="#">Legal &amp; safety contacts</a>
+            <a href="#">Code of Conduct</a>
+            <a href="#">Developers</a>
+            <a href="#">Statistics</a>
+            <a href="#">Cookie statement</a>
+            <a href="#">Mobile view</a>
+          </nav>
+          <div class="vector-footer__logos">
+            <div class="vector-footer__logo-box vector-footer__logo-box--wikimedia"></div>
+            <div class="vector-footer__logo-box vector-footer__logo-box--mediawiki"></div>
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Minerva footer (full-width, outside page-container) -->
+    <footer v-if="!isEditMode && isMinervaSkin" class="minerva-footer">
+      <div class="minerva-footer-top">
+        <div class="minerva-footer-wordmark-row">
+          <span class="minerva-footer-brand">Wikipedia</span>
+          <span class="minerva-footer-puzzle-badge">25</span>
+        </div>
+        <div class="minerva-footer-badges">
+          <div class="minerva-footer-badge-box minerva-footer-badge-box--wikimedia"></div>
+          <div class="minerva-footer-badge-box minerva-footer-badge-box--mediawiki"></div>
+        </div>
+      </div>
+      <div class="minerva-footer-divider"></div>
+      <div class="minerva-footer-meta">
+        <p>Page was rendered with <a href="#">Parsoid</a>.</p>
+        <p>Content is available under <a href="#">CC BY-SA 4.0</a> unless otherwise noted.</p>
+      </div>
+      <div class="minerva-footer-links">
+        <a href="#">Privacy policy</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Contact Wikipedia</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Legal &amp; safety contacts</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Code of Conduct</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Developers</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Statistics</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Cookie statement</a>
+      </div>
+      <div class="minerva-footer-links">
+        <a href="#">Terms of Use</a> <span class="minerva-footer-sep">•</span>
+        <a href="#">Desktop view</a>
+      </div>
+    </footer>
 
     <!-- Read mode: suggestions entry toast -->
     <transition name="read-mode-toast">
@@ -12705,12 +12673,12 @@ function markArticleEdited() {
 }
 
 .minerva-footer {
-  margin-top: 24px;
   padding: 16px;
   background-color: #eaecf0;
   color: #54595d;
   font-size: 12px;
   line-height: 1.5;
+  width: 100%;
 }
 
 .minerva-footer-top {
@@ -12821,16 +12789,14 @@ function markArticleEdited() {
 /* ── Vector22 footer ─────────────────────────────────────────── */
 
 .vector-footer {
-  background-color: #f8f9fa;
+  background-color: var(--background-color-base, #fff);
   border-top: 1px solid #a2a9b1;
-  margin-top: 24px;
   font-size: 13px;
   color: #54595d;
+  width: 100%;
 }
 
 .vector-footer__inner {
-  max-width: 960px;
-  margin: 0 auto;
   padding: 16px 24px 24px;
 }
 
