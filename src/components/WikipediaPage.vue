@@ -136,7 +136,7 @@
             <cdx-icon :icon="cdxIconMenu" size="medium" />
           </button>
           <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup" role="dialog" aria-label="Settings menu" style="padding: 16px;">
-            <cdx-field is-fieldset>
+            <cdx-field v-show="false" is-fieldset>
               <template #label>Suggestions entry point</template>
               <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry" input-value="badge">
                 Icon's modifier in edit action
@@ -234,7 +234,7 @@
               <cdx-icon :icon="cdxIconMenu" size="medium" />
             </button>
             <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup menu-popup--minerva" role="dialog" aria-label="Settings menu" style="padding: 16px;">
-              <cdx-field is-fieldset>
+              <cdx-field v-show="false" is-fieldset>
                 <template #label>Suggestions entry point</template>
                 <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry-minerva" input-value="badge">
                   Icon's modifier in edit action
