@@ -569,6 +569,9 @@
                     <button class="tab-icon-btn">
                       <cdx-icon :icon="cdxIconStar" size="medium" />
                     </button>
+                    <button class="tab-icon-btn" aria-label="Bookmark">
+                      <cdx-icon :icon="cdxIconBookmarkOutline" size="medium" />
+                    </button>
                     <button class="tools-toggle-btn" aria-label="Toggle tools">
                       <span class="tools-toggle-text">Tools</span>
                       <cdx-icon :icon="cdxIconExpand" size="small" />
@@ -599,7 +602,7 @@
                   <cdx-icon :icon="cdxIconLanguage" size="medium" />
                 </button>
                 <button class="minerva-action-btn" aria-label="Watch">
-                  <cdx-icon :icon="cdxIconWatchlist" size="medium" />
+                  <cdx-icon :icon="cdxIconBookmarkOutline" size="medium" />
                 </button>
                 <button class="minerva-action-btn" aria-label="History">
                   <cdx-icon :icon="cdxIconHistory" size="medium" />
@@ -5119,6 +5122,7 @@ import {
   cdxIconArrowDown,
   cdxIconLanguage,
   cdxIconStar,
+  cdxIconBookmarkOutline,
   cdxIconSpeechBubbles,
   cdxIconEllipsis,
   cdxIconHistory,
