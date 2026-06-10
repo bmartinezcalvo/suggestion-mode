@@ -83,22 +83,43 @@
         class="fixed-header"
         aria-label="Fixed navigation"
       >
-        <button class="fixed-header__search-btn" aria-label="Search">
-          <cdx-icon :icon="cdxIconSearch" size="medium" />
-        </button>
-        <div class="fixed-header__divider" aria-hidden="true"></div>
         <span class="fixed-header__title">Audre Lorde</span>
-        <div class="fixed-header__end">
-          <div class="user-tools">
-            <a href="#" class="user-link">User1234</a>
-            <button class="icon-btn" aria-label="Notifications"><cdx-icon :icon="cdxIconBell" size="medium" /></button>
-            <button class="icon-btn" aria-label="Messages"><cdx-icon :icon="cdxIconTray" size="medium" /></button>
-            <button class="icon-btn" aria-label="Watchlist"><cdx-icon :icon="cdxIconWatchlist" size="medium" /></button>
-            <button class="user-menu-btn" aria-label="User menu">
-              <cdx-icon :icon="cdxIconUserAvatar" size="medium" />
-              <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
-            </button>
-          </div>
+        <div class="fixed-header__actions">
+          <!-- Comments -->
+          <button class="fixed-header__btn" aria-label="Comments">
+            <cdx-icon :icon="cdxIconSpeechBubbles" size="medium" />
+          </button>
+          <!-- History -->
+          <button class="fixed-header__btn" aria-label="View history">
+            <cdx-icon :icon="cdxIconHistory" size="medium" />
+          </button>
+          <!-- Watch -->
+          <button class="fixed-header__btn" aria-label="Watch">
+            <cdx-icon :icon="cdxIconStar" size="medium" />
+          </button>
+          <!-- Edit (with lightbulb modifier if badge mode) -->
+          <button v-if="!articleLockToEdit" class="fixed-header__btn" aria-label="Edit" @click="toggleEditMode">
+            <cdx-icon v-if="readModeSuggestionsEntry !== 'badge'" :icon="cdxIconEdit" size="medium" />
+            <span v-else class="fixed-header__edit-badge">
+              <cdx-icon :icon="cdxIconEdit" size="medium" />
+              <cdx-icon
+                v-tooltip="'Suggestions available in this article'"
+                :icon="cdxIconLightbulb"
+                class="fixed-header__lightbulb"
+              />
+            </span>
+          </button>
+          <!-- Languages -->
+          <button class="fixed-header__btn fixed-header__btn--languages" aria-label="95 languages">
+            <cdx-icon :icon="cdxIconLanguage" size="small" />
+            <span class="fixed-header__lang-text">95 languages</span>
+            <cdx-icon :icon="cdxIconExpand" size="x-small" />
+          </button>
+          <!-- User -->
+          <button class="fixed-header__btn" aria-label="User menu">
+            <cdx-icon :icon="cdxIconUserAvatar" size="medium" />
+            <cdx-icon :icon="cdxIconExpand" size="x-small" />
+          </button>
         </div>
       </header>
 
@@ -5079,6 +5100,7 @@ import {
   cdxIconArrowDown,
   cdxIconLanguage,
   cdxIconStar,
+  cdxIconSpeechBubbles,
   cdxIconEllipsis,
   cdxIconHistory,
   cdxIconSearch,
@@ -18357,42 +18379,15 @@ function markArticleEdited() {
   height: 48px;
   display: flex;
   align-items: center;
-  gap: 0;
+  justify-content: space-between;
   padding: 0 44px;
   background-color: var(--background-color-base, #fff);
   border-bottom: 1px solid var(--border-color-subtle, #c8ccd1);
   box-shadow: 0 1px 3px rgba(0,0,0,0.08);
 }
 
-.fixed-header__search-btn {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 36px;
-  height: 36px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  color: var(--color-base, #202122);
-  border-radius: var(--border-radius-base, 2px);
-}
-
-.fixed-header__search-btn:hover {
-  background-color: var(--background-color-button-quiet--hover, rgba(0,24,73,0.027));
-}
-
-.fixed-header__divider {
-  width: 1px;
-  height: 24px;
-  background-color: var(--border-color-subtle, #c8ccd1);
-  flex-shrink: 0;
-  margin: 0 var(--spacing-75, 12px);
-}
-
 .fixed-header__title {
-  flex: 1;
-  min-width: 0;
+  flex-shrink: 0;
   font-family: var(--font-family-serif, 'Linux Libertine', Georgia, serif);
   font-size: 1.125rem;
   font-weight: var(--font-weight-normal, 400);
@@ -18400,11 +18395,63 @@ function markArticleEdited() {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  max-width: 40%;
 }
 
-.fixed-header__end {
+.fixed-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 4px;
   flex-shrink: 0;
-  margin-left: auto;
+}
+
+.fixed-header__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  height: 36px;
+  padding: 0 8px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  color: var(--color-base, #202122);
+  border-radius: var(--border-radius-base, 2px);
+  font-size: var(--font-size-small, 14px);
+  white-space: nowrap;
+}
+
+.fixed-header__btn:hover {
+  background-color: var(--background-color-button-quiet--hover, rgba(0,24,73,0.027));
+}
+
+.fixed-header__btn--languages {
+  padding: 0 10px;
+}
+
+.fixed-header__lang-text {
+  font-size: 13px;
+  color: var(--color-base, #202122);
+}
+
+.fixed-header__edit-badge {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.fixed-header__lightbulb {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  width: 12px;
+  height: 12px;
+  color: var(--color-progressive, #36c);
+}
+
+.fixed-header__lightbulb :deep(svg) {
+  width: 12px;
+  height: 12px;
+  fill: var(--color-progressive, #36c);
 }
 
 /* ── Menu popup toggle row ─────────────────────────────────────── */
