@@ -977,6 +977,17 @@
                 Miriam Kraft summarized Lorde's position when reflecting on the interview; "Yes, we have different historical, social, and cultural backgrounds, different sexual orientations; different aspirations and visions; different skin colors and ages. But we share common experiences and a common goal. Our experiences are rooted in the oppressive forces of racism in various societies, and our goal is our mutual concern to work toward 'a future which has not yet been' in Audre's words."<sup class="citation-marker">[90]</sup>
               </p>
             </div>
+            <div v-if="showEndBanner" class="end-banner end-banner--vector">
+              <div class="end-banner__icon-row">
+                <cdx-icon :icon="cdxIconLightbulb" class="end-banner__icon" />
+                <span class="end-banner__title">Do you know you can edit this article?</span>
+              </div>
+              <p class="end-banner__desc">This article needs some quick improvements that don't require any editing experience.</p>
+              <div class="end-banner__actions">
+                <cdx-button weight="normal" action="default" @click="isEndBannerDismissed = true">Not now</cdx-button>
+                <cdx-button weight="normal" action="progressive" @click="handleEndBannerComplete">Complete suggestions</cdx-button>
+              </div>
+            </div>
             <footer class="vector-footer">
               <div class="vector-footer__inner">
                 <div class="vector-footer__info">
@@ -1458,6 +1469,17 @@
               </div>
             </div>
 
+            <div v-if="showEndBanner" class="end-banner end-banner--minerva">
+              <div class="end-banner__icon-row">
+                <cdx-icon :icon="cdxIconLightbulb" class="end-banner__icon" />
+                <span class="end-banner__title">Do you know you can edit this article?</span>
+              </div>
+              <p class="end-banner__desc">This article needs some quick improvements that don't require any editing experience.</p>
+              <div class="end-banner__actions">
+                <cdx-button weight="normal" action="default" @click="isEndBannerDismissed = true">Not now</cdx-button>
+                <cdx-button weight="normal" action="progressive" @click="handleEndBannerComplete">Complete suggestions</cdx-button>
+              </div>
+            </div>
             <footer class="minerva-footer">
               <div class="minerva-footer-top">
                 <div class="minerva-footer-wordmark-row">
@@ -5402,6 +5424,15 @@ function sectionHasSuggestions(sectionId) {
 
 // Article lock to edit
 const articleLockToEdit = ref(false);
+
+// End-of-article suggestions banner
+const isEndBannerDismissed = ref(false);
+const showEndBanner = computed(() =>
+  !isEditMode.value && !articleLockToEdit.value && !isEndBannerDismissed.value
+);
+function handleEndBannerComplete() {
+  openEditAtSection('early-life');
+}
 
 // Fixed header (Vector22 only, scroll > 150px)
 const isHeaderFixed = ref(false);
@@ -18410,5 +18441,75 @@ function markArticleEdited() {
   border: none;
   padding: 0;
   margin: 0;
+}
+
+/* ── End-of-article suggestions banner ───────────────────────── */
+
+.end-banner {
+  background-color: var(--background-color-progressive-subtle, #eaf3ff);
+  padding: 16px;
+  border-radius: var(--border-radius-base, 2px);
+}
+
+/* Vector22: 48px gap above (from article end) and below (to footer) */
+.end-banner--vector {
+  margin-top: 48px;
+  margin-bottom: 48px;
+}
+
+/* Minerva: 16px above, 32px below */
+.end-banner--minerva {
+  margin-top: 16px;
+  margin-bottom: 32px;
+}
+
+.end-banner__icon-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.end-banner__icon {
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+  color: var(--color-progressive, #36c);
+}
+
+.end-banner__icon :deep(svg) {
+  width: 20px;
+  height: 20px;
+  fill: var(--color-progressive, #36c);
+  color: var(--color-progressive, #36c);
+}
+
+.end-banner__title {
+  font-size: 14px;
+  font-weight: var(--font-weight-bold, bold);
+  line-height: 1.4;
+  color: var(--color-base, #202122);
+}
+
+.end-banner--minerva .end-banner__title {
+  font-size: 16px;
+}
+
+.end-banner__desc {
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-base, #202122);
+}
+
+.end-banner--minerva .end-banner__desc {
+  font-size: 16px;
+}
+
+.end-banner__actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
 }
 </style>
