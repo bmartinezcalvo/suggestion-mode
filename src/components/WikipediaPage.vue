@@ -977,6 +977,32 @@
                 Miriam Kraft summarized Lorde's position when reflecting on the interview; "Yes, we have different historical, social, and cultural backgrounds, different sexual orientations; different aspirations and visions; different skin colors and ages. But we share common experiences and a common goal. Our experiences are rooted in the oppressive forces of racism in various societies, and our goal is our mutual concern to work toward 'a future which has not yet been' in Audre's words."<sup class="citation-marker">[90]</sup>
               </p>
             </div>
+            <footer class="vector-footer">
+              <div class="vector-footer__inner">
+                <div class="vector-footer__info">
+                  <p class="vector-footer__lastmod">This page was last edited on 2 June 2026, at 18:29.</p>
+                  <p class="vector-footer__license">Text is available under the <a href="#">Creative Commons Attribution-ShareAlike 4.0 License</a>; additional terms may apply. By using this site, you agree to the <a href="#">Terms of Use</a> and <a href="#">Privacy Policy</a>. Wikipedia® is a registered trademark of the <a href="#">Wikimedia Foundation, Inc.</a>, a non-profit organization.</p>
+                </div>
+                <div class="vector-footer__bottom">
+                  <nav class="vector-footer__links" aria-label="Footer">
+                    <a href="#">Privacy policy</a>
+                    <a href="#">About Wikipedia</a>
+                    <a href="#">Disclaimers</a>
+                    <a href="#">Contact Wikipedia</a>
+                    <a href="#">Legal &amp; safety contacts</a>
+                    <a href="#">Code of Conduct</a>
+                    <a href="#">Developers</a>
+                    <a href="#">Statistics</a>
+                    <a href="#">Cookie statement</a>
+                    <a href="#">Mobile view</a>
+                  </nav>
+                  <div class="vector-footer__logos">
+                    <div class="vector-footer__logo-box vector-footer__logo-box--wikimedia"></div>
+                    <div class="vector-footer__logo-box vector-footer__logo-box--mediawiki"></div>
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
 
           <div v-else-if="!isEditMode && isMinervaSkin" class="article-content-section minerva-article-content">
@@ -1433,9 +1459,33 @@
             </div>
 
             <footer class="minerva-footer">
-              <div class="minerva-footer-brand">Wikipedia</div>
+              <div class="minerva-footer-top">
+                <div class="minerva-footer-wordmark-row">
+                  <span class="minerva-footer-brand">Wikipedia</span>
+                  <span class="minerva-footer-puzzle-badge">25</span>
+                </div>
+                <div class="minerva-footer-badges">
+                  <div class="minerva-footer-badge-box minerva-footer-badge-box--wikimedia"></div>
+                  <div class="minerva-footer-badge-box minerva-footer-badge-box--mediawiki"></div>
+                </div>
+              </div>
+              <div class="minerva-footer-divider"></div>
               <div class="minerva-footer-meta">
-                Content is available under <a href="#">CC BY-SA 4.0</a> unless otherwise noted.
+                <p>Page was rendered with <a href="#">Parsoid</a>.</p>
+                <p>Content is available under <a href="#">CC BY-SA 4.0</a> unless otherwise noted.</p>
+              </div>
+              <div class="minerva-footer-links">
+                <a href="#">Privacy policy</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Contact Wikipedia</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Legal &amp; safety contacts</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Code of Conduct</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Developers</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Statistics</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Cookie statement</a>
+              </div>
+              <div class="minerva-footer-links">
+                <a href="#">Terms of Use</a> <span class="minerva-footer-sep">•</span>
+                <a href="#">Desktop view</a>
               </div>
             </footer>
           </div>
@@ -12625,20 +12675,75 @@ function markArticleEdited() {
 
 .minerva-footer {
   margin-top: 24px;
-  padding: 16px 0 24px;
-  border-top: 1px solid #c8ccd1;
+  padding: 16px;
+  background-color: #eaecf0;
   color: #54595d;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.minerva-footer-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.minerva-footer-wordmark-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
 }
 
 .minerva-footer-brand {
   font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
-  font-size: 16px;
-  margin-bottom: 6px;
+  font-size: 18px;
+  color: #202122;
+  line-height: 1;
+}
+
+.minerva-footer-puzzle-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  background-color: #3366cc;
+  color: #fff;
+  font-size: 10px;
+  font-weight: bold;
+  border-radius: 2px;
+  margin-left: 4px;
+  line-height: 1;
+}
+
+.minerva-footer-badges {
+  display: flex;
+  gap: 8px;
+}
+
+.minerva-footer-badge-box {
+  width: 44px;
+  height: 44px;
+  border: 1px solid #c8ccd1;
+  border-radius: 2px;
+  background-color: #fff;
+}
+
+.minerva-footer-divider {
+  height: 1px;
+  background-color: #c8ccd1;
+  margin: 12px 0;
 }
 
 .minerva-footer-meta {
   font-size: 11px;
   line-height: 16px;
+  margin-bottom: 8px;
+}
+
+.minerva-footer-meta p {
+  margin: 0 0 4px;
 }
 
 .minerva-footer-meta a {
@@ -12648,6 +12753,26 @@ function markArticleEdited() {
 
 .minerva-footer-meta a:hover {
   text-decoration: underline;
+}
+
+.minerva-footer-links {
+  font-size: 11px;
+  line-height: 20px;
+  margin-bottom: 4px;
+}
+
+.minerva-footer-links a {
+  color: #3366cc;
+  text-decoration: none;
+}
+
+.minerva-footer-links a:hover {
+  text-decoration: underline;
+}
+
+.minerva-footer-sep {
+  color: #54595d;
+  margin: 0 2px;
 }
 
 .article-ve-contents {
@@ -12660,6 +12785,89 @@ function markArticleEdited() {
   display: flex;
   gap: 16px;
   align-items: flex-start;
+}
+
+/* ── Vector22 footer ─────────────────────────────────────────── */
+
+.vector-footer {
+  background-color: #f8f9fa;
+  border-top: 1px solid #a2a9b1;
+  margin-top: 24px;
+  font-size: 13px;
+  color: #54595d;
+}
+
+.vector-footer__inner {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 16px 24px 24px;
+}
+
+.vector-footer__info {
+  margin-bottom: 16px;
+}
+
+.vector-footer__lastmod {
+  margin: 0 0 8px;
+  font-size: 13px;
+  color: #54595d;
+}
+
+.vector-footer__license {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #54595d;
+}
+
+.vector-footer__license a,
+.vector-footer__links a {
+  color: #3366cc;
+  text-decoration: none;
+}
+
+.vector-footer__license a:hover,
+.vector-footer__links a:hover {
+  text-decoration: underline;
+}
+
+.vector-footer__bottom {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.vector-footer__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 0;
+  font-size: 12px;
+}
+
+.vector-footer__links a {
+  padding: 0 4px;
+  border-right: 1px solid #a2a9b1;
+  line-height: 1.4;
+}
+
+.vector-footer__links a:last-child {
+  border-right: none;
+}
+
+.vector-footer__logos {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.vector-footer__logo-box {
+  width: 88px;
+  height: 31px;
+  border: 1px solid #a2a9b1;
+  border-radius: 2px;
+  background-color: #fff;
 }
 
 /* Article Text */
