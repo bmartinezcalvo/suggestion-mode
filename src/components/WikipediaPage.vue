@@ -18753,8 +18753,8 @@ function markArticleEdited() {
 /* Pulsating lightbulb under Edit tab — same position as dot-tab, 32px spread */
 .pulsating-lightbulb--tab {
   top: auto;
-  bottom: -13px;
-  left: 50%;
+  bottom: -33px;
+  left: calc(50% - 4px);
   transform: translateX(-50%);
   width: 8px;
   height: 12px;
