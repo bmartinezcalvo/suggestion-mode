@@ -18831,7 +18831,7 @@ function markArticleEdited() {
 }
 
 /* Minerva: lightbulb center at x=13.84px, y=3.6px within the 18×18px icon */
-.pulsating-dot-wrapper .pulsating-lightbulb {
+.pulsating-dot-wrapper .pulsating-lightbulb:not(.pulsating-lightbulb--tab) {
   top: 4px;
   left: 14px;
 }
