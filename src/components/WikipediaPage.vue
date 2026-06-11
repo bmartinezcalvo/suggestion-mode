@@ -18829,17 +18829,16 @@ function markArticleEdited() {
   z-index: 1;
 }
 
-/* Minerva: the lightbulb is in the top-right of the 18×18 combined icon
-   center ≈ x=13.84 (77%), y=4.8 (25%) within the 18×18px image */
+/* Minerva: lightbulb center at x=13.84px, y=3.6px within the 18×18px icon */
 .pulsating-dot-wrapper .pulsating-lightbulb {
-  top: 25%;
-  left: 77%;
+  top: 4px;
+  left: 14px;
 }
 
-/* Fixed-header edit button: same lightbulb position (20×21px icon) */
+/* Fixed-header: lightbulb center at x=15.52px, y=4.04px within the 20×21px icon */
 .fixed-header__btn .pulsating-lightbulb {
-  top: 25%;
-  left: 77%;
+  top: 4px;
+  left: 16px;
 }
 
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
