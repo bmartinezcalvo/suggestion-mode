@@ -568,14 +568,15 @@
                       <span class="tab-text" :class="{ 'tab-link': isEditMode }">Read</span>
                       <div v-if="!isEditMode" class="tab-indicator"></div>
                     </div>
-                    <div v-if="!articleLockToEdit" class="tab" :class="{ 'tab-selected': isEditMode }" @click="toggleEditMode">
+                    <div v-if="!articleLockToEdit" class="tab tab--edit" :class="{ 'tab-selected': isEditMode }" @click="toggleEditMode">
                       <div class="pulsating-dot-wrapper">
                         <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                         <span v-if="showPulsatingDot" class="pulsating-dot pulsating-dot--tab"></span>
-                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb pulsating-lightbulb--tab">
-                          <img :src="iconLightbulbPulsating" width="8" height="12" alt="" aria-hidden="true" class="pulsating-lightbulb-tab-icon" />
-                        </span>
                       </div>
+                      <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb-wrapper pulsating-lightbulb-wrapper--tab">
+                        <cdx-icon :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" />
+                        <span class="pulsating-lightbulb"></span>
+                      </span>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
                     <div v-if="!articleLockToEdit && editSourceEnabled" class="tab" @click="toggleEditMode">
@@ -18752,35 +18753,12 @@ function markArticleEdited() {
   bottom: -13px;
 }
 
-/* Pulsating lightbulb under Edit tab — same position as dot-tab, 32px spread */
-.pulsating-lightbulb--tab {
-  top: auto;
-  bottom: -33px;
+/* Pulsating lightbulb under Edit tab — positioned relative to .tab */
+.tab--edit .pulsating-lightbulb-wrapper--tab {
+  position: absolute;
+  bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
-  width: 8px;
-  height: 12px;
-  background-color: transparent;
-  border-radius: 4px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 0;
-  animation: pulsate-lightbulb-tab 1.5s ease-out infinite;
-}
-
-.pulsating-lightbulb-tab-icon {
-  width: 8px;
-  height: 12px;
-  position: relative;
-  z-index: 1;
-  flex-shrink: 0;
-}
-
-@keyframes pulsate-lightbulb-tab {
-  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4); }
-  70%  { box-shadow: 0 0 0 32px rgba(51, 102, 204, 0); }
-  100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
 }
 
 @keyframes pulsate {
