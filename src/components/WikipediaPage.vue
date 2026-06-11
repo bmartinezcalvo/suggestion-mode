@@ -5174,7 +5174,7 @@ import {
 import lordeImage from '../assets/lorde-1980.png';
 import scrollIcon from '../assets/scroll.svg';
 import iconEditLightbulb from '../assets/icon-edit-lightbulb.svg';
-import iconModifierV2 from '../assets/icon-modifier-lightbulb.svg';
+import iconModifierV2 from '../assets/icon-modifier-v2.svg';
 import iconLightbulb from '../assets/icon-lightbulb.svg';
 import iconEditLightbulbFixedHeader from '../assets/edit-lightbulb-fixed-header.svg';
 import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
@@ -18690,34 +18690,21 @@ function markArticleEdited() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  isolation: isolate;
 }
 
 .pulsating-lightbulb {
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -50%) scale(0);
+  transform: translate(-50%, -50%);
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: rgba(51, 102, 204, 0.2);
-  animation: pulsate-lightbulb 1.5s ease-out infinite;
+  background-color: transparent;
+  box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
+  animation: pulsate 1.5s ease-out infinite;
   pointer-events: none;
-  z-index: -1;
-}
-
-/* Minerva: the lightbulb is in the top-right of the 18×18 combined icon
-   center ≈ x=13.84 (77%), y=4.8 (25%) within the 18×18px image */
-.pulsating-dot-wrapper .pulsating-lightbulb {
-  top: 25%;
-  left: 77%;
-}
-
-@keyframes pulsate-lightbulb {
-  0%   { transform: translate(-50%, -50%) scale(0); opacity: 1; }
-  80%  { transform: translate(-50%, -50%) scale(1); opacity: 0; }
-  100% { transform: translate(-50%, -50%) scale(0); opacity: 0; }
+  z-index: 1;
 }
 
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
