@@ -18690,6 +18690,7 @@ function markArticleEdited() {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  isolation: isolate;
 }
 
 .pulsating-lightbulb {
@@ -18700,11 +18701,11 @@ function markArticleEdited() {
   width: 20px;
   height: 20px;
   border-radius: 50%;
-  background-color: transparent;
+  background-color: var(--background-color-progressive, #36c);
   box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
   animation: pulsate 1.5s ease-out infinite;
   pointer-events: none;
-  z-index: 1;
+  z-index: -1;
 }
 
 /* Minerva: the lightbulb is in the top-right of the 18×18 combined icon
