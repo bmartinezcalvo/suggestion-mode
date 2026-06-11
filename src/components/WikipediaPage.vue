@@ -13109,7 +13109,7 @@ function markArticleEdited() {
 .section-edit-link {
   color: var(--color-progressive, #36c);
   text-decoration: none;
-  padding: 0;
+  padding: 0 4px;
 }
 
 .section-edit-separator {
