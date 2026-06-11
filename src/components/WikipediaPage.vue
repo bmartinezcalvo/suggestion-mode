@@ -5495,7 +5495,7 @@ const articleLockToEdit = ref(false);
 // Pulsating dot & pulsating lightbulb (mutually exclusive)
 const pulsatingDotEnabled = ref(true);
 const pulsatingLightbulbEnabled = ref(false);
-const hasSeenEditMode = ref(false);
+const hasInteractedWithSuggestion = ref(false);
 
 function onPulsatingDotChange(val) {
   if (val) pulsatingLightbulbEnabled.value = false;
@@ -5507,14 +5507,14 @@ function onPulsatingLightbulbChange(val) {
 const showPulsatingDot = computed(() =>
   pulsatingDotEnabled.value &&
   !articleLockToEdit.value &&
-  !hasSeenEditMode.value &&
+  !hasInteractedWithSuggestion.value &&
   lightbulbModifierEnabled.value
 );
 const showPulsatingLightbulb = computed(() =>
   pulsatingLightbulbEnabled.value &&
   lightbulbModifierEnabled.value &&
   !articleLockToEdit.value &&
-  !hasSeenEditMode.value
+  !hasInteractedWithSuggestion.value
 );
 
 // End-of-article suggestions banner
@@ -7172,7 +7172,6 @@ function openEditAtSection(sectionId) {
   if (isMinervaSkin.value && isArrowOnceMode.value) {
     minervaSectionBannerDismissed.value[sectionId] = false;
   }
-  hasSeenEditMode.value = true;
   startPrototype();
 }
 
@@ -10831,6 +10830,7 @@ function openSuggestionAtTarget(id, targetRef, expandAfterScroll = false, option
     }
   };
   const openSuggestion = (suggestionId) => {
+    hasInteractedWithSuggestion.value = true;
     if (isMinervaSkin.value) {
       openMinervaSuggestion(suggestionId);
       return;
@@ -11481,7 +11481,6 @@ function toggleEditMode() {
   if (!isEditMode.value) {
     minervaEditSectionOnly.value = null;
     readModeReturnSectionId.value = null;
-    hasSeenEditMode.value = true;
     startPrototype();
     return;
   }
