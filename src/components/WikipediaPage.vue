@@ -5493,8 +5493,8 @@ function sectionHasSuggestions(sectionId) {
 const articleLockToEdit = ref(false);
 
 // Pulsating dot & pulsating lightbulb (mutually exclusive)
-const pulsatingDotEnabled = ref(true);
-const pulsatingLightbulbEnabled = ref(false);
+const pulsatingDotEnabled = ref(false);
+const pulsatingLightbulbEnabled = ref(true);
 const hasInteractedWithSuggestion = ref(false);
 
 function onPulsatingDotChange(val) {
