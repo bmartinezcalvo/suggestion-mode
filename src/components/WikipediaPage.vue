@@ -146,12 +146,16 @@
             <cdx-field is-fieldset class="menu-popup__other-fieldset">
               <template #label></template>
               <div class="menu-popup__toggle-row">
-                <span class="menu-popup__toggle-label">Lightbulb modifier en edit action</span>
+                <span class="menu-popup__toggle-label">Lightbulb modifier in edit action</span>
                 <cdx-toggle-switch v-model="lightbulbModifierEnabled" />
+              </div>
+              <div v-if="lightbulbModifierEnabled" class="menu-popup__toggle-row">
+                <span class="menu-popup__toggle-label">Pulsating lightbulb the 1st time</span>
+                <cdx-toggle-switch v-model="pulsatingLightbulbEnabled" @update:model-value="onPulsatingLightbulbChange" />
               </div>
               <div class="menu-popup__toggle-row">
                 <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
-                <cdx-toggle-switch v-model="pulsatingDotEnabled" />
+                <cdx-toggle-switch v-model="pulsatingDotEnabled" @update:model-value="onPulsatingDotChange" />
               </div>
               <div class="menu-popup__toggle-row">
                 <span class="menu-popup__toggle-label">Article lock to edit</span>
@@ -244,12 +248,16 @@
               <cdx-field is-fieldset class="menu-popup__other-fieldset">
                 <template #label></template>
                 <div class="menu-popup__toggle-row">
-                  <span class="menu-popup__toggle-label">Lightbulb modifier en edit action</span>
+                  <span class="menu-popup__toggle-label">Lightbulb modifier in edit action</span>
                   <cdx-toggle-switch v-model="lightbulbModifierEnabled" />
+                </div>
+                <div v-if="lightbulbModifierEnabled" class="menu-popup__toggle-row">
+                  <span class="menu-popup__toggle-label">Pulsating lightbulb the 1st time</span>
+                  <cdx-toggle-switch v-model="pulsatingLightbulbEnabled" @update:model-value="onPulsatingLightbulbChange" />
                 </div>
                 <div class="menu-popup__toggle-row">
                   <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
-                  <cdx-toggle-switch v-model="pulsatingDotEnabled" />
+                  <cdx-toggle-switch v-model="pulsatingDotEnabled" @update:model-value="onPulsatingDotChange" />
                 </div>
                 <div class="menu-popup__toggle-row">
                   <span class="menu-popup__toggle-label">Article lock to edit</span>
@@ -610,15 +618,17 @@
                 </button>
                 <button v-else class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
                   <div class="pulsating-dot-wrapper">
-                    <img
-                      v-if="lightbulbModifierEnabled"
-                      :src="iconModifierV2"
-                      width="18"
-                      height="18"
-                      alt=""
-                      aria-hidden="true"
-                      class="minerva-action-icon-img"
-                    />
+                    <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                      <img
+                        :src="iconModifierV2"
+                        width="18"
+                        height="18"
+                        alt=""
+                        aria-hidden="true"
+                        class="minerva-action-icon-img"
+                      />
+                      <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                    </span>
                     <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                     <span v-if="showPulsatingDot" class="pulsating-dot"></span>
                   </div>
@@ -654,12 +664,11 @@
                       <h2 class="heading-text">Early life</h2>
                       <span v-if="!articleLockToEdit" class="section-edit">
                         <span class="section-edit-inner">
-                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit<cdx-icon
-                            v-if="!isEditMode && lightbulbModifierEnabled"
+                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit<span v-if="!isEditMode && lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper"><cdx-icon
                             v-tooltip="'Suggestions available in this section'"
                             :icon="cdxIconLightbulb"
                             class="section-edit-lightbulb-icon"
-                          /></a><span class="section-edit-bracket">]</span>
+                          /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><span class="section-edit-bracket">]</span>
                         </span>
                       </span>
                     </div>
@@ -745,12 +754,11 @@
                 <h2 class="heading-text">Career</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<cdx-icon
-                      v-if="!isEditMode && lightbulbModifierEnabled"
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<span v-if="!isEditMode && lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper"><cdx-icon
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
-                    /></a><span class="section-edit-bracket">]</span>
+                    /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -790,12 +798,11 @@
                 <h2 class="heading-text">Poetry</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<cdx-icon
-                      v-if="!isEditMode && lightbulbModifierEnabled"
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<span v-if="!isEditMode && lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper"><cdx-icon
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
-                    /></a><span class="section-edit-bracket">]</span>
+                    /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -1111,14 +1118,16 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('early-life') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
                     <div class="pulsating-dot-wrapper">
-                      <img
-                        v-if="lightbulbModifierEnabled"
-                        :src="iconModifierV2"
-                        width="18"
-                        height="18"
-                        alt=""
-                        aria-hidden="true"
-                      />
+                      <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                        <img
+                          :src="iconModifierV2"
+                          width="18"
+                          height="18"
+                          alt=""
+                          aria-hidden="true"
+                        />
+                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                      </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
                     </div>
@@ -1150,14 +1159,16 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
                     <div class="pulsating-dot-wrapper">
-                      <img
-                        v-if="lightbulbModifierEnabled"
-                        :src="iconModifierV2"
-                        width="18"
-                        height="18"
-                        alt=""
-                        aria-hidden="true"
-                      />
+                      <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                        <img
+                          :src="iconModifierV2"
+                          width="18"
+                          height="18"
+                          alt=""
+                          aria-hidden="true"
+                        />
+                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                      </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
                     </div>
@@ -1201,14 +1212,16 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
                     <div class="pulsating-dot-wrapper">
-                      <img
-                        v-if="lightbulbModifierEnabled"
-                        :src="iconModifierV2"
-                        width="18"
-                        height="18"
-                        alt=""
-                        aria-hidden="true"
-                      />
+                      <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                        <img
+                          :src="iconModifierV2"
+                          width="18"
+                          height="18"
+                          alt=""
+                          aria-hidden="true"
+                        />
+                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                      </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
                     </div>
@@ -5451,14 +5464,29 @@ function sectionHasSuggestions(sectionId) {
 // Article lock to edit
 const articleLockToEdit = ref(false);
 
-// Pulsating dot
+// Pulsating dot & pulsating lightbulb (mutually exclusive)
 const pulsatingDotEnabled = ref(true);
+const pulsatingLightbulbEnabled = ref(false);
 const hasSeenEditMode = ref(false);
+
+function onPulsatingDotChange(val) {
+  if (val) pulsatingLightbulbEnabled.value = false;
+}
+function onPulsatingLightbulbChange(val) {
+  if (val) pulsatingDotEnabled.value = false;
+}
+
 const showPulsatingDot = computed(() =>
   pulsatingDotEnabled.value &&
   !articleLockToEdit.value &&
   !hasSeenEditMode.value &&
   lightbulbModifierEnabled.value
+);
+const showPulsatingLightbulb = computed(() =>
+  pulsatingLightbulbEnabled.value &&
+  lightbulbModifierEnabled.value &&
+  !articleLockToEdit.value &&
+  !hasSeenEditMode.value
 );
 
 // End-of-article suggestions banner
@@ -18654,6 +18682,29 @@ function markArticleEdited() {
   100% {
     box-shadow: 0 0 0 0 rgba(51, 102, 204, 0);
   }
+}
+
+/* ── pulsating lightbulb wrapper ────────────────────────────── */
+.pulsating-lightbulb-wrapper {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pulsating-lightbulb {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: transparent;
+  box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
+  animation: pulsate 1.5s ease-out infinite;
+  pointer-events: none;
+  z-index: 1;
 }
 
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
