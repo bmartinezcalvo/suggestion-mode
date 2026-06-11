@@ -18689,7 +18689,7 @@ function markArticleEdited() {
     box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
   }
   70% {
-    box-shadow: 0 0 0 8px rgba(51, 102, 204, 0);
+    box-shadow: 0 0 0 12px rgba(51, 102, 204, 0);
   }
   100% {
     box-shadow: 0 0 0 0 rgba(51, 102, 204, 0);
