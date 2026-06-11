@@ -571,7 +571,7 @@
                         <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                         <span v-if="showPulsatingDot" class="pulsating-dot pulsating-dot--tab"></span>
                         <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb pulsating-lightbulb--tab">
-                          <cdx-icon :icon="cdxIconLightbulb" class="pulsating-lightbulb-tab-icon" />
+                          <img :src="iconLightbulbPulsating" width="8" height="12" alt="" aria-hidden="true" class="pulsating-lightbulb-tab-icon" />
                         </span>
                       </div>
                       <div v-if="isEditMode" class="tab-indicator"></div>
@@ -5215,6 +5215,7 @@ import iconEditLightbulb from '../assets/icon-edit-lightbulb.svg';
 import iconModifierV2 from '../assets/icon-modifier-v2.svg';
 import iconLightbulb from '../assets/icon-lightbulb.svg';
 import iconEditLightbulbFixedHeader from '../assets/edit-lightbulb-fixed-header.svg';
+import iconLightbulbPulsating from '../assets/lightbulb-pulsating.svg';
 import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
 
 const cdxIconConfigure = '<path fill-rule="evenodd" d="M3 4.17V2h2v2.17a3.001 3.001 0 010 5.66V18H3V9.83a3.001 3.001 0 010-5.66M4 6a1 1 0 110 2 1 1 0 010-2m11 12v-6.17a3.001 3.001 0 010-5.66V2h2v4.17a3.001 3.001 0 010 5.66V18zm2-9a1 1 0 10-2 0 1 1 0 002 0"/><path fill-rule="evenodd" d="M11 11.17a3.001 3.001 0 010 5.66V18H9v-1.17a3.001 3.001 0 010-5.66V2h2zM10 13a1 1 0 110 2 1 1 0 010-2"/>';
@@ -18755,9 +18756,10 @@ function markArticleEdited() {
   bottom: -13px;
   left: 50%;
   transform: translateX(-50%);
-  width: 12px;
+  width: 8px;
   height: 12px;
   background-color: transparent;
+  border-radius: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -18765,9 +18767,8 @@ function markArticleEdited() {
 }
 
 .pulsating-lightbulb-tab-icon {
-  width: 12px !important;
-  height: 12px !important;
-  color: var(--color-progressive, #36c);
+  width: 8px;
+  height: 12px;
   position: relative;
   z-index: 1;
   flex-shrink: 0;
