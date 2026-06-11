@@ -158,6 +158,10 @@
                 <cdx-toggle-switch v-model="pulsatingDotEnabled" @update:model-value="onPulsatingDotChange" />
               </div>
               <div class="menu-popup__toggle-row">
+                <span class="menu-popup__toggle-label">Edit + Edit source</span>
+                <cdx-toggle-switch v-model="editSourceEnabled" />
+              </div>
+              <div class="menu-popup__toggle-row">
                 <span class="menu-popup__toggle-label">Article lock to edit</span>
                 <cdx-toggle-switch v-model="articleLockToEdit" />
               </div>
@@ -566,8 +570,12 @@
                       <div class="pulsating-dot-wrapper">
                         <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                         <span v-if="showPulsatingDot" class="pulsating-dot pulsating-dot--tab"></span>
+                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb pulsating-lightbulb--tab"></span>
                       </div>
                       <div v-if="isEditMode" class="tab-indicator"></div>
+                    </div>
+                    <div v-if="!articleLockToEdit && editSourceEnabled" class="tab" @click="toggleEditMode">
+                      <span class="tab-text tab-link">Edit source</span>
                     </div>
                     <div class="tab">
                       <span class="tab-text tab-link">View history</span>
@@ -669,7 +677,7 @@
                             v-tooltip="'Suggestions available in this section'"
                             :icon="cdxIconLightbulb"
                             class="section-edit-lightbulb-icon"
-                          /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><span class="section-edit-bracket">]</span>
+                          /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit source</a></template><span class="section-edit-bracket">]</span>
                         </span>
                       </span>
                     </div>
@@ -759,7 +767,7 @@
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
-                    /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><span class="section-edit-bracket">]</span>
+                    /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit source</a></template><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -819,7 +827,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Early works</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
@@ -838,7 +846,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Wider recognition</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
@@ -856,7 +864,7 @@
               <div class="section-heading-row">
                 <h2 class="heading-text">Prose</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
-                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('prose')">edit</a><span class="section-edit-bracket">]</span>
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('prose')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('prose')">edit source</a></template><span class="section-edit-bracket">]</span>
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -871,7 +879,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Sister Outsider</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
@@ -901,7 +909,7 @@
               <div class="section-heading-row">
                 <h2 class="heading-text">Film</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
-                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('film')">edit</a><span class="section-edit-bracket">]</span>
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('film')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('film')">edit source</a></template><span class="section-edit-bracket">]</span>
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -913,7 +921,7 @@
               </p>
               <div class="subsection-heading-row">
                 <h3 class="subsection-title">The Berlin years</h3>
-                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('berlin-years')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('berlin-years')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('berlin-years')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
               </div>
               <p>
                 <em>The Berlin Years: 1984–1992</em> documented Lorde's time in Germany as she led <a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-Germans</a> in a movement that would allow black people to establish identities for themselves outside of stereotypes and discrimination. After a long history of systemic racism in Germany, Lorde introduced a new sense of empowerment for minorities. As seen in the film, she walks through the streets with pride despite stares and words of discouragement. Including moments like these in a documentary was important for people to see during that time. It inspired them to take charge of their identities and discover who they are outside of the labels put on them by society. The film also educates people on the history of racism in Germany. This enables viewers to understand how Germany reached this point in history and how the society developed. Through her promotion of the study of history and her example of taking her experiences in her stride, she influenced people of many different backgrounds.<sup class="citation-marker">[51]</sup>
@@ -931,7 +939,7 @@
               <div class="section-heading-row">
                 <h2 class="heading-text">Theory</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
-                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('theory')">edit</a><span class="section-edit-bracket">]</span>
+                  <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('theory')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('theory')">edit source</a></template><span class="section-edit-bracket">]</span>
                 </span>
               </div>
               <div class="heading-divider"></div>
@@ -955,7 +963,7 @@
               </p>
               <div class="subsection-heading-row">
                 <h3 class="subsection-title theory-subheading">Feminist thought</h3>
-                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminist-thought')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminist-thought')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminist-thought')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
               </div>
               <p>
                 Lorde set out to confront issues of racism in feminist thought. She maintained that a great deal of the scholarship of White feminists served to augment the oppression of black women, a conviction that led to angry confrontation, most notably in a blunt open letter addressed to the fellow radical lesbian feminist <a href="https://en.wikipedia.org/wiki/Mary_Daly" target="_blank" rel="noopener">Mary Daly</a>, to which Lorde claimed she received no reply.<sup class="citation-marker">[68]</sup> Daly's reply letter to Lorde,<sup class="citation-marker">[69]</sup> dated four months later, was found in 2003 in Lorde's files after she died.<sup class="citation-marker">[70]</sup>
@@ -968,7 +976,7 @@
               </p>
               <div class="subsection-heading-row">
                 <h3 class="subsection-title theory-subheading">Lorde's comments on feminism</h3>
-                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminism-comments')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminism-comments')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminism-comments')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
               </div>
               <p>
                 Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
@@ -981,7 +989,7 @@
               </p>
               <div class="subsection-heading-row">
                 <h3 class="subsection-title theory-subheading">Influences on black feminism</h3>
-                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('black-feminism')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('black-feminism')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('black-feminism')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
               </div>
               <p>
                 Lorde's work on black feminism continues to be examined by scholars today. Jennifer C. Nash examines how black feminists acknowledge their identities and find love for themselves through those differences.<sup class="citation-marker">[77]</sup> Nash cites Lorde, who writes: "I urge each one of us here to reach down into that deep place of knowledge inside herself and touch that terror and loathing of any difference that lives there. See whose face it wears. Then the personal as the political can begin to illuminate all our choices."<sup class="citation-marker">[77]</sup> Nash explains that Lorde is urging black feminists to embrace politics rather than fear it, which will lead to an improvement in society for them. Lorde adds, "Black women sharing close ties with each other, politically or emotionally, are not the enemies of Black men. Too frequently, however, some Black men attempt to rule by fear those Black women who are more ally than enemy."<sup class="citation-marker">[78]</sup>
@@ -994,7 +1002,7 @@
               </p>
               <div class="subsection-heading-row">
                 <h3 class="subsection-title theory-subheading">Personal identity</h3>
-                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('personal-identity')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('personal-identity')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('personal-identity')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
               </div>
               <p>
                 Throughout Lorde's career she included the idea of a collective identity in many of her poems and books. She did not just identify with one category but she wanted to celebrate all parts of herself equally.<sup class="citation-marker">[80]</sup>
@@ -1022,7 +1030,7 @@
               </p>
               <div class="subsection-heading-row">
                 <h3 class="subsection-title theory-subheading">Contributions to the third-wave feminist discourse</h3>
-                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('third-wave')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('third-wave')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('third-wave')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
               </div>
               <p>
                 Around the 1960s, <a href="https://en.wikipedia.org/wiki/Second-wave_feminism" target="_blank" rel="noopener">second-wave feminism</a> became centered around discussions and debates about capitalism as a "biased, discriminatory, and unfair"<sup class="citation-marker">[87]</sup> institution, especially within the context of the rise of <a href="https://en.wikipedia.org/wiki/Globalization" target="_blank" rel="noopener">globalization</a>.
@@ -5491,6 +5499,9 @@ function sectionHasSuggestions(sectionId) {
 
 // Article lock to edit
 const articleLockToEdit = ref(false);
+
+// Edit + Edit source mode
+const editSourceEnabled = ref(false);
 
 // Pulsating dot & pulsating lightbulb (mutually exclusive)
 const pulsatingDotEnabled = ref(false);
@@ -13099,6 +13110,11 @@ function markArticleEdited() {
   padding: 0;
 }
 
+.section-edit-separator {
+  color: var(--color-base, #202122);
+  user-select: none;
+}
+
 .section-edit-link:hover {
   text-decoration: underline;
 }
@@ -18729,6 +18745,21 @@ function markArticleEdited() {
 /* Vector22 tab: centered on the tab-row bottom border */
 .pulsating-dot--tab {
   bottom: -13px;
+}
+
+/* Pulsating lightbulb under Edit tab — same position as dot-tab, 32px spread */
+.pulsating-lightbulb--tab {
+  top: auto;
+  bottom: -13px;
+  left: 50%;
+  transform: translateX(-50%);
+  animation: pulsate-lightbulb-tab 1.5s ease-out infinite;
+}
+
+@keyframes pulsate-lightbulb-tab {
+  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4); }
+  70%  { box-shadow: 0 0 0 32px rgba(51, 102, 204, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
 }
 
 @keyframes pulsate {
