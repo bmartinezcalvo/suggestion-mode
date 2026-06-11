@@ -572,8 +572,9 @@
                     <div class="tab">
                       <span class="tab-text tab-link">View history</span>
                     </div>
-                    <button class="tab-icon-btn">
+                    <button class="watch-btn">
                       <cdx-icon :icon="cdxIconStar" size="medium" />
+                      <span class="watch-btn-text">Watch</span>
                     </button>
                     <button class="tab-icon-btn" aria-label="Bookmark">
                       <cdx-icon :icon="cdxIconBookmarkOutline" size="medium" />
@@ -816,7 +817,10 @@
                             <p>
                 Her conception of her many layers of selfhood is replicated in the multi-genres of her work. Critic Carmen Birkle wrote: "Her multicultural self is thus reflected in a multicultural text, in multi-genres, in which the individual cultures are no longer separate and autonomous entities but melt into a larger whole without losing their individual importance." Her refusal to be placed in a particular category, whether social or literary, was characteristic of her determination to come across as an individual rather than a stereotype. Lorde considered herself a "lesbian, mother, warrior, poet" and used poetry to get this message across.
               </p>
-                            <h3 class="subsection-title">Early works</h3>
+                            <div class="subsection-heading-row">
+                              <h3 class="subsection-title">Early works</h3>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                            </div>
                             <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
               </p>
@@ -832,7 +836,10 @@
                             <p>
                 1974 saw the release of New York Head Shop and Museum, which gives a picture of Lorde's New York through the lenses of both the civil rights movement and her own restricted childhood: stricken with poverty and neglect and, in Lorde's opinion, in need of political action.
               </p>
-                            <h3 class="subsection-title">Wider recognition</h3>
+                            <div class="subsection-heading-row">
+                              <h3 class="subsection-title">Wider recognition</h3>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                            </div>
                             <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
               </p>
@@ -862,7 +869,10 @@
                             <p>
                 Lorde's deeply personal book Zami: A New Spelling of My Name (1982), subtitled a "biomythography", chronicles her childhood and adulthood. The narrative deals with the evolution of Lorde's sexuality and self-awareness.
               </p>
-                            <h3 class="subsection-title">Sister Outsider</h3>
+                            <div class="subsection-heading-row">
+                              <h3 class="subsection-title">Sister Outsider</h3>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit</a><span class="section-edit-bracket">]</span></span></span>
+                            </div>
                             <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
               </p>
@@ -901,7 +911,10 @@
               <p>
                 Lorde had several films that highlighted her journey as an <a href="https://en.wikipedia.org/wiki/Activism" target="_blank" rel="noopener">activist</a> in the 1980s and 1990s.<sup class="citation-marker">[50]</sup>
               </p>
-              <h3 class="subsection-title">The Berlin years</h3>
+              <div class="subsection-heading-row">
+                <h3 class="subsection-title">The Berlin years</h3>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('berlin-years')">edit</a><span class="section-edit-bracket">]</span></span></span>
+              </div>
               <p>
                 <em>The Berlin Years: 1984–1992</em> documented Lorde's time in Germany as she led <a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-Germans</a> in a movement that would allow black people to establish identities for themselves outside of stereotypes and discrimination. After a long history of systemic racism in Germany, Lorde introduced a new sense of empowerment for minorities. As seen in the film, she walks through the streets with pride despite stares and words of discouragement. Including moments like these in a documentary was important for people to see during that time. It inspired them to take charge of their identities and discover who they are outside of the labels put on them by society. The film also educates people on the history of racism in Germany. This enables viewers to understand how Germany reached this point in history and how the society developed. Through her promotion of the study of history and her example of taking her experiences in her stride, she influenced people of many different backgrounds.<sup class="citation-marker">[51]</sup>
               </p>
@@ -940,7 +953,10 @@
               <p>
                 In her essay "The Erotic as Power", written in 1978 and collected in <a href="https://en.wikipedia.org/wiki/Sister_Outsider" target="_blank" rel="noopener">Sister Outsider</a>, Lorde theorizes the Erotic as a site of power for women only when they learn to release it from its suppression and embrace it, without the sexualized meaning it often holds in mainstream society. She proposes that the Erotic needs to be explored and experienced wholeheartedly, because it exists not only in reference to sexuality and the sexual, but also as a feeling of enjoyment, love, and thrill that is felt towards any task or experience that satisfies women in their lives, be it reading a book or loving one's job.<sup class="citation-marker">[65]</sup> She dismisses "the false belief that only by the suppression of the erotic within our lives and consciousness can women be truly strong. But that strength is illusory, for it is fashioned within the context of male models of power".<sup class="citation-marker">[66]</sup> She explains how patriarchal society has misnamed it and used it against women, causing women to fear it. Women also fear it because the erotic is powerful and a deep feeling. Women must share each other's power rather than use it without consent, which is abuse. They should do it as a method to connect everyone in their differences and similarities. Utilizing the erotic as power allows women to use their knowledge and power to face the issues of racism, patriarchy, and our anti-erotic society.<sup class="citation-marker">[65]</sup> She claims that the erotic can be used as a source of power for women to live with passion in all areas of their life. With the erotic guiding life, Lorde encourages women to use the erotic as a compass to identify what holds value in women's lives. Furthermore, Lorde criticizes the idea of <a href="https://en.wikipedia.org/wiki/Compulsory_heterosexuality" target="_blank" rel="noopener">compulsory heterosexuality</a> and the idea that women's happiness will come through marriage, god, or religion. The idea of the erotic will empower women to not settle for what is conventionally expected or safe leaning into the idea of resisting patriarchal values put in place over women and their sexuality. Lorde sees the suppression of the erotic or conformity to heterosexual norms as a form of control over women. In order to assume control over oneself, she urges women to reclaim the erotic and assert control. She erases the erotic differences that lie between varying sexualities in order to promote these desires as a creative force for revolutionary change.<sup class="citation-marker">[65]</sup> While rejecting compulsory heterosexuality, this is a prevalent motif in Uses of the Erotic, and it still carries some heteronormative undertones. The erotic Lorde proposes both promotes this ideal, as "the aim of each thing which we do is to make our lives and the lives of our children richer and more possible. Within the celebration of the erotic in all our endeavours, my work becomes a conscious decision - a longed-for bed which I enter gratefully and from which I rise up empowered," explaining how wielding the erotic as preserving the future for women and children alike.<sup class="citation-marker">[67]</sup> Another feminist philosopher, <a href="https://en.wikipedia.org/wiki/Lee_Edelman" target="_blank" rel="noopener">Lee Edelman</a>, discusses the culture of heteronormativity as a structure upheld through reproduction and the perception of children as the future which relates to this quote as lending to heteronormative culture, despite her rejection of it. Lorde also lends to this reproductive theory by her establishing the root of the erotic as a, "deeply female and spiritual plane, firmly rooted in the power of our unexpressed or unrecognized feeling," imbuing to women that it is inherent to their womanhood. This supports a binary reality by asserting an essentialist view of gender and sex. Essentialism is debated among third-wave feminists and illustrated how intersectionality in third-wave feminism is approached differently than that of fourth-wave feminism.
               </p>
-              <h3 class="subsection-title theory-subheading">Feminist thought</h3>
+              <div class="subsection-heading-row">
+                <h3 class="subsection-title theory-subheading">Feminist thought</h3>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminist-thought')">edit</a><span class="section-edit-bracket">]</span></span></span>
+              </div>
               <p>
                 Lorde set out to confront issues of racism in feminist thought. She maintained that a great deal of the scholarship of White feminists served to augment the oppression of black women, a conviction that led to angry confrontation, most notably in a blunt open letter addressed to the fellow radical lesbian feminist <a href="https://en.wikipedia.org/wiki/Mary_Daly" target="_blank" rel="noopener">Mary Daly</a>, to which Lorde claimed she received no reply.<sup class="citation-marker">[68]</sup> Daly's reply letter to Lorde,<sup class="citation-marker">[69]</sup> dated four months later, was found in 2003 in Lorde's files after she died.<sup class="citation-marker">[70]</sup>
               </p>
@@ -950,7 +966,10 @@
               <p>
                 The criticism was not one-sided: many White feminists were angered by Lorde's brand of feminism. In her 1984 essay "The Master's Tools Will Never Dismantle the Master's House",<sup class="citation-marker">[72]</sup> Lorde attacked what she believed was underlying racism within feminism, describing it as unrecognized dependence on the patriarchy. She argued that, by denying difference in the category of women, White feminists merely furthered old systems of oppression and that, in so doing, they were preventing any real, lasting change. Her argument aligned White feminists who did not recognize race as a feminist issue with White male slave-masters, describing both as "agents of oppression".<sup class="citation-marker">[73]</sup>
               </p>
-              <h3 class="subsection-title theory-subheading">Lorde's comments on feminism</h3>
+              <div class="subsection-heading-row">
+                <h3 class="subsection-title theory-subheading">Lorde's comments on feminism</h3>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('feminism-comments')">edit</a><span class="section-edit-bracket">]</span></span></span>
+              </div>
               <p>
                 Lorde held that the key tenets of feminism were that all forms of oppression were interrelated; creating change required taking a public stand; differences should not be used to divide; revolution is a process; feelings are a form of self-knowledge that can inform and enrich activism; and acknowledging and experiencing pain helps women to transcend it.<sup class="citation-marker">[74]</sup>
               </p>
@@ -960,7 +979,10 @@
               <p>
                 Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
               </p>
-              <h3 class="subsection-title theory-subheading">Influences on black feminism</h3>
+              <div class="subsection-heading-row">
+                <h3 class="subsection-title theory-subheading">Influences on black feminism</h3>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('black-feminism')">edit</a><span class="section-edit-bracket">]</span></span></span>
+              </div>
               <p>
                 Lorde's work on black feminism continues to be examined by scholars today. Jennifer C. Nash examines how black feminists acknowledge their identities and find love for themselves through those differences.<sup class="citation-marker">[77]</sup> Nash cites Lorde, who writes: "I urge each one of us here to reach down into that deep place of knowledge inside herself and touch that terror and loathing of any difference that lives there. See whose face it wears. Then the personal as the political can begin to illuminate all our choices."<sup class="citation-marker">[77]</sup> Nash explains that Lorde is urging black feminists to embrace politics rather than fear it, which will lead to an improvement in society for them. Lorde adds, "Black women sharing close ties with each other, politically or emotionally, are not the enemies of Black men. Too frequently, however, some Black men attempt to rule by fear those Black women who are more ally than enemy."<sup class="citation-marker">[78]</sup>
               </p>
@@ -970,7 +992,10 @@
               <p>
                 In 1981, Lorde and a fellow writer friend, Barbara Smith founded <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a> which was dedicated to helping other black feminist writers by provided resources, guidance and encouragement. Lorde encouraged those around her to celebrate their differences such as race, sexuality or class instead of dwelling upon them, and wanted everyone to have similar opportunities.<sup class="citation-marker">[79]</sup>
               </p>
-              <h3 class="subsection-title theory-subheading">Personal identity</h3>
+              <div class="subsection-heading-row">
+                <h3 class="subsection-title theory-subheading">Personal identity</h3>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('personal-identity')">edit</a><span class="section-edit-bracket">]</span></span></span>
+              </div>
               <p>
                 Throughout Lorde's career she included the idea of a collective identity in many of her poems and books. She did not just identify with one category but she wanted to celebrate all parts of herself equally.<sup class="citation-marker">[80]</sup>
               </p>
@@ -995,7 +1020,10 @@
               <p>
                 While highlighting Lorde's intersectional points through a lens that focuses on race, gender, socioeconomic status/class and so on, we must also embrace one of her salient identities, lesbianism. She was a lesbian and navigated spaces interlocking her womanhood, gayness and blackness in ways that trumped White feminism, predominantly White gay spaces and black male masculinity. Lorde used those identities within her work and ultimately it guided her to create pieces that embodied lesbianism in a light that educated people of many social classes and identities on the issues black lesbian women face in society.
               </p>
-              <h3 class="subsection-title theory-subheading">Contributions to the third-wave feminist discourse</h3>
+              <div class="subsection-heading-row">
+                <h3 class="subsection-title theory-subheading">Contributions to the third-wave feminist discourse</h3>
+                <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('third-wave')">edit</a><span class="section-edit-bracket">]</span></span></span>
+              </div>
               <p>
                 Around the 1960s, <a href="https://en.wikipedia.org/wiki/Second-wave_feminism" target="_blank" rel="noopener">second-wave feminism</a> became centered around discussions and debates about capitalism as a "biased, discriminatory, and unfair"<sup class="citation-marker">[87]</sup> institution, especially within the context of the rise of <a href="https://en.wikipedia.org/wiki/Globalization" target="_blank" rel="noopener">globalization</a>.
               </p>
@@ -12414,7 +12442,7 @@ function markArticleEdited() {
 }
 
 .language-button :deep(.cdx-icon) {
-  color: #36c;
+  color: var(--color-progressive, #36c);
 }
 
 .language-text {
@@ -12462,7 +12490,7 @@ function markArticleEdited() {
   border: none;
   padding: 8px 12px;
   cursor: pointer;
-  color: #202122;
+  color: var(--color-neutral, #404244);
   border-radius: 2px;
   gap: 4px;
   align-items: center;
@@ -12476,7 +12504,7 @@ function markArticleEdited() {
   font-family: 'Inter', sans-serif;
   font-size: 14px;
   line-height: 20px;
-  color: #202122;
+  color: var(--color-neutral, #404244);
 }
 
 @media (max-width: 1119px) {
@@ -12539,12 +12567,37 @@ function markArticleEdited() {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  color: #202122;
+  color: var(--color-neutral, #404244);
   margin-bottom: 4px;
 }
 
 .tab-icon-btn:hover {
   background-color: #f8f9fa;
+}
+
+.watch-btn {
+  background-color: rgba(255, 255, 255, 0);
+  border: 1px solid rgba(255, 255, 255, 0);
+  border-radius: 2px;
+  padding: 5px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  cursor: pointer;
+  color: var(--color-neutral, #404244);
+  margin-bottom: 4px;
+}
+
+.watch-btn:hover {
+  background-color: #f8f9fa;
+}
+
+.watch-btn-text {
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 20px;
+  color: var(--color-neutral, #404244);
 }
 
 .toolbar-divider {
@@ -13044,18 +13097,25 @@ function markArticleEdited() {
 .section-edit-link {
   color: var(--color-progressive, #36c);
   text-decoration: none;
-  padding: 0 4px;
+  padding: 0;
 }
 
 .section-edit-link:hover {
   text-decoration: underline;
 }
 
+.subsection-heading-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 16px 0 0;
+}
+
 .subsection-title {
   display: block;
   font-size: 18px;
   font-weight: 600;
-  margin: 16px 0 0;
+  margin: 0;
 }
 
 .minerva-skin .subsection-title {
