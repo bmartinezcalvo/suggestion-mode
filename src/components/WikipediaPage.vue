@@ -18707,6 +18707,13 @@ function markArticleEdited() {
   z-index: 1;
 }
 
+/* Minerva: the lightbulb is in the top-right of the 18×18 combined icon
+   center ≈ x=13.84 (77%), y=4.8 (25%) within the 18×18px image */
+.pulsating-dot-wrapper .pulsating-lightbulb {
+  top: 25%;
+  left: 77%;
+}
+
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
 
 .section-edit-lightbulb-icon {
