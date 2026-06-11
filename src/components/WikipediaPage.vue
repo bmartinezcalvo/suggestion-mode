@@ -103,14 +103,16 @@
           <!-- Edit (with lightbulb modifier if badge mode) -->
           <button v-if="!articleLockToEdit" class="fixed-header__btn" aria-label="Edit" @click="toggleEditMode">
             <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
-            <img
-              v-else
-              :src="iconEditLightbulbFixedHeader"
-              width="20"
-              height="21"
-              alt=""
-              aria-hidden="true"
-            />
+            <span v-else class="pulsating-lightbulb-wrapper">
+              <img
+                :src="iconEditLightbulbFixedHeader"
+                width="20"
+                height="21"
+                alt=""
+                aria-hidden="true"
+              />
+              <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+            </span>
           </button>
           <!-- Languages -->
           <button class="fixed-header__btn fixed-header__btn--languages" aria-label="95 languages">
@@ -18830,6 +18832,12 @@ function markArticleEdited() {
 /* Minerva: the lightbulb is in the top-right of the 18×18 combined icon
    center ≈ x=13.84 (77%), y=4.8 (25%) within the 18×18px image */
 .pulsating-dot-wrapper .pulsating-lightbulb {
+  top: 25%;
+  left: 77%;
+}
+
+/* Fixed-header edit button: same lightbulb position (20×21px icon) */
+.fixed-header__btn .pulsating-lightbulb {
   top: 25%;
   left: 77%;
 }
