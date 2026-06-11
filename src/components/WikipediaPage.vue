@@ -18755,7 +18755,7 @@ function markArticleEdited() {
 /* Pulsating lightbulb under Edit tab — same position as dot-tab, 32px spread */
 .pulsating-lightbulb--tab {
   top: auto;
-  bottom: -13px;
+  bottom: -33px;
   left: 50%;
   transform: translateX(-50%);
   width: 8px;
@@ -18765,6 +18765,7 @@ function markArticleEdited() {
   display: flex;
   align-items: center;
   justify-content: center;
+  z-index: 0;
   animation: pulsate-lightbulb-tab 1.5s ease-out infinite;
 }
 
