@@ -18684,6 +18684,18 @@ function markArticleEdited() {
   }
 }
 
+@keyframes pulsate-lightbulb {
+  0% {
+    box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
+  }
+  70% {
+    box-shadow: 0 0 0 8px rgba(51, 102, 204, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(51, 102, 204, 0);
+  }
+}
+
 /* ── pulsating lightbulb wrapper ────────────────────────────── */
 .pulsating-lightbulb-wrapper {
   position: relative;
@@ -18697,12 +18709,12 @@ function markArticleEdited() {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 12px;
-  height: 12px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background-color: rgba(51, 102, 204, 0.2);
   box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
-  animation: pulsate 1.5s ease-out infinite;
+  animation: pulsate-lightbulb 1.5s ease-out infinite;
   pointer-events: none;
   z-index: 1;
 }
