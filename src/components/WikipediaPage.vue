@@ -18697,10 +18697,10 @@ function markArticleEdited() {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 20px;
-  height: 20px;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background-color: transparent;
+  background-color: rgba(51, 102, 204, 0.2);
   box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
   animation: pulsate 1.5s ease-out infinite;
   pointer-events: none;
