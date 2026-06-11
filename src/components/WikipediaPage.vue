@@ -570,7 +570,9 @@
                       <div class="pulsating-dot-wrapper">
                         <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                         <span v-if="showPulsatingDot" class="pulsating-dot pulsating-dot--tab"></span>
-                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb pulsating-lightbulb--tab"></span>
+                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb pulsating-lightbulb--tab">
+                          <cdx-icon :icon="cdxIconLightbulb" class="pulsating-lightbulb-tab-icon" />
+                        </span>
                       </div>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
@@ -18753,7 +18755,22 @@ function markArticleEdited() {
   bottom: -13px;
   left: 50%;
   transform: translateX(-50%);
+  width: 12px;
+  height: 12px;
+  background-color: transparent;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   animation: pulsate-lightbulb-tab 1.5s ease-out infinite;
+}
+
+.pulsating-lightbulb-tab-icon {
+  width: 12px !important;
+  height: 12px !important;
+  color: var(--color-progressive, #36c);
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
 }
 
 @keyframes pulsate-lightbulb-tab {
