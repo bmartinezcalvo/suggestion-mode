@@ -66,6 +66,14 @@
       <span>Thank you for helping to make this section easier for people to read.</span>
     </div>
     <div
+      v-if="showNoSuggestionsAvailableToast && toastsEnabled"
+      class="minerva-toast minerva-toast--zero"
+      role="status"
+      aria-live="polite"
+    >
+      No suggestions available for now
+    </div>
+    <div
       v-if="!isMinervaSkin && toastsEnabled && showSuggestionSuccessToast"
       class="vector-success-toast"
       role="status"
@@ -103,7 +111,7 @@
           <!-- Edit (with lightbulb modifier if badge mode) -->
           <button v-if="!articleLockToEdit" class="fixed-header__btn" aria-label="Edit" @click="toggleEditMode">
             <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
-            <span v-else class="pulsating-lightbulb-wrapper">
+            <span v-else v-tooltip="'Suggestions available in this section'" class="pulsating-lightbulb-wrapper">
               <img
                 :src="iconEditLightbulbFixedHeader"
                 width="20"
@@ -147,17 +155,9 @@
             </cdx-field>
             <cdx-field is-fieldset class="menu-popup__other-fieldset">
               <template #label></template>
-              <div class="menu-popup__toggle-row">
-                <span class="menu-popup__toggle-label">Lightbulb modifier in edit action</span>
-                <cdx-toggle-switch v-model="lightbulbModifierEnabled" />
-              </div>
               <div v-if="lightbulbModifierEnabled" class="menu-popup__toggle-row">
                 <span class="menu-popup__toggle-label">Pulsating lightbulb the 1st time</span>
                 <cdx-toggle-switch v-model="pulsatingLightbulbEnabled" @update:model-value="onPulsatingLightbulbChange" />
-              </div>
-              <div class="menu-popup__toggle-row">
-                <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
-                <cdx-toggle-switch v-model="pulsatingDotEnabled" @update:model-value="onPulsatingDotChange" />
               </div>
               <div class="menu-popup__toggle-row">
                 <span class="menu-popup__toggle-label">Edit + Edit source</span>
@@ -253,17 +253,9 @@
               </cdx-field>
               <cdx-field is-fieldset class="menu-popup__other-fieldset">
                 <template #label></template>
-                <div class="menu-popup__toggle-row">
-                  <span class="menu-popup__toggle-label">Lightbulb modifier in edit action</span>
-                  <cdx-toggle-switch v-model="lightbulbModifierEnabled" />
-                </div>
                 <div v-if="lightbulbModifierEnabled" class="menu-popup__toggle-row">
                   <span class="menu-popup__toggle-label">Pulsating lightbulb the 1st time</span>
                   <cdx-toggle-switch v-model="pulsatingLightbulbEnabled" @update:model-value="onPulsatingLightbulbChange" />
-                </div>
-                <div class="menu-popup__toggle-row">
-                  <span class="menu-popup__toggle-label">Pulsating dot the 1st time</span>
-                  <cdx-toggle-switch v-model="pulsatingDotEnabled" @update:model-value="onPulsatingDotChange" />
                 </div>
                 <div class="menu-popup__toggle-row">
                   <span class="menu-popup__toggle-label">Article lock to edit</span>
@@ -573,10 +565,6 @@
                         <span class="tab-text" :class="{ 'tab-link': !isEditMode }">Edit</span>
                         <span v-if="showPulsatingDot" class="pulsating-dot pulsating-dot--tab"></span>
                       </div>
-                      <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb-wrapper pulsating-lightbulb-wrapper--tab">
-                        <cdx-icon :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" />
-                        <span class="pulsating-lightbulb"></span>
-                      </span>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
                     <div v-if="!articleLockToEdit && editSourceEnabled" class="tab" @click="toggleEditMode">
@@ -678,7 +666,7 @@
                       <h2 class="heading-text">Early life</h2>
                       <span v-if="!articleLockToEdit" class="section-edit">
                         <span class="section-edit-inner">
-                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit<span v-if="!isEditMode && lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper"><cdx-icon
+                          <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-life')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('early-life')" class="pulsating-lightbulb-wrapper"><cdx-icon
                             v-tooltip="'Suggestions available in this section'"
                             :icon="cdxIconLightbulb"
                             class="section-edit-lightbulb-icon"
@@ -768,7 +756,7 @@
                 <h2 class="heading-text">Career</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<span v-if="!isEditMode && lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper"><cdx-icon
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('career')" class="pulsating-lightbulb-wrapper"><cdx-icon
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
@@ -812,7 +800,7 @@
                 <h2 class="heading-text">Poetry</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<span v-if="!isEditMode && lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper"><cdx-icon
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('poetry')" class="pulsating-lightbulb-wrapper"><cdx-icon
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
@@ -832,7 +820,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Early works</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('early-works')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
@@ -851,7 +839,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Wider recognition</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('wider-recognition')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
@@ -884,7 +872,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Sister Outsider</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit</a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('sister-outsider')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
@@ -1159,7 +1147,7 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('early-life') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
                     <div class="pulsating-dot-wrapper">
-                      <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                      <span v-if="lightbulbModifierEnabled && sectionHasSuggestions('early-life')" class="pulsating-lightbulb-wrapper">
                         <img
                           :src="iconModifierV2"
                           width="18"
@@ -1200,7 +1188,7 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
                     <div class="pulsating-dot-wrapper">
-                      <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                      <span v-if="lightbulbModifierEnabled && sectionHasSuggestions('career')" class="pulsating-lightbulb-wrapper">
                         <img
                           :src="iconModifierV2"
                           width="18"
@@ -1253,7 +1241,7 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
                     <div class="pulsating-dot-wrapper">
-                      <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
+                      <span v-if="lightbulbModifierEnabled && sectionHasSuggestions('poetry')" class="pulsating-lightbulb-wrapper">
                         <img
                           :src="iconModifierV2"
                           width="18"
@@ -5440,6 +5428,8 @@ const showMinervaMoreSuggestionsToast = ref(false);
 const showMinervaZeroSuggestionsToast = ref(false);
 const showPaginationNoSuggestionsToast = ref(false);
 const showSuggestionSuccessToast = ref(false);
+const showNoSuggestionsAvailableToast = ref(false);
+let noSuggestionsAvailableToastTimer = null;
 const showMinervaRedoButton = ref(false);
 const minervaViewportWidth = ref(375);
 const minervaToolbarAvailableWidth = ref(0);
@@ -5498,7 +5488,7 @@ const isReadModeToastDismissed = ref(false);
 const hasScrolledForToast = ref(false);
 
 // Sections that have suggestions available
-const SECTIONS_WITH_SUGGESTIONS = new Set(['early-life', 'career', 'poetry']);
+const SECTIONS_WITH_SUGGESTIONS = new Set(['career', 'poetry', 'prose', 'early-works', 'wider-recognition', 'sister-outsider']);
 function sectionHasSuggestions(sectionId) {
   return SECTIONS_WITH_SUGGESTIONS.has(sectionId);
 }
@@ -5530,6 +5520,7 @@ const showPulsatingDot = computed(() =>
 const showPulsatingLightbulb = computed(() =>
   pulsatingLightbulbEnabled.value &&
   lightbulbModifierEnabled.value &&
+  !isEditMode.value &&
   !articleLockToEdit.value &&
   !hasInteractedWithSuggestion.value
 );
@@ -7131,6 +7122,11 @@ function maybeShowMinervaNoMoreSuggestionsState() {
   }
 
   if (minervaEditSectionOnly.value && sectionSuggestionCount.value === 0 && otherSuggestionCount.value > 0) {
+    // Only show empty state if this section actually had suggestions (i.e., they were all completed).
+    // If the section never had suggestions, don't show empty state — a toast will appear instead.
+    if (!sectionHasSuggestions(minervaEditSectionOnly.value)) {
+      return false;
+    }
     return openMinervaNoMoreSuggestionsStateSheet('section');
   }
 
@@ -7178,6 +7174,15 @@ function startPrototype() {
   applyPrototypeMode(selectedPrototype.value);
   closePrototypeDialog();
   enterEditMode();
+}
+
+function showNoSuggestionsAvailableToastFn() {
+  if (noSuggestionsAvailableToastTimer) clearTimeout(noSuggestionsAvailableToastTimer);
+  showNoSuggestionsAvailableToast.value = true;
+  noSuggestionsAvailableToastTimer = setTimeout(() => {
+    showNoSuggestionsAvailableToast.value = false;
+    noSuggestionsAvailableToastTimer = null;
+  }, 3000);
 }
 
 function openEditAtSection(sectionId) {
@@ -9307,7 +9312,7 @@ function getEditSectionHeadingElement(sectionElement) {
   return sectionElement.querySelector('.heading-text-edit');
 }
 
-function scrollToEditSection(sectionId) {
+function scrollToEditSection(sectionId, { behavior = 'smooth' } = {}) {
   const targetRef = editSectionRefs[sectionId];
   const sectionElement = targetRef?.value;
   if (!(sectionElement instanceof HTMLElement) || typeof window === 'undefined') return;
@@ -9316,7 +9321,7 @@ function scrollToEditSection(sectionId) {
   const targetTop = window.scrollY + heading.getBoundingClientRect().top - toolbarHeight;
   window.scrollTo({
     top: Math.max(0, Math.round(targetTop)),
-    behavior: 'smooth'
+    behavior
   });
 }
 
@@ -10720,6 +10725,12 @@ watch(isLoading, (newValue) => {
       }, 2000);
     }, 500);
   }
+  // Section with no suggestions: show "No suggestions available for now" toast
+  if (!newValue && isEditMode.value && readModeReturnSectionId.value && !sectionHasSuggestions(readModeReturnSectionId.value)) {
+    setTimeout(() => {
+      showNoSuggestionsAvailableToastFn();
+    }, 500);
+  }
 });
 
 
@@ -11473,6 +11484,13 @@ function enterEditMode() {
   hasUnsavedChanges.value = false;
   nextTick(() => {
     captureEditSnapshot();
+    // Scroll instantly to the target section while the loading overlay covers the page,
+    // so that when the overlay disappears the position is already correct (no visible jump).
+    if (pendingScrollSection.value) {
+      const target = pendingScrollSection.value;
+      pendingScrollSection.value = null;
+      scrollToEditSection(target, { behavior: 'instant' });
+    }
   });
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
@@ -18821,6 +18839,10 @@ function markArticleEdited() {
 }
 
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
+
+:deep(.cdx-tooltip) {
+  font-size: 12px;
+}
 
 .section-edit-lightbulb-icon {
   width: 12px;
