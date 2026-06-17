@@ -756,7 +756,7 @@
                 <h2 class="heading-text">Career</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('career')" class="pulsating-lightbulb-wrapper"><cdx-icon
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('career')" class="pulsating-lightbulb-wrapper"><cdx-icon
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
@@ -800,7 +800,7 @@
                 <h2 class="heading-text">Poetry</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('poetry')" class="pulsating-lightbulb-wrapper"><cdx-icon
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('poetry')" class="pulsating-lightbulb-wrapper"><cdx-icon
                       v-tooltip="'Suggestions available in this section'"
                       :icon="cdxIconLightbulb"
                       class="section-edit-lightbulb-icon"
@@ -820,7 +820,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Early works</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('early-works')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('early-works')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
@@ -839,7 +839,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Wider recognition</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('wider-recognition')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('wider-recognition')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
@@ -872,7 +872,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Sister Outsider</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasSuggestions('sister-outsider')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('sister-outsider')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
@@ -1188,7 +1188,7 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
                     <div class="pulsating-dot-wrapper">
-                      <span v-if="lightbulbModifierEnabled && sectionHasSuggestions('career')" class="pulsating-lightbulb-wrapper">
+                      <span v-if="lightbulbModifierEnabled && sectionHasPendingSuggestions('career')" class="pulsating-lightbulb-wrapper">
                         <img
                           :src="iconModifierV2"
                           width="18"
@@ -1241,7 +1241,7 @@
                   </button>
                   <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
                     <div class="pulsating-dot-wrapper">
-                      <span v-if="lightbulbModifierEnabled && sectionHasSuggestions('poetry')" class="pulsating-lightbulb-wrapper">
+                      <span v-if="lightbulbModifierEnabled && sectionHasPendingSuggestions('poetry')" class="pulsating-lightbulb-wrapper">
                         <img
                           :src="iconModifierV2"
                           width="18"
@@ -5562,13 +5562,14 @@ const desktopPaginationLabel = computed(() => (
   `${desktopPaginationIndex.value + 1} of ${desktopPaginationIds.value.length} suggestions`
 ));
 const isDesktopPaginationPrevDisabled = computed(() => (
-  desktopPaginationIds.value.length <= 1
+  desktopPaginationIndex.value === 0
 ));
 const isDesktopPaginationNextDisabled = computed(() => (
-  desktopPaginationIds.value.length <= 1
+  desktopPaginationIds.value.length > 1 &&
+  desktopPaginationIndex.value === desktopPaginationIds.value.length - 1
 ));
 const showDesktopPaginationArrows = computed(() => (
-  desktopPaginationIds.value.length > 1
+  desktopPaginationIds.value.length >= 1
 ));
 const showDesktopPaginationControls = computed(
   () => !isMinervaSkin.value &&
@@ -5680,6 +5681,16 @@ const SECTIONS_WITH_SUGGESTIONS = new Set(['career', 'poetry', 'prose', 'early-w
 function sectionHasSuggestions(sectionId) {
   return SECTIONS_WITH_SUGGESTIONS.has(sectionId);
 }
+// Returns true only if the section has PENDING (not yet completed/declined) suggestions
+function sectionHasPendingSuggestions(sectionId) {
+  if (sectionId === 'career') return isSuggestion1Pending.value;
+  if (sectionId === 'poetry') return isSuggestion8Pending.value || isSuggestion6Pending.value || isSuggestion2Pending.value || isSuggestion4Pending.value;
+  if (sectionId === 'early-works') return isSuggestion8Pending.value || isSuggestion6Pending.value;
+  if (sectionId === 'wider-recognition') return isSuggestion2Pending.value || isSuggestion4Pending.value;
+  if (sectionId === 'prose') return isSuggestion7Pending.value || isSuggestion3Pending.value;
+  if (sectionId === 'sister-outsider') return isSuggestion3Pending.value;
+  return false;
+}
 
 // Article lock to edit
 const articleLockToEdit = ref(false);
@@ -5710,7 +5721,8 @@ const showPulsatingLightbulb = computed(() =>
   lightbulbModifierEnabled.value &&
   !isEditMode.value &&
   !articleLockToEdit.value &&
-  !hasInteractedWithSuggestion.value
+  !hasInteractedWithSuggestion.value &&
+  availableSuggestionCount.value > 0
 );
 
 // End-of-article suggestions banner
@@ -15387,9 +15399,9 @@ function markArticleEdited() {
 }
 
 .vector-pagination-controls {
-  position: fixed;
-  right: 32px;
-  bottom: 32px;
+  position: sticky;
+  top: 42px;
+  margin-left: auto;
   display: inline-flex;
   align-items: center;
   gap: 12px;
@@ -16558,6 +16570,21 @@ function markArticleEdited() {
   width: 325px;
   z-index: 220;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.vector-success-toast :deep(.cdx-message__icon),
+.vector-success-toast :deep(.cdx-message__icon svg),
+.vector-success-toast :deep(.cdx-message__icon .cdx-icon),
+.vector-success-toast :deep(svg) {
+  color: var(--color-success, #14866d);
+  fill: var(--color-success, #14866d);
+}
+
+.vector-success-toast :deep(.cdx-message__content) {
+  font-size: 14px;
+  line-height: 22px;
 }
 
 
@@ -19419,11 +19446,17 @@ function markArticleEdited() {
 }
 
 /* Vector22 publish dialog */
+.vector-publish-dialog :deep(.cdx-dialog),
+.vector-publish-dialog :deep(.cdx-dialog__shell) {
+  width: 512px;
+  max-width: min(512px, 90vw);
+}
+
 .vector-publish-dialog-content {
   display: flex;
   flex-direction: column;
   gap: 16px;
-  min-width: 360px;
+  width: 100%;
 }
 
 .vector-publish-count {
