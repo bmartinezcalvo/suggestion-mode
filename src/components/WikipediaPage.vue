@@ -15399,9 +15399,9 @@ function markArticleEdited() {
 }
 
 .vector-pagination-controls {
-  position: sticky;
-  top: 42px;
-  margin-left: auto;
+  position: fixed;
+  right: 32px;
+  bottom: 32px;
   display: inline-flex;
   align-items: center;
   gap: 12px;
