@@ -75,12 +75,12 @@
     </div>
     <div
       v-if="!isMinervaSkin && toastsEnabled && showSuggestionSuccessToast"
-      class="vector-success-toast"
+      class="vector-success-toast cdx-message cdx-message--block cdx-message--success"
       role="status"
       aria-live="polite"
     >
-      <cdx-icon :icon="cdxIconSuccess" size="small" />
-      <span>Thank you for helping to make this section easier for people to read.</span>
+      <cdx-icon :icon="cdxIconSuccess" class="cdx-message__icon" />
+      <div class="cdx-message__content">Thank you for helping to make this section easier for people to read.</div>
     </div>
     
     <!-- Page Container -->
@@ -1751,10 +1751,11 @@
               </div>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary minerva-toolbar-fixed"
-                :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
-                :disabled="!hasUnsavedChanges"
-              aria-label="Publish"
-            >
+                :class="{ 'toolbar-btn-primary--disabled': !canPublish }"
+                :disabled="!canPublish"
+                aria-label="Publish"
+                @click="requestPublishChanges"
+              >
                 <cdx-icon :icon="cdxIconCheck" size="medium" />
               </button>
             </div>
@@ -1944,9 +1945,10 @@
               </div>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
-                :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
-                :disabled="!hasUnsavedChanges"
+                :class="{ 'toolbar-btn-primary--disabled': !canPublish }"
+                :disabled="!canPublish"
                 aria-label="Publish"
+                @click="requestPublishChanges"
               >
                 <cdx-icon :icon="cdxIconNext" size="medium" />
               </button>
@@ -2079,9 +2081,10 @@
               </div>
               <button
                 class="toolbar-btn toolbar-btn-icon-only toolbar-btn-primary"
-                :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }"
-                :disabled="!hasUnsavedChanges"
+                :class="{ 'toolbar-btn-primary--disabled': !canPublish }"
+                :disabled="!canPublish"
                 aria-label="Publish"
+                @click="requestPublishChanges"
               >
                 <cdx-icon :icon="cdxIconNext" size="medium" />
               </button>
@@ -2174,7 +2177,7 @@
                   <cdx-icon :icon="cdxIconEdit" size="medium" />
                   <cdx-icon :icon="cdxIconExpand" size="small" class="dropdown-icon" />
                 </button>
-                <button class="toolbar-btn-primary" :class="{ 'toolbar-btn-primary--disabled': !hasUnsavedChanges }" :disabled="!hasUnsavedChanges">
+                <button class="toolbar-btn-primary" :class="{ 'toolbar-btn-primary--disabled': !canPublish }" :disabled="!canPublish" @click="requestPublishChanges">
                   Publish changes...
                 </button>
               </div>
@@ -3968,8 +3971,41 @@
             </div>
           </div>
 
+          <div
+            v-if="showSuggestionsDisplay && !isSuggestionResolved5 && !isSuggestionDeclined5"
+            ref="suggestionsSidebarRef5"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded5,
+              'suggestion-card--expanded': isCardExpanded5,
+              'suggestion-card--hover': isHovered5
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset5}px` }"
+            @mouseenter="isCardHovered5 = true"
+            @mouseleave="isCardHovered5 = false"
+          >
+            <button v-if="!isCardExpanded5" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded5 = true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Disambiguation link</div>
+            </button>
+            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded5 = false" aria-expanded="true">
+              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+              <div class="suggestion-title">Disambiguation link</div>
+            </button>
+            <div v-if="isCardExpanded5" class="suggestion-content">
+              <p class="suggestion-description">This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.</p>
+              <div class="suggestion-actions">
+                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(5)">Link specifically</button>
+                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(5)">Dismiss</button>
+                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+
           <!-- Empty State - Show when all suggestions are completed or declined -->
-          <div 
+          <div
             v-if="isMinervaSkin && ((showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge))"
             class="empty-state"
           >
@@ -6151,6 +6187,7 @@ const bannerSuggestionCount = computed(() => (
     ? sectionSuggestionCount.value
     : availableSuggestionCount.value
 ));
+const canPublish = computed(() => hasUnsavedChanges.value || completedSuggestionCount.value > 0);
 const showToolbarToggle = computed(() => (
   !isMinervaSkin.value &&
   (showSuggestionToggle.value || (!showSuggestionToggle.value && !showSuggestions.value))
@@ -9087,7 +9124,6 @@ const postPublishConfettiColors = ['#36c', '#d33', '#fc3', '#14866d'];
 let postPublishConfettiAnimationFrame = null;
 let postPublishConfettiParticles = [];
 let postPublishConfettiLastTime = 0;
-let postPublishConfettiStopTimer = null;
 
 function randomRange(min, max) {
   return Math.random() * (max - min) + min;
@@ -9100,14 +9136,14 @@ function getRandomConfettiColor() {
 function createConfetto(canvas) {
   return {
     x: randomRange(0, canvas.width),
-    y: randomRange(-20, 0),
+    y: randomRange(-60, 0),
     w: randomRange(6, 12),
     h: randomRange(4, 8),
     color: getRandomConfettiColor(),
     rotation: randomRange(0, Math.PI * 2),
-    rotationSpeed: randomRange(-0.05, 0.05),
-    vx: randomRange(-1.5, 1.5),
-    vy: randomRange(2, 5),
+    rotationSpeed: randomRange(-0.04, 0.04),
+    vx: randomRange(-1, 1),
+    vy: randomRange(1, 2.5),
     opacity: 1,
     type: 'confetto',
   };
@@ -9116,11 +9152,11 @@ function createConfetto(canvas) {
 function createSequin(canvas) {
   return {
     x: randomRange(0, canvas.width),
-    y: randomRange(-20, 0),
-    r: randomRange(3, 6),
+    y: randomRange(-60, 0),
+    r: randomRange(3, 5),
     color: getRandomConfettiColor(),
-    vx: randomRange(-1, 1),
-    vy: randomRange(2, 4),
+    vx: randomRange(-0.5, 0.5),
+    vy: randomRange(0.8, 2),
     opacity: 1,
     type: 'sequin',
   };
@@ -9129,8 +9165,8 @@ function createSequin(canvas) {
 function resizePostPublishConfettiCanvas() {
   const canvas = postPublishConfettiCanvas.value;
   if (!canvas) return;
-  canvas.width = canvas.offsetWidth;
-  canvas.height = canvas.offsetHeight;
+  canvas.width = canvas.offsetWidth || 375;
+  canvas.height = canvas.offsetHeight || 220;
 }
 
 function drawPostPublishConfettiParticle(ctx, p) {
@@ -9153,7 +9189,11 @@ function updatePostPublishConfettiParticle(p, canvas, dt) {
   p.x += p.vx * dt * 60;
   p.y += p.vy * dt * 60;
   if (p.type !== 'sequin') p.rotation += p.rotationSpeed * dt * 60;
-  if (p.y > canvas.height + 20) p.opacity = 0;
+  // Fade out near bottom
+  if (p.y > canvas.height - 20) {
+    p.opacity = Math.max(0, p.opacity - 0.05 * dt * 60);
+  }
+  if (p.y > canvas.height + 10) p.opacity = 0;
 }
 
 function animatePostPublishConfetti(timestamp) {
@@ -9168,8 +9208,11 @@ function animatePostPublishConfetti(timestamp) {
     updatePostPublishConfettiParticle(p, canvas, dt);
     drawPostPublishConfettiParticle(ctx, p);
   });
-  if (postPublishConfettiParticles.length > 0 || postPublishConfettiStopTimer) {
+  // RAF stops naturally when all particles gone — no looping
+  if (postPublishConfettiParticles.length > 0) {
     postPublishConfettiAnimationFrame = requestAnimationFrame(animatePostPublishConfetti);
+  } else {
+    postPublishConfettiAnimationFrame = null;
   }
 }
 
@@ -9178,17 +9221,14 @@ function startPostPublishConfetti() {
   if (!canvas) return;
   resizePostPublishConfettiCanvas();
   postPublishConfettiParticles = [];
-  for (let i = 0; i < 80; i++) {
+  for (let i = 0; i < 100; i++) {
     postPublishConfettiParticles.push(createConfetto(canvas));
   }
-  for (let i = 0; i < 40; i++) {
+  for (let i = 0; i < 50; i++) {
     postPublishConfettiParticles.push(createSequin(canvas));
   }
   postPublishConfettiLastTime = 0;
   if (postPublishConfettiAnimationFrame) cancelAnimationFrame(postPublishConfettiAnimationFrame);
-  postPublishConfettiStopTimer = setTimeout(() => {
-    postPublishConfettiStopTimer = null;
-  }, 3000);
   postPublishConfettiAnimationFrame = requestAnimationFrame(animatePostPublishConfetti);
 }
 
@@ -9196,10 +9236,6 @@ function stopPostPublishConfetti() {
   if (postPublishConfettiAnimationFrame) {
     cancelAnimationFrame(postPublishConfettiAnimationFrame);
     postPublishConfettiAnimationFrame = null;
-  }
-  if (postPublishConfettiStopTimer) {
-    clearTimeout(postPublishConfettiStopTimer);
-    postPublishConfettiStopTimer = null;
   }
   postPublishConfettiParticles = [];
   postPublishConfettiLastTime = 0;
@@ -16517,32 +16553,11 @@ function markArticleEdited() {
 
 .vector-success-toast {
   position: fixed;
-  top: 16px;
-  left: 32px;
+  top: 74px; /* 50px header + 24px gap below user button */
   right: 32px;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 16px;
-  border: 1px solid var(--border-color-subtle, #c8ccd1);
-  border-radius: 2px;
-  background: var(--background-color-base, #fff);
-  color: var(--color-base, #202122);
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
-  font-size: 14px;
-  line-height: 20px;
+  width: 325px;
   z-index: 220;
-}
-
-.vector-success-toast span {
-  min-width: 0;
-}
-
-.vector-success-toast :deep(.cdx-icon),
-.vector-success-toast :deep(svg) {
-  color: var(--color-success, #14866d);
-  fill: var(--color-success, #14866d);
-  flex: 0 0 auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
 }
 
 
@@ -19440,11 +19455,10 @@ function markArticleEdited() {
 
 .minerva-post-publish-confetti {
   position: absolute;
-  inset: 0 0 auto;
-  height: 76px;
+  inset: 0;
   width: 100%;
+  height: 100%;
   pointer-events: none;
-  overflow: hidden;
 }
 
 .minerva-post-publish-header {
