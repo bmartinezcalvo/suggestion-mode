@@ -685,7 +685,7 @@
                       The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
                     <p>
-                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of "Audre Lorde."<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
                     </p>
                     <p>
                       Lorde later wrote that poetry became an essential way to understand and articulate her feelings, and she described herself as someone who thought in poetry from childhood onward.<sup class="citation-marker">[16]</sup>
@@ -1171,7 +1171,7 @@
                       The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
                     <p>
-                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of "Audre Lorde."<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
                     </p>
                     <p>
                       Lorde later wrote that poetry became an essential way to understand and articulate her feelings, and she described herself as someone who thought in poetry from childhood onward.<sup class="citation-marker">[16]</sup>
@@ -2478,7 +2478,7 @@
                   <div class="article-text-block">
                     <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                       <p>
-                        <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a “Black, lesbian, feminist, socialist, mother, warrior, poet” and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
+                        <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a "Black, lesbian, feminist, socialist, mother, warrior, poet" and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
                       </p>
                       <p>
                         Lorde argued that there could be no hierarchy of oppressions among people working toward liberation, and she returned to that idea across her essays, speeches, and poems.<sup class="citation-marker">[3]</sup> As a poet, she is especially known for combining technical control with emotional force and for writing directly about anger, solidarity, and structural inequality.<sup class="citation-marker">[4]</sup>
@@ -2579,7 +2579,7 @@
                       After immigrating, the family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[12]</sup> At age four she learned to read at the same time that she learned to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon afterward.<sup class="citation-marker">[13]</sup>
                     </p>
                     <p>
-                      Born Audrey Geraldine Lorde, she dropped the “y” from her first name while still a child because she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup> She later wrote about a difficult relationship with her parents, discovered poetry as a crucial form of expression, attended Catholic schools and then <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[16]</sup><sup class="citation-marker">[17]</sup><sup class="citation-marker">[18]</sup><sup class="citation-marker">[19]</sup><sup class="citation-marker">[20]</sup><sup class="citation-marker">[21]</sup>
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child because she preferred the visual symmetry of "Audre Lorde."<sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup> She later wrote about a difficult relationship with her parents, discovered poetry as a crucial form of expression, attended Catholic schools and then <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[16]</sup><sup class="citation-marker">[17]</sup><sup class="citation-marker">[18]</sup><sup class="citation-marker">[19]</sup><sup class="citation-marker">[20]</sup><sup class="citation-marker">[21]</sup>
                     </p>
                   </div>
                   <div class="edit-full-page-btn-wrapper">
@@ -4480,7 +4480,7 @@
                 class="minerva-sheet-btn"
                 action="progressive"
                 weight="primary"
-                @click="publishEdits"
+                @click="requestPublishChanges"
               >
                 Publish
               </cdx-button>
@@ -4930,12 +4930,159 @@
               <cdx-button action="default" weight="normal" @click="isVectorNoMoreSuggestionsDialogOpen = false">
                 Continue editing
               </cdx-button>
-              <cdx-button action="progressive" weight="primary" @click="publishEdits">
+              <cdx-button action="progressive" weight="primary" @click="requestPublishChanges">
                 Publish
               </cdx-button>
             </div>
           </div>
         </cdx-dialog>
+
+        <!-- Minerva Publish Dialog (full-screen overlay) -->
+        <div
+          v-if="isMinervaPublishDialogOpen && isMinervaSkin"
+          class="minerva-publish-dialog"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Publish your changes"
+        >
+          <div class="minerva-publish-header">
+            <cdx-button
+              class="minerva-publish-close"
+              action="default"
+              weight="quiet"
+              size="medium"
+              aria-label="Cancel publish"
+              @click="closePublishDialog"
+            >
+              <cdx-icon :icon="cdxIconClose" size="medium" />
+            </cdx-button>
+            <h2 class="minerva-publish-title">Publish changes</h2>
+            <cdx-button
+              class="minerva-publish-confirm"
+              action="progressive"
+              weight="primary"
+              size="medium"
+              aria-label="Publish changes"
+              @click="confirmPublishChanges"
+            >
+              <cdx-icon :icon="cdxIconCheck" size="medium" />
+            </cdx-button>
+          </div>
+          <div class="minerva-publish-content">
+            <div class="minerva-publish-count">{{ completedSuggestionCountLabel }}</div>
+            <ul class="minerva-publish-summary-list">
+              <li v-for="item in completedSuggestionSummaryItems" :key="item.label" class="minerva-publish-summary-item">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                <span>{{ item.label }}</span>
+              </li>
+            </ul>
+            <cdx-field class="minerva-publish-field">
+              <template #label>Describe changes <span>(optional)</span></template>
+              <cdx-text-area
+                v-model="publishSummaryText"
+                class="minerva-publish-textarea"
+                placeholder="Explain what you changed"
+                :rows="6"
+              />
+            </cdx-field>
+            <div class="minerva-publish-notice">
+              Your changes are published immediately. Other editors may review them.
+            </div>
+          </div>
+          <div class="minerva-publish-footer">
+            <p>
+              By publishing changes, you agree to the <a href="#">Terms of Use</a>, and you irrevocably agree to release your contribution under the <a href="#">CC BY-SA 4.0 License</a> and the <a href="#">GFDL</a>.
+            </p>
+            <cdx-checkbox v-model="watchPublishedPage" class="minerva-publish-watch">
+              Watch this page
+            </cdx-checkbox>
+          </div>
+        </div>
+
+        <!-- Vector22 Publish Dialog (cdx-dialog modal) -->
+        <cdx-dialog
+          v-if="!isMinervaSkin"
+          v-model:open="isMinervaPublishDialogOpen"
+          title="Publish changes"
+          use-close-button
+          class="vector-publish-dialog"
+        >
+          <div class="vector-publish-dialog-content">
+            <div class="vector-publish-count">{{ completedSuggestionCountLabel }}</div>
+            <ul class="minerva-publish-summary-list">
+              <li v-for="item in completedSuggestionSummaryItems" :key="item.label" class="minerva-publish-summary-item">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                <span>{{ item.label }}</span>
+              </li>
+            </ul>
+            <cdx-field class="minerva-publish-field">
+              <template #label>Describe changes <span>(optional)</span></template>
+              <cdx-text-area
+                v-model="publishSummaryText"
+                class="minerva-publish-textarea"
+                placeholder="Explain what you changed"
+                :rows="4"
+              />
+            </cdx-field>
+            <div class="minerva-publish-notice">
+              Your changes are published immediately. Other editors may review them.
+            </div>
+            <cdx-checkbox v-model="watchPublishedPage" class="minerva-publish-watch">
+              Watch this page
+            </cdx-checkbox>
+          </div>
+          <template #footer>
+            <div class="vector-publish-dialog-actions">
+              <cdx-button action="default" weight="normal" @click="closePublishDialog">
+                Cancel
+              </cdx-button>
+              <cdx-button action="progressive" weight="primary" @click="confirmPublishChanges">
+                Publish changes
+              </cdx-button>
+            </div>
+          </template>
+        </cdx-dialog>
+
+        <!-- Post-publish popup with confetti (both skins) -->
+        <div
+          v-if="showPostPublishSuggestionPopup && !isEditMode"
+          class="minerva-post-publish-popup"
+          role="dialog"
+          aria-live="polite"
+          aria-label="Edit published"
+        >
+          <canvas ref="postPublishConfettiCanvas" class="minerva-post-publish-confetti" aria-hidden="true"></canvas>
+          <div class="minerva-post-publish-header">
+            <div>
+              <h2>Edit published!<br />Keep improving this article.</h2>
+              <p>There are some more suggestions to improve this article. Ready for the next improvement?</p>
+            </div>
+            <button aria-label="Close" @click="showPostPublishSuggestionPopup = false">
+              <cdx-icon :icon="cdxIconClose" size="medium" />
+            </button>
+          </div>
+          <div class="minerva-post-publish-carousel">
+            <div
+              v-for="item in postPublishSuggestionItems"
+              :key="item.id"
+              class="minerva-post-publish-card"
+            >
+              <div class="minerva-post-publish-card-header">
+                <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-post-publish-card-icon" />
+                <div class="minerva-post-publish-card-title">{{ getMinervaSuggestionCardTitle(item.id) }}</div>
+              </div>
+              <p>{{ getMinervaSuggestionCardDescription(item.id) }}</p>
+              <div class="minerva-post-publish-actions">
+                <cdx-button action="progressive" weight="normal" @click="handlePostPublishSuggestionClick(item.id)">
+                  {{ getMinervaSuggestionPrimaryActionLabel(item.id) }}
+                </cdx-button>
+                <cdx-button action="default" weight="quiet" @click="showPostPublishSuggestionPopup = false">
+                  Skip
+                </cdx-button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <div
           v-if="isMinervaAddLinkDialogOpen"
@@ -5430,6 +5577,11 @@ const showPaginationNoSuggestionsToast = ref(false);
 const showSuggestionSuccessToast = ref(false);
 const showNoSuggestionsAvailableToast = ref(false);
 let noSuggestionsAvailableToastTimer = null;
+const isMinervaPublishDialogOpen = ref(false);
+const publishSummaryText = ref('');
+const watchPublishedPage = ref(true);
+const showPostPublishSuggestionPopup = ref(false);
+const postPublishConfettiCanvas = ref(null);
 const showMinervaRedoButton = ref(false);
 const minervaViewportWidth = ref(375);
 const minervaToolbarAvailableWidth = ref(0);
@@ -6442,15 +6594,41 @@ const completedSuggestionCountLabel = computed(() => (
 ));
 const minervaNoMoreSuggestionsDescription = computed(() => {
   if (isMinervaNoMoreSuggestionsSectionState.value) {
-    return 'You’ve reviewed all suggestions in this section. Continue completing suggestions in other sections of this article.';
+    return "You've reviewed all suggestions in this section. Continue completing suggestions in other sections of this article.";
   }
   if (isMinervaNoMoreSuggestionsArticleState.value) {
-    return `You’ve reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`;
+    return `You've reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`;
   }
   return '';
 });
 const vectorNoMoreSuggestionsDescription = computed(() => (
-  `You’ve reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`
+  `You've reviewed all suggestions in this article. You can now publish your ${completedSuggestionCountLabel.value} or continue editing.`
+));
+const completedSuggestionSummaryItems = computed(() => {
+  const items = [];
+  const citationCount = [citationNumber1.value, citationNumber2.value, citationNumber3.value]
+    .filter((value) => value !== null).length;
+  const externalLinkCount = [
+    isSuggestionResolved5.value,
+    isSuggestionResolved6.value,
+    isSuggestionResolved7.value,
+    isSuggestionResolved8.value
+  ].filter(Boolean).length;
+  if (citationCount) {
+    items.push({ label: `Added a citation${citationCount > 1 ? ` (x${citationCount})` : ''}` });
+  }
+  if (externalLinkCount) {
+    items.push({ label: `Removed external link${externalLinkCount > 1 ? ` (x${externalLinkCount})` : ''}` });
+  }
+  if (isSuggestionResolved4.value) {
+    items.push({ label: 'Removed duplicated link' });
+  }
+  return items;
+});
+const postPublishSuggestionItems = computed(() => (
+  getPostPublishSuggestionIds()
+    .sort((a, b) => a - b)
+    .map((id) => ({ id }))
 ));
 const minervaSuggestionSuccessCopy = {
   1: {
@@ -7159,15 +7337,46 @@ function clearEditModeUiState() {
   }
 }
 
-function publishEdits() {
+function publishEdits(shouldShowPostPublishPopup = completedSuggestionCount.value > 0) {
   const currentSnapshot = getCurrentEditSnapshot();
   editSnapshot.value = cloneEditSnapshot(currentSnapshot);
   editUndoStack.value = [cloneEditSnapshot(currentSnapshot)];
   editRedoStack.value = [];
   syncMinervaRedoButtonVisibility();
   hasUnsavedChanges.value = false;
+  isMinervaPublishDialogOpen.value = false;
   closeVectorNoMoreSuggestionsDialog();
   clearEditModeUiState();
+  if (shouldShowPostPublishPopup) {
+    nextTick(() => {
+      if (typeof window !== 'undefined') {
+        window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+      }
+      showPostPublishSuggestionPopup.value = true;
+    });
+  }
+}
+
+function requestPublishChanges() {
+  if (isMinervaSkin.value) {
+    isMinervaPublishDialogOpen.value = true;
+    minervaCarouselCollapsed.value = true;
+    return;
+  }
+  publishEdits();
+}
+
+function closePublishDialog() {
+  isMinervaPublishDialogOpen.value = false;
+}
+
+function confirmPublishChanges() {
+  publishEdits();
+}
+
+function handlePostPublishSuggestionClick() {
+  showPostPublishSuggestionPopup.value = false;
+  enterEditMode();
 }
 
 function startPrototype() {
@@ -8819,6 +9028,183 @@ function getPendingSuggestionIdsForContext() {
   if (isSuggestion5Pending.value) ids.push(5);
   return ids;
 }
+
+function getPendingSuggestionIdsForArticle() {
+  const ids = [];
+  if (isSuggestion1Pending.value) ids.push(1);
+  if (isSuggestion8Pending.value) ids.push(8);
+  if (isSuggestion6Pending.value) ids.push(6);
+  if (isSuggestion2Pending.value) ids.push(2);
+  if (isSuggestion4Pending.value) ids.push(4);
+  if (isSuggestion7Pending.value) ids.push(7);
+  if (isSuggestion3Pending.value) ids.push(3);
+  if (isSuggestion5Pending.value) ids.push(5);
+  return ids;
+}
+
+function getPostPublishSuggestionIds() {
+  const pendingIds = getPendingSuggestionIdsForArticle();
+  if (pendingIds.length) return pendingIds;
+  return [1, 8, 6, 2, 4, 7, 3, 5];
+}
+
+function getMinervaSuggestionCardTitle(suggestionId) {
+  const titles = {
+    1: 'Add a citation to support a claim',
+    2: 'Add a citation to support a claim',
+    3: 'Add a citation to support a claim',
+    4: 'Remove a duplicated link',
+    5: 'Remove an external link from the article body',
+    6: 'Remove an external link from the article body',
+    7: 'Remove an external link from the article body',
+    8: 'Remove an external link from the article body',
+  };
+  return titles[suggestionId] || 'Review suggestion';
+}
+
+function getMinervaSuggestionPrimaryActionLabel(suggestionId) {
+  if ([1, 2, 3].includes(suggestionId)) return 'Add citation';
+  if (suggestionId === 4) return 'Remove link';
+  return 'Remove link';
+}
+
+function getMinervaSuggestionCardDescription(suggestionId) {
+  const descriptions = {
+    1: 'A claim in the Early life section needs a reliable source.',
+    2: 'A claim in the Poetry section needs a reliable source.',
+    3: 'A claim in the Prose section needs a reliable source.',
+    4: 'There is a duplicated link in the Poetry section.',
+    5: 'There is an external link in the article body that should be removed.',
+    6: 'There is an external link in the article body that should be removed.',
+    7: 'There is an external link in the article body that should be removed.',
+    8: 'There is an external link in the article body that should be removed.',
+  };
+  return descriptions[suggestionId] || '';
+}
+
+// ── Confetti ──────────────────────────────────────────────────────────────────
+const postPublishConfettiColors = ['#36c', '#d33', '#fc3', '#14866d'];
+let postPublishConfettiAnimationFrame = null;
+let postPublishConfettiParticles = [];
+let postPublishConfettiLastTime = 0;
+let postPublishConfettiStopTimer = null;
+
+function randomRange(min, max) {
+  return Math.random() * (max - min) + min;
+}
+
+function getRandomConfettiColor() {
+  return postPublishConfettiColors[Math.floor(Math.random() * postPublishConfettiColors.length)];
+}
+
+function createConfetto(canvas) {
+  return {
+    x: randomRange(0, canvas.width),
+    y: randomRange(-20, 0),
+    w: randomRange(6, 12),
+    h: randomRange(4, 8),
+    color: getRandomConfettiColor(),
+    rotation: randomRange(0, Math.PI * 2),
+    rotationSpeed: randomRange(-0.05, 0.05),
+    vx: randomRange(-1.5, 1.5),
+    vy: randomRange(2, 5),
+    opacity: 1,
+    type: 'confetto',
+  };
+}
+
+function createSequin(canvas) {
+  return {
+    x: randomRange(0, canvas.width),
+    y: randomRange(-20, 0),
+    r: randomRange(3, 6),
+    color: getRandomConfettiColor(),
+    vx: randomRange(-1, 1),
+    vy: randomRange(2, 4),
+    opacity: 1,
+    type: 'sequin',
+  };
+}
+
+function resizePostPublishConfettiCanvas() {
+  const canvas = postPublishConfettiCanvas.value;
+  if (!canvas) return;
+  canvas.width = canvas.offsetWidth;
+  canvas.height = canvas.offsetHeight;
+}
+
+function drawPostPublishConfettiParticle(ctx, p) {
+  ctx.save();
+  ctx.globalAlpha = p.opacity;
+  ctx.fillStyle = p.color;
+  if (p.type === 'sequin') {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fill();
+  } else {
+    ctx.translate(p.x, p.y);
+    ctx.rotate(p.rotation);
+    ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+  }
+  ctx.restore();
+}
+
+function updatePostPublishConfettiParticle(p, canvas, dt) {
+  p.x += p.vx * dt * 60;
+  p.y += p.vy * dt * 60;
+  if (p.type !== 'sequin') p.rotation += p.rotationSpeed * dt * 60;
+  if (p.y > canvas.height + 20) p.opacity = 0;
+}
+
+function animatePostPublishConfetti(timestamp) {
+  const canvas = postPublishConfettiCanvas.value;
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  const dt = postPublishConfettiLastTime ? Math.min((timestamp - postPublishConfettiLastTime) / 1000, 0.05) : 0.016;
+  postPublishConfettiLastTime = timestamp;
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  postPublishConfettiParticles = postPublishConfettiParticles.filter((p) => p.opacity > 0);
+  postPublishConfettiParticles.forEach((p) => {
+    updatePostPublishConfettiParticle(p, canvas, dt);
+    drawPostPublishConfettiParticle(ctx, p);
+  });
+  if (postPublishConfettiParticles.length > 0 || postPublishConfettiStopTimer) {
+    postPublishConfettiAnimationFrame = requestAnimationFrame(animatePostPublishConfetti);
+  }
+}
+
+function startPostPublishConfetti() {
+  const canvas = postPublishConfettiCanvas.value;
+  if (!canvas) return;
+  resizePostPublishConfettiCanvas();
+  postPublishConfettiParticles = [];
+  for (let i = 0; i < 80; i++) {
+    postPublishConfettiParticles.push(createConfetto(canvas));
+  }
+  for (let i = 0; i < 40; i++) {
+    postPublishConfettiParticles.push(createSequin(canvas));
+  }
+  postPublishConfettiLastTime = 0;
+  if (postPublishConfettiAnimationFrame) cancelAnimationFrame(postPublishConfettiAnimationFrame);
+  postPublishConfettiStopTimer = setTimeout(() => {
+    postPublishConfettiStopTimer = null;
+  }, 3000);
+  postPublishConfettiAnimationFrame = requestAnimationFrame(animatePostPublishConfetti);
+}
+
+function stopPostPublishConfetti() {
+  if (postPublishConfettiAnimationFrame) {
+    cancelAnimationFrame(postPublishConfettiAnimationFrame);
+    postPublishConfettiAnimationFrame = null;
+  }
+  if (postPublishConfettiStopTimer) {
+    clearTimeout(postPublishConfettiStopTimer);
+    postPublishConfettiStopTimer = null;
+  }
+  postPublishConfettiParticles = [];
+  postPublishConfettiLastTime = 0;
+}
+// ── End Confetti ──────────────────────────────────────────────────────────────
 
 function updateBannerArrowDirections() {
   if (
@@ -11206,6 +11592,14 @@ watch(
     }
   }
 );
+
+watch(showPostPublishSuggestionPopup, (isOpen) => {
+  if (isOpen) {
+    nextTick(() => startPostPublishConfetti());
+  } else {
+    stopPostPublishConfetti();
+  }
+});
 
 // Align on mount and add event listeners
 onMounted(() => {
@@ -18856,5 +19250,300 @@ function markArticleEdited() {
   width: 12px;
   height: 12px;
   fill: var(--color-progressive, #36c);
+}
+
+/* ── Publish Dialog ── */
+.minerva-publish-dialog {
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+  display: flex;
+  flex-direction: column;
+  background: var(--background-color-base, #ffffff);
+  color: var(--color-base, #202122);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-publish-header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  height: 44px;
+  min-height: 44px;
+  border-bottom: 1px solid var(--border-color-base, #a2a9b1);
+}
+
+.minerva-publish-close,
+.minerva-publish-close :deep(button),
+.minerva-publish-close :deep(.cdx-button__button),
+.minerva-publish-confirm,
+.minerva-publish-confirm :deep(button),
+.minerva-publish-confirm :deep(.cdx-button__button) {
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 0;
+}
+
+.minerva-publish-close :deep(.cdx-icon),
+.minerva-publish-close :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
+}
+
+.minerva-publish-confirm :deep(.cdx-icon),
+.minerva-publish-confirm :deep(svg) {
+  color: var(--color-inverted, #ffffff);
+  fill: var(--color-inverted, #ffffff);
+}
+
+.minerva-publish-title {
+  margin: 0;
+  text-align: center;
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.minerva-publish-content {
+  flex: 1;
+  padding: 16px;
+  overflow-y: auto;
+}
+
+.minerva-publish-count {
+  font-size: 16px;
+  line-height: 24px;
+  padding: 12px;
+  margin: 0;
+}
+
+.minerva-publish-summary-list {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  list-style: none;
+  padding: 12px;
+  margin: 0 0 28px;
+}
+
+.minerva-publish-summary-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-publish-summary-item :deep(.cdx-icon),
+.minerva-publish-summary-item :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.minerva-publish-field :deep(.cdx-label),
+.minerva-publish-field :deep(.cdx-label__label),
+.minerva-publish-field :deep(.cdx-field__label) {
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 700;
+}
+
+.minerva-publish-field :deep(.cdx-label span),
+.minerva-publish-field :deep(.cdx-field__label span) {
+  color: var(--color-subtle, #54595d);
+  font-weight: 400;
+}
+
+.minerva-publish-textarea,
+.minerva-publish-textarea :deep(textarea),
+.minerva-publish-textarea :deep(.cdx-text-area__textarea) {
+  width: 100%;
+  min-height: 160px;
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-publish-notice {
+  margin-top: 32px;
+  padding: 12px;
+  background: var(--background-color-progressive-subtle, #E8EEFF);
+  border: 1px solid var(--border-color-progressive, #36c);
+  border-radius: var(--border-radius-base, 2px);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-publish-footer {
+  border-top: 1px solid var(--border-color-subtle, #c8ccd1);
+  padding: 16px;
+  color: var(--color-subtle, #54595d);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+.minerva-publish-footer p {
+  margin: 0 0 24px;
+}
+
+.minerva-publish-footer a {
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-publish-watch {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-publish-watch :deep(.cdx-checkbox__label) {
+  font-size: 16px;
+  line-height: 24px;
+}
+
+/* Vector22 publish dialog */
+.vector-publish-dialog-content {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  min-width: 360px;
+}
+
+.vector-publish-count {
+  font-size: 14px;
+  line-height: 22px;
+  color: var(--color-subtle, #54595d);
+}
+
+.vector-publish-dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* ── Post-publish popup with confetti ── */
+.minerva-post-publish-popup {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 180;
+  box-sizing: border-box;
+  padding: 48px 16px 16px;
+  background: var(--background-color-base, #ffffff);
+  border-top: 1px solid var(--border-color-base, #a2a9b1);
+  box-shadow: 0 -2px 14px rgba(0, 0, 0, 0.16);
+  overflow: hidden;
+}
+
+.minerva-post-publish-confetti {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 76px;
+  width: 100%;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.minerva-post-publish-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.minerva-post-publish-header button {
+  border: 0;
+  background: transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.minerva-post-publish-header h2 {
+  margin: 0;
+  font-family: 'Linux Libertine', 'Georgia', 'Times', serif;
+  font-size: 22px;
+  line-height: 32px;
+  font-weight: 400;
+}
+
+.minerva-post-publish-header p {
+  margin: 12px 0 0;
+  color: var(--color-base, #202122);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-post-publish-carousel {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  margin-top: 12px;
+  padding-bottom: 4px;
+  scrollbar-width: none;
+}
+
+.minerva-post-publish-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.minerva-post-publish-card {
+  flex: 0 0 calc(100vw - 76px);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  row-gap: 8px;
+  padding: 12px 16px 16px;
+  background: var(--background-color-base, #ffffff);
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: var(--border-radius-base, 2px);
+}
+
+.minerva-post-publish-card-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.minerva-post-publish-card-icon {
+  display: inline-flex;
+  flex: 0 0 32px;
+  align-items: center;
+  justify-content: center;
+  box-sizing: border-box;
+  width: 32px;
+  height: 32px;
+  background: var(--background-color-progressive-subtle, #E8EEFF);
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: var(--border-radius-base, 2px);
+}
+
+.minerva-post-publish-card-icon :deep(.cdx-icon),
+.minerva-post-publish-card-icon :deep(svg) {
+  color: var(--color-progressive, #36c);
+  fill: var(--color-progressive, #36c);
+}
+
+.minerva-post-publish-card-title {
+  font-weight: 700;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.minerva-post-publish-card p {
+  margin: 0;
+  color: var(--color-subtle, #54595d);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+.minerva-post-publish-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 8px;
 }
 </style>
