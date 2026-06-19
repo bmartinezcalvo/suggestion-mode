@@ -15891,7 +15891,7 @@ function markArticleEdited() {
   gap: 0;
   margin-top: 0;
   margin-bottom: 0;
-  height: 40px;
+  height: 64px;
   padding: 0;
   box-sizing: border-box;
 }
