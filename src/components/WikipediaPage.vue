@@ -78,6 +78,69 @@
         Thank you for helping to make this section easier for people to read.
       </cdx-message>
     </transition>
+
+    <!-- "Next suggestion" button — Minerva: fixed, centered, 16px above viewport bottom -->
+    <div
+      v-if="isMinervaSkin && isEditMode && feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'"
+      class="next-suggestion-anchor next-suggestion-anchor--minerva"
+    >
+      <transition name="next-suggestion-reveal">
+        <div
+          v-if="showNextSuggestionButton && getPendingSuggestionIdsForContext().length > 0"
+          class="next-suggestion-btn"
+          role="button"
+          tabindex="0"
+          @click="handleNextSuggestionButtonClick"
+          @keydown.enter="handleNextSuggestionButtonClick"
+          @keydown.space.prevent="handleNextSuggestionButtonClick"
+        >
+          <cdx-icon
+            :icon="showBannerPrimaryArrowUp ? cdxIconArrowUp : cdxIconArrowDown"
+            size="medium"
+          />
+          <span>Next suggestion</span>
+          <cdx-button
+            class="next-suggestion-btn-close"
+            weight="quiet"
+            size="small"
+            aria-label="Dismiss"
+            @click.stop="hideNextSuggestionButton"
+          >
+            <cdx-icon :icon="cdxIconClose" size="small" />
+          </cdx-button>
+        </div>
+      </transition>
+    </div>
+
+    <!-- Feedback success toast (view-button mode) -->
+    <div
+      v-if="feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showFeedbackSuccessToast"
+      class="minerva-toast minerva-toast--success"
+      role="status"
+      aria-live="polite"
+    >
+      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+      <span>{{ feedbackSuccessToastMessage }}</span>
+    </div>
+
+    <!-- Suggestion dismissed toast (view-button mode) -->
+    <div
+      v-if="feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showSuggestionDismissedToast"
+      class="minerva-toast minerva-toast--dismissed"
+      role="status"
+      aria-live="polite"
+    >
+      <span>Suggestion dismissed</span>
+      <cdx-button
+        class="minerva-toast-undo-btn"
+        action="default"
+        weight="quiet"
+        size="small"
+        @click="handleUndoDismiss"
+      >
+        Undo
+      </cdx-button>
+    </div>
     
     <!-- Page Container -->
     <div class="page-container">
@@ -415,7 +478,7 @@
               </div>
             </div>
           </transition>
-          <button
+                    <button
             v-if="showMinervaHelpButton"
             class="help-button minerva-help-button"
             type="button"
@@ -3962,6 +4025,39 @@
               </div>
             </div>
           </div>
+
+          <!-- "Next suggestion" button — Vector: absolute, centered in sidebar, 32px above viewport bottom -->
+          <div
+            v-if="!isMinervaSkin && isEditMode && feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'"
+            class="next-suggestion-anchor next-suggestion-anchor--vector"
+          >
+            <transition name="next-suggestion-reveal">
+              <div
+                v-if="showNextSuggestionButton && getPendingSuggestionIdsForContext().length > 0"
+                class="next-suggestion-btn"
+                role="button"
+                tabindex="0"
+                @click="handleNextSuggestionButtonClick"
+                @keydown.enter="handleNextSuggestionButtonClick"
+                @keydown.space.prevent="handleNextSuggestionButtonClick"
+              >
+                <cdx-icon
+                  :icon="showBannerPrimaryArrowUp ? cdxIconArrowUp : cdxIconArrowDown"
+                  size="medium"
+                />
+                <span>Next suggestion</span>
+                <cdx-button
+                  class="next-suggestion-btn-close"
+                  weight="quiet"
+                  size="small"
+                  aria-label="Dismiss"
+                  @click.stop="hideNextSuggestionButton"
+                >
+                  <cdx-icon :icon="cdxIconClose" size="small" />
+                </cdx-button>
+              </div>
+            </transition>
+          </div>
         </aside>
 
         <div
@@ -4695,7 +4791,7 @@
                       Manual navigation
                     </cdx-radio>
                     <div
-                      v-if="isMinervaSkin && selectedPrototype === 'option-6' && minervaToggleLocation !== 'toolbar'"
+                      v-if="isMinervaSkin && selectedPrototype === 'option-6' && minervaToggleLocation !== 'toolbar' && !feedbackAndNextEnabled"
                       class="prototype-suboptions"
                     >
                       <cdx-checkbox v-model="paginationManualNavigableButtonEnabled">
@@ -4729,9 +4825,27 @@
               </cdx-field>
               <cdx-field>
                 <template #label>Other features</template>
-                <cdx-checkbox v-model="filteringEnabled">
-                  Enable filtering (<a href="https://phabricator.wikimedia.org/T420648" target="_blank" rel="noopener">T420648</a>)
+                <cdx-checkbox v-model="feedbackAndNextEnabled">
+                  Enable feedback and next suggestion
                 </cdx-checkbox>
+                <div v-if="feedbackAndNextEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                  <cdx-radio
+                    v-model="feedbackAndNextMode"
+                    name="feedback-and-next-mode"
+                    input-value="bottom-sheet"
+                    class="prototype-suboption-radio"
+                  >
+                    Bottom sheet
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackAndNextMode"
+                    name="feedback-and-next-mode"
+                    input-value="view-button"
+                    class="prototype-suboption-radio prototype-suboption-radio--last"
+                  >
+                    "View suggestion" button
+                  </cdx-radio>
+                </div>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
@@ -4768,6 +4882,9 @@
                     Scroll button
                   </cdx-radio>
                 </div>
+                <cdx-checkbox v-model="filteringEnabled">
+                  Enable filtering (<a href="https://phabricator.wikimedia.org/T420648" target="_blank" rel="noopener">T420648</a>)
+                </cdx-checkbox>
               </cdx-field>
               <cdx-field>
                 <template #label>Visual improvements</template>
@@ -5167,7 +5284,8 @@ const showDesktopPaginationControls = computed(
     isPaginationMode.value &&
     showSuggestions.value &&
     desktopPaginationIds.value.length > 0 &&
-    hasOpenedDesktopPagination.value
+    hasOpenedDesktopPagination.value &&
+    !(feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button')
 );
 const overviewSuggestionItems = computed(() => getPendingSuggestionIdsForContext().map((id) => ({
   id,
@@ -5412,6 +5530,19 @@ const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(false);
 const successHighlightOnCompleteEnabled = ref(true);
+const feedbackAndNextEnabled = ref(true);
+const feedbackAndNextMode = ref('bottom-sheet'); // 'bottom-sheet' | 'view-button'
+const dismissedSuggestionIdForUndo = ref(null); // stores the id of the last dismissed suggestion for Undo
+const showSuggestionDismissedToast = ref(false);
+let suggestionDismissedToastTimer = null;
+const showFeedbackSuccessToast = ref(false);
+const feedbackSuccessToastMessage = ref('');
+const showNextSuggestionButton = ref(false); // "Next suggestion" button in view-button mode
+let nextSuggestionButtonTimer = null;
+let nextSuggestionButtonGracePeriod = false;
+let nextSuggestionButtonGraceTimer = null;
+let feedbackSuccessToastTimer = null;
+let suggestionDismissedToastTimerRef = null;
 const noMoreSuggestionsEmptyStateEnabled = ref(false);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false); // starts unchecked by default
@@ -8345,6 +8476,85 @@ function triggerSuggestionSuccessToast() {
   }, 4000);
 }
 
+// Map suggestion id to success toast message (reuse existing minervaSuggestionSuccessCopy titles)
+const suggestionSuccessToastMessages = {
+  1: 'Added citation!',
+  2: 'Added citation!',
+  3: 'Added citation!',
+  4: 'Link removed!',
+  5: 'Link updated!',
+  6: 'Heading adjusted!',
+  7: 'Year link fixed!',
+  8: 'Link updated!',
+};
+
+function triggerFeedbackSuccessToast(suggestionId) {
+  feedbackSuccessToastMessage.value = suggestionSuccessToastMessages[suggestionId] || 'Suggestion completed!';
+  if (feedbackSuccessToastTimer) clearTimeout(feedbackSuccessToastTimer);
+  showFeedbackSuccessToast.value = true;
+  feedbackSuccessToastTimer = window.setTimeout(() => {
+    showFeedbackSuccessToast.value = false;
+    feedbackSuccessToastTimer = null;
+  }, 4000);
+  // Always show "Next suggestion" button — updateSuggestionVisibility hides it if suggestions are visible
+  nextTick(() => triggerNextSuggestionButton());
+}
+
+function triggerNextSuggestionButton() {
+  if (nextSuggestionButtonTimer) clearTimeout(nextSuggestionButtonTimer);
+  updateBannerArrowDirections();
+  // Only show if no pending suggestions are currently visible in viewport
+  if (isAnyPendingSuggestionVisibleInViewport()) return;
+  showNextSuggestionButton.value = true;
+}
+
+function hideNextSuggestionButton() {
+  showNextSuggestionButton.value = false;
+  if (nextSuggestionButtonTimer) {
+    clearTimeout(nextSuggestionButtonTimer);
+    nextSuggestionButtonTimer = null;
+  }
+}
+
+function handleNextSuggestionButtonClick() {
+  hideNextSuggestionButton();
+  scrollToSuggestionByDirection(showBannerPrimaryArrowUp.value ? 'up' : 'down');
+}
+
+function triggerSuggestionDismissedToast(suggestionId) {
+  dismissedSuggestionIdForUndo.value = suggestionId;
+  if (suggestionDismissedToastTimerRef) clearTimeout(suggestionDismissedToastTimerRef);
+  showSuggestionDismissedToast.value = true;
+  suggestionDismissedToastTimerRef = window.setTimeout(() => {
+    showSuggestionDismissedToast.value = false;
+    dismissedSuggestionIdForUndo.value = null;
+    suggestionDismissedToastTimerRef = null;
+  }, 4000);
+  // Always show "Next suggestion" button — updateSuggestionVisibility hides it if suggestions are visible
+  nextTick(() => triggerNextSuggestionButton());
+}
+
+function handleUndoDismiss() {
+  const id = dismissedSuggestionIdForUndo.value;
+  if (!id) return;
+  // Restore the suggestion
+  if (id === 1) isSuggestionDeclined1.value = false;
+  else if (id === 2) isSuggestionDeclined2.value = false;
+  else if (id === 3) isSuggestionDeclined3.value = false;
+  else if (id === 4) isSuggestionDeclined4.value = false;
+  else if (id === 5) isSuggestionDeclined5.value = false;
+  else if (id === 6) isSuggestionDeclined6.value = false;
+  else if (id === 7) isSuggestionDeclined7.value = false;
+  else if (id === 8) isSuggestionDeclined8.value = false;
+  showSuggestionDismissedToast.value = false;
+  if (suggestionDismissedToastTimerRef) {
+    clearTimeout(suggestionDismissedToastTimerRef);
+    suggestionDismissedToastTimerRef = null;
+  }
+  dismissedSuggestionIdForUndo.value = null;
+  nextTick(() => updateSuggestionVisibility());
+}
+
 function getSuggestionSuccessAutoAdvanceDelay(wasCompleted = false) {
   return 0;
 }
@@ -8417,16 +8627,31 @@ function advanceMinervaEditCheck(currentType) {
 }
 
 function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
-  if (wasCompleted && isMinervaSkin.value && successHighlightOnCompleteEnabled.value && queueMinervaSuccessState(currentId)) {
+  if (wasCompleted && isMinervaSkin.value && successHighlightOnCompleteEnabled.value
+      && feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'bottom-sheet'
+      && queueMinervaSuccessState(currentId)) {
     return;
   }
-  // Dismiss in pagination mode: show "Want to view next suggestion?" prompt
-  if (!wasCompleted && isMinervaSkin.value && isPaginationMode.value) {
+  // Dismiss in pagination mode with bottom-sheet feedback: show "Want to view next?" prompt (Minerva only)
+  if (!wasCompleted && isMinervaSkin.value && isPaginationMode.value
+      && feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'bottom-sheet') {
     const nextId = getNextMinervaSuggestionId(currentId);
     if (nextId) {
       showMinervaDismissNextPrompt(nextId);
       return;
     }
+  }
+  // "View suggestion" button mode: show toast, close sheet, show Next button if needed — no auto-advance
+  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+    if (wasCompleted) {
+      triggerFeedbackSuccessToast(currentId);
+    } else {
+      triggerSuggestionDismissedToast(currentId);
+    }
+    if (isMinervaSkin.value) {
+      closeMinervaSuggestion();
+    }
+    return;
   }
   const delay = getSuggestionSuccessAutoAdvanceDelay(wasCompleted);
   window.setTimeout(() => {
@@ -9274,6 +9499,10 @@ function updateSuggestionVisibility() {
   updatePrimaryBannerDirection();
   updateVectorSuggestionsControlsVisibility();
   updateMinervaSheetReturnDirection();
+  // Hide "Next suggestion" button when a pending suggestion scrolls into view
+  if (showNextSuggestionButton.value && isAnyPendingSuggestionVisibleInViewport()) {
+    hideNextSuggestionButton();
+  }
 }
 
 function updateVectorSuggestionsControlsVisibility() {
@@ -9404,6 +9633,9 @@ function handleNoSuggestion1() {
     }, 260);
   } else {
     closeMinervaSuggestion();
+    if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+      triggerSuggestionDismissedToast(1);
+    }
   }
   scheduleBannerReappear();
 }
@@ -9419,6 +9651,9 @@ function handleNoSuggestion2() {
     }, 260);
   } else {
     closeMinervaSuggestion();
+    if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+      triggerSuggestionDismissedToast(2);
+    }
   }
   scheduleBannerReappear();
 }
@@ -9434,6 +9669,9 @@ function handleNoSuggestion3() {
     }, 260);
   } else {
     closeMinervaSuggestion();
+    if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+      triggerSuggestionDismissedToast(3);
+    }
   }
   scheduleBannerReappear();
 }
@@ -9448,6 +9686,9 @@ function handleYesSuggestion4() {
     closeMinervaSuggestion();
   }
   triggerSuggestionSuccessToast();
+  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+    triggerFeedbackSuccessToast(4);
+  }
   nextTick(() => {
     alignSidebarWithText4();
     updateSuggestionVisibility();
@@ -9465,6 +9706,9 @@ function handleNoSuggestion4() {
     }, 260);
   } else {
     closeMinervaSuggestion();
+    if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+      triggerSuggestionDismissedToast(4);
+    }
   }
   scheduleBannerReappear();
 }
@@ -9490,6 +9734,9 @@ function handleResolveGenericSuggestion(suggestionId) {
     closeMinervaSuggestion();
   }
   triggerSuggestionSuccessToast();
+  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+    triggerFeedbackSuccessToast(suggestionId);
+  }
   nextTick(() => {
     alignBothSuggestions();
     updateSuggestionVisibility();
@@ -9518,6 +9765,9 @@ function handleDeclineGenericSuggestion(suggestionId) {
     }, 260);
   } else {
     closeMinervaSuggestion();
+    if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+      triggerSuggestionDismissedToast(suggestionId);
+    }
   }
   nextTick(() => {
     alignBothSuggestions();
@@ -9537,6 +9787,9 @@ function createCitation1() {
       handleMinervaSuggestionResolutionAfterAction(1, true);
     } else {
       closeMinervaSuggestion();
+      if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+        triggerFeedbackSuccessToast(1);
+      }
     }
     triggerSuggestionSuccessToast();
     nextTick(() => {
@@ -9557,6 +9810,9 @@ function createCitation2() {
       handleMinervaSuggestionResolutionAfterAction(2, true);
     } else {
       closeMinervaSuggestion();
+      if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+        triggerFeedbackSuccessToast(2);
+      }
     }
     triggerSuggestionSuccessToast();
     nextTick(() => {
@@ -9577,6 +9833,9 @@ function createCitation3() {
       handleMinervaSuggestionResolutionAfterAction(3, true);
     } else {
       closeMinervaSuggestion();
+      if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+        triggerFeedbackSuccessToast(3);
+      }
     }
     triggerSuggestionSuccessToast();
     nextTick(() => {
@@ -15604,6 +15863,84 @@ function markArticleEdited() {
   color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
+/* "Next suggestion" button — shared pill styles */
+.next-suggestion-btn {
+  display: inline-flex;
+  height: 44px;
+  min-height: 44px;
+  max-height: 44px;
+  min-width: 128px;
+  max-width: 448px;
+  padding: 0 16px;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  border-radius: 9999px;
+  border: 1px solid var(--border-color-progressive, #3366cc);
+  background: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #eaf3ff));
+  color: var(--color-progressive, #36c);
+  font-size: 14px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0,0,0,0.06), 0 0 8px 0 rgba(0,0,0,0.06));
+  user-select: none;
+}
+
+.next-suggestion-btn:hover {
+  background: var(--suggestion-color-subtle-hover, var(--background-color-progressive-subtle--hover, #dbe8ff));
+}
+
+/* Icons always @color-progressive */
+.next-suggestion-btn :deep(.cdx-icon),
+.next-suggestion-btn :deep(svg) {
+  color: var(--color-progressive, #36c) !important;
+  fill: var(--color-progressive, #36c) !important;
+}
+
+.next-suggestion-btn-close {
+  color: var(--color-progressive, #36c) !important;
+  margin-left: -4px;
+}
+
+/* Minerva: font-size 16px */
+.minerva-skin .next-suggestion-btn {
+  font-size: 16px;
+}
+
+/* Positioning anchors */
+.next-suggestion-anchor {
+  pointer-events: none;
+  z-index: 100;
+}
+
+.next-suggestion-anchor .next-suggestion-btn {
+  pointer-events: auto;
+}
+
+/* Minerva: fixed, centered in viewport, 16px from bottom */
+.next-suggestion-anchor--minerva {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Vector: fixed, centered within sidebar column (325px wide, 32px from right), 32px from viewport bottom */
+.next-suggestion-anchor--vector {
+  position: fixed;
+  right: 32px;
+  width: 325px;
+  bottom: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .minerva-toast {
   position: fixed;
   top: calc(42px + 12px);
@@ -15647,6 +15984,18 @@ function markArticleEdited() {
 
 .minerva-toast--zero {
   top: calc(42px + 16px);
+}
+
+.minerva-toast--dismissed {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: space-between;
+}
+
+.minerva-toast-undo-btn {
+  color: #ffffff;
+  flex-shrink: 0;
 }
 
 .vector-success-toast {
@@ -16780,6 +17129,24 @@ function markArticleEdited() {
 .banner-reveal-enter-to,
 .banner-reveal-leave-from {
   transform: scaleY(1);
+  opacity: 1;
+}
+
+/* "Next suggestion" bar transition — slide up from bottom */
+.next-suggestion-reveal-enter-active,
+.next-suggestion-reveal-leave-active {
+  transition: transform 220ms ease, opacity 220ms ease;
+}
+
+.next-suggestion-reveal-enter-from,
+.next-suggestion-reveal-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.next-suggestion-reveal-enter-to,
+.next-suggestion-reveal-leave-from {
+  transform: translateY(0);
   opacity: 1;
 }
 
