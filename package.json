@@ -6,7 +6,7 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && touch dist/.nojekyll && cd dist && git init && git add -A && git commit -m 'deploy' && git push -f git@github.com:bmartinezcalvo/suggestion-mode.git main:gh-pages && cd .."
+    "deploy": "node deploy.mjs"
   },
   "dependencies": {
     "vue": "^3.4.0",

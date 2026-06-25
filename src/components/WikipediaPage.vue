@@ -111,16 +111,16 @@
           <!-- Edit (with lightbulb modifier if badge mode) -->
           <button v-if="!articleLockToEdit" class="fixed-header__btn" aria-label="Edit" @click="toggleEditMode">
             <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
-            <span v-else v-tooltip="'Suggestions available in this section'" class="pulsating-lightbulb-wrapper">
-              <img
-                :src="iconEditLightbulbFixedHeader"
-                width="20"
-                height="21"
-                alt=""
-                aria-hidden="true"
-              />
-              <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
-            </span>
+            <template v-else>
+              <span v-if="entryPointSolution === 'pulsating-lightbulb'" v-tooltip="'Suggestions available in this section'" class="pulsating-lightbulb-wrapper">
+                <img :src="iconEditLightbulbFixedHeader" width="20" height="21" alt="" aria-hidden="true" />
+                <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+              </span>
+              <span v-if="showNumberedBadge" class="pulsating-lightbulb-wrapper">
+                <cdx-icon :icon="cdxIconEdit" size="medium" />
+                <span v-if="availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(availableSuggestionCount) }}</span>
+              </span>
+            </template>
           </button>
           <!-- Languages -->
           <button class="fixed-header__btn fixed-header__btn--languages" aria-label="95 languages">
@@ -144,29 +144,19 @@
             <cdx-icon :icon="cdxIconMenu" size="medium" />
           </button>
           <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup" role="dialog" aria-label="Settings menu" style="padding: 16px;">
-            <cdx-field v-show="false" is-fieldset>
-              <template #label>Suggestions entry point</template>
-              <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry" input-value="badge">
-                Icon's modifier in edit action
+            <cdx-field v-if="lightbulbModifierEnabled" is-fieldset>
+              <template #label>Entry point solutions</template>
+              <cdx-radio v-model="entryPointSolution" name="entry-point-solution" input-value="pulsating-lightbulb">
+                Pulsating lightbulb
               </cdx-radio>
-              <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry" input-value="toast">
-                Navigable banner [DISCARDED]
+              <cdx-radio v-model="entryPointSolution" name="entry-point-solution" input-value="numbered-badge">
+                Numbered badge
               </cdx-radio>
             </cdx-field>
-            <cdx-field is-fieldset class="menu-popup__other-fieldset">
+            <cdx-field is-fieldset>
               <template #label></template>
-              <div v-if="lightbulbModifierEnabled" class="menu-popup__toggle-row">
-                <span class="menu-popup__toggle-label">Pulsating lightbulb the 1st time</span>
-                <cdx-toggle-switch v-model="pulsatingLightbulbEnabled" @update:model-value="onPulsatingLightbulbChange" />
-              </div>
-              <div class="menu-popup__toggle-row">
-                <span class="menu-popup__toggle-label">Edit + Edit source</span>
-                <cdx-toggle-switch v-model="editSourceEnabled" />
-              </div>
-              <div class="menu-popup__toggle-row">
-                <span class="menu-popup__toggle-label">Article lock to edit</span>
-                <cdx-toggle-switch v-model="articleLockToEdit" />
-              </div>
+              <cdx-checkbox v-model="editSourceEnabled">Edit + Edit source</cdx-checkbox>
+              <cdx-checkbox v-model="articleLockToEdit">Article lock to edit</cdx-checkbox>
             </cdx-field>
           </div>
 
@@ -242,25 +232,19 @@
               <cdx-icon :icon="cdxIconMenu" size="medium" />
             </button>
             <div v-if="isSkinMenuOpen && !isEditMode" class="menu-popup menu-popup--minerva" role="dialog" aria-label="Settings menu" style="padding: 16px;">
-              <cdx-field v-show="false" is-fieldset>
-                <template #label>Suggestions entry point</template>
-                <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry-minerva" input-value="badge">
-                  Icon's modifier in edit action
+              <cdx-field v-if="lightbulbModifierEnabled" is-fieldset>
+                <template #label>Entry point solutions</template>
+                <cdx-radio v-model="entryPointSolution" name="entry-point-solution-minerva" input-value="pulsating-lightbulb">
+                  Pulsating lightbulb
                 </cdx-radio>
-                <cdx-radio v-model="readModeSuggestionsEntry" name="read-mode-entry-minerva" input-value="toast">
-                  Navigable banner [DISCARDED]
+                <cdx-radio v-model="entryPointSolution" name="entry-point-solution-minerva" input-value="numbered-badge">
+                  Numbered badge
                 </cdx-radio>
               </cdx-field>
-              <cdx-field is-fieldset class="menu-popup__other-fieldset">
+              <cdx-field is-fieldset>
                 <template #label></template>
-                <div v-if="lightbulbModifierEnabled" class="menu-popup__toggle-row">
-                  <span class="menu-popup__toggle-label">Pulsating lightbulb the 1st time</span>
-                  <cdx-toggle-switch v-model="pulsatingLightbulbEnabled" @update:model-value="onPulsatingLightbulbChange" />
-                </div>
-                <div class="menu-popup__toggle-row">
-                  <span class="menu-popup__toggle-label">Article lock to edit</span>
-                  <cdx-toggle-switch v-model="articleLockToEdit" />
-                </div>
+                <cdx-checkbox v-model="editSourceEnabled">Edit + Edit source</cdx-checkbox>
+                <cdx-checkbox v-model="articleLockToEdit">Article lock to edit</cdx-checkbox>
               </cdx-field>
             </div>
 
@@ -621,15 +605,10 @@
                 <button v-else class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
                   <div class="pulsating-dot-wrapper">
                     <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
-                      <img
-                        :src="iconModifierV2"
-                        width="18"
-                        height="18"
-                        alt=""
-                        aria-hidden="true"
-                        class="minerva-action-icon-img"
-                      />
+                      <img v-if="entryPointSolution === 'pulsating-lightbulb'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" class="minerva-action-icon-img" />
+                      <cdx-icon v-if="showNumberedBadge" :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                      <span v-if="showNumberedBadge && availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(availableSuggestionCount) }}</span>
                     </span>
                     <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                     <span v-if="showPulsatingDot" class="pulsating-dot"></span>
@@ -756,11 +735,7 @@
                 <h2 class="heading-text">Career</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('career')" class="pulsating-lightbulb-wrapper"><cdx-icon
-                      v-tooltip="'Suggestions available in this section'"
-                      :icon="cdxIconLightbulb"
-                      class="section-edit-lightbulb-icon"
-                    /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit source</a></template><span class="section-edit-bracket">]</span>
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit<template v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('career')"><span v-if="entryPointSolution === 'pulsating-lightbulb'" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span><span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this section'" class="suggestion-badge suggestion-badge--inline">{{ badgeLabel(getSectionBadgeCount('career')) }}</span></template></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('career')">edit source</a></template><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -800,11 +775,7 @@
                 <h2 class="heading-text">Poetry</h2>
                 <span v-if="!articleLockToEdit" class="section-edit">
                   <span class="section-edit-inner">
-                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('poetry')" class="pulsating-lightbulb-wrapper"><cdx-icon
-                      v-tooltip="'Suggestions available in this section'"
-                      :icon="cdxIconLightbulb"
-                      class="section-edit-lightbulb-icon"
-                    /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><span class="section-edit-bracket">]</span>
+                    <span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('poetry')">edit<template v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('poetry')"><span v-if="entryPointSolution === 'pulsating-lightbulb'" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span><span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this section'" class="suggestion-badge suggestion-badge--inline">{{ badgeLabel(getSectionBadgeCount('poetry')) }}</span></template></a><span class="section-edit-bracket">]</span>
                   </span>
                 </span>
               </div>
@@ -820,7 +791,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Early works</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('early-works')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit<template v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('early-works')"><span v-if="entryPointSolution === 'pulsating-lightbulb'" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span><span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this section'" class="suggestion-badge suggestion-badge--inline">{{ badgeLabel(getSectionBadgeCount('early-works')) }}</span></template></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('early-works')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
@@ -839,7 +810,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Wider recognition</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('wider-recognition')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit<template v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('wider-recognition')"><span v-if="entryPointSolution === 'pulsating-lightbulb'" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span><span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this section'" class="suggestion-badge suggestion-badge--inline">{{ badgeLabel(getSectionBadgeCount('wider-recognition')) }}</span></template></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('wider-recognition')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 Despite the success of these volumes, it was the release of Coal in 1976 that established Lorde as an influential voice in the Black Arts Movement, and the large publishing house behind it - Norton - helped introduce her to a wider audience. The volume includes poems from both The First Cities and Cables to Rage, and it unites many of the themes Lorde would become known for throughout her career: her rage at racial injustice, her celebration of her black identity, and her call for an intersectional consideration of women's experiences. Lorde followed Coal up with Between Our Selves (also in 1976) and Hanging Fire (1978).
@@ -872,7 +843,7 @@
               </p>
                             <div class="subsection-heading-row">
                               <h3 class="subsection-title">Sister Outsider</h3>
-                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit<span v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('sister-outsider')" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
+                              <span v-if="!articleLockToEdit" class="section-edit"><span class="section-edit-inner"><span class="section-edit-bracket">[</span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit<template v-if="!isEditMode && lightbulbModifierEnabled && sectionHasPendingSuggestions('sister-outsider')"><span v-if="entryPointSolution === 'pulsating-lightbulb'" class="pulsating-lightbulb-wrapper"><cdx-icon v-tooltip="'Suggestions available in this section'" :icon="cdxIconLightbulb" class="section-edit-lightbulb-icon" /><span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span></span><span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this section'" class="suggestion-badge suggestion-badge--inline">{{ badgeLabel(getSectionBadgeCount('sister-outsider')) }}</span></template></a><template v-if="editSourceEnabled"><span class="section-edit-separator"> | </span><a href="#" class="section-edit-link" @click.prevent="openEditAtSection('sister-outsider')">edit source</a></template><span class="section-edit-bracket">]</span></span></span>
                             </div>
                             <p>
                 In Sister Outsider: Essays and Speeches (1984), Lorde asserts the necessity of communicating the experience of marginalized groups to make their struggles visible in a repressive society. She emphasizes the need for different groups of people (particularly white women and African-American women) to find common ground in their experiences in life, but also to face difference directly, and use it as a source of strength rather than alienation. She repeatedly emphasizes the need for community in the struggle to build a better world. How to constructively channel the anger and rage incited by oppression is another prominent theme throughout her works, and in this collection in particular.
@@ -1148,14 +1119,10 @@
                   <button v-if="isMinervaSectionOpen('early-life') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('early-life')">
                     <div class="pulsating-dot-wrapper">
                       <span v-if="lightbulbModifierEnabled && sectionHasSuggestions('early-life')" class="pulsating-lightbulb-wrapper">
-                        <img
-                          :src="iconModifierV2"
-                          width="18"
-                          height="18"
-                          alt=""
-                          aria-hidden="true"
-                        />
+                        <img v-if="entryPointSolution === 'pulsating-lightbulb'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" />
+                        <cdx-icon v-if="showNumberedBadge" :icon="cdxIconEdit" size="medium" />
                         <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                        <span v-if="showNumberedBadge" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(getSectionBadgeCount('early-life')) }}</span>
                       </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
@@ -1189,14 +1156,10 @@
                   <button v-if="isMinervaSectionOpen('career') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('career')">
                     <div class="pulsating-dot-wrapper">
                       <span v-if="lightbulbModifierEnabled && sectionHasPendingSuggestions('career')" class="pulsating-lightbulb-wrapper">
-                        <img
-                          :src="iconModifierV2"
-                          width="18"
-                          height="18"
-                          alt=""
-                          aria-hidden="true"
-                        />
+                        <img v-if="entryPointSolution === 'pulsating-lightbulb'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" />
+                        <cdx-icon v-if="showNumberedBadge" :icon="cdxIconEdit" size="medium" />
                         <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                        <span v-if="showNumberedBadge" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(getSectionBadgeCount('career')) }}</span>
                       </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
@@ -1242,14 +1205,10 @@
                   <button v-if="isMinervaSectionOpen('poetry') && !articleLockToEdit" class="minerva-accordion-edit minerva-accordion-edit--entry" aria-label="Edit section" @click.stop="openEditAtSection('poetry')">
                     <div class="pulsating-dot-wrapper">
                       <span v-if="lightbulbModifierEnabled && sectionHasPendingSuggestions('poetry')" class="pulsating-lightbulb-wrapper">
-                        <img
-                          :src="iconModifierV2"
-                          width="18"
-                          height="18"
-                          alt=""
-                          aria-hidden="true"
-                        />
+                        <img v-if="entryPointSolution === 'pulsating-lightbulb'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" />
+                        <cdx-icon v-if="showNumberedBadge" :icon="cdxIconEdit" size="medium" />
                         <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                        <span v-if="showNumberedBadge" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(getSectionBadgeCount('poetry')) }}</span>
                       </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
@@ -5673,6 +5632,7 @@ const selectedSkin = ref('vector22');
 const isMinervaSkin = computed(() => selectedSkin.value === 'minerva');
 const readModeSuggestionsEntry = ref('badge');
 const lightbulbModifierEnabled = ref(true);
+const entryPointSolution = ref('pulsating-lightbulb');
 const isReadModeToastDismissed = ref(false);
 const hasScrolledForToast = ref(false);
 
@@ -5690,6 +5650,21 @@ function sectionHasPendingSuggestions(sectionId) {
   if (sectionId === 'prose') return isSuggestion7Pending.value || isSuggestion3Pending.value;
   if (sectionId === 'sister-outsider') return isSuggestion3Pending.value;
   return false;
+}
+
+// Returns pending suggestion count for a section (used by numbered badge)
+function getSectionBadgeCount(sectionId) {
+  if (sectionId === 'career') return (isSuggestion1Pending.value ? 1 : 0);
+  if (sectionId === 'poetry') return (isSuggestion8Pending.value ? 1 : 0) + (isSuggestion6Pending.value ? 1 : 0) + (isSuggestion2Pending.value ? 1 : 0) + (isSuggestion4Pending.value ? 1 : 0);
+  if (sectionId === 'early-works') return (isSuggestion8Pending.value ? 1 : 0) + (isSuggestion6Pending.value ? 1 : 0);
+  if (sectionId === 'wider-recognition') return (isSuggestion2Pending.value ? 1 : 0) + (isSuggestion4Pending.value ? 1 : 0);
+  if (sectionId === 'prose') return (isSuggestion7Pending.value ? 1 : 0) + (isSuggestion3Pending.value ? 1 : 0);
+  if (sectionId === 'sister-outsider') return (isSuggestion3Pending.value ? 1 : 0);
+  return 0;
+}
+
+function badgeLabel(count) {
+  return count > 9 ? '+9' : String(count);
 }
 
 // Article lock to edit
@@ -5717,12 +5692,20 @@ const showPulsatingDot = computed(() =>
   lightbulbModifierEnabled.value
 );
 const showPulsatingLightbulb = computed(() =>
+  entryPointSolution.value === 'pulsating-lightbulb' &&
   pulsatingLightbulbEnabled.value &&
   lightbulbModifierEnabled.value &&
   !isEditMode.value &&
   !articleLockToEdit.value &&
   !hasInteractedWithSuggestion.value &&
   availableSuggestionCount.value > 0
+);
+
+const showNumberedBadge = computed(() =>
+  entryPointSolution.value === 'numbered-badge' &&
+  lightbulbModifierEnabled.value &&
+  !isEditMode.value &&
+  !articleLockToEdit.value
 );
 
 // End-of-article suggestions banner
@@ -19272,6 +19255,44 @@ function markArticleEdited() {
 .fixed-header__btn .pulsating-lightbulb {
   top: 4px;
   left: 16px;
+}
+
+/* ── numbered suggestion badge ───────────────────────────────── */
+
+.suggestion-badge {
+  display: inline-flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  max-width: var(--size-100, 1.5rem);
+  max-height: var(--size-75, 1.125rem);
+  min-width: 12px;
+  padding: 0 var(--spacing-12, 2px);
+  background-color: var(--background-color-progressive, #36c);
+  color: #fff;
+  font-size: 12px;
+  font-weight: normal;
+  line-height: 1;
+  border-radius: 2px;
+  outline: 1px solid var(--border-color-inverted, #fff);
+  box-sizing: border-box;
+  white-space: nowrap;
+}
+
+/* Badge overlaid on pencil icon (Minerva toolbar/accordion + Vector fixed header) */
+.suggestion-badge--icon {
+  position: absolute;
+  top: -2px;
+  right: -4px;
+  z-index: 1;
+}
+
+/* Badge inline after [edit] text (Vector section links) */
+.suggestion-badge--inline {
+  position: relative;
+  vertical-align: middle;
+  margin-left: 2px;
 }
 
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
