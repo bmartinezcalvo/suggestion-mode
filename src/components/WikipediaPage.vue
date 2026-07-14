@@ -367,6 +367,62 @@
         >
           <cdx-icon :icon="cdxIconHelp" size="medium" />
         </button>
+        <!-- Persistent pagination bar — shown in persistent-pagination feedback mode -->
+        <transition name="next-suggestion-reveal">
+          <div
+            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen"
+            class="minerva-persistent-pagination-bar"
+          >
+            <!-- Both types: show chips, no arrows -->
+            <template v-if="persistentPaginationSuggestionCount > 0 && persistentPaginationCheckCount > 0">
+              <cdx-info-chip
+                class="minerva-persistent-chip"
+                status="warning"
+                @click="handlePersistentPaginationChipClick('checks')"
+              >
+                {{ persistentPaginationCheckCount }} {{ persistentPaginationCheckCount === 1 ? 'check' : 'checks' }}
+              </cdx-info-chip>
+              <cdx-info-chip
+                class="minerva-persistent-chip"
+                status="notice"
+                @click="handlePersistentPaginationChipClick('suggestions')"
+              >
+                {{ persistentPaginationSuggestionCount }} {{ persistentPaginationSuggestionCount === 1 ? 'suggestion' : 'suggestions' }}
+              </cdx-info-chip>
+            </template>
+            <!-- Only suggestions: lightbulb + count + arrows -->
+            <template v-else-if="persistentPaginationSuggestionCount > 0">
+              <cdx-icon :icon="cdxIconLightbulb" size="small" class="minerva-persistent-bar-icon minerva-persistent-bar-icon--progressive" />
+              <span class="minerva-persistent-bar-label">
+                <strong>{{ persistentPaginationSuggestionCount }} {{ persistentPaginationSuggestionCount === 1 ? 'suggestion' : 'suggestions' }}</strong>
+              </span>
+              <div class="minerva-persistent-bar-arrows">
+                <cdx-button weight="quiet" size="small" aria-label="Previous suggestion" @click="handlePersistentPaginationBarPrev">
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon minerva-pagination-icon--prev" />
+                </cdx-button>
+                <cdx-button weight="quiet" size="small" aria-label="Next suggestion" @click="handlePersistentPaginationBarNext">
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon" />
+                </cdx-button>
+              </div>
+            </template>
+            <!-- Only checks: warning + count + arrows -->
+            <template v-else-if="persistentPaginationCheckCount > 0">
+              <cdx-icon :icon="cdxIconAlert" size="small" class="minerva-persistent-bar-icon minerva-persistent-bar-icon--warning" />
+              <span class="minerva-persistent-bar-label">
+                <strong>{{ persistentPaginationCheckCount }} {{ persistentPaginationCheckCount === 1 ? 'check' : 'checks' }}</strong>
+              </span>
+              <div class="minerva-persistent-bar-arrows">
+                <cdx-button weight="quiet" size="small" aria-label="Previous check" @click="handlePersistentPaginationBarPrev">
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon minerva-pagination-icon--prev" />
+                </cdx-button>
+                <cdx-button weight="quiet" size="small" aria-label="Next check" @click="handlePersistentPaginationBarNext">
+                  <cdx-icon :icon="cdxIconExpand" size="small" class="minerva-pagination-icon" />
+                </cdx-button>
+              </div>
+            </template>
+          </div>
+        </transition>
+
         <div
           v-if="showMinervaBanner || showMinervaHelpButton || showMinervaArrowOnly"
           class="minerva-suggestions-bar"
@@ -4294,12 +4350,12 @@
                 'minerva-sheet-header--success': isMinervaSuggestionSuccessState && !isEditCheckSheet
               }"
             >
-              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaSuggestionSuccessState ? cdxIconSuccess : cdxIconLightbulb)" size="medium" />
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode) ? cdxIconSuccess : cdxIconLightbulb)" size="medium" />
               <div
                 class="minerva-sheet-title"
-                :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState }"
+                :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode }"
               >
-                {{ isEditCheckSheet ? editCheckTitle : minervaSheetTitle }}
+                {{ isPersistentPaginationSuccessMode ? persistentPaginationSuccessTitle : (isEditCheckSheet ? editCheckTitle : minervaSheetTitle) }}
               </div>
               <div
                 v-if="showMinervaSuggestionHeaderIndicator"
@@ -4317,9 +4373,9 @@
                 >
                   <cdx-icon :icon="minervaSheetReturnDirection === 'up' ? cdxIconArrowUp : cdxIconArrowDown" size="medium" />
                 </button>
-                <!-- Close button hidden in success state -->
+                <!-- Close button hidden in regular success state, but visible in persistent-pagination success -->
                 <button
-                  v-else-if="!isMinervaSuggestionSuccessState"
+                  v-else-if="!isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode"
                   class="minerva-sheet-icon-button minerva-sheet-icon-button--close"
                   type="button"
                   aria-label="Close"
@@ -4343,6 +4399,9 @@
               copyright violation or plagiarism
             </a>
             and may result in your content being removed or your account being blocked.
+          </p>
+          <p v-else-if="isPersistentPaginationSuccessMode" class="minerva-sheet-description">
+            Thank you for helping to make this section easier for people to read.
           </p>
           <template v-else-if="isMinervaSuggestionSuccessState"></template><!-- success: no description -->
           <p v-else-if="showMinervaNoMoreSuggestionsState" class="minerva-sheet-description">
@@ -4410,6 +4469,7 @@
               No, remove it
             </cdx-button>
           </div>
+            <template v-else-if="isPersistentPaginationSuccessMode"></template><!-- persistent-pagination success: no action buttons -->
             <div v-else-if="isMinervaSuggestionSuccessState && isPaginationManualMode" class="minerva-sheet-actions minerva-sheet-actions--next-prompt">
               <span class="minerva-next-prompt-text">Want to view next suggestion?</span>
               <cdx-button
@@ -4614,7 +4674,7 @@
             </template><!-- end v-else (non-dismiss-prompt content) -->
           </div>
           <div
-            v-if="showMinervaPagination && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode)"
+            v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode)"
             class="minerva-sheet-pagination"
           >
             <div
@@ -4835,15 +4895,23 @@
                     input-value="bottom-sheet"
                     class="prototype-suboption-radio"
                   >
-                    Bottom sheet
+                    Custom bottom sheet
                   </cdx-radio>
                   <cdx-radio
                     v-model="feedbackAndNextMode"
                     name="feedback-and-next-mode"
                     input-value="view-button"
+                    class="prototype-suboption-radio"
+                  >
+                    Reuse "View suggestion" button
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackAndNextMode"
+                    name="feedback-and-next-mode"
+                    input-value="persistent-pagination"
                     class="prototype-suboption-radio prototype-suboption-radio--last"
                   >
-                    "View suggestion" button
+                    Persistent pagination
                   </cdx-radio>
                 </div>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
@@ -5044,7 +5112,8 @@ import {
   CdxTextInput,
   CdxMessage,
   CdxRadio,
-  CdxDialog
+  CdxDialog,
+  CdxInfoChip
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -5153,6 +5222,9 @@ const filteringEnabled = ref(false);
 const isPaginationAutoMode = computed(() => activePrototype.value === 'option-5');
 const isPaginationManualMode = computed(() => activePrototype.value === 'option-6');
 const isPaginationMode = computed(() => isPaginationAutoMode.value || isPaginationManualMode.value);
+const isPersistentPaginationMode = computed(() =>
+  feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination'
+);
 const shouldAutoAdvancePaginationSuggestion = computed(() => isPaginationAutoMode.value);
 const isFirstSuggestionNavigationMode = computed(() => (
   activePrototype.value === 'option-2' || isPaginationMode.value
@@ -5531,7 +5603,10 @@ const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(false);
 const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(true);
-const feedbackAndNextMode = ref('bottom-sheet'); // 'bottom-sheet' | 'view-button'
+const feedbackAndNextMode = ref('bottom-sheet'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
+const isPersistentPaginationSuccessMode = ref(false);
+let persistentPaginationSuccessTimer = null;
+const persistentPaginationActiveGroup = ref(null); // null | 'suggestions' | 'checks'
 const dismissedSuggestionIdForUndo = ref(null); // stores the id of the last dismissed suggestion for Undo
 const showSuggestionDismissedToast = ref(false);
 let suggestionDismissedToastTimer = null;
@@ -6489,6 +6564,7 @@ const isSuggestionSheetMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
+  if (isPersistentPaginationMode.value) return false;
   if (suppressMinervaBannerDuringViewMoreSuggestions.value) return false;
   if (['option-3', 'option-4'].includes(activePrototype.value)) return false;
   if (showMinervaArrowOnly.value) return false;
@@ -6677,10 +6753,10 @@ const isMinervaPaginationNextDisabled = computed(() => (
   isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1
 ));
 const showMinervaPaginationArrows = computed(() => (
-  !isMinervaSuggestionSuccessState.value && minervaPaginationTotal.value > 1
+  (!isMinervaSuggestionSuccessState.value || isPersistentPaginationSuccessMode.value) && minervaPaginationTotal.value > 1
 ));
 const showMinervaPagination = computed(() => {
-  if (isMinervaSuggestionSuccessState.value) {
+  if (isMinervaSuggestionSuccessState.value || isPersistentPaginationSuccessMode.value) {
     return true;
   }
   if (showMinervaNoMoreSuggestionsState.value) {
@@ -8488,6 +8564,38 @@ const suggestionSuccessToastMessages = {
   8: 'Link updated!',
 };
 
+const persistentPaginationSuccessTitles = {
+  1: 'Citation added!',
+  2: 'Citation added!',
+  3: 'Citation added!',
+  4: 'Link removed!',
+  5: 'Link updated!',
+  6: 'Heading updated!',
+  7: 'Link updated!',
+  8: 'Link updated!',
+  tone: 'Tone improved!',
+  paste: 'Content reviewed!',
+};
+
+const persistentPaginationSuccessTitle = computed(() => {
+  if (isEditCheckSheet.value) {
+    return persistentPaginationSuccessTitles[activeEditCheckType.value] || 'Check resolved!';
+  }
+  return persistentPaginationSuccessTitles[activeMinervaSuggestion.value] || 'Done!';
+});
+
+const persistentPaginationSuggestionCount = computed(() =>
+  getPendingSuggestionIdsForContext().length
+);
+
+const persistentPaginationCheckCount = computed(() =>
+  editCheckPaginationTypes.value.length
+);
+
+const hasPendingPersistentItems = computed(() =>
+  persistentPaginationSuggestionCount.value > 0 || persistentPaginationCheckCount.value > 0
+);
+
 function triggerFeedbackSuccessToast(suggestionId) {
   feedbackSuccessToastMessage.value = suggestionSuccessToastMessages[suggestionId] || 'Suggestion completed!';
   if (feedbackSuccessToastTimer) clearTimeout(feedbackSuccessToastTimer);
@@ -8519,6 +8627,44 @@ function hideNextSuggestionButton() {
 function handleNextSuggestionButtonClick() {
   hideNextSuggestionButton();
   scrollToSuggestionByDirection(showBannerPrimaryArrowUp.value ? 'up' : 'down');
+}
+
+// Persistent pagination bar handlers
+function handlePersistentPaginationChipClick(group) {
+  persistentPaginationActiveGroup.value = group;
+  if (group === 'suggestions') {
+    const ids = getPendingSuggestionIdsForContext();
+    if (ids.length > 0) {
+      openMinervaSuggestion(ids[0]);
+    }
+  } else if (group === 'checks') {
+    const types = editCheckPaginationTypes.value;
+    if (types.length > 0) {
+      openEditCheckAtType(types[0]);
+    }
+  }
+}
+
+function handlePersistentPaginationBarPrev() {
+  const onlySuggestions = persistentPaginationSuggestionCount.value > 0 && persistentPaginationCheckCount.value === 0;
+  const onlyChecks = persistentPaginationCheckCount.value > 0 && persistentPaginationSuggestionCount.value === 0;
+  if (onlySuggestions) {
+    handleMinervaPaginationPrev();
+  } else if (onlyChecks) {
+    handleMinervaPaginationPrev();
+  }
+}
+
+function handlePersistentPaginationBarNext() {
+  const onlySuggestions = persistentPaginationSuggestionCount.value > 0 && persistentPaginationCheckCount.value === 0;
+  const onlyChecks = persistentPaginationCheckCount.value > 0 && persistentPaginationSuggestionCount.value === 0;
+  if (onlySuggestions) {
+    const ids = getPendingSuggestionIdsForContext();
+    if (ids.length > 0) openMinervaSuggestion(ids[0]);
+  } else if (onlyChecks) {
+    const types = editCheckPaginationTypes.value;
+    if (types.length > 0) openEditCheckAtType(types[0]);
+  }
 }
 
 function triggerSuggestionDismissedToast(suggestionId) {
@@ -8640,6 +8786,28 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
       showMinervaDismissNextPrompt(nextId);
       return;
     }
+  }
+  // Persistent pagination mode: success state in sheet OR dismiss toast
+  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
+    if (wasCompleted) {
+      activateSuccessHighlight(currentId);
+      isPersistentPaginationSuccessMode.value = true;
+      if (persistentPaginationSuccessTimer) clearTimeout(persistentPaginationSuccessTimer);
+      persistentPaginationSuccessTimer = window.setTimeout(() => {
+        isPersistentPaginationSuccessMode.value = false;
+        persistentPaginationSuccessTimer = null;
+        nextTick(() => {
+          if (!maybeShowMinervaNoMoreSuggestionsState()) {
+            closeMinervaSuggestion();
+          }
+        });
+      }, 4000);
+    } else {
+      triggerSuggestionDismissedToast(currentId);
+      persistentPaginationActiveGroup.value = null;
+      closeMinervaSuggestion();
+    }
+    return;
   }
   // "View suggestion" button mode: show toast, close sheet, show Next button if needed — no auto-advance
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
@@ -11699,6 +11867,16 @@ function closeMinervaSuggestion() {
   clearMinervaNoMoreSuggestionsState();
   clearMinervaSuggestionSuccessState();
   clearMinervaSheetClosingState();
+  if (isPersistentPaginationSuccessMode.value) {
+    isPersistentPaginationSuccessMode.value = false;
+    if (persistentPaginationSuccessTimer) {
+      clearTimeout(persistentPaginationSuccessTimer);
+      persistentPaginationSuccessTimer = null;
+    }
+  }
+  if (isPersistentPaginationMode.value) {
+    persistentPaginationActiveGroup.value = null;
+  }
   isMinervaSheetOpen.value = false;
   minervaSheetReturnDirection.value = null;
   isCardExpanded.value = false;
@@ -15861,6 +16039,49 @@ function markArticleEdited() {
 
 .minerva-suggestions-rail-toggle--active :deep(.cdx-icon) {
   color: var(--suggestion-color, var(--color-progressive, #36c));
+}
+
+/* Persistent pagination bar */
+.minerva-persistent-pagination-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 70;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 16px;
+  background: var(--background-color-base, #fff);
+  border-top: 1px solid #dadde3;
+  font-family: 'Inter', sans-serif;
+  font-size: 14px;
+}
+
+.minerva-persistent-bar-icon--progressive {
+  color: var(--color-progressive, #36c);
+}
+
+.minerva-persistent-bar-icon--warning {
+  color: var(--color-warning, #ac6600);
+}
+
+.minerva-persistent-bar-label {
+  color: var(--color-base, #202122);
+  font-size: 14px;
+}
+
+.minerva-persistent-bar-arrows {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.minerva-persistent-chip {
+  cursor: pointer;
+  font-size: 14px;
 }
 
 /* "Next suggestion" button — shared pill styles */
