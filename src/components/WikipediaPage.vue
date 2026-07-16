@@ -8987,7 +8987,14 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
     } else {
       triggerSuggestionDismissedToast(currentId);
       persistentPaginationActiveGroup.value = null;
-      closeMinervaSuggestion();
+      nextTick(() => {
+        if (!maybeShowMinervaNoMoreSuggestionsState()) {
+          if (shouldShowNoMoreSuggestionsLeftToast()) {
+            showPaginationNoMoreSuggestionsToast();
+          }
+          closeMinervaSuggestion();
+        }
+      });
     }
     return;
   }
