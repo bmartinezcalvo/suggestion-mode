@@ -16339,6 +16339,7 @@ function markArticleEdited() {
 
 /* PP success description: 16px padding bottom */
 .minerva-sheet-description--pp-success {
+  padding-top: 16px;
   padding-bottom: 16px;
 }
 
