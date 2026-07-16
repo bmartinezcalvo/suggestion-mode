@@ -349,7 +349,7 @@
         <!-- Persistent pagination bar — shown in persistent-pagination feedback mode -->
         <transition name="next-suggestion-reveal">
           <div
-            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet"
+            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet && !persistentPaginationBarScrollPending"
             class="minerva-persistent-pagination-bar"
           >
             <!-- Left: checks (if any) + divider + suggestions -->
@@ -5689,6 +5689,7 @@ const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(true);
 const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
 const isPersistentPaginationSuccessMode = ref(false);
+const persistentPaginationBarScrollPending = ref(false);
 const persistentPaginationSuccessLabel = ref('');
 const persistentPaginationSuccessItems = ref([]);
 const persistentPaginationSuccessIndex = ref(0);
@@ -8970,9 +8971,24 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
     if (wasCompleted) {
       activateSuccessHighlight(currentId);
-      persistentPaginationSuccessLabel.value = `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value}`;
-      persistentPaginationSuccessItems.value = [...minervaPaginationItems.value];
-      persistentPaginationSuccessIndex.value = minervaPaginationIndex.value;
+      // Reconstruct original items/index: suggestion already removed from pending before this runs
+      const naturalOrder = [1, 8, 6, 2, 4, 7, 3, 5];
+      const currentItems = [...minervaPaginationItems.value];
+      let origIndex;
+      if (typeof currentId === 'number') {
+        const editCheckCount = editCheckPaginationTypes.value.length;
+        const currentNaturalPos = naturalOrder.indexOf(currentId);
+        const suggsBefore = currentItems.filter(
+          (item) => typeof item === 'number' && naturalOrder.indexOf(item) < currentNaturalPos
+        ).length;
+        origIndex = editCheckCount + suggsBefore;
+      } else {
+        origIndex = ['paste', 'tone'].indexOf(currentId);
+      }
+      if (!currentItems.includes(currentId)) currentItems.splice(origIndex, 0, currentId);
+      persistentPaginationSuccessLabel.value = `${origIndex + 1} of ${currentItems.length}`;
+      persistentPaginationSuccessItems.value = currentItems;
+      persistentPaginationSuccessIndex.value = origIndex;
       isPersistentPaginationSuccessMode.value = true;
       if (persistentPaginationSuccessTimer) clearTimeout(persistentPaginationSuccessTimer);
       persistentPaginationSuccessTimer = window.setTimeout(() => {
@@ -9815,6 +9831,10 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef8.value) ||
     isVisible(toneCheckHighlightRef.value) ||
     isVisible(pasteCheckHighlightRef.value);
+  // Clear scroll-pending flag on first scroll after sheet close (reveals PP bar)
+  if (persistentPaginationBarScrollPending.value) {
+    persistentPaginationBarScrollPending.value = false;
+  }
   // Track whether any *pending* suggestion or check is visible (used by persistent pagination bar)
   anyPendingItemVisibleInViewport.value = getPendingSuggestionIdsForContext().some((id) => {
     const ref = getSuggestionRefById(id);
@@ -12080,6 +12100,7 @@ function closeMinervaSuggestion() {
   }
   if (isPersistentPaginationMode.value) {
     persistentPaginationActiveGroup.value = null;
+    persistentPaginationBarScrollPending.value = true;
   }
   isMinervaSheetOpen.value = false;
   minervaSheetReturnDirection.value = null;
@@ -16280,8 +16301,14 @@ function markArticleEdited() {
 
 .minerva-persistent-bar-info-icon {
   flex-shrink: 0;
-  width: 16px;
-  height: 16px;
+  width: 16px !important;
+  height: 16px !important;
+}
+
+.minerva-persistent-bar-info-icon :deep(.cdx-icon),
+.minerva-persistent-bar-info-icon :deep(svg) {
+  width: 16px !important;
+  height: 16px !important;
 }
 
 .minerva-persistent-bar-info-icon--progressive :deep(.cdx-icon),
@@ -16339,7 +16366,7 @@ function markArticleEdited() {
 
 /* PP success description: 16px padding bottom */
 .minerva-sheet-description--pp-success {
-  padding-top: 16px;
+  padding-top: 8px;
   padding-bottom: 16px;
 }
 
@@ -16592,6 +16619,9 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   min-height: 44px;
+  border-bottom: 1px solid var(--border-color-muted, #eaecf0);
+  margin: 0 -16px;
+  padding: 0 16px;
 }
 
 .minerva-sheet-header--success {
@@ -16692,6 +16722,7 @@ function markArticleEdited() {
 
 .minerva-sheet-description {
   margin-top: 0;
+  padding-top: 8px;
   font-size: 16px;
   line-height: 24px;
   color: #54595d;
