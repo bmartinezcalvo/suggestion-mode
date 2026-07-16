@@ -5689,6 +5689,9 @@ const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(true);
 const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
 const isPersistentPaginationSuccessMode = ref(false);
+const persistentPaginationSuccessLabel = ref('');
+const persistentPaginationSuccessItems = ref([]);
+const persistentPaginationSuccessIndex = ref(0);
 let persistentPaginationSuccessTimer = null;
 const persistentPaginationActiveGroup = ref(null); // null | 'suggestions' | 'checks'
 const persistentPaginationHasOpenedSheet = ref(false);
@@ -6822,6 +6825,9 @@ const minervaPaginationLabel = computed(() => {
   if (isMinervaSuggestionSuccessState.value && isPaginationAutoMode.value) {
     return 'Moving to next suggestion...';
   }
+  if (isPersistentPaginationSuccessMode.value) {
+    return persistentPaginationSuccessLabel.value;
+  }
   if (isPersistentPaginationMode.value) {
     return `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value}`;
   }
@@ -6848,15 +6854,24 @@ const showMinervaSheetReturnArrow = computed(() => (
   !isAutoScrollActive.value &&
   !(activePrototype.value === 'option-3' && !isEditCheckSheet.value)
 ));
-const isMinervaPaginationPrevDisabled = computed(() => (
-  isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1 || minervaPaginationIndex.value <= 0
-));
-const isMinervaPaginationNextDisabled = computed(() => (
-  isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1 || minervaPaginationIndex.value >= minervaPaginationTotal.value - 1
-));
-const showMinervaPaginationArrows = computed(() => (
-  (!isMinervaSuggestionSuccessState.value || isPersistentPaginationSuccessMode.value) && minervaPaginationTotal.value > 1
-));
+const isMinervaPaginationPrevDisabled = computed(() => {
+  if (isPersistentPaginationSuccessMode.value) {
+    return persistentPaginationSuccessIndex.value <= 0;
+  }
+  return isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1 || minervaPaginationIndex.value <= 0;
+});
+const isMinervaPaginationNextDisabled = computed(() => {
+  if (isPersistentPaginationSuccessMode.value) {
+    return persistentPaginationSuccessIndex.value >= persistentPaginationSuccessItems.value.length - 1;
+  }
+  return isMinervaSuggestionSuccessState.value || minervaPaginationTotal.value <= 1 || minervaPaginationIndex.value >= minervaPaginationTotal.value - 1;
+});
+const showMinervaPaginationArrows = computed(() => {
+  if (isPersistentPaginationSuccessMode.value) {
+    return persistentPaginationSuccessItems.value.length > 1;
+  }
+  return !isMinervaSuggestionSuccessState.value && minervaPaginationTotal.value > 1;
+});
 const showMinervaPagination = computed(() => {
   if (isMinervaSuggestionSuccessState.value || isPersistentPaginationSuccessMode.value) {
     return true;
@@ -8599,6 +8614,15 @@ function openPaginationItem(id) {
 
 function handleMinervaPaginationPrev() {
   if (isMinervaPaginationPrevDisabled.value) return;
+  if (isPersistentPaginationSuccessMode.value) {
+    const prevIndex = persistentPaginationSuccessIndex.value - 1;
+    if (prevIndex < 0) return;
+    const prevId = persistentPaginationSuccessItems.value[prevIndex];
+    isPersistentPaginationSuccessMode.value = false;
+    if (persistentPaginationSuccessTimer) { clearTimeout(persistentPaginationSuccessTimer); persistentPaginationSuccessTimer = null; }
+    openPaginationItem(prevId);
+    return;
+  }
   const nextIndex = minervaPaginationIndex.value - 1;
   if (nextIndex < 0) return;
   const nextId = minervaPaginationItems.value[nextIndex];
@@ -8607,6 +8631,15 @@ function handleMinervaPaginationPrev() {
 
 function handleMinervaPaginationNext() {
   if (isMinervaPaginationNextDisabled.value) return;
+  if (isPersistentPaginationSuccessMode.value) {
+    const nextIndex = persistentPaginationSuccessIndex.value + 1;
+    if (nextIndex >= persistentPaginationSuccessItems.value.length) return;
+    const nextId = persistentPaginationSuccessItems.value[nextIndex];
+    isPersistentPaginationSuccessMode.value = false;
+    if (persistentPaginationSuccessTimer) { clearTimeout(persistentPaginationSuccessTimer); persistentPaginationSuccessTimer = null; }
+    openPaginationItem(nextId);
+    return;
+  }
   const nextIndex = minervaPaginationIndex.value + 1;
   if (nextIndex >= minervaPaginationItems.value.length) return;
   const nextId = minervaPaginationItems.value[nextIndex];
@@ -8937,6 +8970,9 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
     if (wasCompleted) {
       activateSuccessHighlight(currentId);
+      persistentPaginationSuccessLabel.value = `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value}`;
+      persistentPaginationSuccessItems.value = [...minervaPaginationItems.value];
+      persistentPaginationSuccessIndex.value = minervaPaginationIndex.value;
       isPersistentPaginationSuccessMode.value = true;
       if (persistentPaginationSuccessTimer) clearTimeout(persistentPaginationSuccessTimer);
       persistentPaginationSuccessTimer = window.setTimeout(() => {
@@ -16281,11 +16317,17 @@ function markArticleEdited() {
   flex-shrink: 0;
 }
 
-/* PP success: icon uses @color-progressive instead of @color-success */
-.minerva-sheet-header--pp-success :deep(.cdx-icon),
-.minerva-sheet-header--pp-success :deep(svg) {
-  color: var(--color-progressive, #36c) !important;
-  fill: var(--color-progressive, #36c) !important;
+/* PP success: start icon uses @color-icon-success, close button uses @color-base */
+.minerva-sheet-header--pp-success > :deep(.cdx-icon),
+.minerva-sheet-header--pp-success > :deep(svg) {
+  color: var(--color-icon-success, #14866d) !important;
+  fill: var(--color-icon-success, #14866d) !important;
+}
+
+.minerva-sheet-header--pp-success .minerva-sheet-icon-button--close :deep(.cdx-icon),
+.minerva-sheet-header--pp-success .minerva-sheet-icon-button--close :deep(svg) {
+  color: var(--color-base, #202122) !important;
+  fill: var(--color-base, #202122) !important;
 }
 
 /* PP success description: 16px padding bottom */
