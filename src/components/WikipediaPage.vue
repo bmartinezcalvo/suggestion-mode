@@ -4969,6 +4969,27 @@
               </cdx-field>
               <cdx-field>
                 <template #label>Other features</template>
+                <cdx-checkbox v-model="feedbackLocationEnabled">
+                  Feedback after completing or dismissing (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
+                </cdx-checkbox>
+                <div v-if="feedbackLocationEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                  <cdx-radio
+                    v-model="feedbackLocationMode"
+                    name="feedback-location-mode"
+                    input-value="toast"
+                    class="prototype-suboption-radio"
+                  >
+                    Feedback en Toast
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackLocationMode"
+                    name="feedback-location-mode"
+                    input-value="card"
+                    class="prototype-suboption-radio prototype-suboption-radio--last"
+                  >
+                    Feedback en suggestions card
+                  </cdx-radio>
+                </div>
                 <cdx-checkbox v-model="feedbackAndNextEnabled">
                   Enable feedback and next suggestion
                 </cdx-checkbox>
@@ -5246,12 +5267,12 @@ import {
   cdxIconImage,
   cdxIconTable,
   cdxIconSpeechBubble,
-  cdxIconHieroglyph
+  cdxIconHieroglyph,
+  cdxIconConfigure
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
 import scrollIcon from '../assets/scroll.svg';
 
-const cdxIconConfigure = '<path fill-rule="evenodd" d="M3 4.17V2h2v2.17a3.001 3.001 0 010 5.66V18H3V9.83a3.001 3.001 0 010-5.66M4 6a1 1 0 110 2 1 1 0 010-2m11 12v-6.17a3.001 3.001 0 010-5.66V2h2v4.17a3.001 3.001 0 010 5.66V18zm2-9a1 1 0 10-2 0 1 1 0 002 0"/><path fill-rule="evenodd" d="M11 11.17a3.001 3.001 0 010 5.66V18H9v-1.17a3.001 3.001 0 010-5.66V2h2zM10 13a1 1 0 110 2 1 1 0 010-2"/>';
 
 // Wikipedia logo - solo el globo
 const wikipediaGlobe = "https://upload.wikimedia.org/wikipedia/commons/thumb/8/80/Wikipedia-logo-v2.svg/103px-Wikipedia-logo-v2.svg.png";
@@ -5688,8 +5709,11 @@ const editToolbarImprovementsEnabled = ref(true);
 const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(true);
 const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
+const feedbackLocationEnabled = ref(true);
+const feedbackLocationMode = ref('toast'); // 'toast' | 'card'
 const isPersistentPaginationSuccessMode = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
+let persistentPaginationBarIdleTimer = null;
 const persistentPaginationSuccessLabel = ref('');
 const persistentPaginationSuccessItems = ref([]);
 const persistentPaginationSuccessIndex = ref(0);
@@ -7284,6 +7308,8 @@ function resetPrototypeDialog() {
   minervaToggleLocation.value = 'toolbar';
   feedbackAndNextEnabled.value = true;
   feedbackAndNextMode.value = 'persistent-pagination';
+  feedbackLocationEnabled.value = true;
+  feedbackLocationMode.value = 'toast';
   editToolbarImprovementsEnabled.value = true;
   noMoreSuggestionsEmptyStateEnabled.value = true;
   minervaFullPageSuggestionNavigationEnabled.value = false;
@@ -9834,6 +9860,10 @@ function updateSuggestionVisibility() {
   // Clear scroll-pending flag on first scroll after sheet close (reveals PP bar)
   if (persistentPaginationBarScrollPending.value) {
     persistentPaginationBarScrollPending.value = false;
+    if (persistentPaginationBarIdleTimer) {
+      clearTimeout(persistentPaginationBarIdleTimer);
+      persistentPaginationBarIdleTimer = null;
+    }
   }
   // Track whether any *pending* suggestion or check is visible (used by persistent pagination bar)
   anyPendingItemVisibleInViewport.value = getPendingSuggestionIdsForContext().some((id) => {
@@ -12101,6 +12131,11 @@ function closeMinervaSuggestion() {
   if (isPersistentPaginationMode.value) {
     persistentPaginationActiveGroup.value = null;
     persistentPaginationBarScrollPending.value = true;
+    if (persistentPaginationBarIdleTimer) clearTimeout(persistentPaginationBarIdleTimer);
+    persistentPaginationBarIdleTimer = setTimeout(() => {
+      persistentPaginationBarScrollPending.value = false;
+      persistentPaginationBarIdleTimer = null;
+    }, 3000);
   }
   isMinervaSheetOpen.value = false;
   minervaSheetReturnDirection.value = null;
