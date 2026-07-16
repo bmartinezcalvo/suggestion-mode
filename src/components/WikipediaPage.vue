@@ -1532,7 +1532,7 @@
                   </div>
                 </div>
                 <cdx-toggle-button
-                  v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                  v-if="minervaToolbarToggleEnabled && !isPersistentPaginationMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
                   v-model="showSuggestions"
                   quiet
                   aria-label="Toggle suggestions"
@@ -1641,6 +1641,28 @@
                             <span>Source editing</span>
                           </button>
                         </li>
+                        <li v-if="isPersistentPaginationMode" class="minerva-edit-menu-item" role="none">
+                          <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                            <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
+                              <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                              <span v-if="showToggleBadge" class="suggestions-badge">{{ toggleBadgeCount }}</span>
+                            </span>
+                            <span>Suggestions</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                              aria-label="Suggestions enabled"
+                              role="switch"
+                              :aria-checked="showSuggestions"
+                              @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
                       </template>
                     </ul>
                   </div>
@@ -1719,7 +1741,7 @@
                 </button>
               </template>
               <cdx-toggle-button
-                v-if="minervaToolbarToggleEnabled && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                v-if="minervaToolbarToggleEnabled && !isPersistentPaginationMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
                 v-model="showSuggestions"
                 quiet
                 aria-label="Toggle suggestions"
@@ -1834,6 +1856,28 @@
                           <cdx-icon :icon="cdxIconWikitext" size="medium" />
                           <span>Source editing</span>
                         </button>
+                      </li>
+                      <li v-if="isPersistentPaginationMode" class="minerva-edit-menu-item" role="none">
+                        <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                          <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
+                            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                            <span v-if="showToggleBadge" class="suggestions-badge">{{ toggleBadgeCount }}</span>
+                          </span>
+                          <span>Suggestions</span>
+                          <button
+                            type="button"
+                            class="minerva-edit-menu-switch"
+                            :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                            aria-label="Suggestions enabled"
+                            role="switch"
+                            :aria-checked="showSuggestions"
+                            @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                          >
+                            <span class="minerva-edit-menu-switch__track">
+                              <span class="minerva-edit-menu-switch__grip"></span>
+                            </span>
+                          </button>
+                        </div>
                       </li>
                     </template>
                   </ul>
@@ -1969,6 +2013,28 @@
                           <cdx-icon :icon="cdxIconWikitext" size="medium" />
                           <span>Source editing</span>
                         </button>
+                      </li>
+                      <li v-if="isPersistentPaginationMode" class="minerva-edit-menu-item" role="none">
+                        <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                          <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
+                            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                            <span v-if="showToggleBadge" class="suggestions-badge">{{ toggleBadgeCount }}</span>
+                          </span>
+                          <span>Suggestions</span>
+                          <button
+                            type="button"
+                            class="minerva-edit-menu-switch"
+                            :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                            aria-label="Suggestions enabled"
+                            role="switch"
+                            :aria-checked="showSuggestions"
+                            @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                          >
+                            <span class="minerva-edit-menu-switch__track">
+                              <span class="minerva-edit-menu-switch__grip"></span>
+                            </span>
+                          </button>
+                        </div>
                       </li>
                     </template>
                   </ul>
