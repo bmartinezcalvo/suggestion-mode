@@ -155,7 +155,6 @@
 
           <!-- Wikipedia Logo -->
           <div class="wikipedia-logo">
-            <img :src="wikipediaGlobe" alt="Wikipedia globe" class="wikipedia-globe" />
             <div class="wikipedia-text">
               <div class="wikipedia-title">WIKIPEDIA</div>
               <div class="wikipedia-tagline">The Free Encyclopedia</div>
@@ -353,109 +352,41 @@
             v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet"
             class="minerva-persistent-pagination-bar"
           >
-            <!-- Both types: chips (informational) + counter + arrows -->
-            <template v-if="persistentPaginationSuggestionCount > 0 && persistentPaginationCheckCount > 0">
-              <div class="minerva-persistent-bar-chips">
-                <cdx-info-chip
-                  class="minerva-persistent-chip minerva-persistent-chip--checks"
-                  status="warning"
-                >
-                  {{ persistentPaginationCheckCount }} {{ persistentPaginationCheckCount === 1 ? 'check' : 'checks' }}
-                </cdx-info-chip>
-                <cdx-info-chip
-                  class="minerva-persistent-chip minerva-persistent-chip--suggestions"
-                  :icon="cdxIconLightbulb"
-                >
-                  {{ persistentPaginationSuggestionCount }} {{ persistentPaginationSuggestionCount === 1 ? 'suggestion' : 'suggestions' }}
-                </cdx-info-chip>
-              </div>
-              <div class="minerva-persistent-bar-arrows">
-                <cdx-button
-                  class="minerva-pagination-btn"
-                  action="default"
-                  weight="quiet"
-                  size="medium"
-                  aria-label="Previous"
-                  :disabled="isMinervaPaginationPrevDisabled"
-                  @click="handleMinervaPaginationPrev"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon minerva-pagination-icon--prev" />
-                </cdx-button>
-                <cdx-button
-                  class="minerva-pagination-btn"
-                  action="default"
-                  weight="quiet"
-                  size="medium"
-                  aria-label="Next"
-                  :disabled="isMinervaPaginationNextDisabled"
-                  @click="handleMinervaPaginationNext"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
-                </cdx-button>
-              </div>
-            </template>
-            <!-- Only suggestions: lightbulb + count + arrows -->
-            <template v-else-if="persistentPaginationSuggestionCount > 0">
-              <cdx-icon :icon="cdxIconLightbulb" size="small" class="minerva-persistent-bar-icon minerva-persistent-bar-icon--progressive" />
-              <span class="minerva-persistent-bar-label">
-                <strong>{{ persistentPaginationSuggestionCount }} {{ persistentPaginationSuggestionCount === 1 ? 'suggestion' : 'suggestions' }}</strong>
-              </span>
-              <div class="minerva-persistent-bar-arrows">
-                <cdx-button
-                  class="minerva-pagination-btn"
-                  action="default"
-                  weight="quiet"
-                  size="medium"
-                  aria-label="Previous suggestion"
-                  :disabled="isMinervaPaginationPrevDisabled"
-                  @click="handleMinervaPaginationPrev"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon minerva-pagination-icon--prev" />
-                </cdx-button>
-                <cdx-button
-                  class="minerva-pagination-btn"
-                  action="default"
-                  weight="quiet"
-                  size="medium"
-                  aria-label="Next suggestion"
-                  :disabled="isMinervaPaginationNextDisabled"
-                  @click="handleMinervaPaginationNext"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
-                </cdx-button>
-              </div>
-            </template>
-            <!-- Only checks: alert icon + count + arrows -->
-            <template v-else-if="persistentPaginationCheckCount > 0">
-              <cdx-icon :icon="cdxIconAlert" size="small" class="minerva-persistent-bar-icon minerva-persistent-bar-icon--warning" />
-              <span class="minerva-persistent-bar-label">
-                <strong>{{ persistentPaginationCheckCount }} {{ persistentPaginationCheckCount === 1 ? 'check' : 'checks' }}</strong>
-              </span>
-              <div class="minerva-persistent-bar-arrows">
-                <cdx-button
-                  class="minerva-pagination-btn"
-                  action="default"
-                  weight="quiet"
-                  size="medium"
-                  aria-label="Previous check"
-                  :disabled="isMinervaPaginationPrevDisabled"
-                  @click="handleMinervaPaginationPrev"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon minerva-pagination-icon--prev" />
-                </cdx-button>
-                <cdx-button
-                  class="minerva-pagination-btn"
-                  action="default"
-                  weight="quiet"
-                  size="medium"
-                  aria-label="Next check"
-                  :disabled="isMinervaPaginationNextDisabled"
-                  @click="handleMinervaPaginationNext"
-                >
-                  <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
-                </cdx-button>
-              </div>
-            </template>
+            <!-- Left: checks (if any) + divider + suggestions -->
+            <div class="minerva-persistent-bar-info">
+              <template v-if="persistentPaginationCheckCount > 0">
+                <cdx-icon :icon="cdxIconAlert" class="minerva-persistent-bar-info-icon minerva-persistent-bar-info-icon--warning" />
+                <span class="minerva-persistent-bar-info-count">{{ persistentPaginationCheckCount }}</span>
+                <span class="minerva-persistent-bar-info-divider"></span>
+              </template>
+              <cdx-icon :icon="cdxIconLightbulb" class="minerva-persistent-bar-info-icon minerva-persistent-bar-info-icon--progressive" />
+              <span class="minerva-persistent-bar-info-count">{{ persistentPaginationSuggestionCount }}</span>
+            </div>
+            <!-- Right: up/down arrows (directional by viewport position) -->
+            <div class="minerva-persistent-bar-arrows">
+              <cdx-button
+                class="minerva-pagination-btn"
+                action="default"
+                weight="quiet"
+                size="medium"
+                aria-label="Scroll up to previous"
+                :disabled="persistentPaginationBarUpDisabled"
+                @click="handlePersistentPaginationBarUp"
+              >
+                <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon minerva-pagination-icon--prev" />
+              </cdx-button>
+              <cdx-button
+                class="minerva-pagination-btn"
+                action="default"
+                weight="quiet"
+                size="medium"
+                aria-label="Scroll down to next"
+                :disabled="persistentPaginationBarDownDisabled"
+                @click="handlePersistentPaginationBarDown"
+              >
+                <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
+              </cdx-button>
+            </div>
           </div>
         </transition>
 
@@ -4833,9 +4764,11 @@
         <cdx-dialog
           v-model:open="isPrototypeDialogOpen"
           title="Choose prototype"
-          :primary-action="{ label: 'Save preferences', actionType: 'progressive' }"
+          :primary-action="{ label: 'Save', actionType: 'progressive' }"
+          :default-action="{ label: 'Reset' }"
           use-close-button
           @primary="startPrototype"
+          @default="resetPrototypeDialog"
         >
           <div class="prototype-dialog-content">
             <div class="prototype-dialog-options">
@@ -6467,6 +6400,8 @@ const minervaToggleBottom = computed(() => {
 });
 const anySuggestionVisible = ref(false);
 const anyPendingItemVisibleInViewport = ref(false);
+const persistentPaginationBarUpDisabled = ref(true);
+const persistentPaginationBarDownDisabled = ref(true);
 const shouldShowToasts = computed(() => (
   isMinervaSkin.value &&
   (activePrototype.value === 'option-1' ||
@@ -7206,6 +7141,22 @@ function startPrototype() {
   if (!isEditMode.value) {
     enterEditMode();
   }
+}
+
+function resetPrototypeDialog() {
+  selectedPrototype.value = 'option-4';
+  minervaToggleLocation.value = 'outside';
+  feedbackAndNextEnabled.value = true;
+  feedbackAndNextMode.value = 'bottom-sheet';
+  editToolbarImprovementsEnabled.value = false;
+  noMoreSuggestionsEmptyStateEnabled.value = false;
+  minervaFullPageSuggestionNavigationEnabled.value = false;
+  minervaFullPageSuggestionNavigationMode.value = 'toc-button';
+  filteringEnabled.value = false;
+  newSuggestionColorEnabled.value = false;
+  nonSelectedHighlightUnderlineEnabled.value = false;
+  editFullPageImprovedEnabled.value = false;
+  paginationManualNavigableButtonEnabled.value = false;
 }
 
 function openEditAtSection(sectionId) {
@@ -8711,11 +8662,7 @@ function getPersistentPaginationAllTargets() {
   return targets.sort((a, b) => a.top - b.top);
 }
 
-function handlePersistentPaginationBarPrev() {
-  const currentY = window.scrollY + window.innerHeight / 2;
-  const targets = getPersistentPaginationAllTargets();
-  const above = targets.filter((t) => t.top < currentY - 10);
-  const target = above.length ? above[above.length - 1] : null;
+function openPersistentPaginationTarget(target) {
   if (!target) return;
   if (target.kind === 'suggestion') {
     openMinervaSuggestion(target.id);
@@ -8724,17 +8671,26 @@ function handlePersistentPaginationBarPrev() {
   }
 }
 
-function handlePersistentPaginationBarNext() {
+function getPersistentPaginationBarTargetUp() {
+  const currentY = window.scrollY + window.innerHeight / 2;
+  const targets = getPersistentPaginationAllTargets();
+  const above = targets.filter((t) => t.top < currentY - 10);
+  return above.length ? above[above.length - 1] : null;
+}
+
+function getPersistentPaginationBarTargetDown() {
   const currentY = window.scrollY + window.innerHeight / 2;
   const targets = getPersistentPaginationAllTargets();
   const below = targets.filter((t) => t.top > currentY + 10);
-  const target = below.length ? below[0] : null;
-  if (!target) return;
-  if (target.kind === 'suggestion') {
-    openMinervaSuggestion(target.id);
-  } else {
-    openEditCheckAtType(target.id);
-  }
+  return below.length ? below[0] : null;
+}
+
+function handlePersistentPaginationBarUp() {
+  openPersistentPaginationTarget(getPersistentPaginationBarTargetUp());
+}
+
+function handlePersistentPaginationBarDown() {
+  openPersistentPaginationTarget(getPersistentPaginationBarTargetDown());
 }
 
 function triggerSuggestionDismissedToast(suggestionId) {
@@ -9702,6 +9658,13 @@ function updateSuggestionVisibility() {
     return ref?.value && isVisible(ref.value);
   }) || (toneCheckActive.value && isVisible(toneCheckHighlightRef.value))
     || (pasteCheckActive.value && isVisible(pasteCheckHighlightRef.value));
+  // Update PP bar directional arrow disabled state
+  if (isPersistentPaginationMode.value) {
+    const currentY = window.scrollY + window.innerHeight / 2;
+    const targets = getPersistentPaginationAllTargets();
+    persistentPaginationBarUpDisabled.value = !targets.some((t) => t.top < currentY - 10);
+    persistentPaginationBarDownDisabled.value = !targets.some((t) => t.top > currentY + 10);
+  }
   const pendingIds = getPendingSuggestionIdsForContext();
   const getRefForId = (id) => getSuggestionRefById(id);
   const fullyVisible = pendingIds
@@ -16140,40 +16103,50 @@ function markArticleEdited() {
   line-height: 24px;
 }
 
-.minerva-persistent-bar-chips {
+/* PP bar: left info section (checks + divider + suggestions) */
+.minerva-persistent-bar-info {
   display: flex;
   align-items: center;
-  gap: 8px;
   flex: 1;
 }
 
-.minerva-persistent-bar-icon--progressive {
+.minerva-persistent-bar-info-icon {
   flex-shrink: 0;
-  color: var(--color-progressive, #36c);
+  width: 16px;
+  height: 16px;
 }
 
-.minerva-persistent-bar-icon--progressive :deep(.cdx-icon),
-.minerva-persistent-bar-icon--progressive :deep(svg) {
+.minerva-persistent-bar-info-icon--progressive :deep(.cdx-icon),
+.minerva-persistent-bar-info-icon--progressive :deep(svg) {
   color: var(--color-progressive, #36c) !important;
   fill: var(--color-progressive, #36c) !important;
+  width: 16px;
+  height: 16px;
 }
 
-.minerva-persistent-bar-icon--warning {
-  flex-shrink: 0;
-  color: var(--color-warning, #ac6600);
-}
-
-.minerva-persistent-bar-icon--warning :deep(.cdx-icon),
-.minerva-persistent-bar-icon--warning :deep(svg) {
+.minerva-persistent-bar-info-icon--warning :deep(.cdx-icon),
+.minerva-persistent-bar-info-icon--warning :deep(svg) {
   color: var(--color-warning, #ac6600) !important;
   fill: var(--color-warning, #ac6600) !important;
+  width: 16px;
+  height: 16px;
 }
 
-.minerva-persistent-bar-label {
-  flex: 1;
-  color: var(--color-subtle, #54595d);
+.minerva-persistent-bar-info-count {
+  margin-left: 4px;
   font-size: 16px;
+  font-weight: 700;
   line-height: 24px;
+  color: var(--color-base, #202122);
+}
+
+.minerva-persistent-bar-info-divider {
+  display: inline-block;
+  width: 1px;
+  height: 16px;
+  background: var(--border-color-muted, #dadde3);
+  margin: 0 12px;
+  flex-shrink: 0;
 }
 
 .minerva-persistent-bar-arrows {
@@ -16181,32 +16154,6 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   flex-shrink: 0;
-}
-
-/* Suggestions chip: progressive blue */
-.minerva-persistent-chip {
-  cursor: pointer;
-  font-size: 14px;
-}
-
-.minerva-persistent-chip--suggestions {
-  background-color: var(--background-color-progressive-subtle, #eaf3ff) !important;
-  border-color: var(--border-color-progressive, #3366cc) !important;
-}
-
-.minerva-persistent-chip--suggestions :deep(.cdx-info-chip__icon),
-.minerva-persistent-chip--suggestions :deep(.cdx-icon),
-.minerva-persistent-chip--suggestions :deep(svg) {
-  color: var(--color-progressive, #36c) !important;
-  fill: var(--color-progressive, #36c) !important;
-}
-
-/* Checks chip: warning */
-.minerva-persistent-chip--checks :deep(.cdx-info-chip__icon),
-.minerva-persistent-chip--checks :deep(.cdx-icon),
-.minerva-persistent-chip--checks :deep(svg) {
-  color: var(--color-warning, #ac6600) !important;
-  fill: var(--color-warning, #ac6600) !important;
 }
 
 /* PP success: icon uses @color-progressive instead of @color-success */
@@ -16719,12 +16666,11 @@ function markArticleEdited() {
 }
 
 .minerva-pagination-count {
-  text-align: right;
+  text-align: left;
   flex: 1;
   font-size: 16px;
   line-height: 24px;
-  color: var(--color-subtle, #54595d);
-  padding-right: 16px;
+  color: var(--color-base, #202122);
 }
 
 .minerva-pagination-count--loading {
