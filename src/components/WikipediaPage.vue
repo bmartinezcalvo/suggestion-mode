@@ -1629,40 +1629,58 @@
                         </li>
                       </template>
                       <template v-else>
-                        <li class="minerva-edit-menu-item" role="none">
-                          <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
-                            <cdx-icon :icon="cdxIconEye" size="medium" />
-                            <span>Visual editing</span>
-                          </button>
-                        </li>
-                        <li class="minerva-edit-menu-item" role="none">
-                          <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                            <cdx-icon :icon="cdxIconWikitext" size="medium" />
-                            <span>Source editing</span>
-                          </button>
-                        </li>
-                        <li v-if="isPersistentPaginationMode" class="minerva-edit-menu-item" role="none">
-                          <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
-                            <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
-                              <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                              <span v-if="showToggleBadge" class="suggestions-badge">{{ toggleBadgeCount }}</span>
-                            </span>
-                            <span>Suggestions</span>
-                            <button
-                              type="button"
-                              class="minerva-edit-menu-switch"
-                              :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
-                              aria-label="Suggestions enabled"
-                              role="switch"
-                              :aria-checked="showSuggestions"
-                              @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
-                            >
-                              <span class="minerva-edit-menu-switch__track">
-                                <span class="minerva-edit-menu-switch__grip"></span>
-                              </span>
+                        <template v-if="isPersistentPaginationMode">
+                          <li class="minerva-edit-menu-item" role="none">
+                            <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                              <cdx-icon :icon="cdxIconWikitext" size="medium" class="minerva-edit-menu-icon--subtle" />
+                              <span>Source editing</span>
+                              <button
+                                type="button"
+                                class="minerva-edit-menu-switch"
+                                aria-label="Source editing enabled"
+                                role="switch"
+                                aria-checked="false"
+                              >
+                                <span class="minerva-edit-menu-switch__track">
+                                  <span class="minerva-edit-menu-switch__grip"></span>
+                                </span>
+                              </button>
+                            </div>
+                          </li>
+                          <li class="minerva-edit-menu-item" role="none">
+                            <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                              <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-edit-menu-icon--subtle" />
+                              <span>Suggestions</span>
+                              <button
+                                type="button"
+                                class="minerva-edit-menu-switch"
+                                :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                                aria-label="Suggestions enabled"
+                                role="switch"
+                                :aria-checked="showSuggestions"
+                                @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                              >
+                                <span class="minerva-edit-menu-switch__track">
+                                  <span class="minerva-edit-menu-switch__grip"></span>
+                                </span>
+                              </button>
+                            </div>
+                          </li>
+                        </template>
+                        <template v-else>
+                          <li class="minerva-edit-menu-item" role="none">
+                            <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
+                              <cdx-icon :icon="cdxIconEye" size="medium" />
+                              <span>Visual editing</span>
                             </button>
-                          </div>
-                        </li>
+                          </li>
+                          <li class="minerva-edit-menu-item" role="none">
+                            <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
+                              <cdx-icon :icon="cdxIconWikitext" size="medium" />
+                              <span>Source editing</span>
+                            </button>
+                          </li>
+                        </template>
                       </template>
                     </ul>
                   </div>
@@ -1845,40 +1863,58 @@
                       </li>
                     </template>
                     <template v-else>
-                      <li class="minerva-edit-menu-item" role="none">
-                        <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
-                          <cdx-icon :icon="cdxIconEye" size="medium" />
-                          <span>Visual editing</span>
-                        </button>
-                      </li>
-                      <li class="minerva-edit-menu-item" role="none">
-                        <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                          <cdx-icon :icon="cdxIconWikitext" size="medium" />
-                          <span>Source editing</span>
-                        </button>
-                      </li>
-                      <li v-if="isPersistentPaginationMode" class="minerva-edit-menu-item" role="none">
-                        <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
-                          <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
-                            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                            <span v-if="showToggleBadge" class="suggestions-badge">{{ toggleBadgeCount }}</span>
-                          </span>
-                          <span>Suggestions</span>
-                          <button
-                            type="button"
-                            class="minerva-edit-menu-switch"
-                            :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
-                            aria-label="Suggestions enabled"
-                            role="switch"
-                            :aria-checked="showSuggestions"
-                            @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
-                          >
-                            <span class="minerva-edit-menu-switch__track">
-                              <span class="minerva-edit-menu-switch__grip"></span>
-                            </span>
+                      <template v-if="isPersistentPaginationMode">
+                        <li class="minerva-edit-menu-item" role="none">
+                          <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                            <cdx-icon :icon="cdxIconWikitext" size="medium" class="minerva-edit-menu-icon--subtle" />
+                            <span>Source editing</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              aria-label="Source editing enabled"
+                              role="switch"
+                              aria-checked="false"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                            <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-edit-menu-icon--subtle" />
+                            <span>Suggestions</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                              aria-label="Suggestions enabled"
+                              role="switch"
+                              :aria-checked="showSuggestions"
+                              @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
+                      </template>
+                      <template v-else>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
+                            <cdx-icon :icon="cdxIconEye" size="medium" />
+                            <span>Visual editing</span>
                           </button>
-                        </div>
-                      </li>
+                        </li>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
+                            <cdx-icon :icon="cdxIconWikitext" size="medium" />
+                            <span>Source editing</span>
+                          </button>
+                        </li>
+                      </template>
                     </template>
                   </ul>
                 </div>
@@ -2002,40 +2038,58 @@
                       </li>
                     </template>
                     <template v-else>
-                      <li class="minerva-edit-menu-item" role="none">
-                        <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
-                          <cdx-icon :icon="cdxIconEye" size="medium" />
-                          <span>Visual editing</span>
-                        </button>
-                      </li>
-                      <li class="minerva-edit-menu-item" role="none">
-                        <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
-                          <cdx-icon :icon="cdxIconWikitext" size="medium" />
-                          <span>Source editing</span>
-                        </button>
-                      </li>
-                      <li v-if="isPersistentPaginationMode" class="minerva-edit-menu-item" role="none">
-                        <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
-                          <span class="lightbulb-icon-wrapper minerva-edit-menu-lightbulb">
-                            <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                            <span v-if="showToggleBadge" class="suggestions-badge">{{ toggleBadgeCount }}</span>
-                          </span>
-                          <span>Suggestions</span>
-                          <button
-                            type="button"
-                            class="minerva-edit-menu-switch"
-                            :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
-                            aria-label="Suggestions enabled"
-                            role="switch"
-                            :aria-checked="showSuggestions"
-                            @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
-                          >
-                            <span class="minerva-edit-menu-switch__track">
-                              <span class="minerva-edit-menu-switch__grip"></span>
-                            </span>
+                      <template v-if="isPersistentPaginationMode">
+                        <li class="minerva-edit-menu-item" role="none">
+                          <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                            <cdx-icon :icon="cdxIconWikitext" size="medium" class="minerva-edit-menu-icon--subtle" />
+                            <span>Source editing</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              aria-label="Source editing enabled"
+                              role="switch"
+                              aria-checked="false"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <div class="minerva-edit-menu-button minerva-edit-menu-button--switch-row">
+                            <cdx-icon :icon="cdxIconLightbulb" size="medium" class="minerva-edit-menu-icon--subtle" />
+                            <span>Suggestions</span>
+                            <button
+                              type="button"
+                              class="minerva-edit-menu-switch"
+                              :class="{ 'minerva-edit-menu-switch--checked': showSuggestions }"
+                              aria-label="Suggestions enabled"
+                              role="switch"
+                              :aria-checked="showSuggestions"
+                              @click.stop="handleMinervaEditMenuSwitchChange('suggestion-mode', !showSuggestions)"
+                            >
+                              <span class="minerva-edit-menu-switch__track">
+                                <span class="minerva-edit-menu-switch__grip"></span>
+                              </span>
+                            </button>
+                          </div>
+                        </li>
+                      </template>
+                      <template v-else>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <button type="button" class="minerva-edit-menu-button minerva-edit-menu-button--active" role="menuitem" @click="handleMinervaEditMenuItem('visual')">
+                            <cdx-icon :icon="cdxIconEye" size="medium" />
+                            <span>Visual editing</span>
                           </button>
-                        </div>
-                      </li>
+                        </li>
+                        <li class="minerva-edit-menu-item" role="none">
+                          <button type="button" class="minerva-edit-menu-button" role="menuitem" @click="handleMinervaEditMenuItem('source')">
+                            <cdx-icon :icon="cdxIconWikitext" size="medium" />
+                            <span>Source editing</span>
+                          </button>
+                        </li>
+                      </template>
                     </template>
                   </ul>
                 </div>
@@ -5234,7 +5288,7 @@ const isMinervaAddMenuOpen = ref(false);
 const isMinervaEditMenuOpen = ref(false);
 const isMinervaAddLinkDialogOpen = ref(false);
 const isMinervaAddCitationDialogOpen = ref(false);
-const minervaToggleLocation = ref('outside');
+const minervaToggleLocation = ref('toolbar');
 const paginationManualNavigableButtonEnabled = ref(false);
 const minervaOutsideMenuEnabled = ref(true);
 const minervaOutsideRailEnabled = ref(true);
@@ -5630,10 +5684,10 @@ const minervaSheetMode = ref('suggestion');
 const isPrototypeDialogOpen = ref(false);
 const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
-const editToolbarImprovementsEnabled = ref(false);
+const editToolbarImprovementsEnabled = ref(true);
 const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(true);
-const feedbackAndNextMode = ref('bottom-sheet'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
+const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
 const isPersistentPaginationSuccessMode = ref(false);
 let persistentPaginationSuccessTimer = null;
 const persistentPaginationActiveGroup = ref(null); // null | 'suggestions' | 'checks'
@@ -5649,11 +5703,11 @@ let nextSuggestionButtonGracePeriod = false;
 let nextSuggestionButtonGraceTimer = null;
 let feedbackSuccessToastTimer = null;
 let suggestionDismissedToastTimerRef = null;
-const noMoreSuggestionsEmptyStateEnabled = ref(false);
+const noMoreSuggestionsEmptyStateEnabled = ref(true);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false); // starts unchecked by default
 const minervaFullPageSuggestionNavigationMode = ref('toc-button');
-const selectedPrototype = ref('option-4');
+const selectedPrototype = ref('option-6');
 const selectedNavigationGroup = computed({
   get() {
     if (selectedPrototype.value === 'option-5' || selectedPrototype.value === 'option-6') {
@@ -7210,12 +7264,12 @@ function startPrototype() {
 }
 
 function resetPrototypeDialog() {
-  selectedPrototype.value = 'option-4';
-  minervaToggleLocation.value = 'outside';
+  selectedPrototype.value = 'option-6';
+  minervaToggleLocation.value = 'toolbar';
   feedbackAndNextEnabled.value = true;
-  feedbackAndNextMode.value = 'bottom-sheet';
-  editToolbarImprovementsEnabled.value = false;
-  noMoreSuggestionsEmptyStateEnabled.value = false;
+  feedbackAndNextMode.value = 'persistent-pagination';
+  editToolbarImprovementsEnabled.value = true;
+  noMoreSuggestionsEmptyStateEnabled.value = true;
   minervaFullPageSuggestionNavigationEnabled.value = false;
   minervaFullPageSuggestionNavigationMode.value = 'toc-button';
   filteringEnabled.value = false;
@@ -14713,6 +14767,11 @@ function markArticleEdited() {
 
 .minerva-edit-menu-lightbulb {
   flex: 0 0 auto;
+}
+
+.minerva-edit-menu-icon--subtle :deep(.cdx-icon) {
+  color: var(--color-subtle, #54595d);
+  fill: var(--color-subtle, #54595d);
 }
 
 .minerva-edit-menu-switch__track {
