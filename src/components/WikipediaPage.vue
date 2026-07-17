@@ -117,23 +117,21 @@
               <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
               <template v-else>
                 <span v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" v-tooltip="'Suggestions available in this article'" class="pulsating-lightbulb-wrapper">
-                  <img :src="iconEditLightbulbFixedHeader" width="20" height="21" alt="" aria-hidden="true" :class="{ 'lightbulb-icon--appear': showLightbulbPopover }" />
+                  <img :src="iconEditLightbulbFixedHeader" width="20" height="21" alt="" aria-hidden="true" />
+                  <img v-if="entryPointSolution === 'lightbulb-popup'" :src="iconLightbulbBlueHeaderOverlay" width="20" height="21" alt="" aria-hidden="true" class="lightbulb-pulse-overlay" :class="{ 'lightbulb-icon--pulse': lightbulbPulseActive }" />
                   <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
                 </span>
                 <span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this article'" class="pulsating-lightbulb-wrapper">
                   <cdx-icon :icon="cdxIconEdit" size="medium" />
-                  <span v-if="availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(availableSuggestionCount) }}</span>
+                  <span v-if="availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon" :class="{ 'suggestion-badge--pulsating': lightbulbPulseActive }">{{ badgeLabel(availableSuggestionCount) }}</span>
                 </span>
               </template>
             </button>
-            <div v-if="showLightbulbPopover" class="lightbulb-popover lightbulb-popover--vector">
-              <div class="lightbulb-popover__body">
-                <span class="lightbulb-popover__description">There are suggestions to improve this article.</span>
-                <button class="lightbulb-popover__close" aria-label="Close" @click="dismissPopover">
-                  <cdx-icon :icon="cdxIconClose" size="small" />
-                </button>
+            <div v-if="showLightbulbPopover || isPopoverDismissing" class="lightbulb-popover lightbulb-popover--vector" :class="{ 'lightbulb-popover--dismissing': isPopoverDismissing }">
+              <span class="lightbulb-popover__description">There are some suggestions to improve this article that are easy to complete.</span>
+              <div class="lightbulb-popover__actions">
+                <cdx-button weight="primary" action="progressive" @click="dismissPopover">Got it</cdx-button>
               </div>
-              <p class="lightbulb-popover__footer">No editing experience needed</p>
             </div>
           </div>
           <!-- Languages -->
@@ -625,23 +623,21 @@
                   <button v-else class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
                     <div class="pulsating-dot-wrapper">
                       <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
-                        <img v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" class="minerva-action-icon-img" :class="{ 'lightbulb-icon--appear': showLightbulbPopover }" />
+                        <img v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" class="minerva-action-icon-img" />
+                        <img v-if="entryPointSolution === 'lightbulb-popup'" :src="iconLightbulbBlueOverlay" width="18" height="18" alt="" aria-hidden="true" class="minerva-action-icon-img lightbulb-pulse-overlay" :class="{ 'lightbulb-icon--pulse': lightbulbPulseActive }" />
                         <cdx-icon v-if="showNumberedBadge" :icon="cdxIconEdit" size="medium" />
                         <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
-                        <span v-if="showNumberedBadge && availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon">{{ badgeLabel(availableSuggestionCount) }}</span>
+                        <span v-if="showNumberedBadge && availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon" :class="{ 'suggestion-badge--pulsating': lightbulbPulseActive }">{{ badgeLabel(availableSuggestionCount) }}</span>
                       </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingDot" class="pulsating-dot"></span>
                     </div>
                   </button>
-                  <div v-if="showLightbulbPopover" class="lightbulb-popover lightbulb-popover--minerva">
-                    <div class="lightbulb-popover__body">
-                      <span class="lightbulb-popover__description">There are suggestions to improve this article.</span>
-                      <button class="lightbulb-popover__close" aria-label="Close" @click="dismissPopover">
-                        <cdx-icon :icon="cdxIconClose" size="small" />
-                      </button>
-                    </div>
-                    <p class="lightbulb-popover__footer">No editing experience needed</p>
+                </div>
+                <div v-if="showLightbulbPopover || isPopoverDismissing" class="lightbulb-popover lightbulb-popover--minerva" :class="{ 'lightbulb-popover--dismissing': isPopoverDismissing }">
+                  <span class="lightbulb-popover__description">There are some suggestions to improve this article that are easy to complete.</span>
+                  <div class="lightbulb-popover__actions">
+                    <cdx-button weight="primary" action="progressive" @click="dismissPopover">Got it</cdx-button>
                   </div>
                 </div>
                 <button class="minerva-action-btn" aria-label="More actions">
@@ -5360,6 +5356,8 @@ import iconEditLightbulb from '../assets/icon-edit-lightbulb.svg';
 import iconModifierV2 from '../assets/icon-modifier-v2.svg';
 import iconLightbulb from '../assets/icon-lightbulb.svg';
 import iconEditLightbulbFixedHeader from '../assets/edit-lightbulb-fixed-header.svg';
+import iconLightbulbBlueOverlay from '../assets/icon-lightbulb-blue-overlay.svg';
+import iconLightbulbBlueHeaderOverlay from '../assets/icon-lightbulb-blue-header-overlay.svg';
 import iconLightbulbPulsating from '../assets/lightbulb-pulsating.svg';
 import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
 
@@ -5646,8 +5644,11 @@ const readModeSuggestionsEntry = ref('badge');
 const lightbulbModifierEnabled = ref(true);
 const entryPointSolution = ref('pulsating-lightbulb');
 const isPopoverDismissed = ref(false);
+const isPopoverDismissing = ref(false);
 const popoverDelayedVisible = ref(false);
+const lightbulbPulseActive = ref(false);
 let popoverDelayTimer = null;
+let popoverShowTimer = null;
 const isReadModeToastDismissed = ref(false);
 const hasScrolledForToast = ref(false);
 
@@ -7437,7 +7438,11 @@ function closePublishDialog() {
 }
 
 function dismissPopover() {
-  isPopoverDismissed.value = true;
+  isPopoverDismissing.value = true;
+  setTimeout(() => {
+    isPopoverDismissed.value = true;
+    isPopoverDismissing.value = false;
+  }, 250);
 }
 
 function confirmPublishChanges() {
@@ -11664,11 +11669,22 @@ watch(
 
 watch([isEditMode, entryPointSolution], () => {
   if (popoverDelayTimer) clearTimeout(popoverDelayTimer);
+  if (popoverShowTimer) clearTimeout(popoverShowTimer);
   popoverDelayedVisible.value = false;
-  if (!isEditMode.value && entryPointSolution.value === 'lightbulb-popup') {
-    popoverDelayTimer = setTimeout(() => {
-      popoverDelayedVisible.value = true;
-    }, 1000);
+  lightbulbPulseActive.value = false;
+  isPopoverDismissing.value = false;
+  if (!isEditMode.value) {
+    if (entryPointSolution.value === 'lightbulb-popup' || entryPointSolution.value === 'numbered-badge') {
+      popoverDelayTimer = setTimeout(() => {
+        lightbulbPulseActive.value = true;
+        setTimeout(() => { lightbulbPulseActive.value = false; }, 450);
+      }, 1000);
+    }
+    if (entryPointSolution.value === 'lightbulb-popup') {
+      popoverShowTimer = setTimeout(() => {
+        popoverDelayedVisible.value = true;
+      }, 1600);
+    }
   }
 }, { immediate: true });
 
@@ -19240,11 +19256,21 @@ function markArticleEdited() {
 }
 
 /* Pulsating lightbulb under Edit tab — positioned relative to .tab */
+.tab--edit {
+  position: relative;
+}
+
 .tab--edit .pulsating-lightbulb-wrapper--tab {
   position: absolute;
   bottom: -8px;
   left: 50%;
   transform: translateX(-50%);
+}
+
+.suggestion-badge--tab {
+  position: absolute;
+  top: 2px;
+  right: 2px;
 }
 
 @keyframes pulsate {
@@ -19353,15 +19379,17 @@ function markArticleEdited() {
   align-items: center;
 }
 
+/* ── Lightbulb popup ─────────────────────────────────────────── */
+
 .lightbulb-popover {
   position: absolute;
-  top: calc(100% + 10px);
+  top: calc(100% + 5px);
   background: #fff;
   border: 1px solid var(--border-color-base, #a2a9b1);
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-  width: 220px;
-  padding: 8px 12px;
+  width: 256px;
+  padding: 12px 16px;
   z-index: 300;
 }
 
@@ -19378,10 +19406,14 @@ function markArticleEdited() {
   transform: rotate(45deg);
 }
 
-/* Vector: centered under the lightbulb icon */
+/* Vector fixed-header: centered under the lightbulb icon */
 .lightbulb-popover--vector {
   left: 50%;
-  transform: translateX(-50%);
+  animation: lightbulb-popup-enter-center 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.lightbulb-popover--vector.lightbulb-popover--dismissing {
+  animation: lightbulb-popup-exit-center 250ms ease forwards;
 }
 
 .lightbulb-popover--vector::before {
@@ -19389,58 +19421,125 @@ function markArticleEdited() {
   transform: translateX(-50%) rotate(45deg);
 }
 
-/* Minerva: centered under the edit button */
-.lightbulb-popover--minerva {
+/* Vector tab: centered under the Edit tab lightbulb indicator */
+.lightbulb-popover--vector-tab {
   left: 50%;
-  transform: translateX(-50%);
+  animation: lightbulb-popup-enter-center 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
-.lightbulb-popover--minerva::before {
+.lightbulb-popover--vector-tab.lightbulb-popover--dismissing {
+  animation: lightbulb-popup-exit-center 250ms ease forwards;
+}
+
+.lightbulb-popover--vector-tab::before {
   left: 50%;
   transform: translateX(-50%) rotate(45deg);
 }
 
-.lightbulb-popover__body {
-  display: flex;
-  align-items: flex-start;
-  gap: 8px;
+/* Minerva: right: 0 relative to minerva-actions. Triangle right: 93px centers the 10px triangle
+   under the blue lightbulb (~98px from right of minerva-actions on a 375px phone). */
+.lightbulb-popover--minerva {
+  right: 0;
+  left: auto;
+  animation: lightbulb-popup-enter-right 350ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+.lightbulb-popover--minerva.lightbulb-popover--dismissing {
+  animation: lightbulb-popup-exit-right 250ms ease forwards;
+}
+
+.lightbulb-popover--minerva::before {
+  left: auto;
+  right: 93px;
+  transform: rotate(45deg);
 }
 
 .lightbulb-popover__description {
+  display: block;
   font-size: 14px;
   color: var(--color-base, #202122);
-  flex: 1;
   line-height: 1.4;
 }
 
-.lightbulb-popover__close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 0;
-  color: var(--color-base, #202122);
-  flex-shrink: 0;
+.lightbulb-popover--minerva .lightbulb-popover__description {
+  font-size: 16px;
+}
+
+.lightbulb-popover__actions {
   display: flex;
-  align-items: center;
+  justify-content: flex-end;
+  margin-top: 16px;
 }
 
-.lightbulb-popover__footer {
-  font-size: 14px;
-  font-style: italic;
-  color: var(--color-subtle, #54595d);
-  margin: 4px 0 0;
-  line-height: 1.4;
+/* Popup animations — centered (Vector, translateX(-50%) baked in) */
+@keyframes lightbulb-popup-enter-center {
+  from { opacity: 0; transform: translateX(-50%) translateY(-10px); }
+  to   { opacity: 1; transform: translateX(-50%) translateY(0); }
 }
 
-/* Appear animation for lightbulb indicator when popover shows */
-@keyframes lightbulb-appear {
-  0% { opacity: 0; transform: scale(0.6); }
-  60% { opacity: 1; transform: scale(1.15); }
-  100% { opacity: 1; transform: scale(1); }
+@keyframes lightbulb-popup-exit-center {
+  from { opacity: 1; transform: translateX(-50%) translateY(0); }
+  to   { opacity: 0; transform: translateX(-50%) translateY(-6px); }
 }
 
-.lightbulb-icon--appear {
-  animation: lightbulb-appear 0.4s ease forwards;
+/* Popup animations — right-anchored (Minerva, no translateX) */
+@keyframes lightbulb-popup-enter-right {
+  from { opacity: 0; transform: translateY(-10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes lightbulb-popup-exit-right {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-6px); }
+}
+
+/* ── Lightbulb pulse (overlay image only) ────────────────────── */
+
+@keyframes lightbulb-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+
+.lightbulb-pulse-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.lightbulb-icon--pulse {
+  animation: lightbulb-pulse 450ms cubic-bezier(0.36, 0.07, 0.19, 0.97) 1 forwards;
+  transform-origin: 78% 26%;
+}
+
+/* ── Numbered badge pulse (same scale animation) ─────────────── */
+
+.suggestion-badge--pulsating {
+  animation: lightbulb-pulse 450ms cubic-bezier(0.36, 0.07, 0.19, 0.97) 1 forwards;
+  transform-origin: center;
+}
+
+/* ── Reduced motion ──────────────────────────────────────────── */
+
+@media (prefers-reduced-motion: reduce) {
+  .lightbulb-icon--pulse { animation: none; }
+  .suggestion-badge--pulsating { animation: none; }
+  @keyframes lightbulb-popup-enter-center {
+    from { opacity: 0; transform: translateX(-50%); }
+    to   { opacity: 1; transform: translateX(-50%); }
+  }
+  @keyframes lightbulb-popup-exit-center {
+    from { opacity: 1; transform: translateX(-50%); }
+    to   { opacity: 0; transform: translateX(-50%); }
+  }
+  @keyframes lightbulb-popup-enter-right {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes lightbulb-popup-exit-right {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
 }
 
 /* ── section-edit lightbulb icon (Vector22) ──────────────────── */
