@@ -83,6 +83,7 @@
     <div
       v-if="isMinervaSkin && isEditMode && ((feedbackLocationEnabled && feedbackLocationMode === 'toast' && !isPersistentPaginationMode) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'))"
       class="next-suggestion-anchor next-suggestion-anchor--minerva"
+      :class="{ 'next-suggestion-anchor--sheet-lifted': showContextualSheet }"
     >
       <transition name="next-suggestion-reveal">
         <div
@@ -116,21 +117,26 @@
     <div
       v-if="(feedbackLocationEnabled && feedbackLocationMode === 'toast' && showFeedbackSuccessToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showFeedbackSuccessToast)"
       class="minerva-toast minerva-toast--success"
+      :class="{ 'minerva-toast--sheet-lifted': showContextualSheet }"
       role="status"
       aria-live="polite"
     >
       <cdx-icon :icon="cdxIconSuccess" size="medium" />
-      <span>{{ feedbackSuccessToastMessage }}</span>
+      <span class="minerva-toast-label">{{ feedbackSuccessToastMessage }}</span>
+      <button class="minerva-toast-close-btn" type="button" aria-label="Close" @click="showFeedbackSuccessToast = false">
+        <cdx-icon :icon="cdxIconClose" size="small" />
+      </button>
     </div>
 
     <!-- Suggestion dismissed toast (view-button mode or toast feedback mode) -->
     <div
       v-if="(feedbackLocationEnabled && feedbackLocationMode === 'toast' && showSuggestionDismissedToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showSuggestionDismissedToast)"
       class="minerva-toast minerva-toast--dismissed"
+      :class="{ 'minerva-toast--sheet-lifted': showContextualSheet }"
       role="status"
       aria-live="polite"
     >
-      <span>Suggestion dismissed</span>
+      <span class="minerva-toast-label">Suggestion dismissed</span>
       <cdx-button
         class="minerva-toast-undo-btn"
         action="default"
@@ -140,8 +146,87 @@
       >
         Undo
       </cdx-button>
+      <button class="minerva-toast-close-btn" type="button" aria-label="Close" @click="showSuggestionDismissedToast = false">
+        <cdx-icon :icon="cdxIconClose" size="small" />
+      </button>
     </div>
     
+    <!-- Contextual bottom sheet (standalone: view-button and navigable-arrows modes) -->
+    <div
+      v-if="isMinervaSkin && showContextualSheet && activeContextualData"
+      class="minerva-bottom-sheet minerva-contextual-sheet"
+    >
+      <!-- Citation type -->
+      <template v-if="activeContextualData.type === 'citation'">
+        <div class="minerva-sheet-header minerva-sheet-header--success">
+          <cdx-icon :icon="cdxIconSuccess" size="medium" />
+          <div class="minerva-sheet-title minerva-sheet-title--success">Citation added</div>
+          <div class="minerva-sheet-header-actions">
+            <button class="minerva-sheet-icon-button minerva-sheet-icon-button--close" type="button" aria-label="Close" @click="closeContextualSheet">
+              <cdx-icon :icon="cdxIconClose" size="medium" />
+            </button>
+          </div>
+        </div>
+        <div class="minerva-contextual-citation-row">
+          <span class="minerva-contextual-citation-text">{{ activeContextualData.data.text }}</span>
+          <cdx-button weight="quiet" action="progressive" :icon-only="true" aria-label="Edit" class="minerva-contextual-edit-btn">
+            <cdx-icon :icon="cdxIconEdit" />
+          </cdx-button>
+        </div>
+        <div class="minerva-contextual-sheet-footer">
+          <cdx-button weight="quiet" action="default" class="minerva-contextual-footer-btn">
+            <cdx-icon :icon="cdxIconCopy" />
+            Copy
+          </cdx-button>
+          <cdx-button weight="quiet" action="destructive" class="minerva-contextual-footer-btn">
+            <cdx-icon :icon="cdxIconTrash" />
+            Delete
+          </cdx-button>
+        </div>
+      </template>
+      <!-- Link type -->
+      <template v-else-if="activeContextualData.type === 'link'">
+        <div class="minerva-sheet-header">
+          <cdx-icon :icon="cdxIconLink" size="medium" class="minerva-contextual-link-header-icon" />
+          <div class="minerva-sheet-title">Link</div>
+          <div class="minerva-sheet-header-actions">
+            <button class="minerva-sheet-icon-button minerva-sheet-icon-button--close" type="button" aria-label="Close" @click="closeContextualSheet">
+              <cdx-icon :icon="cdxIconClose" size="medium" />
+            </button>
+          </div>
+        </div>
+        <div class="minerva-contextual-link-content">
+          <div class="minerva-contextual-link-text-row">
+            <div class="minerva-contextual-link-text-info">
+              <div class="minerva-contextual-label">Text</div>
+              <div class="minerva-contextual-link-value">{{ activeContextualData.data.anchorText }}</div>
+            </div>
+            <cdx-button weight="quiet" action="progressive" :icon-only="true" aria-label="Edit" class="minerva-contextual-edit-btn">
+              <cdx-icon :icon="cdxIconEdit" />
+            </cdx-button>
+          </div>
+          <div class="minerva-contextual-separator"></div>
+          <div class="minerva-contextual-label">Link</div>
+          <div class="minerva-contextual-link-article-row">
+            <div class="minerva-contextual-link-thumbnail">
+              <img v-if="activeContextualData.data.thumbnail" :src="activeContextualData.data.thumbnail" alt="" />
+              <div v-else class="minerva-contextual-link-thumbnail-placeholder"></div>
+            </div>
+            <div class="minerva-contextual-link-article-info">
+              <div class="minerva-contextual-link-article-title">{{ activeContextualData.data.linkTitle }}</div>
+              <div class="minerva-contextual-link-article-description">{{ activeContextualData.data.linkDescription }}</div>
+            </div>
+          </div>
+        </div>
+        <div class="minerva-contextual-sheet-footer">
+          <cdx-button weight="quiet" action="destructive" class="minerva-contextual-footer-btn">
+            <cdx-icon :icon="cdxIconUnLink" />
+            Remove link
+          </cdx-button>
+        </div>
+      </template>
+    </div>
+
     <!-- Page Container -->
     <div class="page-container">
       
@@ -4489,10 +4574,86 @@
             </a>
             and may result in your content being removed or your account being blocked.
           </p>
-          <p v-else-if="isPersistentPaginationSuccessMode" class="minerva-sheet-description minerva-sheet-description--pp-success">
-            Thank you for helping to make this section easier for people to read.
-          </p>
-          <template v-else-if="isMinervaSuggestionSuccessState"></template><!-- success: no description -->
+          <template v-else-if="isPersistentPaginationSuccessMode">
+            <p class="minerva-sheet-description minerva-sheet-description--pp-success">
+              Thank you for helping to make this section easier for people to read.
+            </p>
+            <template v-if="ppSuccessContextualData">
+              <div v-if="ppSuccessContextualData.type === 'citation'" class="minerva-contextual-citation-row">
+                <span class="minerva-contextual-citation-text">{{ ppSuccessContextualData.data.text }}</span>
+                <cdx-button weight="quiet" action="progressive" :icon-only="true" aria-label="Edit" class="minerva-contextual-edit-btn">
+                  <cdx-icon :icon="cdxIconEdit" />
+                </cdx-button>
+              </div>
+              <template v-else-if="ppSuccessContextualData.type === 'link'">
+                <div class="minerva-contextual-link-content">
+                  <div class="minerva-contextual-link-text-row">
+                    <div class="minerva-contextual-link-text-info">
+                      <div class="minerva-contextual-label">Text</div>
+                      <div class="minerva-contextual-link-value">{{ ppSuccessContextualData.data.anchorText }}</div>
+                    </div>
+                    <cdx-button weight="quiet" action="progressive" :icon-only="true" aria-label="Edit" class="minerva-contextual-edit-btn">
+                      <cdx-icon :icon="cdxIconEdit" />
+                    </cdx-button>
+                  </div>
+                  <div class="minerva-contextual-separator"></div>
+                  <div class="minerva-contextual-label">Link</div>
+                  <div class="minerva-contextual-link-article-row">
+                    <div class="minerva-contextual-link-thumbnail">
+                      <img v-if="ppSuccessContextualData.data.thumbnail" :src="ppSuccessContextualData.data.thumbnail" alt="" />
+                      <div v-else class="minerva-contextual-link-thumbnail-placeholder"></div>
+                    </div>
+                    <div class="minerva-contextual-link-article-info">
+                      <div class="minerva-contextual-link-article-title">{{ ppSuccessContextualData.data.linkTitle }}</div>
+                      <div class="minerva-contextual-link-article-description">{{ ppSuccessContextualData.data.linkDescription }}</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="minerva-contextual-sheet-footer">
+                  <cdx-button weight="quiet" action="destructive" class="minerva-contextual-footer-btn">
+                    <cdx-icon :icon="cdxIconUnLink" />
+                    Remove link
+                  </cdx-button>
+                </div>
+              </template>
+            </template>
+          </template>
+          <template v-else-if="isMinervaSuggestionSuccessState">
+            <div v-if="successContextualData && successContextualData.type === 'citation'" class="minerva-contextual-citation-row">
+              <span class="minerva-contextual-citation-text">{{ successContextualData.data.text }}</span>
+              <cdx-button weight="quiet" action="progressive" :icon-only="true" aria-label="Edit" class="minerva-contextual-edit-btn">
+                <cdx-icon :icon="cdxIconEdit" />
+              </cdx-button>
+            </div>
+            <template v-else-if="successContextualData && successContextualData.type === 'link'">
+              <div class="minerva-contextual-link-content">
+                <div class="minerva-contextual-link-text-row">
+                  <div class="minerva-contextual-link-text-info">
+                    <div class="minerva-contextual-label">Text</div>
+                    <div class="minerva-contextual-link-value">{{ successContextualData.data.anchorText }}</div>
+                  </div>
+                  <cdx-button weight="quiet" action="progressive" :icon-only="true" aria-label="Edit" class="minerva-contextual-edit-btn">
+                    <cdx-icon :icon="cdxIconEdit" />
+                  </cdx-button>
+                </div>
+                <div class="minerva-contextual-separator"></div>
+                <div class="minerva-contextual-label">Link</div>
+                <div class="minerva-contextual-link-article-row">
+                  <div class="minerva-contextual-link-thumbnail">
+                    <img v-if="successContextualData.data.thumbnail" :src="successContextualData.data.thumbnail" alt="" />
+                    <div v-else class="minerva-contextual-link-thumbnail-placeholder"></div>
+                  </div>
+                  <div class="minerva-contextual-link-article-info">
+                    <div class="minerva-contextual-link-article-title">{{ successContextualData.data.linkTitle }}</div>
+                    <div class="minerva-contextual-link-article-description">{{ successContextualData.data.linkDescription }}</div>
+                  </div>
+                </div>
+              </div>
+            </template>
+            <p v-else class="minerva-sheet-description minerva-sheet-description--success">
+              {{ minervaSuggestionSuccessDescription }}
+            </p>
+          </template>
           <p v-else-if="showMinervaNoMoreSuggestionsState" class="minerva-sheet-description">
             {{ minervaNoMoreSuggestionsDescription }}
           </p>
@@ -4568,6 +4729,22 @@
                 @click="handleMinervaViewNextFromSuccess"
               >
                 View
+              </cdx-button>
+            </div>
+            <div v-else-if="isMinervaSuggestionSuccessState && !isPaginationManualMode && successContextualData && successContextualData.type === 'link'" class="minerva-contextual-sheet-footer">
+              <cdx-button weight="quiet" action="destructive" class="minerva-contextual-footer-btn">
+                <cdx-icon :icon="cdxIconUnLink" />
+                Remove link
+              </cdx-button>
+            </div>
+            <div v-else-if="isMinervaSuggestionSuccessState && !isPaginationManualMode && successContextualData && successContextualData.type === 'citation'" class="minerva-contextual-sheet-footer">
+              <cdx-button weight="quiet" action="default" class="minerva-contextual-footer-btn">
+                <cdx-icon :icon="cdxIconCopy" />
+                Copy
+              </cdx-button>
+              <cdx-button weight="quiet" action="destructive" class="minerva-contextual-footer-btn">
+                <cdx-icon :icon="cdxIconTrash" />
+                Delete
               </cdx-button>
             </div>
             <template v-else-if="isMinervaSuggestionSuccessState && !isPaginationManualMode"></template>
@@ -5359,7 +5536,10 @@ import {
   cdxIconTable,
   cdxIconSpeechBubble,
   cdxIconHieroglyph,
-  cdxIconConfigure
+  cdxIconConfigure,
+  cdxIconUnLink,
+  cdxIconCopy,
+  cdxIconTrash
 } from '@wikimedia/codex-icons';
 import lordeImage from '../assets/lorde-1980.png';
 import scrollIcon from '../assets/scroll.svg';
@@ -5827,6 +6007,9 @@ let nextSuggestionButtonGracePeriod = false;
 let nextSuggestionButtonGraceTimer = null;
 let feedbackSuccessToastTimer = null;
 let suggestionDismissedToastTimerRef = null;
+const showContextualSheet = ref(false);
+const contextualSheetSuggestionId = ref(null);
+const persistentPaginationSuccessSuggestionId = ref(null);
 const noMoreSuggestionsEmptyStateEnabled = ref(true);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false); // starts unchecked by default
@@ -6635,6 +6818,41 @@ const minervaSuggestionSuccessCopy = {
     description: 'This link now points directly to the intended page. Thank you for improving this article.'
   }
 };
+const citationContextData = {
+  1: { text: '"Audre Lorde: A Biography". Hull, Gloria T. Oxford University Press. 2020-03-15. Retrieved 2026-06-22.' },
+  2: { text: '"The Black Unicorn". Lorde, Audre. W. W. Norton & Company. 1978-10-17. Retrieved 2026-06-22.' },
+  3: { text: '"Sister Outsider: Essays and Speeches". Lorde, Audre. Crossing Press. 1984-01-01. Retrieved 2026-06-22.' },
+};
+const linkContextDataMap = {
+  5: {
+    anchorText: 'Diane di Prima',
+    linkTitle: 'Diane di Prima',
+    linkDescription: 'American poet and key figure in the Beat Generation (1934–2020)',
+    thumbnail: null
+  },
+  8: {
+    anchorText: 'The First Cities',
+    linkTitle: 'The First Cities',
+    linkDescription: 'Debut poetry collection by Audre Lorde, published in 1968 by Poets Press',
+    thumbnail: null
+  }
+};
+function getSuggestionContextualData(id) {
+  if (citationContextData[id]) return { type: 'citation', data: citationContextData[id] };
+  if (linkContextDataMap[id]) return { type: 'link', data: linkContextDataMap[id] };
+  return null;
+}
+function showContextualSheetForSuggestion(id) {
+  const ctx = getSuggestionContextualData(id);
+  if (!ctx) return false;
+  contextualSheetSuggestionId.value = id;
+  showContextualSheet.value = true;
+  return true;
+}
+function closeContextualSheet() {
+  showContextualSheet.value = false;
+  contextualSheetSuggestionId.value = null;
+}
 const isMinervaSuggestionSuccessState = computed(() => (
   isMinervaSkin.value &&
   minervaSheetMode.value === 'suggestion' &&
@@ -6648,6 +6866,18 @@ const minervaSuggestionSuccessTitle = computed(() => (
 const minervaSuggestionSuccessDescription = computed(() => (
   minervaSuggestionSuccessState.value?.description || ''
 ));
+const successContextualData = computed(() => {
+  if (!minervaSuggestionSuccessState.value) return null;
+  return getSuggestionContextualData(minervaSuggestionSuccessState.value.id);
+});
+const ppSuccessContextualData = computed(() => {
+  if (!isPersistentPaginationSuccessMode.value) return null;
+  return getSuggestionContextualData(persistentPaginationSuccessSuggestionId.value);
+});
+const activeContextualData = computed(() => {
+  if (!contextualSheetSuggestionId.value) return null;
+  return getSuggestionContextualData(contextualSheetSuggestionId.value);
+});
 const isMinervaDismissNextPromptVisible = computed(() => (
   isMinervaSkin.value &&
   isMinervaSheetOpen.value &&
@@ -9326,6 +9556,7 @@ function activatePersistentPaginationSuccess(currentId) {
   persistentPaginationSuccessLabel.value = `${origIndex + 1} of ${currentItems.length}`;
   persistentPaginationSuccessItems.value = currentItems;
   persistentPaginationSuccessIndex.value = origIndex;
+  persistentPaginationSuccessSuggestionId.value = currentId;
   isPersistentPaginationSuccessMode.value = true;
   if (persistentPaginationSuccessTimer) clearTimeout(persistentPaginationSuccessTimer);
   persistentPaginationSuccessTimer = window.setTimeout(() => {
@@ -9349,6 +9580,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
       if (wasCompleted) activateSuccessHighlight(currentId);
       if (wasCompleted) {
         triggerFeedbackSuccessToast(currentId, nextBtnDelay);
+        if (isMinervaSkin.value) showContextualSheetForSuggestion(currentId);
       } else {
         triggerSuggestionDismissedToast(currentId, nextBtnDelay);
       }
@@ -9400,7 +9632,11 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           } else {
             nextTick(() => {
               if (maybeShowMinervaNoMoreSuggestionsState()) return;
-              closeMinervaSuggestion();
+              if (isPaginationAutoMode.value) {
+                advanceMinervaSuggestion(currentId);
+              } else {
+                closeMinervaSuggestion();
+              }
             });
           }
           return;
@@ -9445,6 +9681,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
     if (wasCompleted) {
       triggerFeedbackSuccessToast(currentId);
+      if (isMinervaSkin.value) showContextualSheetForSuggestion(currentId);
     } else {
       triggerSuggestionDismissedToast(currentId);
     }
@@ -12032,6 +12269,10 @@ watch(feedbackAndNextMode, (newVal) => {
 watch(selectedPrototype, (newVal) => {
   if (newVal === 'option-6') {
     feedbackAndNextEnabled.value = true;
+  } else if (newVal === 'option-5') {
+    feedbackAndNextEnabled.value = false;
+    feedbackLocationEnabled.value = true;
+    feedbackLocationMode.value = 'card';
   }
 });
 
@@ -16930,7 +17171,7 @@ function markArticleEdited() {
 
 .minerva-toast--success {
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   gap: 8px;
   top: auto;
   bottom: 16px;
@@ -16943,8 +17184,33 @@ function markArticleEdited() {
   flex: 0 0 auto;
 }
 
-.minerva-toast--success span {
+.minerva-toast-label {
+  font-size: 16px;
+  line-height: 22px;
+  flex: 1;
   min-width: 0;
+}
+
+.minerva-toast-close-btn {
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  color: #ffffff;
+  flex-shrink: 0;
+  margin-left: 4px;
+}
+
+.minerva-toast-close-btn :deep(.cdx-icon),
+.minerva-toast-close-btn :deep(svg) {
+  color: #ffffff;
+  fill: #ffffff;
+}
+
+.minerva-toast--sheet-lifted {
+  bottom: 280px !important;
 }
 
 .minerva-toast--more {
@@ -16962,6 +17228,10 @@ function markArticleEdited() {
   justify-content: space-between;
   top: auto;
   bottom: 16px;
+}
+
+.next-suggestion-anchor--sheet-lifted {
+  bottom: calc(280px + 16px) !important;
 }
 
 .minerva-toast-undo-btn {
@@ -17026,6 +17296,146 @@ function markArticleEdited() {
 
 .minerva-bottom-sheet--suggestion {
   right: 0;
+}
+
+.minerva-contextual-sheet {
+  z-index: 85;
+  padding: 0 16px;
+}
+
+.minerva-contextual-link-header-icon :deep(.cdx-icon),
+.minerva-contextual-link-header-icon :deep(svg) {
+  color: var(--color-base, #202122);
+  fill: var(--color-base, #202122);
+}
+
+.minerva-contextual-citation-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border-color-muted, #eaecf0);
+}
+
+.minerva-contextual-citation-text {
+  flex: 1;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-progressive, #36c);
+  min-width: 0;
+}
+
+.minerva-contextual-edit-btn {
+  flex-shrink: 0;
+}
+
+.minerva-contextual-sheet-footer {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 8px 0;
+  border-top: 1px solid var(--border-color-muted, #eaecf0);
+  margin-top: 4px;
+}
+
+.minerva-contextual-footer-btn {
+  padding-left: 8px;
+  padding-right: 8px;
+}
+
+.minerva-contextual-link-content {
+  padding: 12px 0 4px;
+}
+
+.minerva-contextual-label {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-base, #202122);
+  margin-bottom: 2px;
+}
+
+.minerva-contextual-link-text-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.minerva-contextual-link-text-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.minerva-contextual-link-value {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
+  color: var(--color-base, #202122);
+}
+
+.minerva-contextual-separator {
+  height: 1px;
+  background: var(--border-color-muted, #eaecf0);
+  margin: 0 0 12px;
+}
+
+.minerva-contextual-link-article-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-top: 4px;
+}
+
+.minerva-contextual-link-thumbnail {
+  flex-shrink: 0;
+  width: 64px;
+  height: 64px;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--background-color-neutral, #eaecf0);
+}
+
+.minerva-contextual-link-thumbnail img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.minerva-contextual-link-thumbnail-placeholder {
+  width: 64px;
+  height: 64px;
+  background: var(--background-color-neutral, #eaecf0);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.minerva-contextual-link-article-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.minerva-contextual-link-article-title {
+  font-size: 16px;
+  font-weight: 700;
+  line-height: 22px;
+  color: var(--color-progressive, #36c);
+  margin-bottom: 2px;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.minerva-contextual-link-article-description {
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--color-subtle, #54595d);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .minerva-bottom-sheet--rail-offset {
