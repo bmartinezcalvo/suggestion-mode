@@ -4920,106 +4920,48 @@
                 </template>
                 <div class="cdx-radio-group" role="radiogroup">
                   <cdx-radio
-                    v-model="selectedNavigationGroup"
+                    v-model="selectedPrototype"
                     name="suggestions-discoverability"
-                    input-value="pagination"
+                    input-value="option-5"
                   >
-                    Pagination
+                    Pagination: Automatic navigation
                   </cdx-radio>
-                  <div v-if="selectedNavigationGroup === 'pagination'" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                  <cdx-radio
+                    v-model="selectedPrototype"
+                    name="suggestions-discoverability"
+                    input-value="option-6"
+                  >
+                    Pagination: Manual navigation
+                  </cdx-radio>
+                  <div v-if="selectedPrototype === 'option-6'" class="prototype-suboptions prototype-suboptions--indexed-radios">
                     <cdx-radio
-                      v-model="selectedPrototype"
-                      name="pagination-navigation-mode"
-                      input-value="option-6"
+                      v-model="feedbackAndNextMode"
+                      name="pagination-manual-mode"
+                      input-value="view-button"
                       class="prototype-suboption-radio"
                     >
-                      Manual navigation
+                      "Next suggestion" button
                     </cdx-radio>
-                    <div
-                      v-if="isMinervaSkin && selectedPrototype === 'option-6' && minervaToggleLocation !== 'toolbar' && !feedbackAndNextEnabled"
-                      class="prototype-suboptions"
-                    >
-                      <cdx-checkbox v-model="paginationManualNavigableButtonEnabled">
-                        Enable navigable button to next suggestion
-                      </cdx-checkbox>
-                    </div>
                     <cdx-radio
-                      v-model="selectedPrototype"
-                      name="pagination-navigation-mode"
-                      input-value="option-5"
+                      v-model="feedbackAndNextMode"
+                      name="pagination-manual-mode"
+                      input-value="persistent-pagination"
                       class="prototype-suboption-radio prototype-suboption-radio--last"
                     >
-                      Automatic navigation
+                      Persistent pagination
                     </cdx-radio>
                   </div>
                   <cdx-radio
-                    v-model="selectedNavigationGroup"
+                    v-model="selectedPrototype"
                     name="suggestions-discoverability"
                     input-value="option-3"
                   >
                     Navigable arrows
                   </cdx-radio>
-                  <cdx-radio
-                    v-model="selectedNavigationGroup"
-                    name="suggestions-discoverability"
-                    input-value="option-4"
-                  >
-                    Overview with list of suggestions
-                  </cdx-radio>
                 </div>
               </cdx-field>
               <cdx-field>
                 <template #label>Other features</template>
-                <cdx-checkbox v-model="feedbackLocationEnabled">
-                  Feedback after completing or dismissing (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
-                </cdx-checkbox>
-                <div v-if="feedbackLocationEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
-                  <cdx-radio
-                    v-model="feedbackLocationMode"
-                    name="feedback-location-mode"
-                    input-value="toast"
-                    class="prototype-suboption-radio"
-                  >
-                    Feedback en Toast
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackLocationMode"
-                    name="feedback-location-mode"
-                    input-value="card"
-                    class="prototype-suboption-radio prototype-suboption-radio--last"
-                  >
-                    Feedback en suggestions card
-                  </cdx-radio>
-                </div>
-                <cdx-checkbox v-model="feedbackAndNextEnabled">
-                  Enable find suggestions after completing/dismissing
-                </cdx-checkbox>
-                <div v-if="feedbackAndNextEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
-                  <cdx-radio
-                    v-model="feedbackAndNextMode"
-                    name="feedback-and-next-mode"
-                    input-value="bottom-sheet"
-                    class="prototype-suboption-radio"
-                  >
-                    Custom bottom sheet
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackAndNextMode"
-                    name="feedback-and-next-mode"
-                    input-value="view-button"
-                    class="prototype-suboption-radio"
-                  >
-                    Reuse "View suggestion" button
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackAndNextMode"
-                    name="feedback-and-next-mode"
-                    input-value="persistent-pagination"
-                    class="prototype-suboption-radio prototype-suboption-radio--last"
-                  >
-                    Persistent pagination
-                  </cdx-radio>
-                </div>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
@@ -7691,7 +7633,7 @@ function resetPrototypeDialog() {
   feedbackAndNextEnabled.value = true;
   feedbackAndNextMode.value = 'persistent-pagination';
   feedbackLocationEnabled.value = true;
-  feedbackLocationMode.value = 'toast';
+  feedbackLocationMode.value = 'card';
   editToolbarImprovementsEnabled.value = true;
   noMoreSuggestionsEmptyStateEnabled.value = true;
   minervaFullPageSuggestionNavigationEnabled.value = false;
@@ -9158,7 +9100,7 @@ const hasPendingPersistentItems = computed(() =>
   persistentPaginationSuggestionCount.value > 0 || persistentPaginationCheckCount.value > 0
 );
 
-function triggerFeedbackSuccessToast(suggestionId) {
+function triggerFeedbackSuccessToast(suggestionId, nextBtnDelay = 0) {
   feedbackSuccessToastMessage.value = suggestionSuccessToastMessages[suggestionId] || 'Suggestion completed!';
   if (feedbackSuccessToastTimer) clearTimeout(feedbackSuccessToastTimer);
   showFeedbackSuccessToast.value = true;
@@ -9166,8 +9108,11 @@ function triggerFeedbackSuccessToast(suggestionId) {
     showFeedbackSuccessToast.value = false;
     feedbackSuccessToastTimer = null;
   }, 4000);
-  // Always show "Next suggestion" button — updateSuggestionVisibility hides it if suggestions are visible
-  nextTick(() => triggerNextSuggestionButton());
+  if (nextBtnDelay > 0) {
+    window.setTimeout(() => nextTick(() => triggerNextSuggestionButton()), nextBtnDelay);
+  } else {
+    nextTick(() => triggerNextSuggestionButton());
+  }
 }
 
 function triggerNextSuggestionButton() {
@@ -9255,7 +9200,7 @@ function handlePersistentPaginationBarDown() {
   openPersistentPaginationTarget(getPersistentPaginationBarTargetDown());
 }
 
-function triggerSuggestionDismissedToast(suggestionId) {
+function triggerSuggestionDismissedToast(suggestionId, nextBtnDelay = 0) {
   dismissedSuggestionIdForUndo.value = suggestionId;
   if (suggestionDismissedToastTimerRef) clearTimeout(suggestionDismissedToastTimerRef);
   showSuggestionDismissedToast.value = true;
@@ -9264,8 +9209,11 @@ function triggerSuggestionDismissedToast(suggestionId) {
     dismissedSuggestionIdForUndo.value = null;
     suggestionDismissedToastTimerRef = null;
   }, 4000);
-  // Always show "Next suggestion" button — updateSuggestionVisibility hides it if suggestions are visible
-  nextTick(() => triggerNextSuggestionButton());
+  if (nextBtnDelay > 0) {
+    window.setTimeout(() => nextTick(() => triggerNextSuggestionButton()), nextBtnDelay);
+  } else {
+    nextTick(() => triggerNextSuggestionButton());
+  }
 }
 
 function handleUndoDismiss() {
@@ -9395,25 +9343,34 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   // feedbackLocationMode overrides feedback display across all prototype modes
   if (feedbackLocationEnabled.value) {
     if (feedbackLocationMode.value === 'toast') {
+      const TOAST_DURATION = 4000;
+      const AFTER_TOAST_DELAY = 1500;
+      const nextBtnDelay = TOAST_DURATION + AFTER_TOAST_DELAY;
       if (wasCompleted) activateSuccessHighlight(currentId);
       if (wasCompleted) {
-        triggerFeedbackSuccessToast(currentId);
+        triggerFeedbackSuccessToast(currentId, nextBtnDelay);
       } else {
-        triggerSuggestionDismissedToast(currentId);
+        triggerSuggestionDismissedToast(currentId, nextBtnDelay);
       }
       if (isMinervaSkin.value) {
         if (isPersistentPaginationMode.value) {
           persistentPaginationActiveGroup.value = null;
           nextTick(() => {
-            if (!maybeShowMinervaNoMoreSuggestionsState()) {
-              if (shouldShowNoMoreSuggestionsLeftToast()) showPaginationNoMoreSuggestionsToast();
-              closeMinervaSuggestion();
-            }
+            closeMinervaSuggestion();
+            window.setTimeout(() => {
+              nextTick(() => {
+                if (!maybeShowMinervaNoMoreSuggestionsState()) {
+                  if (shouldShowNoMoreSuggestionsLeftToast()) showPaginationNoMoreSuggestionsToast();
+                }
+              });
+            }, nextBtnDelay);
           });
         } else {
           nextTick(() => {
-            if (maybeShowMinervaNoMoreSuggestionsState()) return;
             closeMinervaSuggestion();
+            window.setTimeout(() => {
+              nextTick(() => maybeShowMinervaNoMoreSuggestionsState());
+            }, nextBtnDelay);
           });
         }
       }
@@ -10550,7 +10507,7 @@ function handleYesSuggestion4() {
     closeMinervaSuggestion();
   }
   triggerSuggestionSuccessToast();
-  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+  if (!isMinervaSkin.value && feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
     triggerFeedbackSuccessToast(4);
   }
   nextTick(() => {
@@ -10598,7 +10555,7 @@ function handleResolveGenericSuggestion(suggestionId) {
     closeMinervaSuggestion();
   }
   triggerSuggestionSuccessToast();
-  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
+  if (!isMinervaSkin.value && feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
     triggerFeedbackSuccessToast(suggestionId);
   }
   nextTick(() => {
@@ -12061,6 +12018,22 @@ watch(
     }
   }
 );
+
+watch(feedbackAndNextMode, (newVal) => {
+  if (newVal === 'view-button') {
+    feedbackLocationEnabled.value = true;
+    feedbackLocationMode.value = 'toast';
+  } else if (newVal === 'persistent-pagination') {
+    feedbackLocationEnabled.value = true;
+    feedbackLocationMode.value = 'card';
+  }
+});
+
+watch(selectedPrototype, (newVal) => {
+  if (newVal === 'option-6') {
+    feedbackAndNextEnabled.value = true;
+  }
+});
 
 watch(showPostPublishSuggestionPopup, (isOpen) => {
   if (isOpen) {
@@ -16959,6 +16932,8 @@ function markArticleEdited() {
   display: flex;
   align-items: flex-start;
   gap: 8px;
+  top: auto;
+  bottom: 16px;
 }
 
 .minerva-toast--success :deep(.cdx-icon),
@@ -16985,6 +16960,8 @@ function markArticleEdited() {
   align-items: center;
   gap: 8px;
   justify-content: space-between;
+  top: auto;
+  bottom: 16px;
 }
 
 .minerva-toast-undo-btn {
@@ -18132,14 +18109,17 @@ function markArticleEdited() {
 }
 
 /* "Next suggestion" bar transition — slide up from bottom */
-.next-suggestion-reveal-enter-active,
+.next-suggestion-reveal-enter-active {
+  transition: transform 350ms cubic-bezier(0.22, 1, 0.36, 1), opacity 300ms ease;
+}
+
 .next-suggestion-reveal-leave-active {
-  transition: transform 220ms ease, opacity 220ms ease;
+  transition: transform 200ms ease-in, opacity 200ms ease-in;
 }
 
 .next-suggestion-reveal-enter-from,
 .next-suggestion-reveal-leave-to {
-  transform: translateY(100%);
+  transform: translateY(16px);
   opacity: 0;
 }
 
