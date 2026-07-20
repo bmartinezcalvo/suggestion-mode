@@ -117,9 +117,9 @@
               <cdx-icon v-if="!lightbulbModifierEnabled" :icon="cdxIconEdit" size="medium" />
               <template v-else>
                 <span v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" v-tooltip="'Suggestions available in this article'" class="pulsating-lightbulb-wrapper">
-                  <img :src="iconEditLightbulbFixedHeader" width="20" height="21" alt="" aria-hidden="true" />
-                  <img v-if="entryPointSolution === 'lightbulb-popup'" :src="iconLightbulbBlueHeaderOverlay" width="20" height="21" alt="" aria-hidden="true" class="lightbulb-pulse-overlay" :class="{ 'lightbulb-icon--pulse': lightbulbPulseActive }" />
-                  <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
+                  <cdx-icon :icon="cdxIconEdit" size="medium" />
+                  <span v-if="showPulsatingLightbulb || lightbulbPulseActive" class="lightbulb-indicator-pulse"></span>
+                  <img :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="lightbulb-indicator-badge" />
                 </span>
                 <span v-if="showNumberedBadge" v-tooltip="'Suggestions available in this article'" class="pulsating-lightbulb-wrapper">
                   <cdx-icon :icon="cdxIconEdit" size="medium" />
@@ -623,10 +623,10 @@
                   <button v-else class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
                     <div class="pulsating-dot-wrapper">
                       <span v-if="lightbulbModifierEnabled" class="pulsating-lightbulb-wrapper">
-                        <img v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" :src="iconModifierV2" width="18" height="18" alt="" aria-hidden="true" class="minerva-action-icon-img" />
-                        <img v-if="entryPointSolution === 'lightbulb-popup'" :src="iconLightbulbBlueOverlay" width="18" height="18" alt="" aria-hidden="true" class="minerva-action-icon-img lightbulb-pulse-overlay" :class="{ 'lightbulb-icon--pulse': lightbulbPulseActive }" />
+                        <cdx-icon v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" :icon="cdxIconEdit" size="medium" />
+                        <span v-if="showPulsatingLightbulb || lightbulbPulseActive" class="lightbulb-indicator-pulse"></span>
+                        <img v-if="entryPointSolution === 'pulsating-lightbulb' || entryPointSolution === 'lightbulb-popup'" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="lightbulb-indicator-badge" />
                         <cdx-icon v-if="showNumberedBadge" :icon="cdxIconEdit" size="medium" />
-                        <span v-if="showPulsatingLightbulb" class="pulsating-lightbulb"></span>
                         <span v-if="showNumberedBadge && availableSuggestionCount > 0" class="suggestion-badge suggestion-badge--icon" :class="{ 'suggestion-badge--pulsating': lightbulbPulseActive }">{{ badgeLabel(availableSuggestionCount) }}</span>
                       </span>
                       <cdx-icon v-else :icon="cdxIconEdit" size="medium" />
@@ -5358,6 +5358,7 @@ import iconLightbulb from '../assets/icon-lightbulb.svg';
 import iconEditLightbulbFixedHeader from '../assets/edit-lightbulb-fixed-header.svg';
 import iconLightbulbBlueOverlay from '../assets/icon-lightbulb-blue-overlay.svg';
 import iconLightbulbBlueHeaderOverlay from '../assets/icon-lightbulb-blue-header-overlay.svg';
+import iconLightbulbBlueIndicator from '../assets/icon-lightbulb-blue-indicator.svg';
 import iconLightbulbPulsating from '../assets/lightbulb-pulsating.svg';
 import wikipediaWordmark from '../assets/wikipedia-wordmark-en-25.svg';
 
@@ -19503,13 +19504,39 @@ function markArticleEdited() {
 
 .lightbulb-pulse-overlay {
   position: absolute;
-  top: 0;
-  left: 0;
+}
+
+.lightbulb-indicator-badge {
+  position: absolute;
+  bottom: -2px;
+  right: -2px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.lightbulb-indicator-pulse {
+  position: absolute;
+  bottom: 2px;
+  right: 2px;
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: rgba(51, 102, 204, 0.2);
+  box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4);
+  animation: pulsate-indicator 1.5s ease-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes pulsate-indicator {
+  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4); }
+  70%  { box-shadow: 0 0 0 14px rgba(51, 102, 204, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
 }
 
 .lightbulb-icon--pulse {
   animation: lightbulb-pulse 450ms cubic-bezier(0.36, 0.07, 0.19, 0.97) 1 forwards;
-  transform-origin: 78% 26%;
+  transform-origin: 50% 50%;
 }
 
 /* ── Numbered badge pulse (same scale animation) ─────────────── */
