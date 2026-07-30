@@ -9823,6 +9823,23 @@ function activatePersistentPaginationSuccess(currentId) {
 }
 
 function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
+  // Persistent pagination always uses bottom-sheet success + dismissed toast, regardless of feedbackLocationMode
+  if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
+    if (wasCompleted) {
+      activateSuccessHighlight(currentId);
+      activatePersistentPaginationSuccess(currentId);
+    } else {
+      triggerSuggestionDismissedToast(currentId);
+      persistentPaginationActiveGroup.value = null;
+      nextTick(() => {
+        if (!maybeShowMinervaNoMoreSuggestionsState()) {
+          if (shouldShowNoMoreSuggestionsLeftToast()) showPaginationNoMoreSuggestionsToast();
+          closeMinervaSuggestion();
+        }
+      });
+    }
+    return;
+  }
   // feedbackLocationMode overrides feedback display across all prototype modes
   if (feedbackLocationEnabled.value) {
     if (feedbackLocationMode.value === 'toast') {
