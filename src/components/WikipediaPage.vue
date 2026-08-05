@@ -7509,16 +7509,16 @@ const showMinervaTextStyleMenuToggle = computed(() => (
 ));
 const minervaPaginationIds = computed(() => {
   const ids = [];
-  if (citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value) {
+  if (!publishPromptEnabled.value && citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value) {
     ids.push(1);
   }
-  if (citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value) {
+  if (!publishPromptEnabled.value && citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value) {
     ids.push(2);
   }
   if (!isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value) {
     ids.push(4);
   }
-  if (citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value) {
+  if (!publishPromptEnabled.value && citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value) {
     ids.push(3);
   }
   return ids;
