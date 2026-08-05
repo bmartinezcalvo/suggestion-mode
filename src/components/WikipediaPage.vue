@@ -7812,6 +7812,7 @@ function activateSuccessHighlight(suggestionId) {
     successHighlightSuggestionIds.value = [ ...successHighlightSuggestionIds.value, suggestionId ];
   }
   window.setTimeout(() => {
+    if (publishPromptEnabled.value && publishPromptSuggestionId.value === suggestionId) return;
     successHighlightSuggestionIds.value = successHighlightSuggestionIds.value.filter((id) => id !== suggestionId);
   }, 4000);
 }
@@ -12856,6 +12857,12 @@ watch(selectedPrototype, (newVal) => {
     feedbackAndNextEnabled.value = false;
     feedbackLocationEnabled.value = true;
     feedbackLocationMode.value = 'card';
+  }
+});
+
+watch(publishPromptSuggestionId, (newId, oldId) => {
+  if (oldId !== null && newId !== oldId) {
+    successHighlightSuggestionIds.value = successHighlightSuggestionIds.value.filter((id) => id !== oldId);
   }
 });
 
@@ -18933,7 +18940,6 @@ function markArticleEdited() {
   display: flex;
   flex-direction: row;
   gap: 8px;
-  padding: 12px 16px 16px;
 }
 
 .suggestion-header:focus {
