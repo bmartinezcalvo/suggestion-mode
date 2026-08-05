@@ -4114,13 +4114,7 @@
             @mouseenter="isCardHovered4 = true"
             @mouseleave="isCardHovered4 = false"
           >
-            <template v-if="!isMinervaSkin && isSuccessHighlightActive(4)">
-              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">Link removed!</div>
-              </div>
-            </template>
-            <template v-else-if="publishPromptSuggestionId === 4">
+            <template v-if="publishPromptSuggestionId === 4">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4132,6 +4126,12 @@
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
                   <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && isSuccessHighlightActive(4)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link removed!</div>
               </div>
             </template>
             <template v-else>
@@ -4192,13 +4192,7 @@
             @mouseenter="isCardHovered5 = true"
             @mouseleave="isCardHovered5 = false"
           >
-            <template v-if="!isMinervaSkin && isSuccessHighlightActive(5)">
-              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">Link updated!</div>
-              </div>
-            </template>
-            <template v-else-if="publishPromptSuggestionId === 5">
+            <template v-if="publishPromptSuggestionId === 5">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4210,6 +4204,12 @@
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
                   <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && isSuccessHighlightActive(5)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
             <template v-else>
@@ -4248,13 +4248,7 @@
             @mouseenter="isCardHovered8 = true"
             @mouseleave="isCardHovered8 = false"
           >
-            <template v-if="!isMinervaSkin && isSuccessHighlightActive(8)">
-              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">Link updated!</div>
-              </div>
-            </template>
-            <template v-else-if="publishPromptSuggestionId === 8">
+            <template v-if="publishPromptSuggestionId === 8">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4266,6 +4260,12 @@
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
                   <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && isSuccessHighlightActive(8)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
             <template v-else>
@@ -4304,13 +4304,7 @@
             @mouseenter="isCardHovered6 = true"
             @mouseleave="isCardHovered6 = false"
           >
-            <template v-if="!isMinervaSkin && isSuccessHighlightActive(6)">
-              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">Heading updated!</div>
-              </div>
-            </template>
-            <template v-else-if="publishPromptSuggestionId === 6">
+            <template v-if="publishPromptSuggestionId === 6">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4322,6 +4316,12 @@
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
                   <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && isSuccessHighlightActive(6)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Heading updated!</div>
               </div>
             </template>
             <template v-else>
@@ -4360,13 +4360,7 @@
             @mouseenter="isCardHovered7 = true"
             @mouseleave="isCardHovered7 = false"
           >
-            <template v-if="!isMinervaSkin && isSuccessHighlightActive(7)">
-              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">Link updated!</div>
-              </div>
-            </template>
-            <template v-else-if="publishPromptSuggestionId === 7">
+            <template v-if="publishPromptSuggestionId === 7">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4378,6 +4372,12 @@
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
                   <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && isSuccessHighlightActive(7)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
             <template v-else>
