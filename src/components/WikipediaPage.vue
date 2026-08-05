@@ -4851,7 +4851,7 @@
                   class="minerva-sheet-icon-button minerva-sheet-icon-button--close"
                   type="button"
                   aria-label="Close"
-                  @click="closeMinervaSuggestion"
+                  @click="isPublishPromptMode ? (publishPromptSuggestionId = null, closeMinervaSuggestion()) : closeMinervaSuggestion()"
                 >
                   <cdx-icon :icon="cdxIconClose" size="medium" />
                 </button>
@@ -18926,6 +18926,15 @@ function markArticleEdited() {
 
 .suggestion-btn-publish {
   flex: 1;
+  font-size: 14px;
+}
+
+.suggestion-card--publish-prompt.suggestion-card--hover {
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
+.suggestion-card--publish-prompt.suggestion-card--hover .suggestion-header {
+  cursor: default;
 }
 
 .suggestion-card--publish-prompt {
