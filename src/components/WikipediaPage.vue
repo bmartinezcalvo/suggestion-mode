@@ -4124,7 +4124,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4196,7 +4196,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4246,7 +4246,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4296,7 +4296,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4346,7 +4346,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4995,7 +4995,7 @@
             <template v-else-if="isPublishPromptMode">
               <div class="minerva-sheet-actions minerva-sheet-actions--publish-prompt">
                 <cdx-button class="minerva-sheet-btn" action="default" weight="normal" @click="handlePublishPromptViewMore">View more suggestions</cdx-button>
-                <cdx-button class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="requestPublishChanges">Publish</cdx-button>
+                <cdx-button class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="primary" @click="requestPublishChanges">Publish</cdx-button>
               </div>
             </template>
             <template v-else-if="isPersistentPaginationSuccessMode"></template><!-- persistent-pagination success: no action buttons -->
@@ -5219,7 +5219,7 @@
             </template><!-- end v-else (non-dismiss-prompt content) -->
           </div>
           <div
-            v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode)"
+            v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode) && !isPublishPromptMode"
             class="minerva-sheet-pagination"
           >
             <div
@@ -18848,7 +18848,7 @@ function markArticleEdited() {
 
 .suggestion-header--publish-prompt {
   background-color: var(--background-color-base, #ffffff);
-  border-color: var(--border-color-base, #a2a9b1);
+  border-color: var(--border-color-muted, #c8ccd1);
   cursor: default;
   pointer-events: none;
 }
@@ -18881,13 +18881,17 @@ function markArticleEdited() {
   flex: 1;
 }
 
+.suggestion-card--publish-prompt {
+  border-color: var(--border-color-base, #a2a9b1);
+}
+
 .suggestion-card--publish-prompt .suggestion-content {
   background-color: var(--background-color-base, #ffffff);
 }
 
 .minerva-sheet-actions--publish-prompt {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
   gap: 8px;
   padding: 12px 16px 16px;
 }
