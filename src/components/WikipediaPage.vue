@@ -4101,20 +4101,26 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4)"
+            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)))"
             ref="suggestionsSidebarRef4"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4,
-              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4,
+              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4 && !(!isMinervaSkin && isSuccessHighlightActive(4)),
+              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)),
               'suggestion-card--hover': isHovered4,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4))
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset4}px` }"
             @mouseenter="isCardHovered4 = true"
             @mouseleave="isCardHovered4 = false"
           >
-            <template v-if="publishPromptSuggestionId === 4">
+            <template v-if="!isMinervaSkin && isSuccessHighlightActive(4)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link removed!</div>
+              </div>
+            </template>
+            <template v-else-if="publishPromptSuggestionId === 4">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4173,20 +4179,26 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)))"
             ref="suggestionsSidebarRef5"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5,
-              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5,
+              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5 && !(!isMinervaSkin && isSuccessHighlightActive(5)),
+              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)),
               'suggestion-card--hover': isHovered5,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5))
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset5}px` }"
             @mouseenter="isCardHovered5 = true"
             @mouseleave="isCardHovered5 = false"
           >
-            <template v-if="publishPromptSuggestionId === 5">
+            <template v-if="!isMinervaSkin && isSuccessHighlightActive(5)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link updated!</div>
+              </div>
+            </template>
+            <template v-else-if="publishPromptSuggestionId === 5">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4223,20 +4235,26 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)))"
             ref="suggestionsSidebarRef8"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8,
-              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8,
+              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8 && !(!isMinervaSkin && isSuccessHighlightActive(8)),
+              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)),
               'suggestion-card--hover': isHovered8,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8))
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset8}px` }"
             @mouseenter="isCardHovered8 = true"
             @mouseleave="isCardHovered8 = false"
           >
-            <template v-if="publishPromptSuggestionId === 8">
+            <template v-if="!isMinervaSkin && isSuccessHighlightActive(8)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link updated!</div>
+              </div>
+            </template>
+            <template v-else-if="publishPromptSuggestionId === 8">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4273,20 +4291,26 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)))"
             ref="suggestionsSidebarRef6"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6,
-              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6,
+              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6 && !(!isMinervaSkin && isSuccessHighlightActive(6)),
+              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)),
               'suggestion-card--hover': isHovered6,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6))
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset6}px` }"
             @mouseenter="isCardHovered6 = true"
             @mouseleave="isCardHovered6 = false"
           >
-            <template v-if="publishPromptSuggestionId === 6">
+            <template v-if="!isMinervaSkin && isSuccessHighlightActive(6)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Heading updated!</div>
+              </div>
+            </template>
+            <template v-else-if="publishPromptSuggestionId === 6">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -4323,20 +4347,26 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)))"
             ref="suggestionsSidebarRef7"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7,
-              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7,
+              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7 && !(!isMinervaSkin && isSuccessHighlightActive(7)),
+              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)),
               'suggestion-card--hover': isHovered7,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7))
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset7}px` }"
             @mouseenter="isCardHovered7 = true"
             @mouseleave="isCardHovered7 = false"
           >
-            <template v-if="publishPromptSuggestionId === 7">
+            <template v-if="!isMinervaSkin && isSuccessHighlightActive(7)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">Link updated!</div>
+              </div>
+            </template>
+            <template v-else-if="publishPromptSuggestionId === 7">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
@@ -5058,7 +5088,7 @@
           </div>
             <div v-else-if="!shouldShowEmptyState" class="minerva-sheet-actions">
             <cdx-button
-              v-if="activeMinervaSuggestion === 1"
+              v-if="activeMinervaSuggestion === 1 && !publishPromptEnabled"
               class="minerva-sheet-btn"
               action="default"
               weight="normal"
@@ -5068,7 +5098,7 @@
               Add citation
             </cdx-button>
             <cdx-button
-              v-if="activeMinervaSuggestion === 1"
+              v-if="activeMinervaSuggestion === 1 && !publishPromptEnabled"
               class="minerva-sheet-btn minerva-sheet-btn-secondary"
               action="default"
               weight="normal"
@@ -5078,7 +5108,7 @@
               Dismiss
             </cdx-button>
             <cdx-button
-              v-if="activeMinervaSuggestion === 2"
+              v-if="activeMinervaSuggestion === 2 && !publishPromptEnabled"
               class="minerva-sheet-btn"
               action="default"
               weight="normal"
@@ -5088,7 +5118,7 @@
               Add citation
             </cdx-button>
             <cdx-button
-              v-if="activeMinervaSuggestion === 2"
+              v-if="activeMinervaSuggestion === 2 && !publishPromptEnabled"
               class="minerva-sheet-btn minerva-sheet-btn-secondary"
               action="default"
               weight="normal"
@@ -5098,7 +5128,7 @@
               Dismiss
             </cdx-button>
             <cdx-button
-              v-if="activeMinervaSuggestion === 3"
+              v-if="activeMinervaSuggestion === 3 && !publishPromptEnabled"
               class="minerva-sheet-btn"
               action="default"
               weight="normal"
@@ -5108,7 +5138,7 @@
               Add citation
             </cdx-button>
             <cdx-button
-              v-if="activeMinervaSuggestion === 3"
+              v-if="activeMinervaSuggestion === 3 && !publishPromptEnabled"
               class="minerva-sheet-btn minerva-sheet-btn-secondary"
               action="default"
               weight="normal"
@@ -5375,6 +5405,14 @@
                   Navigation of suggestions (<a href="https://phabricator.wikimedia.org/T417821" target="_blank" rel="noopener">T417821</a>)
                 </template>
                 <div class="cdx-radio-group" role="radiogroup">
+                  <cdx-radio
+                    v-if="!isMinervaSkin"
+                    v-model="selectedPrototype"
+                    name="suggestions-discoverability"
+                    input-value="option-no-pagination"
+                  >
+                    No pagination
+                  </cdx-radio>
                   <cdx-radio
                     v-model="selectedPrototype"
                     name="suggestions-discoverability"
@@ -7712,7 +7750,7 @@ function resetSuggestionState() {
 function applyPrototypeMode(mode) {
   resetSuggestionState();
   activePrototype.value = mode;
-  const modeShowsSuggestions = ['option-1', 'option-2', 'option-3', 'option-4', 'option-5', 'option-6', 'option-7'].includes(mode);
+  const modeShowsSuggestions = ['option-1', 'option-2', 'option-3', 'option-4', 'option-5', 'option-6', 'option-7', 'option-no-pagination'].includes(mode);
   showSuggestionNotification.value = modeShowsSuggestions;
   showSuggestionBadge.value = modeShowsSuggestions;
   isBannerDismissed.value = false;
@@ -9633,6 +9671,8 @@ function triggerSuggestionSuccessToast() {
   if (!toastsEnabled.value) return;
   // In Minerva pagination/carousel mode the success state replaces the toast
   if (isMinervaSkin.value && (isPaginationMode.value || isCarouselMode.value)) return;
+  // In Vector22 the success card replaces the toast
+  if (!isMinervaSkin.value && successHighlightSuggestionIds.value.length > 0) return;
   if (suggestionSuccessToastTimer) {
     clearTimeout(suggestionSuccessToastTimer);
   }
