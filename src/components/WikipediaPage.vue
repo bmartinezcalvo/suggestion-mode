@@ -617,7 +617,7 @@
         <!-- Persistent pagination bar — shown in persistent-pagination feedback mode -->
         <transition name="next-suggestion-reveal">
           <div
-            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet && !persistentPaginationBarScrollPending"
+            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet && !persistentPaginationBarScrollPending && !isPublishPromptMode"
             class="minerva-persistent-pagination-bar"
           >
             <!-- Left: checks (if any) + divider + suggestions -->
@@ -3895,7 +3895,7 @@
           </div>
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestionsDisplay && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -3964,7 +3964,7 @@
 
           <!-- Second Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestionsDisplay && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -4033,7 +4033,7 @@
 
           <!-- Third Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestionsDisplay && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
             ref="suggestionsSidebarRef3"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded3,
@@ -4101,190 +4101,275 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && !showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4"
+            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4)"
             ref="suggestionsSidebarRef4"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded4,
-              'suggestion-card--expanded': isCardExpanded4,
-              'suggestion-card--hover': isHovered4
+              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4,
+              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4,
+              'suggestion-card--hover': isHovered4,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset4}px` }"
             @mouseenter="isCardHovered4 = true"
             @mouseleave="isCardHovered4 = false"
           >
-            <button
-              v-if="!isCardExpanded4"
-              class="suggestion-header suggestion-header--collapsed"
-              @click="isCardExpanded4 = true"
-            >
-              <div class="suggestion-icon">
-                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+            <template v-if="publishPromptSuggestionId === 4">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">First suggestion completed!</div>
+                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
-              <div class="suggestion-title">Remove external link</div>
-            </button>
-            <button
-              v-if="isCardExpanded4"
-              class="suggestion-header suggestion-header--expanded"
-              @click="isCardExpanded4 = false"
-              aria-expanded="true"
-            >
-              <div class="suggestion-icon">
-                <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
               </div>
-              <div class="suggestion-title">Remove external link</div>
-            </button>
-            <div v-if="isCardExpanded4" class="suggestion-content">
-              <p class="suggestion-description">This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the <a href="https://en.wikipedia.org/wiki/Wikipedia:External_links" target="_blank" rel="noopener">External links</a> section, or converting it into a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a> if appropriate.</p>
-              <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleYesSuggestion4">
-                  Remove link
-                </button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="handleNoSuggestion4">
-                  Dismiss
-                </button>
-                <cdx-button
-                  class="suggestion-more-actions"
-                  action="default"
-                  weight="quiet"
-                  aria-label="More actions"
-                >
-                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
-                </cdx-button>
+            </template>
+            <template v-else>
+              <button
+                v-if="!isCardExpanded4"
+                class="suggestion-header suggestion-header--collapsed"
+                @click="isCardExpanded4 = true"
+              >
+                <div class="suggestion-icon">
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                </div>
+                <div class="suggestion-title">Remove external link</div>
+              </button>
+              <button
+                v-if="isCardExpanded4"
+                class="suggestion-header suggestion-header--expanded"
+                @click="isCardExpanded4 = false"
+                aria-expanded="true"
+              >
+                <div class="suggestion-icon">
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                </div>
+                <div class="suggestion-title">Remove external link</div>
+              </button>
+              <div v-if="isCardExpanded4" class="suggestion-content">
+                <p class="suggestion-description">This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the <a href="https://en.wikipedia.org/wiki/Wikipedia:External_links" target="_blank" rel="noopener">External links</a> section, or converting it into a <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a> if appropriate.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleYesSuggestion4">
+                    Remove link
+                  </button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleNoSuggestion4">
+                    Dismiss
+                  </button>
+                  <cdx-button
+                    class="suggestion-more-actions"
+                    action="default"
+                    weight="quiet"
+                    aria-label="More actions"
+                  >
+                    <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                  </cdx-button>
+                </div>
               </div>
-            </div>
+            </template>
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && !isSuggestionResolved5 && !isSuggestionDeclined5"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5)"
             ref="suggestionsSidebarRef5"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded5,
-              'suggestion-card--expanded': isCardExpanded5,
-              'suggestion-card--hover': isHovered5
+              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5,
+              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5,
+              'suggestion-card--hover': isHovered5,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset5}px` }"
             @mouseenter="isCardHovered5 = true"
             @mouseleave="isCardHovered5 = false"
           >
-            <button v-if="!isCardExpanded5" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded5 = true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Link specifically</div>
-            </button>
-            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded5 = false" aria-expanded="true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Link specifically</div>
-            </button>
-            <div v-if="isCardExpanded5" class="suggestion-content">
-              <p class="suggestion-description">This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.</p>
-              <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(5)">Link specifically</button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(5)">Dismiss</button>
-                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
-                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
-                </cdx-button>
+            <template v-if="publishPromptSuggestionId === 5">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">First suggestion completed!</div>
+                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
-            </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded5" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded5 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Link specifically</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded5 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Link specifically</div>
+              </button>
+              <div v-if="isCardExpanded5" class="suggestion-content">
+                <p class="suggestion-description">This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(5)">Link specifically</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(5)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                    <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                  </cdx-button>
+                </div>
+              </div>
+            </template>
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && !isSuggestionResolved8 && !isSuggestionDeclined8"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8)"
             ref="suggestionsSidebarRef8"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded8,
-              'suggestion-card--expanded': isCardExpanded8,
-              'suggestion-card--hover': isHovered8
+              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8,
+              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8,
+              'suggestion-card--hover': isHovered8,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset8}px` }"
             @mouseenter="isCardHovered8 = true"
             @mouseleave="isCardHovered8 = false"
           >
-            <button v-if="!isCardExpanded8" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded8 = true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Redirect link</div>
-            </button>
-            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded8 = false" aria-expanded="true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Redirect link</div>
-            </button>
-            <div v-if="isCardExpanded8" class="suggestion-content">
-              <p class="suggestion-description">This link points to a redirect. Help readers get to the right destination by linking directly to the target page.</p>
-              <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(8)">Update link</button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(8)">Dismiss</button>
-                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
-                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
-                </cdx-button>
+            <template v-if="publishPromptSuggestionId === 8">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">First suggestion completed!</div>
+                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
-            </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded8" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded8 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Redirect link</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded8 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Redirect link</div>
+              </button>
+              <div v-if="isCardExpanded8" class="suggestion-content">
+                <p class="suggestion-description">This link points to a redirect. Help readers get to the right destination by linking directly to the target page.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(8)">Update link</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(8)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                    <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                  </cdx-button>
+                </div>
+              </div>
+            </template>
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && !isSuggestionResolved6 && !isSuggestionDeclined6"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6)"
             ref="suggestionsSidebarRef6"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded6,
-              'suggestion-card--expanded': isCardExpanded6,
-              'suggestion-card--hover': isHovered6
+              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6,
+              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6,
+              'suggestion-card--hover': isHovered6,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset6}px` }"
             @mouseenter="isCardHovered6 = true"
             @mouseleave="isCardHovered6 = false"
           >
-            <button v-if="!isCardExpanded6" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded6 = true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Adjust heading level</div>
-            </button>
-            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded6 = false" aria-expanded="true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Adjust heading level</div>
-            </button>
-            <div v-if="isCardExpanded6" class="suggestion-content">
-              <p class="suggestion-description">This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.</p>
-              <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(6)">Adjust heading</button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(6)">Dismiss</button>
-                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
-                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
-                </cdx-button>
+            <template v-if="publishPromptSuggestionId === 6">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">First suggestion completed!</div>
+                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
-            </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded6" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded6 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Adjust heading level</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded6 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Adjust heading level</div>
+              </button>
+              <div v-if="isCardExpanded6" class="suggestion-content">
+                <p class="suggestion-description">This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(6)">Adjust heading</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(6)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                    <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                  </cdx-button>
+                </div>
+              </div>
+            </template>
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && !isSuggestionResolved7 && !isSuggestionDeclined7"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7)"
             ref="suggestionsSidebarRef7"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded7,
-              'suggestion-card--expanded': isCardExpanded7,
-              'suggestion-card--hover': isHovered7
+              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7,
+              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7,
+              'suggestion-card--hover': isHovered7,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset7}px` }"
             @mouseenter="isCardHovered7 = true"
             @mouseleave="isCardHovered7 = false"
           >
-            <button v-if="!isCardExpanded7" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded7 = true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Fix year link</div>
-            </button>
-            <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded7 = false" aria-expanded="true">
-              <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
-              <div class="suggestion-title">Fix year link</div>
-            </button>
-            <div v-if="isCardExpanded7" class="suggestion-content">
-              <p class="suggestion-description">This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.</p>
-              <div class="suggestion-actions">
-                <button class="suggestion-btn" @click="handleResolveGenericSuggestion(7)">Fix year link</button>
-                <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(7)">Dismiss</button>
-                <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
-                  <cdx-icon :icon="cdxIconEllipsis" size="small" />
-                </cdx-button>
+            <template v-if="publishPromptSuggestionId === 7">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">First suggestion completed!</div>
+                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
-            </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded7" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded7 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Fix year link</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded7 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Fix year link</div>
+              </button>
+              <div v-if="isCardExpanded7" class="suggestion-content">
+                <p class="suggestion-description">This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(7)">Fix year link</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(7)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions">
+                    <cdx-icon :icon="cdxIconEllipsis" size="small" />
+                  </cdx-button>
+                </div>
+              </div>
+            </template>
           </div>
 
           <!-- Empty State - Show when all suggestions are completed or declined -->
@@ -4703,16 +4788,16 @@
               :class="{
                 'minerva-sheet-header--empty': shouldShowEmptyState && !showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
                 'minerva-sheet-header--no-more': showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
-                'minerva-sheet-header--success': (isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode) && !isEditCheckSheet,
-                'minerva-sheet-header--pp-success': isPersistentPaginationSuccessMode && !isEditCheckSheet
+                'minerva-sheet-header--success': (isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet,
+                'minerva-sheet-header--pp-success': (isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet
               }"
             >
-              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode) ? cdxIconSuccess : cdxIconLightbulb)" size="medium" />
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb)" size="medium" />
               <div
                 class="minerva-sheet-title"
-                :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode }"
+                :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode }"
               >
-                {{ isPersistentPaginationSuccessMode ? persistentPaginationSuccessTitle : (isEditCheckSheet ? editCheckTitle : minervaSheetTitle) }}
+                {{ isPublishPromptMode ? 'First suggestion completed!' : (isPersistentPaginationSuccessMode ? persistentPaginationSuccessTitle : (isEditCheckSheet ? editCheckTitle : minervaSheetTitle)) }}
               </div>
               <div
                 v-if="showMinervaSuggestionHeaderIndicator"
@@ -4730,9 +4815,9 @@
                 >
                   <cdx-icon :icon="minervaSheetReturnDirection === 'up' ? cdxIconArrowUp : cdxIconArrowDown" size="medium" />
                 </button>
-                <!-- Close button hidden in regular success state, but visible in persistent-pagination success -->
+                <!-- Close button hidden in regular success state, but visible in persistent-pagination success and publish prompt -->
                 <button
-                  v-else-if="!isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode"
+                  v-else-if="!isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode"
                   class="minerva-sheet-icon-button minerva-sheet-icon-button--close"
                   type="button"
                   aria-label="Close"
@@ -4757,6 +4842,11 @@
             </a>
             and may result in your content being removed or your account being blocked.
           </p>
+          <template v-else-if="isPublishPromptMode">
+            <p class="minerva-sheet-description minerva-sheet-description--pp-success">
+              Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.
+            </p>
+          </template>
           <template v-else-if="isPersistentPaginationSuccessMode">
             <p class="minerva-sheet-description minerva-sheet-description--pp-success">
               Thank you for helping to make this section easier for people to read.
@@ -4902,6 +4992,12 @@
               No, remove it
             </cdx-button>
           </div>
+            <template v-else-if="isPublishPromptMode">
+              <div class="minerva-sheet-actions minerva-sheet-actions--publish-prompt">
+                <cdx-button class="minerva-sheet-btn" action="default" weight="normal" @click="handlePublishPromptViewMore">View more suggestions</cdx-button>
+                <cdx-button class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="requestPublishChanges">Publish</cdx-button>
+              </div>
+            </template>
             <template v-else-if="isPersistentPaginationSuccessMode"></template><!-- persistent-pagination success: no action buttons -->
             <div v-else-if="isMinervaSuggestionSuccessState && isPaginationManualMode" class="minerva-sheet-actions minerva-sheet-actions--next-prompt">
               <span class="minerva-next-prompt-text">Want to view next suggestion?</span>
@@ -5323,6 +5419,9 @@
               </cdx-field>
               <cdx-field>
                 <template #label>Other features</template>
+                <cdx-checkbox v-model="publishPromptEnabled">
+                  Enable Publish prompt para newcomers (<a href="https://phabricator.wikimedia.org/T432622" target="_blank" rel="noopener">T432622</a>)
+                </cdx-checkbox>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
@@ -5828,6 +5927,7 @@ const minervaCarouselVisibleSuggestionIds = computed(() =>
 const isPersistentPaginationMode = computed(() =>
   feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination'
 );
+const isPublishPromptMode = computed(() => publishPromptEnabled.value && publishPromptSuggestionId.value !== null);
 const shouldAutoAdvancePaginationSuggestion = computed(() => isPaginationAutoMode.value);
 const isFirstSuggestionNavigationMode = computed(() => (
   activePrototype.value === 'option-2' || isPaginationMode.value
@@ -6233,6 +6333,9 @@ const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'v
 const feedbackLocationEnabled = ref(true);
 const feedbackLocationMode = ref('toast'); // 'toast' | 'card'
 const isPersistentPaginationSuccessMode = ref(false);
+const publishPromptEnabled = ref(false);
+const publishPromptShown = ref(false);
+const publishPromptSuggestionId = ref(null);
 const persistentPaginationBarScrollPending = ref(false);
 let persistentPaginationBarIdleTimer = null;
 const persistentPaginationSuccessLabel = ref('');
@@ -6467,13 +6570,13 @@ const showEmptyState = computed(() => {
 });
 const shouldShowEmptyState = computed(() => showSuggestions.value && showEmptyState.value);
 const isSuggestion1Pending = computed(() => (
-  citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value
+  !publishPromptEnabled.value && citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value
 ));
 const isSuggestion2Pending = computed(() => (
-  citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value
+  !publishPromptEnabled.value && citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value
 ));
 const isSuggestion3Pending = computed(() => (
-  citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value
+  !publishPromptEnabled.value && citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value
 ));
 const isSuggestion4Pending = computed(() => (
   !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value
@@ -7551,6 +7654,8 @@ function resetSuggestionState() {
   isSuggestionResolved7.value = false;
   isSuggestionDeclined8.value = false;
   isSuggestionResolved8.value = false;
+  publishPromptShown.value = false;
+  publishPromptSuggestionId.value = null;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
   isCardExpanded3.value = false;
@@ -9651,6 +9756,21 @@ function getPersistentPaginationAllTargets() {
   return targets.sort((a, b) => a.top - b.top);
 }
 
+function handlePublishPromptViewMore() {
+  const currentId = publishPromptSuggestionId.value;
+  publishPromptSuggestionId.value = null;
+  if (currentId === null) return;
+  if (isMinervaSkin.value) {
+    advanceMinervaSuggestion(currentId);
+  } else {
+    const nextId = getNextMinervaSuggestionId(currentId) ?? getPendingSuggestionIdsForContext()[0];
+    if (nextId) {
+      const ref = getSuggestionRefById(nextId);
+      if (ref) openSuggestionAtTarget(nextId, ref, false);
+    }
+  }
+}
+
 function openPersistentPaginationTarget(target) {
   if (!target) return;
   if (target.kind === 'suggestion') {
@@ -9827,7 +9947,12 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
     if (wasCompleted) {
       activateSuccessHighlight(currentId);
-      activatePersistentPaginationSuccess(currentId);
+      if (publishPromptEnabled.value && !publishPromptShown.value) {
+        publishPromptShown.value = true;
+        publishPromptSuggestionId.value = currentId;
+      } else {
+        activatePersistentPaginationSuccess(currentId);
+      }
     } else {
       triggerSuggestionDismissedToast(currentId);
       persistentPaginationActiveGroup.value = null;
@@ -11016,7 +11141,12 @@ function handleYesSuggestion4() {
   if (isMinervaSkin.value) {
     handleMinervaSuggestionResolutionAfterAction(4, true);
   } else {
-    closeMinervaSuggestion();
+    if (publishPromptEnabled.value && !publishPromptShown.value) {
+      publishPromptShown.value = true;
+      publishPromptSuggestionId.value = 4;
+    } else {
+      closeMinervaSuggestion();
+    }
   }
   triggerSuggestionSuccessToast();
   if (!isMinervaSkin.value && feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
@@ -11064,7 +11194,12 @@ function handleResolveGenericSuggestion(suggestionId) {
   if (isMinervaSkin.value) {
     handleMinervaSuggestionResolutionAfterAction(suggestionId, true);
   } else {
-    closeMinervaSuggestion();
+    if (publishPromptEnabled.value && !publishPromptShown.value) {
+      publishPromptShown.value = true;
+      publishPromptSuggestionId.value = suggestionId;
+    } else {
+      closeMinervaSuggestion();
+    }
   }
   triggerSuggestionSuccessToast();
   if (!isMinervaSkin.value && feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
@@ -18709,6 +18844,52 @@ function markArticleEdited() {
 .suggestion-header--expanded {
   cursor: pointer;
   background-color: var(--suggestion-color-subtle, #e8eeff);
+}
+
+.suggestion-header--publish-prompt {
+  background-color: var(--background-color-base, #ffffff);
+  border-color: var(--border-color-base, #a2a9b1);
+  cursor: default;
+  pointer-events: none;
+}
+
+.suggestion-icon--success :deep(.cdx-icon),
+.suggestion-icon--success :deep(svg) {
+  color: var(--color-icon-success, #00af89);
+  fill: var(--color-icon-success, #00af89);
+}
+
+.suggestion-close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-base, #202122);
+  border-radius: 2px;
+  flex-shrink: 0;
+  pointer-events: all;
+}
+
+.suggestion-close-btn:hover {
+  background-color: var(--background-color-interactive, #eaecf0);
+}
+
+.suggestion-btn-publish {
+  flex: 1;
+}
+
+.suggestion-card--publish-prompt .suggestion-content {
+  background-color: var(--background-color-base, #ffffff);
+}
+
+.minerva-sheet-actions--publish-prompt {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 12px 16px 16px;
 }
 
 .suggestion-header:focus {
