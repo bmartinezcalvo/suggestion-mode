@@ -5305,7 +5305,6 @@
           v-if="isMinervaSkin && isEditMode && showSuggestionsDisplay && isMinervaSheetOpen && (availableSuggestionCount > 0 || isMinervaSuggestionSuccessState)"
           class="minerva-sheet-backdrop"
           :class="{ 'minerva-sheet-backdrop--suggestion': activePrototype === 'option-3' && !isEditCheckSheet }"
-          @click="closeMinervaSuggestion"
         ></div>
         <div
           v-if="isMinervaSkin && isEditMode && activePrototype === 'option-4' && isMinervaOverviewSheetOpen"
