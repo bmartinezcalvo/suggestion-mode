@@ -4585,6 +4585,23 @@
               </div>
             </transition>
           </div>
+          <!-- Fixed bottom publish prompt card (fixed-bottom mode) -->
+          <transition name="fixed-bottom-publish-prompt-reveal">
+            <div v-if="showFixedBottomPublishPrompt" class="suggestion-card suggestion-card--expanded suggestion-card--publish-prompt suggestion-card--fixed-bottom">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-title">First suggestion completed!</div>
+                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="showFixedBottomPublishPrompt = false"><cdx-icon :icon="cdxIconClose" size="small" /></button>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </div>
+          </transition>
         </aside>
 
         <div
@@ -5966,6 +5983,7 @@ const isPersistentPaginationMode = computed(() =>
   feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination'
 );
 const isPublishPromptMode = computed(() => publishPromptEnabled.value && publishPromptSuggestionId.value !== null);
+const isFixedBottomPublishPromptMode = computed(() => publishPromptEnabled.value && publishPromptMode.value === 'fixed-bottom');
 const shouldAutoAdvancePaginationSuggestion = computed(() => isPaginationAutoMode.value);
 const isFirstSuggestionNavigationMode = computed(() => (
   activePrototype.value === 'option-2' || isPaginationMode.value
@@ -6371,9 +6389,11 @@ const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'v
 const feedbackLocationEnabled = ref(true);
 const feedbackLocationMode = ref('toast'); // 'toast' | 'card'
 const isPersistentPaginationSuccessMode = ref(false);
-const publishPromptEnabled = ref(false);
+const publishPromptEnabled = ref(true);
+const publishPromptMode = ref('card'); // 'card' | 'fixed-bottom'
 const publishPromptShown = ref(false);
 const publishPromptSuggestionId = ref(null);
+const showFixedBottomPublishPrompt = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
 let persistentPaginationBarIdleTimer = null;
 const persistentPaginationSuccessLabel = ref('');
@@ -6400,7 +6420,7 @@ const noMoreSuggestionsEmptyStateEnabled = ref(true);
 const editFullPageImprovedEnabled = ref(true);
 const minervaFullPageSuggestionNavigationEnabled = ref(false); // starts unchecked by default
 const minervaFullPageSuggestionNavigationMode = ref('toc-button');
-const selectedPrototype = ref('option-6');
+const selectedPrototype = ref('option-no-pagination');
 const selectedNavigationGroup = computed({
   get() {
     if (selectedPrototype.value === 'option-5' || selectedPrototype.value === 'option-6') {
@@ -7694,6 +7714,7 @@ function resetSuggestionState() {
   isSuggestionResolved8.value = false;
   publishPromptShown.value = false;
   publishPromptSuggestionId.value = null;
+  showFixedBottomPublishPrompt.value = false;
   isCardExpanded.value = false;
   isCardExpanded2.value = false;
   isCardExpanded3.value = false;
@@ -9798,6 +9819,15 @@ function getPersistentPaginationAllTargets() {
 }
 
 function handlePublishPromptViewMore() {
+  if (showFixedBottomPublishPrompt.value) {
+    showFixedBottomPublishPrompt.value = false;
+    const pendingId = getPendingSuggestionIdsForContext()[0];
+    if (pendingId) {
+      const ref = getSuggestionRefById(pendingId);
+      if (ref) openSuggestionAtTarget(pendingId, ref, false);
+    }
+    return;
+  }
   const currentId = publishPromptSuggestionId.value;
   publishPromptSuggestionId.value = null;
   if (currentId === null) return;
@@ -11184,7 +11214,13 @@ function handleYesSuggestion4() {
   } else {
     if (publishPromptEnabled.value && !publishPromptShown.value) {
       publishPromptShown.value = true;
-      publishPromptSuggestionId.value = 4;
+      if (publishPromptMode.value === 'fixed-bottom') {
+        window.setTimeout(() => {
+          showFixedBottomPublishPrompt.value = true;
+        }, 4000);
+      } else {
+        publishPromptSuggestionId.value = 4;
+      }
     } else {
       closeMinervaSuggestion();
     }
@@ -11237,7 +11273,13 @@ function handleResolveGenericSuggestion(suggestionId) {
   } else {
     if (publishPromptEnabled.value && !publishPromptShown.value) {
       publishPromptShown.value = true;
-      publishPromptSuggestionId.value = suggestionId;
+      if (publishPromptMode.value === 'fixed-bottom') {
+        window.setTimeout(() => {
+          showFixedBottomPublishPrompt.value = true;
+        }, 4000);
+      } else {
+        publishPromptSuggestionId.value = suggestionId;
+      }
     } else {
       closeMinervaSuggestion();
     }
@@ -18951,6 +18993,31 @@ function markArticleEdited() {
   gap: 8px;
 }
 
+.suggestion-card--fixed-bottom {
+  position: sticky;
+  bottom: 32px;
+  z-index: 100;
+  width: 100%;
+}
+
+.fixed-bottom-publish-prompt-reveal-enter-active {
+  transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+}
+
+.fixed-bottom-publish-prompt-reveal-leave-active {
+  transition: transform 0.2s ease-in, opacity 0.2s ease-in;
+}
+
+.fixed-bottom-publish-prompt-reveal-enter-from {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
+.fixed-bottom-publish-prompt-reveal-leave-to {
+  transform: translateY(100%);
+  opacity: 0;
+}
+
 .suggestion-header:focus {
   outline: none;
 }
@@ -19583,6 +19650,22 @@ function markArticleEdited() {
 .vector-help-button {
   right: 32px;
   bottom: 32px;
+  border-color: var(--border-color-interactive, #72777d);
+  background: var(--background-color-interactive-subtle, #f8f9fa);
+}
+
+.vector-help-button:hover {
+  border-color: var(--border-color-interactive--hover, #54595d);
+  background: var(--background-color-interactive-subtle--hover, #eaecf0);
+}
+
+.vector-help-button:active {
+  border-color: var(--border-color-interactive--active, #202122);
+  background: var(--background-color-interactive-subtle--active, #dadde3);
+}
+
+.vector-help-button :deep(.cdx-icon) {
+  color: var(--color-base, #202122);
 }
 
 .minerva-help-button {
