@@ -2439,9 +2439,13 @@
                     </span>
                     <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     <span
-                      v-if="showToggleBadge"
+                      v-if="showToggleBadge || (activePrototype === 'option-no-pagination' && showSuggestions)"
                       class="suggestions-badge"
-                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                      :class="{
+                        'suggestions-badge--zero': showToggleBadgeZero,
+                        'suggestions-badge--pulse': badgePulse,
+                        'suggestions-badge--rail-active': activePrototype === 'option-no-pagination' && showSuggestions
+                      }"
                     >
                       {{ toggleBadgeCount }}
                     </span>
@@ -5480,7 +5484,7 @@
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
                 <!-- success state is always enabled, no longer a toggle -->
-                <cdx-checkbox v-if="isMinervaSkin" v-model="noMoreSuggestionsEmptyStateEnabled">
+                <cdx-checkbox v-model="noMoreSuggestionsEmptyStateEnabled">
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="minervaFullPageSuggestionNavigationEnabled">
@@ -5985,7 +5989,7 @@ const isPublishPromptMode = computed(() => publishPromptEnabled.value && publish
 const isFixedBottomPublishPromptMode = computed(() => publishPromptEnabled.value && publishPromptMode.value === 'fixed-bottom');
 const shouldAutoAdvancePaginationSuggestion = computed(() => isPaginationAutoMode.value);
 const isFirstSuggestionNavigationMode = computed(() => (
-  activePrototype.value === 'option-2' || isPaginationMode.value
+  activePrototype.value === 'option-2' || isPaginationMode.value || activePrototype.value === 'option-no-pagination'
 ));
 const showMinervaCollapsedCountRailToggle = computed(
   () => isMinervaSkin.value &&
@@ -9817,13 +9821,21 @@ function getPersistentPaginationAllTargets() {
   return targets.sort((a, b) => a.top - b.top);
 }
 
+const ADD_CITATION_IDS = [1, 2, 3];
+
+function getPublishPromptNextId(currentId = null) {
+  const pending = getPendingSuggestionIdsForContext().filter((id) => !publishPromptEnabled.value || !ADD_CITATION_IDS.includes(id));
+  if (currentId === null) return pending[0];
+  return pending.find((id) => id !== currentId) ?? pending[0];
+}
+
 function handlePublishPromptViewMore() {
   if (showFixedBottomPublishPrompt.value) {
     showFixedBottomPublishPrompt.value = false;
-    const pendingId = getPendingSuggestionIdsForContext()[0];
-    if (pendingId) {
-      const ref = getSuggestionRefById(pendingId);
-      if (ref) openSuggestionAtTarget(pendingId, ref, false);
+    const nextId = getPublishPromptNextId();
+    if (nextId) {
+      const ref = getSuggestionRefById(nextId);
+      if (ref) openSuggestionAtTarget(nextId, ref, false);
     }
     return;
   }
@@ -9833,7 +9845,7 @@ function handlePublishPromptViewMore() {
   if (isMinervaSkin.value) {
     advanceMinervaSuggestion(currentId);
   } else {
-    const nextId = getNextMinervaSuggestionId(currentId) ?? getPendingSuggestionIdsForContext()[0];
+    const nextId = getNextMinervaSuggestionId(currentId) ?? getPublishPromptNextId(currentId);
     if (nextId) {
       const ref = getSuggestionRefById(nextId);
       if (ref) openSuggestionAtTarget(nextId, ref, false);
@@ -17769,12 +17781,12 @@ function markArticleEdited() {
   align-items: center;
 }
 
-/* Vector: fixed, centered within sidebar column (325px wide, 32px from right), 32px from viewport bottom */
+/* Vector: fixed, centered within sidebar column (325px wide, 16px from right), 16px from viewport bottom */
 .next-suggestion-anchor--vector {
   position: fixed;
-  right: 32px;
+  right: 16px;
   width: 325px;
-  bottom: 32px;
+  bottom: 16px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -18937,14 +18949,15 @@ function markArticleEdited() {
 .suggestion-header--publish-prompt {
   background-color: var(--background-color-base, #ffffff);
   border-color: var(--border-color-muted, #c8ccd1);
+  border-bottom: 1px solid var(--border-color-muted, #c8ccd1);
   cursor: default;
   pointer-events: none;
 }
 
 .suggestion-icon--success :deep(.cdx-icon),
 .suggestion-icon--success :deep(svg) {
-  color: var(--color-icon-success, #00af89);
-  fill: var(--color-icon-success, #00af89);
+  color: var(--color-icon-success, #099979);
+  fill: var(--color-icon-success, #099979);
 }
 
 .suggestion-close-btn {
@@ -18994,7 +19007,7 @@ function markArticleEdited() {
 
 .suggestion-card--fixed-bottom {
   position: sticky;
-  bottom: 32px;
+  bottom: 16px;
   z-index: 100;
   width: 100%;
 }
@@ -19647,8 +19660,8 @@ function markArticleEdited() {
 }
 
 .vector-help-button {
-  right: 32px;
-  bottom: 32px;
+  right: 16px;
+  bottom: 16px;
   border-color: var(--border-color-interactive, #72777d);
   background: var(--background-color-interactive-subtle, #f8f9fa);
 }
@@ -20336,7 +20349,7 @@ function markArticleEdited() {
   line-height: 20px;
   position: sticky;
   top: auto;
-  bottom: 32px;
+  bottom: 16px;
 }
 
 .vector-skin .suggestions-banner.suggestions-banner--contextual-up {
