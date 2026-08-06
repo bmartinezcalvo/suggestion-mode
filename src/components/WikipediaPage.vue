@@ -4122,7 +4122,6 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
-                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4200,7 +4199,6 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
-                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4256,7 +4254,6 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
-                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4312,7 +4309,6 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
-                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4368,7 +4364,6 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">First suggestion completed!</div>
-                <button class="suggestion-close-btn" type="button" aria-label="Close" @click="publishPromptSuggestionId = null"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -12926,6 +12921,16 @@ watch(isMinervaSkin, (minerva) => {
   }
 });
 
+// Vector22: opening any suggestion card while publish prompt is active closes the prompt
+watch(
+  [isCardExpanded, isCardExpanded2, isCardExpanded3, isCardExpanded4, isCardExpanded5, isCardExpanded6, isCardExpanded7, isCardExpanded8],
+  (newVals, oldVals) => {
+    if (publishPromptSuggestionId.value !== null && newVals.some((v, i) => v && !oldVals[i])) {
+      publishPromptSuggestionId.value = null;
+    }
+  }
+);
+
 watch(publishPromptSuggestionId, (newId, oldId) => {
   if (oldId !== null && newId !== oldId) {
     successHighlightSuggestionIds.value = successHighlightSuggestionIds.value.filter((id) => id !== oldId);
@@ -13264,6 +13269,9 @@ function openMinervaSuggestion(suggestionId, options = {}) {
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === suggestionId) {
     closeMinervaSuggestion();
     return;
+  }
+  if (publishPromptSuggestionId.value !== null) {
+    publishPromptSuggestionId.value = null;
   }
   clearMinervaNoMoreSuggestionsState();
   clearMinervaSuggestionSuccessState({ keepExit: keepSuccessExit });
