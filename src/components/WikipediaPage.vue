@@ -10048,6 +10048,12 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
     }
     return;
   }
+  // Publish prompt takes priority over all other feedback flows
+  if (wasCompleted && publishPromptEnabled.value && !publishPromptShown.value) {
+    publishPromptShown.value = true;
+    publishPromptSuggestionId.value = currentId;
+    return;
+  }
   // feedbackLocationMode overrides feedback display across all prototype modes
   if (feedbackLocationEnabled.value) {
     if (feedbackLocationMode.value === 'toast') {
@@ -12901,9 +12907,7 @@ watch(carouselSuccessId, (id) => {
 });
 
 watch(selectedPrototype, (newVal) => {
-  if (newVal === 'option-6') {
-    feedbackAndNextEnabled.value = true;
-  } else if (newVal === 'option-5') {
+  if (newVal === 'option-5') {
     feedbackAndNextEnabled.value = false;
     feedbackLocationEnabled.value = true;
     feedbackLocationMode.value = 'card';
@@ -12911,6 +12915,14 @@ watch(selectedPrototype, (newVal) => {
     feedbackAndNextEnabled.value = false;
     feedbackLocationEnabled.value = true;
     feedbackLocationMode.value = 'card';
+  }
+});
+
+watch(isMinervaSkin, (minerva) => {
+  if (minerva && selectedPrototype.value === 'option-no-pagination') {
+    selectedPrototype.value = 'option-6';
+  } else if (!minerva && selectedPrototype.value === 'option-7') {
+    selectedPrototype.value = 'option-no-pagination';
   }
 });
 
@@ -16447,7 +16459,7 @@ function markArticleEdited() {
 
 /* With suggestions: 32px margin + article + sidebar + 32px margin (no gap) */
 .vector-skin.edit-mode .main-content-area.has-suggestions {
-  grid-template-columns: 32px minmax(0, 949px) 24px 325px 32px;
+  grid-template-columns: 32px minmax(0, 1fr) 24px 325px 32px;
 }
 
 /* Article takes center column when no suggestions */
@@ -16461,7 +16473,7 @@ function markArticleEdited() {
 .vector-skin.edit-mode .main-content-area.has-suggestions .article {
   grid-column: 2; /* Second column (after left margin) */
   width: 100%;
-  max-width: 949px;
+  max-width: none;
 }
 
 /* Suggestions sidebar - third column (no gap) */
@@ -16608,7 +16620,6 @@ function markArticleEdited() {
   flex-direction: column;
   gap: 8px;
   width: 100%;
-  max-width: 949px;
 }
 
 .minerva-skin.edit-mode.minerva-edit-full-page-improved .article-main-edit {
