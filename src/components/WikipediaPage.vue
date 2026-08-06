@@ -4128,7 +4128,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4206,7 +4206,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4262,7 +4262,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4318,7 +4318,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4374,7 +4374,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </template>
@@ -4601,7 +4601,7 @@
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
                 <div class="suggestion-actions">
                   <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
-                  <cdx-button action="progressive" weight="primary" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
                 </div>
               </div>
             </div>
@@ -5046,7 +5046,7 @@
             <template v-else-if="isPublishPromptMode">
               <div class="minerva-sheet-actions minerva-sheet-actions--publish-prompt">
                 <cdx-button class="minerva-sheet-btn" action="default" weight="normal" @click="handlePublishPromptViewMore">View more suggestions</cdx-button>
-                <cdx-button class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="primary" @click="requestPublishChanges">Publish</cdx-button>
+                <cdx-button class="minerva-sheet-btn" action="progressive" weight="normal" @click="requestPublishChanges">Publish</cdx-button>
               </div>
             </template>
             <template v-else-if="isPersistentPaginationSuccessMode"></template><!-- persistent-pagination success: no action buttons -->
@@ -5100,7 +5100,7 @@
               <cdx-button
                 class="minerva-sheet-btn"
                 action="progressive"
-                weight="primary"
+                weight="normal"
                 @click="requestPublishChanges"
               >
                 Publish
@@ -5447,24 +5447,6 @@
                   >
                     Pagination: Manual navigation
                   </cdx-radio>
-                  <div v-if="selectedPrototype === 'option-6'" class="prototype-suboptions prototype-suboptions--indexed-radios">
-                    <cdx-radio
-                      v-model="feedbackAndNextMode"
-                      name="pagination-manual-mode"
-                      input-value="view-button"
-                      class="prototype-suboption-radio"
-                    >
-                      "Next suggestion" button
-                    </cdx-radio>
-                    <cdx-radio
-                      v-model="feedbackAndNextMode"
-                      name="pagination-manual-mode"
-                      input-value="persistent-pagination"
-                      class="prototype-suboption-radio prototype-suboption-radio--last"
-                    >
-                      Persistent pagination
-                    </cdx-radio>
-                  </div>
                   <cdx-radio
                     v-if="isMinervaSkin"
                     v-model="selectedPrototype"
@@ -5487,6 +5469,27 @@
                 <cdx-checkbox v-model="noMoreSuggestionsEmptyStateEnabled">
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
                 </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="feedbackAndNextEnabled">
+                  Enable navigation helper (<a href="https://phabricator.wikimedia.org/T429693" target="_blank" rel="noopener">T429693</a>)
+                </cdx-checkbox>
+                <div v-if="isMinervaSkin && feedbackAndNextEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                  <cdx-radio
+                    v-model="feedbackAndNextMode"
+                    name="pagination-manual-mode"
+                    input-value="view-button"
+                    class="prototype-suboption-radio"
+                  >
+                    1. "Next suggestion" button
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackAndNextMode"
+                    name="pagination-manual-mode"
+                    input-value="persistent-pagination"
+                    class="prototype-suboption-radio prototype-suboption-radio--last"
+                  >
+                    2. Persistent pagination
+                  </cdx-radio>
+                </div>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="minervaFullPageSuggestionNavigationEnabled">
                   Enable ToC when editing full page (<a href="https://phabricator.wikimedia.org/T416468" target="_blank" rel="noopener">T416468</a>)
                 </cdx-checkbox>
@@ -5549,7 +5552,7 @@
               <cdx-button action="default" weight="normal" @click="isVectorNoMoreSuggestionsDialogOpen = false">
                 Continue editing
               </cdx-button>
-              <cdx-button action="progressive" weight="primary" @click="requestPublishChanges">
+              <cdx-button action="progressive" weight="normal" @click="requestPublishChanges">
                 Publish
               </cdx-button>
             </div>
@@ -6387,7 +6390,7 @@ const newSuggestionColorEnabled = ref(false);
 const nonSelectedHighlightUnderlineEnabled = ref(false);
 const editToolbarImprovementsEnabled = ref(true);
 const successHighlightOnCompleteEnabled = ref(true);
-const feedbackAndNextEnabled = ref(true);
+const feedbackAndNextEnabled = ref(false);
 const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
 const feedbackLocationEnabled = ref(true);
 const feedbackLocationMode = ref('toast'); // 'toast' | 'card'
@@ -8057,11 +8060,7 @@ function clearEditModeUiState() {
 }
 
 function requestPublishChanges() {
-  if (isMinervaSkin.value) {
-    isMinervaPublishDialogOpen.value = true;
-    return;
-  }
-  publishEdits();
+  isMinervaPublishDialogOpen.value = true;
 }
 
 function closePublishDialog() {
@@ -9696,6 +9695,8 @@ function triggerSuggestionSuccessToast() {
   if (!toastsEnabled.value) return;
   // In Minerva pagination/carousel mode the success state replaces the toast
   if (isMinervaSkin.value && (isPaginationMode.value || isCarouselMode.value)) return;
+  // When publish prompt is enabled the publish prompt replaces the toast
+  if (publishPromptEnabled.value) return;
   // In Vector22 the success card replaces the toast
   if (!isMinervaSkin.value && successHighlightSuggestionIds.value.length > 0) return;
   if (suggestionSuccessToastTimer) {
@@ -12692,9 +12693,9 @@ function scrollToSuggestionByDirection(direction, suggestionIdToSkip = null, opt
 function openFirstPendingSuggestion(expandAfterScroll = false, options = {}) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
-  const suggestion1Pending = citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
-  const suggestion2Pending = citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
-  const suggestion3Pending = citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
+  const suggestion1Pending = !publishPromptEnabled.value && citationNumber1.value === null && !isSuggestionDeclined1.value && !showSuccessMessage1.value;
+  const suggestion2Pending = !publishPromptEnabled.value && citationNumber2.value === null && !isSuggestionDeclined2.value && !showSuccessMessage2.value;
+  const suggestion3Pending = !publishPromptEnabled.value && citationNumber3.value === null && !isSuggestionDeclined3.value && !showSuccessMessage3.value;
   const suggestion4Pending = !isSuggestionResolved4.value && !isSuggestionDeclined4.value && !showSuccessMessage4.value;
   const suggestion5Pending = !isSuggestionResolved5.value && !isSuggestionDeclined5.value;
   const suggestion6Pending = !isSuggestionResolved6.value && !isSuggestionDeclined6.value;
@@ -20923,6 +20924,8 @@ function markArticleEdited() {
   bottom: 0;
   z-index: 180;
   box-sizing: border-box;
+  max-width: 512px;
+  margin: 0 auto;
   padding: 48px 16px 16px;
   background: var(--background-color-base, #ffffff);
   border-top: 1px solid var(--border-color-base, #a2a9b1);
@@ -21016,6 +21019,8 @@ function markArticleEdited() {
 .minerva-post-publish-card-icon :deep(svg) {
   color: var(--color-progressive, #36c);
   fill: var(--color-progressive, #36c);
+  width: 20px;
+  height: 20px;
 }
 
 .minerva-post-publish-card-title {
@@ -21037,4 +21042,5 @@ function markArticleEdited() {
   gap: 12px;
   margin-top: 8px;
 }
+
 </style>
