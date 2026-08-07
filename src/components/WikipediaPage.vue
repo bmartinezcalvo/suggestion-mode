@@ -4121,7 +4121,7 @@
             <template v-if="publishPromptSuggestionId === 4">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">First suggestion completed!</div>
+                <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4198,7 +4198,7 @@
             <template v-if="publishPromptSuggestionId === 5">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">First suggestion completed!</div>
+                <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4253,7 +4253,7 @@
             <template v-if="publishPromptSuggestionId === 8">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">First suggestion completed!</div>
+                <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4308,7 +4308,7 @@
             <template v-if="publishPromptSuggestionId === 6">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">First suggestion completed!</div>
+                <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4363,7 +4363,7 @@
             <template v-if="publishPromptSuggestionId === 7">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">First suggestion completed!</div>
+                <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
                 <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
@@ -4589,7 +4589,7 @@
             <div v-if="showFixedBottomPublishPrompt" class="suggestion-card suggestion-card--expanded suggestion-card--publish-prompt suggestion-card--fixed-bottom">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
-                <div class="suggestion-title">First suggestion completed!</div>
+                <div class="suggestion-title">Suggestion completed!</div>
                 <button class="suggestion-close-btn" type="button" aria-label="Close" @click="showFixedBottomPublishPrompt = false"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
               <div class="suggestion-content">
@@ -4843,7 +4843,7 @@
                 class="minerva-sheet-title"
                 :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode }"
               >
-                {{ isPublishPromptMode ? 'First suggestion completed!' : (isPersistentPaginationSuccessMode ? persistentPaginationSuccessTitle : (isEditCheckSheet ? editCheckTitle : minervaSheetTitle)) }}
+                {{ isPublishPromptMode ? 'Suggestion completed!' : (isPersistentPaginationSuccessMode ? persistentPaginationSuccessTitle : (isEditCheckSheet ? editCheckTitle : minervaSheetTitle)) }}
               </div>
               <div
                 v-if="showMinervaSuggestionHeaderIndicator"
