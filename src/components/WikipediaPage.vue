@@ -12951,6 +12951,11 @@ onMounted(() => {
   if (typeof window !== 'undefined') {
     const isMobileOrTablet = window.matchMedia('(max-width: 1024px)').matches;
     selectedSkin.value = isMobileOrTablet ? 'minerva' : 'vector22';
+    if (!isMobileOrTablet) {
+      selectedPrototype.value = 'option-no-pagination';
+    } else if (selectedPrototype.value === 'option-no-pagination') {
+      selectedPrototype.value = 'option-6';
+    }
   }
 
   if (isEditMode.value && showSuggestions.value) {
