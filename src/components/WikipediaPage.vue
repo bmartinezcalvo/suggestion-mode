@@ -10311,7 +10311,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           dismissedSuggestionIdForUndo.value = currentId;
           if (isMinervaSkin.value) {
             closeMinervaSuggestion();
-            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 500);
+            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
           } else {
             dismissFirstTimeCardId.value = currentId;
           }
@@ -10348,7 +10348,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         dismissedSuggestionIdForUndo.value = currentId;
         if (isMinervaSkin.value) {
           closeMinervaSuggestion();
-          window.setTimeout(() => openMinervaDismissCardSheet(currentId), 500);
+          window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
         } else {
           dismissFirstTimeCardId.value = currentId;
         }
