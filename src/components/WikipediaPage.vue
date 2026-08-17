@@ -10232,7 +10232,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
       closeMinervaSuggestion();
       window.setTimeout(() => {
         openMinervaPublishPromptSheet(currentId, true);
-      }, 1000);
+      }, 500);
     } else {
       publishPromptShown.value = true;
       publishPromptSuggestionId.value = currentId;
