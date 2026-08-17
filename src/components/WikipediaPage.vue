@@ -6493,7 +6493,15 @@ const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(false);
 const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
 const feedbackAfterActionEnabled = ref(true);
-const feedbackAfterActionMode = ref('toast'); // 'card' | 'toast' | 'highlight-only'
+const feedbackAfterActionModeMinervaSkin = ref('highlight-only');
+const feedbackAfterActionModeVector22 = ref('card');
+const feedbackAfterActionMode = computed({
+  get: () => isMinervaSkin.value ? feedbackAfterActionModeMinervaSkin.value : feedbackAfterActionModeVector22.value,
+  set: (val) => {
+    if (isMinervaSkin.value) feedbackAfterActionModeMinervaSkin.value = val;
+    else feedbackAfterActionModeVector22.value = val;
+  }
+});
 const dismissCardSeen = ref(false);
 const dismissFirstTimeCardId = ref(null);
 const isPersistentPaginationSuccessMode = ref(false);
