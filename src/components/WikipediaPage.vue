@@ -4133,7 +4133,7 @@
             </template>
             <template v-else-if="dismissFirstTimeCardId === 4">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
-                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
                 <div class="suggestion-title">Suggestion dismissed</div>
               </div>
               <div class="suggestion-content">
@@ -4225,7 +4225,7 @@
             </template>
             <template v-else-if="dismissFirstTimeCardId === 5">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
-                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
                 <div class="suggestion-title">Suggestion dismissed</div>
               </div>
               <div class="suggestion-content">
@@ -4295,7 +4295,7 @@
             </template>
             <template v-else-if="dismissFirstTimeCardId === 8">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
-                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
                 <div class="suggestion-title">Suggestion dismissed</div>
               </div>
               <div class="suggestion-content">
@@ -4365,7 +4365,7 @@
             </template>
             <template v-else-if="dismissFirstTimeCardId === 6">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
-                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
                 <div class="suggestion-title">Suggestion dismissed</div>
               </div>
               <div class="suggestion-content">
@@ -4435,7 +4435,7 @@
             </template>
             <template v-else-if="dismissFirstTimeCardId === 7">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
-                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
                 <div class="suggestion-title">Suggestion dismissed</div>
               </div>
               <div class="suggestion-content">
@@ -4905,7 +4905,7 @@
                 'minerva-sheet-header--pp-success': (isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet
               }"
             >
-              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaDismissFirstTimeState ? cdxIconLightbulbOutline : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb))" size="medium" />
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaDismissFirstTimeState ? cdxIconClear : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb))" size="medium" />
               <div
                 class="minerva-sheet-title"
                 :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode }"
@@ -5963,6 +5963,7 @@ import {
   cdxIconPuzzle,
   cdxIconLightbulb,
   cdxIconLightbulbOutline,
+  cdxIconClear,
   cdxIconClock,
   cdxIconArticle,
   cdxIconClose,
@@ -8096,6 +8097,23 @@ function openMinervaNoMoreSuggestionsStateSheet(mode) {
   return true;
 }
 
+function openMinervaPublishPromptSheet(suggestionId) {
+  isMinervaSheetClosing.value = true;
+  window.setTimeout(() => {
+    isMinervaSheetOpen.value = false;
+    minervaSheetHeight.value = 0;
+    publishPromptShown.value = true;
+    publishPromptSuggestionId.value = suggestionId;
+    isMinervaSheetOpen.value = true;
+    updateMinervaSheetHeight();
+    nextTick(() => {
+      window.requestAnimationFrame(() => {
+        clearMinervaSheetClosingState();
+      });
+    });
+  }, 220);
+}
+
 function maybeShowVectorNoMoreSuggestionsDialog() {
   if (
     !noMoreSuggestionsEmptyStateEnabled.value ||
@@ -10194,8 +10212,12 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   }
   // Publish prompt takes priority over all other feedback flows
   if (wasCompleted && publishPromptEnabled.value && !publishPromptShown.value) {
-    publishPromptShown.value = true;
-    publishPromptSuggestionId.value = currentId;
+    if (isMinervaSkin.value) {
+      openMinervaPublishPromptSheet(currentId);
+    } else {
+      publishPromptShown.value = true;
+      publishPromptSuggestionId.value = currentId;
+    }
     return;
   }
   // feedbackAfterActionMode overrides feedback display across all prototype modes
@@ -21274,16 +21296,22 @@ function markArticleEdited() {
 /* Dismiss first-time card */
 .suggestion-card--dismiss-first {
   background-color: var(--background-color-base, #fff);
+  border-color: var(--border-color-disabled, #c8ccd1);
 }
 
 .suggestion-header--dismiss-first {
   cursor: default;
+  background-color: var(--background-color-base, #fff);
 }
 
 .suggestion-icon--dismissed :deep(.cdx-icon),
 .suggestion-icon--dismissed :deep(svg) {
   color: var(--color-disabled, #72777d);
   fill: var(--color-disabled, #72777d);
+}
+
+.suggestion-card--dismiss-first .suggestion-actions .cdx-button {
+  font-size: 14px;
 }
 
 /* Minerva sheet actions for dismiss-first state */
