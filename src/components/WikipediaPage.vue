@@ -8097,7 +8097,20 @@ function openMinervaNoMoreSuggestionsStateSheet(mode) {
   return true;
 }
 
-function openMinervaPublishPromptSheet(suggestionId) {
+function openMinervaPublishPromptSheet(suggestionId, slideUpOnly = false) {
+  if (slideUpOnly) {
+    // Sheet is already closed — just set content and slide up from below
+    publishPromptSuggestionId.value = suggestionId;
+    isMinervaSheetClosing.value = true;
+    isMinervaSheetOpen.value = true;
+    updateMinervaSheetHeight();
+    nextTick(() => {
+      window.requestAnimationFrame(() => {
+        clearMinervaSheetClosingState();
+      });
+    });
+    return;
+  }
   isMinervaSheetClosing.value = true;
   window.setTimeout(() => {
     isMinervaSheetOpen.value = false;
@@ -10213,7 +10226,13 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
   // Publish prompt takes priority over all other feedback flows
   if (wasCompleted && publishPromptEnabled.value && !publishPromptShown.value) {
     if (isMinervaSkin.value) {
-      openMinervaPublishPromptSheet(currentId);
+      // Mark shown immediately to prevent re-entry during the delay
+      publishPromptShown.value = true;
+      // Close sheet so user sees the article success highlight for 1s
+      closeMinervaSuggestion();
+      window.setTimeout(() => {
+        openMinervaPublishPromptSheet(currentId, true);
+      }, 1000);
     } else {
       publishPromptShown.value = true;
       publishPromptSuggestionId.value = currentId;
