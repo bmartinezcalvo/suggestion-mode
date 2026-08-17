@@ -81,7 +81,7 @@
 
     <!-- "Next suggestion" button — Minerva: fixed, centered, 16px above viewport bottom -->
     <div
-      v-if="isMinervaSkin && isEditMode && ((feedbackLocationEnabled && feedbackLocationMode === 'toast' && !isPersistentPaginationMode) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'))"
+      v-if="isMinervaSkin && isEditMode && ((feedbackAfterActionEnabled && feedbackAfterActionMode === 'toast' && !isPersistentPaginationMode) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'))"
       class="next-suggestion-anchor next-suggestion-anchor--minerva"
       :class="{ 'next-suggestion-anchor--sheet-lifted': showContextualSheet }"
     >
@@ -115,40 +115,30 @@
 
     <!-- Feedback success toast (view-button mode or toast feedback mode) -->
     <div
-      v-if="(feedbackLocationEnabled && feedbackLocationMode === 'toast' && showFeedbackSuccessToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showFeedbackSuccessToast)"
-      class="minerva-toast minerva-toast--success"
-      :class="{ 'minerva-toast--sheet-lifted': showContextualSheet }"
-      role="status"
-      aria-live="polite"
+      v-if="(feedbackAfterActionEnabled && feedbackAfterActionMode === 'toast' && showFeedbackSuccessToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showFeedbackSuccessToast)"
+      class="minerva-toast-codex-wrapper"
+      :class="{ 'minerva-toast-codex-wrapper--sheet-lifted': showContextualSheet }"
     >
-      <cdx-icon :icon="cdxIconSuccess" size="medium" />
-      <span class="minerva-toast-label">{{ feedbackSuccessToastMessage }}</span>
-      <button class="minerva-toast-close-btn" type="button" aria-label="Close" @click="showFeedbackSuccessToast = false">
-        <cdx-icon :icon="cdxIconClose" size="small" />
-      </button>
+      <cdx-toast
+        type="success"
+        :render-in-place="true"
+        @close="showFeedbackSuccessToast = false"
+      >{{ feedbackSuccessToastMessage }}</cdx-toast>
     </div>
 
     <!-- Suggestion dismissed toast (view-button mode or toast feedback mode) -->
     <div
-      v-if="(feedbackLocationEnabled && feedbackLocationMode === 'toast' && showSuggestionDismissedToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showSuggestionDismissedToast)"
-      class="minerva-toast minerva-toast--dismissed"
-      :class="{ 'minerva-toast--sheet-lifted': showContextualSheet }"
-      role="status"
-      aria-live="polite"
+      v-if="(feedbackAfterActionEnabled && feedbackAfterActionMode === 'toast' && showSuggestionDismissedToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showSuggestionDismissedToast)"
+      class="minerva-toast-codex-wrapper"
+      :class="{ 'minerva-toast-codex-wrapper--sheet-lifted': showContextualSheet }"
     >
-      <span class="minerva-toast-label">Suggestion dismissed</span>
-      <cdx-button
-        class="minerva-toast-undo-btn"
-        action="default"
-        weight="quiet"
-        size="small"
-        @click="handleUndoDismiss"
-      >
-        Undo
-      </cdx-button>
-      <button class="minerva-toast-close-btn" type="button" aria-label="Close" @click="showSuggestionDismissedToast = false">
-        <cdx-icon :icon="cdxIconClose" size="small" />
-      </button>
+      <cdx-toast
+        type="notice"
+        :render-in-place="true"
+        action-button-label="Undo"
+        @action="handleUndoDismiss"
+        @close="showSuggestionDismissedToast = false"
+      >Suggestion dismissed</cdx-toast>
     </div>
     
     <!-- Contextual bottom sheet (standalone: view-button and navigable-arrows modes) -->
@@ -4105,13 +4095,15 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)))"
+            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)) || dismissFirstTimeCardId === 4)"
             ref="suggestionsSidebarRef4"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4 && !(!isMinervaSkin && isSuccessHighlightActive(4)),
-              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)),
+              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4 && !(!isMinervaSkin && isSuccessHighlightActive(4)) && dismissFirstTimeCardId !== 4,
+              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)) || dismissFirstTimeCardId === 4,
               'suggestion-card--hover': isHovered4,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4))
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4 || (!isMinervaSkin && isSuccessHighlightActive(4)),
+              'suggestion-card--success-toast': !isMinervaSkin && isSuccessHighlightActive(4) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 4
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset4}px` }"
@@ -4135,6 +4127,19 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Link removed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 4">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
               </div>
             </template>
             <template v-else>
@@ -4182,13 +4187,15 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)))"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)) || dismissFirstTimeCardId === 5)"
             ref="suggestionsSidebarRef5"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5 && !(!isMinervaSkin && isSuccessHighlightActive(5)),
-              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)),
+              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5 && !(!isMinervaSkin && isSuccessHighlightActive(5)) && dismissFirstTimeCardId !== 5,
+              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)) || dismissFirstTimeCardId === 5,
               'suggestion-card--hover': isHovered5,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5))
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5 || (!isMinervaSkin && isSuccessHighlightActive(5)),
+              'suggestion-card--success-toast': !isMinervaSkin && isSuccessHighlightActive(5) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 5
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset5}px` }"
@@ -4214,6 +4221,19 @@
                 <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
+            <template v-else-if="dismissFirstTimeCardId === 5">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
             <template v-else>
               <button v-if="!isCardExpanded5" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded5 = true">
                 <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
@@ -4237,13 +4257,15 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)))"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)) || dismissFirstTimeCardId === 8)"
             ref="suggestionsSidebarRef8"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8 && !(!isMinervaSkin && isSuccessHighlightActive(8)),
-              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)),
+              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8 && !(!isMinervaSkin && isSuccessHighlightActive(8)) && dismissFirstTimeCardId !== 8,
+              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)) || dismissFirstTimeCardId === 8,
               'suggestion-card--hover': isHovered8,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8))
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8 || (!isMinervaSkin && isSuccessHighlightActive(8)),
+              'suggestion-card--success-toast': !isMinervaSkin && isSuccessHighlightActive(8) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 8
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset8}px` }"
@@ -4269,6 +4291,19 @@
                 <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
+            <template v-else-if="dismissFirstTimeCardId === 8">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
             <template v-else>
               <button v-if="!isCardExpanded8" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded8 = true">
                 <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
@@ -4292,13 +4327,15 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)))"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)) || dismissFirstTimeCardId === 6)"
             ref="suggestionsSidebarRef6"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6 && !(!isMinervaSkin && isSuccessHighlightActive(6)),
-              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)),
+              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6 && !(!isMinervaSkin && isSuccessHighlightActive(6)) && dismissFirstTimeCardId !== 6,
+              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)) || dismissFirstTimeCardId === 6,
               'suggestion-card--hover': isHovered6,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6))
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6 || (!isMinervaSkin && isSuccessHighlightActive(6)),
+              'suggestion-card--success-toast': !isMinervaSkin && isSuccessHighlightActive(6) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 6
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset6}px` }"
@@ -4324,6 +4361,19 @@
                 <div class="suggestion-title">Heading updated!</div>
               </div>
             </template>
+            <template v-else-if="dismissFirstTimeCardId === 6">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
             <template v-else>
               <button v-if="!isCardExpanded6" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded6 = true">
                 <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
@@ -4347,13 +4397,15 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)))"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)) || dismissFirstTimeCardId === 7)"
             ref="suggestionsSidebarRef7"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7 && !(!isMinervaSkin && isSuccessHighlightActive(7)),
-              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)),
+              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7 && !(!isMinervaSkin && isSuccessHighlightActive(7)) && dismissFirstTimeCardId !== 7,
+              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)) || dismissFirstTimeCardId === 7,
               'suggestion-card--hover': isHovered7,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7))
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7 || (!isMinervaSkin && isSuccessHighlightActive(7)),
+              'suggestion-card--success-toast': !isMinervaSkin && isSuccessHighlightActive(7) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 7
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset7}px` }"
@@ -4377,6 +4429,19 @@
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Link updated!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 7">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconLightbulbOutline" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
               </div>
             </template>
             <template v-else>
@@ -4554,7 +4619,7 @@
 
           <!-- "Next suggestion" button — Vector: absolute, centered in sidebar, 32px above viewport bottom -->
           <div
-            v-if="!isMinervaSkin && isEditMode && ((feedbackLocationEnabled && feedbackLocationMode === 'toast') || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'))"
+            v-if="!isMinervaSkin && isEditMode && ((feedbackAfterActionEnabled && feedbackAfterActionMode === 'toast') || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button'))"
             class="next-suggestion-anchor next-suggestion-anchor--vector"
           >
             <transition name="next-suggestion-reveal">
@@ -4798,7 +4863,7 @@
         </div>
 
         <div
-          v-if="isMinervaSkin && isEditMode && !isCarouselMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState || isMinervaSuggestionSuccessState || isMinervaDismissNextPromptVisible)"
+          v-if="isMinervaSkin && isEditMode && !isCarouselMode && (showSuggestionsDisplay || isEditCheckMode) && isMinervaSheetOpen && (availableSuggestionCount > 0 || isEditCheckSheet || showMinervaNoMoreSuggestionsState || isMinervaSuggestionSuccessState || isMinervaDismissNextPromptVisible || isMinervaDismissFirstTimeState)"
           class="minerva-bottom-sheet"
             :class="{
               'minerva-bottom-sheet--edit-check': isEditCheckSheet,
@@ -4838,7 +4903,7 @@
                 'minerva-sheet-header--pp-success': (isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet
               }"
             >
-              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb)" size="medium" />
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaDismissFirstTimeState ? cdxIconLightbulbOutline : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb))" size="medium" />
               <div
                 class="minerva-sheet-title"
                 :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode }"
@@ -4936,6 +5001,9 @@
                 </div>
               </template>
             </template>
+          </template>
+          <template v-else-if="isMinervaDismissFirstTimeState">
+            <p class="minerva-sheet-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
           </template>
           <template v-else-if="isMinervaSuggestionSuccessState">
             <div v-if="successContextualData && successContextualData.type === 'citation'" class="minerva-contextual-citation-row">
@@ -5038,6 +5106,10 @@
               No, remove it
             </cdx-button>
           </div>
+            <div v-else-if="isMinervaDismissFirstTimeState" class="minerva-sheet-actions minerva-sheet-actions--dismiss-first">
+              <cdx-button class="minerva-sheet-btn" action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+              <cdx-button class="minerva-sheet-btn" action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+            </div>
             <template v-else-if="isPublishPromptMode">
               <div class="minerva-sheet-actions minerva-sheet-actions--publish-prompt">
                 <cdx-button class="minerva-sheet-btn" action="default" weight="normal" @click="handlePublishPromptViewMore">View more suggestions</cdx-button>
@@ -5457,6 +5529,35 @@
                 <cdx-checkbox v-model="publishPromptEnabled">
                   Enable Publish prompt para newcomers (<a href="https://phabricator.wikimedia.org/T432622" target="_blank" rel="noopener">T432622</a>)
                 </cdx-checkbox>
+                <cdx-checkbox v-model="feedbackAfterActionEnabled">
+                  Enable feedback after completing/dismissing suggestion (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
+                </cdx-checkbox>
+                <div v-if="feedbackAfterActionEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                  <cdx-radio
+                    v-model="feedbackAfterActionMode"
+                    name="feedback-after-action-mode"
+                    input-value="card"
+                    class="prototype-suboption-radio"
+                  >
+                    1. Custom card
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackAfterActionMode"
+                    name="feedback-after-action-mode"
+                    input-value="toast"
+                    class="prototype-suboption-radio"
+                  >
+                    2. Toast
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackAfterActionMode"
+                    name="feedback-after-action-mode"
+                    input-value="highlight-only"
+                    class="prototype-suboption-radio prototype-suboption-radio--last"
+                  >
+                    3. Just feedback in highlighted text
+                  </cdx-radio>
+                </div>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
                   Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
                 </cdx-checkbox>
@@ -5825,7 +5926,8 @@ import {
   CdxMessage,
   CdxRadio,
   CdxDialog,
-  CdxInfoChip
+  CdxInfoChip,
+  CdxToast
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -5859,6 +5961,7 @@ import {
   cdxIconEye,
   cdxIconPuzzle,
   cdxIconLightbulb,
+  cdxIconLightbulbOutline,
   cdxIconClock,
   cdxIconArticle,
   cdxIconClose,
@@ -6387,8 +6490,10 @@ const editToolbarImprovementsEnabled = ref(true);
 const successHighlightOnCompleteEnabled = ref(true);
 const feedbackAndNextEnabled = ref(false);
 const feedbackAndNextMode = ref('persistent-pagination'); // 'bottom-sheet' | 'view-button' | 'persistent-pagination'
-const feedbackLocationEnabled = ref(true);
-const feedbackLocationMode = ref('toast'); // 'toast' | 'card'
+const feedbackAfterActionEnabled = ref(true);
+const feedbackAfterActionMode = ref('toast'); // 'card' | 'toast' | 'highlight-only'
+const dismissCardSeen = ref(false);
+const dismissFirstTimeCardId = ref(null);
 const isPersistentPaginationSuccessMode = ref(false);
 const publishPromptEnabled = ref(true);
 const publishPromptMode = ref('card'); // 'card' | 'fixed-bottom'
@@ -7298,7 +7403,13 @@ const isMinervaDismissNextPromptVisible = computed(() => (
   Boolean(minervaDismissNextPromptState.value) &&
   !isMinervaSuggestionSuccessState.value
 ));
+const isMinervaDismissFirstTimeState = computed(() => (
+  isMinervaSkin.value &&
+  dismissFirstTimeCardId.value !== null &&
+  isMinervaSheetOpen.value
+));
 const minervaSheetTitle = computed(() => {
+  if (isMinervaDismissFirstTimeState.value) return 'Suggestion dismissed';
   if (isMinervaSuggestionSuccessState.value) return minervaSuggestionSuccessTitle.value;
   if (isMinervaDismissNextPromptVisible.value) return '';
   if (showMinervaNoMoreSuggestionsState.value) return 'No more suggestions';
@@ -8276,8 +8387,8 @@ function resetPrototypeDialog() {
   minervaToggleLocation.value = 'toolbar';
   feedbackAndNextEnabled.value = true;
   feedbackAndNextMode.value = 'persistent-pagination';
-  feedbackLocationEnabled.value = true;
-  feedbackLocationMode.value = 'card';
+  feedbackAfterActionEnabled.value = true;
+  feedbackAfterActionMode.value = 'card';
   editToolbarImprovementsEnabled.value = true;
   noMoreSuggestionsEmptyStateEnabled.value = true;
   minervaFullPageSuggestionNavigationEnabled.value = false;
@@ -9896,6 +10007,44 @@ function triggerSuggestionDismissedToast(suggestionId, nextBtnDelay = 0) {
   }
 }
 
+function handleDismissCardGotIt() {
+  const id = dismissFirstTimeCardId.value;
+  dismissFirstTimeCardId.value = null;
+  dismissedSuggestionIdForUndo.value = null;
+  if (isMinervaSkin.value) {
+    nextTick(() => {
+      if (!maybeShowMinervaNoMoreSuggestionsState()) {
+        if (isPaginationAutoMode.value) {
+          advanceMinervaSuggestion(id);
+        } else {
+          closeMinervaSuggestion();
+        }
+      }
+    });
+  }
+}
+
+function handleDismissCardUndo() {
+  const id = dismissFirstTimeCardId.value;
+  dismissFirstTimeCardId.value = null;
+  dismissedSuggestionIdForUndo.value = null;
+  dismissCardSeen.value = false;
+  if (id === 1) isSuggestionDeclined1.value = false;
+  else if (id === 2) isSuggestionDeclined2.value = false;
+  else if (id === 3) isSuggestionDeclined3.value = false;
+  else if (id === 4) isSuggestionDeclined4.value = false;
+  else if (id === 5) isSuggestionDeclined5.value = false;
+  else if (id === 6) isSuggestionDeclined6.value = false;
+  else if (id === 7) isSuggestionDeclined7.value = false;
+  else if (id === 8) isSuggestionDeclined8.value = false;
+  nextTick(() => {
+    updateSuggestionVisibility();
+    if (isMinervaSkin.value) {
+      openMinervaSuggestion(id);
+    }
+  });
+}
+
 function handleUndoDismiss() {
   const id = dismissedSuggestionIdForUndo.value;
   if (!id) return;
@@ -10021,7 +10170,7 @@ function activatePersistentPaginationSuccess(currentId) {
 }
 
 function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
-  // Persistent pagination always uses bottom-sheet success + dismissed toast, regardless of feedbackLocationMode
+  // Persistent pagination always uses bottom-sheet success + dismissed toast, regardless of feedbackAfterActionMode
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
     if (wasCompleted) {
       activateSuccessHighlight(currentId);
@@ -10049,9 +10198,9 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
     publishPromptSuggestionId.value = currentId;
     return;
   }
-  // feedbackLocationMode overrides feedback display across all prototype modes
-  if (feedbackLocationEnabled.value) {
-    if (feedbackLocationMode.value === 'toast') {
+  // feedbackAfterActionMode overrides feedback display across all prototype modes
+  if (feedbackAfterActionEnabled.value) {
+    if (feedbackAfterActionMode.value === 'toast') {
       const TOAST_DURATION = 4000;
       const AFTER_TOAST_DELAY = 1500;
       const nextBtnDelay = TOAST_DURATION + AFTER_TOAST_DELAY;
@@ -10086,7 +10235,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
       }
       return;
     }
-    if (feedbackLocationMode.value === 'card') {
+    if (feedbackAfterActionMode.value === 'card') {
       if (wasCompleted) {
         activateSuccessHighlight(currentId);
         if (isMinervaSkin.value) {
@@ -10104,7 +10253,13 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           return;
         }
       } else {
-        // Dismissed in card mode: no feedback, just close
+        if (!dismissCardSeen.value) {
+          dismissCardSeen.value = true;
+          dismissedSuggestionIdForUndo.value = currentId;
+          dismissFirstTimeCardId.value = currentId;
+          return;
+        }
+        // Dismissed in card mode (not first time): just close
         if (isMinervaSkin.value) {
           if (isPersistentPaginationMode.value) {
             persistentPaginationActiveGroup.value = null;
@@ -10126,6 +10281,28 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           return;
         }
       }
+    }
+    if (feedbackAfterActionMode.value === 'highlight-only') {
+      if (wasCompleted) {
+        activateSuccessHighlight(currentId);
+      } else if (!dismissCardSeen.value) {
+        dismissCardSeen.value = true;
+        dismissedSuggestionIdForUndo.value = currentId;
+        dismissFirstTimeCardId.value = currentId;
+        return;
+      }
+      if (isMinervaSkin.value) {
+        nextTick(() => {
+          if (!maybeShowMinervaNoMoreSuggestionsState()) {
+            if (isPaginationAutoMode.value && !wasCompleted) {
+              advanceMinervaSuggestion(currentId);
+            } else {
+              closeMinervaSuggestion();
+            }
+          }
+        });
+      }
+      return;
     }
   }
   if (wasCompleted && isMinervaSkin.value && successHighlightOnCompleteEnabled.value
@@ -12767,11 +12944,11 @@ watch(
 
 watch(feedbackAndNextMode, (newVal) => {
   if (newVal === 'view-button') {
-    feedbackLocationEnabled.value = true;
-    feedbackLocationMode.value = 'toast';
+    feedbackAfterActionEnabled.value = true;
+    feedbackAfterActionMode.value = 'toast';
   } else if (newVal === 'persistent-pagination') {
-    feedbackLocationEnabled.value = true;
-    feedbackLocationMode.value = 'card';
+    feedbackAfterActionEnabled.value = true;
+    feedbackAfterActionMode.value = 'card';
   }
 });
 
@@ -12904,12 +13081,12 @@ watch(carouselSuccessId, (id) => {
 watch(selectedPrototype, (newVal) => {
   if (newVal === 'option-5') {
     feedbackAndNextEnabled.value = false;
-    feedbackLocationEnabled.value = true;
-    feedbackLocationMode.value = 'card';
+    feedbackAfterActionEnabled.value = true;
+    feedbackAfterActionMode.value = 'card';
   } else if (newVal === 'option-7') {
     feedbackAndNextEnabled.value = false;
-    feedbackLocationEnabled.value = true;
-    feedbackLocationMode.value = 'card';
+    feedbackAfterActionEnabled.value = true;
+    feedbackAfterActionMode.value = 'card';
   }
 });
 
@@ -21065,6 +21242,49 @@ function markArticleEdited() {
   align-items: center;
   gap: 12px;
   margin-top: 8px;
+}
+
+/* Toast-styled success card (Radio 2 — Vector22) */
+.suggestion-card--success-toast {
+  background-color: var(--background-color-success-subtle, #f3fcf8);
+  border-color: var(--border-color-success, #14866d);
+}
+
+/* Dismiss first-time card */
+.suggestion-card--dismiss-first {
+  background-color: var(--background-color-base, #fff);
+}
+
+.suggestion-header--dismiss-first {
+  cursor: default;
+}
+
+.suggestion-icon--dismissed :deep(.cdx-icon),
+.suggestion-icon--dismissed :deep(svg) {
+  color: var(--color-disabled, #72777d);
+  fill: var(--color-disabled, #72777d);
+}
+
+/* Minerva sheet actions for dismiss-first state */
+.minerva-sheet-actions--dismiss-first {
+  display: flex;
+  gap: 8px;
+  padding: 16px;
+}
+
+/* Codex Toast wrapper — Minerva positioning */
+.minerva-toast-codex-wrapper {
+  position: fixed;
+  bottom: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 220;
+  max-width: calc(100vw - 32px);
+  width: max-content;
+}
+
+.minerva-toast-codex-wrapper--sheet-lifted {
+  bottom: 280px;
 }
 
 </style>
