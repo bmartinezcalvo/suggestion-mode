@@ -4905,7 +4905,7 @@
                 'minerva-sheet-header--pp-success': (isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet
               }"
             >
-              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaDismissFirstTimeState ? cdxIconClear : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb))" size="medium" />
+              <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaDismissFirstTimeState ? cdxIconClear : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb))" :class="{ 'minerva-sheet-icon--dismissed': isMinervaDismissFirstTimeState }" size="medium" />
               <div
                 class="minerva-sheet-title"
                 :class="{ 'minerva-sheet-title--success': isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode }"
@@ -8127,6 +8127,18 @@ function openMinervaPublishPromptSheet(suggestionId, slideUpOnly = false) {
   }, 220);
 }
 
+function openMinervaDismissCardSheet(suggestionId) {
+  dismissFirstTimeCardId.value = suggestionId;
+  isMinervaSheetClosing.value = true;
+  isMinervaSheetOpen.value = true;
+  updateMinervaSheetHeight();
+  nextTick(() => {
+    window.requestAnimationFrame(() => {
+      clearMinervaSheetClosingState();
+    });
+  });
+}
+
 function maybeShowVectorNoMoreSuggestionsDialog() {
   if (
     !noMoreSuggestionsEmptyStateEnabled.value ||
@@ -10297,7 +10309,12 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         if (!dismissCardSeen.value) {
           dismissCardSeen.value = true;
           dismissedSuggestionIdForUndo.value = currentId;
-          dismissFirstTimeCardId.value = currentId;
+          if (isMinervaSkin.value) {
+            closeMinervaSuggestion();
+            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 500);
+          } else {
+            dismissFirstTimeCardId.value = currentId;
+          }
           return;
         }
         // Dismissed in card mode (not first time): just close
@@ -10329,7 +10346,12 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
       } else if (!dismissCardSeen.value) {
         dismissCardSeen.value = true;
         dismissedSuggestionIdForUndo.value = currentId;
-        dismissFirstTimeCardId.value = currentId;
+        if (isMinervaSkin.value) {
+          closeMinervaSuggestion();
+          window.setTimeout(() => openMinervaDismissCardSheet(currentId), 500);
+        } else {
+          dismissFirstTimeCardId.value = currentId;
+        }
         return;
       }
       if (isMinervaSkin.value) {
@@ -21324,9 +21346,11 @@ function markArticleEdited() {
 }
 
 .suggestion-icon--dismissed :deep(.cdx-icon),
-.suggestion-icon--dismissed :deep(svg) {
-  color: var(--color-disabled, #72777d);
-  fill: var(--color-disabled, #72777d);
+.suggestion-icon--dismissed :deep(svg),
+.minerva-sheet-icon--dismissed :deep(.cdx-icon),
+.minerva-sheet-icon--dismissed :deep(svg) {
+  color: var(--color-disabled, #72777d) !important;
+  fill: var(--color-disabled, #72777d) !important;
 }
 
 .suggestion-card--dismiss-first .suggestion-actions .cdx-button {
