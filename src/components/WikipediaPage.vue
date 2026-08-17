@@ -116,29 +116,31 @@
     <!-- Feedback success toast (view-button mode or toast feedback mode) -->
     <div
       v-if="(feedbackAfterActionEnabled && feedbackAfterActionMode === 'toast' && showFeedbackSuccessToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showFeedbackSuccessToast)"
-      class="minerva-toast-codex-wrapper"
-      :class="{ 'minerva-toast-codex-wrapper--sheet-lifted': showContextualSheet }"
+      class="minerva-toast minerva-toast--success"
+      :class="{ 'minerva-toast--sheet-lifted': showContextualSheet }"
+      role="status"
+      aria-live="polite"
     >
-      <cdx-toast
-        type="success"
-        :render-in-place="true"
-        @close="showFeedbackSuccessToast = false"
-      >{{ feedbackSuccessToastMessage }}</cdx-toast>
+      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+      <span class="minerva-toast-label">{{ feedbackSuccessToastMessage }}</span>
+      <button class="minerva-toast-close-btn" type="button" aria-label="Close" @click="showFeedbackSuccessToast = false">
+        <cdx-icon :icon="cdxIconClose" size="small" />
+      </button>
     </div>
 
     <!-- Suggestion dismissed toast (view-button mode or toast feedback mode) -->
     <div
       v-if="(feedbackAfterActionEnabled && feedbackAfterActionMode === 'toast' && showSuggestionDismissedToast) || (feedbackAndNextEnabled && feedbackAndNextMode === 'view-button' && showSuggestionDismissedToast)"
-      class="minerva-toast-codex-wrapper"
-      :class="{ 'minerva-toast-codex-wrapper--sheet-lifted': showContextualSheet }"
+      class="minerva-toast minerva-toast--dismissed"
+      :class="{ 'minerva-toast--sheet-lifted': showContextualSheet }"
+      role="status"
+      aria-live="polite"
     >
-      <cdx-toast
-        type="notice"
-        :render-in-place="true"
-        action-button-label="Undo"
-        @action="handleUndoDismiss"
-        @close="showSuggestionDismissedToast = false"
-      >Suggestion dismissed</cdx-toast>
+      <span class="minerva-toast-label">Suggestion dismissed</span>
+      <cdx-button class="minerva-toast-undo-btn" action="default" weight="quiet" size="small" @click="handleUndoDismiss">Undo</cdx-button>
+      <button class="minerva-toast-close-btn" type="button" aria-label="Close" @click="showSuggestionDismissedToast = false">
+        <cdx-icon :icon="cdxIconClose" size="small" />
+      </button>
     </div>
     
     <!-- Contextual bottom sheet (standalone: view-button and navigable-arrows modes) -->
@@ -5117,7 +5119,7 @@
               </div>
             </template>
             <template v-else-if="isPersistentPaginationSuccessMode"></template><!-- persistent-pagination success: no action buttons -->
-            <div v-else-if="isMinervaSuggestionSuccessState && isPaginationManualMode" class="minerva-sheet-actions minerva-sheet-actions--next-prompt">
+            <div v-else-if="isMinervaSuggestionSuccessState && isPaginationManualMode && feedbackAfterActionMode !== 'card'" class="minerva-sheet-actions minerva-sheet-actions--next-prompt">
               <span class="minerva-next-prompt-text">Want to view next suggestion?</span>
               <cdx-button
                 class="minerva-next-prompt-btn"
@@ -5337,7 +5339,7 @@
             </template><!-- end v-else (non-dismiss-prompt content) -->
           </div>
           <div
-            v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode) && !isPublishPromptMode"
+            v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode && feedbackAfterActionMode !== 'card') && !isPublishPromptMode && !isMinervaDismissFirstTimeState"
             class="minerva-sheet-pagination"
           >
             <div
@@ -5539,7 +5541,7 @@
                     input-value="card"
                     class="prototype-suboption-radio"
                   >
-                    1. Custom card
+                    Custom card
                   </cdx-radio>
                   <cdx-radio
                     v-model="feedbackAfterActionMode"
@@ -5547,7 +5549,7 @@
                     input-value="toast"
                     class="prototype-suboption-radio"
                   >
-                    2. Toast
+                    Toast
                   </cdx-radio>
                   <cdx-radio
                     v-model="feedbackAfterActionMode"
@@ -5555,7 +5557,7 @@
                     input-value="highlight-only"
                     class="prototype-suboption-radio prototype-suboption-radio--last"
                   >
-                    3. Just feedback in highlighted text
+                    Just feedback in highlighted text
                   </cdx-radio>
                 </div>
                 <cdx-checkbox v-model="editToolbarImprovementsEnabled">
@@ -5926,8 +5928,7 @@ import {
   CdxMessage,
   CdxRadio,
   CdxDialog,
-  CdxInfoChip,
-  CdxToast
+  CdxInfoChip
 } from '@wikimedia/codex';
 import {
   cdxIconMenu,
@@ -10028,7 +10029,6 @@ function handleDismissCardUndo() {
   const id = dismissFirstTimeCardId.value;
   dismissFirstTimeCardId.value = null;
   dismissedSuggestionIdForUndo.value = null;
-  dismissCardSeen.value = false;
   if (id === 1) isSuggestionDeclined1.value = false;
   else if (id === 2) isSuggestionDeclined2.value = false;
   else if (id === 3) isSuggestionDeclined3.value = false;
@@ -11504,6 +11504,23 @@ function handleDeclineGenericSuggestion(suggestionId) {
     setTimeout(() => {
       handleMinervaSuggestionResolutionAfterAction(suggestionId);
     }, 260);
+  } else if (isMinervaSkin.value && feedbackAfterActionEnabled.value) {
+    handleMinervaSuggestionResolutionAfterAction(suggestionId, false);
+  } else if (!isMinervaSkin.value && feedbackAfterActionEnabled.value) {
+    if (feedbackAfterActionMode.value === 'toast') {
+      triggerSuggestionDismissedToast(suggestionId);
+      closeMinervaSuggestion();
+    } else if (feedbackAfterActionMode.value === 'card' || feedbackAfterActionMode.value === 'highlight-only') {
+      if (!dismissCardSeen.value) {
+        dismissCardSeen.value = true;
+        dismissedSuggestionIdForUndo.value = suggestionId;
+        dismissFirstTimeCardId.value = suggestionId;
+      } else {
+        closeMinervaSuggestion();
+      }
+    } else {
+      closeMinervaSuggestion();
+    }
   } else {
     closeMinervaSuggestion();
     if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'view-button') {
@@ -21245,9 +21262,13 @@ function markArticleEdited() {
 }
 
 /* Toast-styled success card (Radio 2 — Vector22) */
-.suggestion-card--success-toast {
+.suggestion-card.suggestion-card--success-toast {
   background-color: var(--background-color-success-subtle, #f3fcf8);
   border-color: var(--border-color-success, #14866d);
+}
+
+.suggestion-card.suggestion-card--success-toast .suggestion-content {
+  background-color: var(--background-color-success-subtle, #f3fcf8);
 }
 
 /* Dismiss first-time card */
@@ -21269,22 +21290,7 @@ function markArticleEdited() {
 .minerva-sheet-actions--dismiss-first {
   display: flex;
   gap: 8px;
-  padding: 16px;
 }
 
-/* Codex Toast wrapper — Minerva positioning */
-.minerva-toast-codex-wrapper {
-  position: fixed;
-  bottom: 16px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 220;
-  max-width: calc(100vw - 32px);
-  width: max-content;
-}
-
-.minerva-toast-codex-wrapper--sheet-lifted {
-  bottom: 280px;
-}
 
 </style>
