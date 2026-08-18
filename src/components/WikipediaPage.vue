@@ -10266,6 +10266,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           nextTick(() => {
             if (!maybeShowMinervaNoMoreSuggestionsState()) {
               closeMinervaSuggestion();
+              persistentPaginationBarScrollPending.value = false;
               persistentPaginationBarWaitForScroll.value = true;
               if (persistentPaginationBarIdleTimer) {
                 clearTimeout(persistentPaginationBarIdleTimer);
