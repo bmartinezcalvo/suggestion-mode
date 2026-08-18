@@ -10242,15 +10242,25 @@ function activatePersistentPaginationSuccess(currentId) {
 }
 
 function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
-  // Persistent pagination always uses bottom-sheet success + dismissed toast, regardless of feedbackAfterActionMode
+  // Persistent pagination: when feedbackAfterAction is enabled, skip bottom-sheet success
+  // and publish prompt — just highlight text and let the pagination bar take over
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
     if (wasCompleted) {
       activateSuccessHighlight(currentId);
-      if (publishPromptEnabled.value && !publishPromptShown.value) {
-        publishPromptShown.value = true;
-        publishPromptSuggestionId.value = currentId;
+      if (!feedbackAfterActionEnabled.value) {
+        if (publishPromptEnabled.value && !publishPromptShown.value) {
+          publishPromptShown.value = true;
+          publishPromptSuggestionId.value = currentId;
+        } else {
+          activatePersistentPaginationSuccess(currentId);
+        }
       } else {
-        activatePersistentPaginationSuccess(currentId);
+        persistentPaginationActiveGroup.value = null;
+        nextTick(() => {
+          if (!maybeShowMinervaNoMoreSuggestionsState()) {
+            closeMinervaSuggestion();
+          }
+        });
       }
     } else {
       triggerSuggestionDismissedToast(currentId);
@@ -17641,7 +17651,7 @@ function markArticleEdited() {
 .minerva-success-check {
   stroke-dasharray: 20;
   stroke-dashoffset: 20;
-  animation: success-check-draw 550ms ease 150ms forwards;
+  animation: success-check-draw 380ms ease 100ms forwards;
 }
 
 @keyframes success-check-draw {
