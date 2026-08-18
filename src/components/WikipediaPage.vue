@@ -2963,7 +2963,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
 
@@ -3128,7 +3131,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
                                     <p v-else>
@@ -3185,7 +3191,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
                                     <h3 v-else class="subsection-title">Wider recognition</h3>
@@ -3260,7 +3269,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
                   <p
@@ -3313,7 +3325,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
                   <!-- Citation Popup 2 -->
@@ -3447,7 +3462,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
                   <p v-else>
@@ -3520,7 +3538,10 @@
                       class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
                       aria-hidden="true"
                     >
-                      <cdx-icon :icon="cdxIconSuccess" size="medium" />
+                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                      </svg>
                     </span>
                   </p>
                   <p v-else>
@@ -17612,10 +17633,19 @@ function markArticleEdited() {
   z-index: 22;
 }
 
-.minerva-suggestion-trigger--success :deep(.cdx-icon),
-.minerva-suggestion-trigger--success :deep(svg) {
+.minerva-suggestion-trigger--success :deep(.cdx-icon) {
   color: var(--color-success, #14866d);
   fill: var(--color-success, #14866d);
+}
+
+.minerva-success-check {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: success-check-draw 550ms ease 150ms forwards;
+}
+
+@keyframes success-check-draw {
+  to { stroke-dashoffset: 0; }
 }
 
 .minerva-suggestions-on .article-content-edit {
