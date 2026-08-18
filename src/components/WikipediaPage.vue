@@ -607,7 +607,7 @@
           <cdx-icon :icon="cdxIconHelp" size="medium" />
         </button>
         <!-- Persistent pagination bar — shown in persistent-pagination feedback mode -->
-        <transition name="next-suggestion-reveal">
+        <transition name="persistent-bar-reveal">
           <div
             v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet && !persistentPaginationBarScrollPending && !isPublishPromptMode"
             class="minerva-persistent-pagination-bar"
@@ -17975,6 +17975,24 @@ function markArticleEdited() {
   box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   font-size: 16px;
   line-height: 24px;
+}
+
+.persistent-bar-reveal-enter-active {
+  transition: transform 220ms ease;
+}
+
+.persistent-bar-reveal-leave-active {
+  transition: transform 180ms ease-in;
+}
+
+.persistent-bar-reveal-enter-from,
+.persistent-bar-reveal-leave-to {
+  transform: translateY(100%);
+}
+
+.persistent-bar-reveal-enter-to,
+.persistent-bar-reveal-leave-from {
+  transform: translateY(0);
 }
 
 /* PP bar: left info section (checks + divider + suggestions) */
