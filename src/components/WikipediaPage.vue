@@ -11064,11 +11064,7 @@ function handleMinervaFullPageTocScrollVisibility() {
 function handlePersistentPaginationBarScroll() {
   if (!isPersistentPaginationMode.value || !isMinervaSkin.value) return;
   if (!persistentPaginationBarWaitForScroll.value) return;
-  if (persistentPaginationBarScrollTimer) clearTimeout(persistentPaginationBarScrollTimer);
-  persistentPaginationBarScrollTimer = setTimeout(() => {
-    persistentPaginationBarWaitForScroll.value = false;
-    persistentPaginationBarScrollTimer = null;
-  }, 1500);
+  persistentPaginationBarWaitForScroll.value = false;
 }
 
 function handleScrollReappear() {
