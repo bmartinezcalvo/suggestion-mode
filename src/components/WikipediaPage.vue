@@ -2942,7 +2942,7 @@
                       </span>
                     </span>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion1Pending || isSuccessHighlightActive(1))"
+                      v-if="isMinervaSkin && isSuggestion1Pending && !isSuccessHighlightActive(1)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(1) }"
                     ></span>
@@ -3108,7 +3108,7 @@
                       In 1968, Lorde published <span class="highlighted-text-annotation"><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></span>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                     </span>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion8Pending || isSuccessHighlightActive(8))"
+                      v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(8) }"
                     ></span>
@@ -3165,7 +3165,7 @@
                       <span class="highlighted-text-annotation"><strong class="subsection-title">Wider recognition</strong></span>
                     </span>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion6Pending || isSuccessHighlightActive(6))"
+                      v-if="isMinervaSkin && isSuggestion6Pending && !isSuccessHighlightActive(6)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(6) }"
                     ></span>
@@ -3238,7 +3238,7 @@
                       </span>
                     </span>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion2Pending || isSuccessHighlightActive(2))"
+                      v-if="isMinervaSkin && isSuggestion2Pending && !isSuccessHighlightActive(2)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(2) }"
                     ></span>
@@ -3293,7 +3293,7 @@
                     (1978), she describes her identity within the mythos of African female deities of creation, fertility, and warrior strength. This reclamation of African female identity both builds and challenges existing Black Arts ideas about pan-Africanism. While writers like Amiri Baraka and Ishmael Reed utilized African cosmology in a way that "furnished a repertoire of bold male gods capable of forging and defending an aboriginal Black universe," in Lorde's writing "that warrior ethos is transferred to a female vanguard capable equally of force and fertility".
                     <sup v-if="citationNumber2" class="citation-marker">[{{ citationNumber2 }}]</sup>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion4Pending || isSuccessHighlightActive(4))"
+                      v-if="isMinervaSkin && isSuggestion4Pending && !isSuccessHighlightActive(4)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(4) }"
                     ></span>
@@ -3427,7 +3427,7 @@
                       The Cancer Journals (<span class="highlighted-text-annotation"><a href="https://example.org/1980" target="_blank" rel="noopener">1980</a></span>) and A Burst of Light (1988) both use non-fiction prose, including essays and journal entries, to bear witness to, explore, and reflect on Lorde's diagnosis, treatment, recovery from breast cancer, and ultimately fatal recurrence with liver metastases. In both works, Lorde deals with Western notions of illness, disability, treatment, cancer and sexuality, and physical beauty and prosthesis, as well as themes of death, fear of mortality, survival, emotional healing, and inner power.
                     </span>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion7Pending || isSuccessHighlightActive(7))"
+                      v-if="isMinervaSkin && isSuggestion7Pending && !isSuccessHighlightActive(7)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(7) }"
                     ></span>
@@ -3499,7 +3499,7 @@
                       </span>
                     </span>
                     <span
-                      v-if="isMinervaSkin && (isSuggestion3Pending || isSuccessHighlightActive(3))"
+                      v-if="isMinervaSkin && isSuggestion3Pending && !isSuccessHighlightActive(3)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(3) }"
                     ></span>
