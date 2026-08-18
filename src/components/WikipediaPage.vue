@@ -609,7 +609,7 @@
         <!-- Persistent pagination bar — shown in persistent-pagination feedback mode -->
         <transition name="persistent-bar-reveal">
           <div
-            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet && !persistentPaginationBarScrollPending && !isPublishPromptMode"
+            v-if="isPersistentPaginationMode && isMinervaSkin && isEditMode && hasPendingPersistentItems && !isMinervaSheetOpen && !anyPendingItemVisibleInViewport && persistentPaginationHasOpenedSheet && !persistentPaginationBarScrollPending && !persistentPaginationBarWaitForScroll && !isPublishPromptMode"
             class="minerva-persistent-pagination-bar"
           >
             <!-- Left: checks (if any) + divider + suggestions -->
@@ -6532,6 +6532,7 @@ const publishPromptShown = ref(false);
 const publishPromptSuggestionId = ref(null);
 const showFixedBottomPublishPrompt = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
+const persistentPaginationBarWaitForScroll = ref(false);
 let persistentPaginationBarIdleTimer = null;
 let persistentPaginationBarScrollTimer = null;
 const persistentPaginationSuccessLabel = ref('');
@@ -10264,8 +10265,8 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         } else {
           nextTick(() => {
             if (!maybeShowMinervaNoMoreSuggestionsState()) {
-              closeMinervaSuggestion(); // sets bar pending for 3s
-              // Clear the auto-timer — bar now appears on scroll instead
+              closeMinervaSuggestion();
+              persistentPaginationBarWaitForScroll.value = true;
               if (persistentPaginationBarIdleTimer) {
                 clearTimeout(persistentPaginationBarIdleTimer);
                 persistentPaginationBarIdleTimer = null;
@@ -11061,10 +11062,10 @@ function handleMinervaFullPageTocScrollVisibility() {
 
 function handlePersistentPaginationBarScroll() {
   if (!isPersistentPaginationMode.value || !isMinervaSkin.value) return;
-  if (!persistentPaginationBarScrollPending.value) return;
+  if (!persistentPaginationBarWaitForScroll.value) return;
   if (persistentPaginationBarScrollTimer) clearTimeout(persistentPaginationBarScrollTimer);
   persistentPaginationBarScrollTimer = setTimeout(() => {
-    persistentPaginationBarScrollPending.value = false;
+    persistentPaginationBarWaitForScroll.value = false;
     persistentPaginationBarScrollTimer = null;
   }, 1500);
 }
@@ -11280,14 +11281,6 @@ function updateSuggestionVisibility() {
     isVisible(highlightedTextRef8.value) ||
     isVisible(toneCheckHighlightRef.value) ||
     isVisible(pasteCheckHighlightRef.value);
-  // Clear scroll-pending flag on first scroll after sheet close (reveals PP bar)
-  if (persistentPaginationBarScrollPending.value) {
-    persistentPaginationBarScrollPending.value = false;
-    if (persistentPaginationBarIdleTimer) {
-      clearTimeout(persistentPaginationBarIdleTimer);
-      persistentPaginationBarIdleTimer = null;
-    }
-  }
   // Track whether any *pending* suggestion or check is visible (used by persistent pagination bar)
   anyPendingItemVisibleInViewport.value = getPendingSuggestionIdsForContext().some((id) => {
     const ref = getSuggestionRefById(id);
@@ -13603,6 +13596,13 @@ function openMinervaSuggestion(suggestionId, options = {}) {
   clearMinervaDismissNextPrompt();
   clearMinervaSheetClosingState();
   if (isPersistentPaginationMode.value) persistentPaginationHasOpenedSheet.value = true;
+  if (persistentPaginationBarWaitForScroll.value) {
+    persistentPaginationBarWaitForScroll.value = false;
+    if (persistentPaginationBarScrollTimer) {
+      clearTimeout(persistentPaginationBarScrollTimer);
+      persistentPaginationBarScrollTimer = null;
+    }
+  }
   minervaSheetMode.value = 'suggestion';
   activeMinervaSuggestion.value = suggestionId;
   isMinervaSheetOpen.value = true;
