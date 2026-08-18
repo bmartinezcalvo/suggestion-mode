@@ -10242,8 +10242,8 @@ function activatePersistentPaginationSuccess(currentId) {
 }
 
 function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = false) {
-  // Persistent pagination: when feedbackAfterAction is enabled, skip bottom-sheet success
-  // and publish prompt — just highlight text and let the pagination bar take over
+  // Persistent pagination: when feedbackAfterAction is enabled, skip bottom-sheet success —
+  // show only the article highlight; publish prompt still appears; bar appears after 2s
   if (feedbackAndNextEnabled.value && feedbackAndNextMode.value === 'persistent-pagination' && isMinervaSkin.value) {
     if (wasCompleted) {
       activateSuccessHighlight(currentId);
@@ -10256,11 +10256,22 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         }
       } else {
         persistentPaginationActiveGroup.value = null;
-        nextTick(() => {
-          if (!maybeShowMinervaNoMoreSuggestionsState()) {
-            closeMinervaSuggestion();
-          }
-        });
+        if (publishPromptEnabled.value && !publishPromptShown.value) {
+          publishPromptShown.value = true;
+          nextTick(() => closeMinervaSuggestion());
+          window.setTimeout(() => openMinervaPublishPromptSheet(currentId, true), 500);
+        } else {
+          nextTick(() => {
+            if (!maybeShowMinervaNoMoreSuggestionsState()) {
+              closeMinervaSuggestion(); // sets bar pending for 3s — we override to 2s below
+              if (persistentPaginationBarIdleTimer) clearTimeout(persistentPaginationBarIdleTimer);
+              persistentPaginationBarIdleTimer = window.setTimeout(() => {
+                persistentPaginationBarScrollPending.value = false;
+                persistentPaginationBarIdleTimer = null;
+              }, 2000);
+            }
+          });
+        }
       }
     } else {
       triggerSuggestionDismissedToast(currentId);
