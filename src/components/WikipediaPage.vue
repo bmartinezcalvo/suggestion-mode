@@ -6533,6 +6533,7 @@ const publishPromptSuggestionId = ref(null);
 const showFixedBottomPublishPrompt = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
 let persistentPaginationBarIdleTimer = null;
+let persistentPaginationBarScrollTimer = null;
 const persistentPaginationSuccessLabel = ref('');
 const persistentPaginationSuccessItems = ref([]);
 const persistentPaginationSuccessIndex = ref(0);
@@ -10263,12 +10264,12 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         } else {
           nextTick(() => {
             if (!maybeShowMinervaNoMoreSuggestionsState()) {
-              closeMinervaSuggestion(); // sets bar pending for 3s — we override to 2s below
-              if (persistentPaginationBarIdleTimer) clearTimeout(persistentPaginationBarIdleTimer);
-              persistentPaginationBarIdleTimer = window.setTimeout(() => {
-                persistentPaginationBarScrollPending.value = false;
+              closeMinervaSuggestion(); // sets bar pending for 3s
+              // Clear the auto-timer — bar now appears on scroll instead
+              if (persistentPaginationBarIdleTimer) {
+                clearTimeout(persistentPaginationBarIdleTimer);
                 persistentPaginationBarIdleTimer = null;
-              }, 2000);
+              }
             }
           });
         }
@@ -11056,6 +11057,16 @@ function handleMinervaFullPageTocScrollVisibility() {
     }
     minervaFullPageTocScrollingTimer = null;
   }, 180);
+}
+
+function handlePersistentPaginationBarScroll() {
+  if (!isPersistentPaginationMode.value || !isMinervaSkin.value) return;
+  if (!persistentPaginationBarScrollPending.value) return;
+  if (persistentPaginationBarScrollTimer) clearTimeout(persistentPaginationBarScrollTimer);
+  persistentPaginationBarScrollTimer = setTimeout(() => {
+    persistentPaginationBarScrollPending.value = false;
+    persistentPaginationBarScrollTimer = null;
+  }, 1500);
 }
 
 function handleScrollReappear() {
@@ -13284,6 +13295,7 @@ onMounted(() => {
     window.addEventListener('resize', updateSuggestionVisibility);
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
     window.addEventListener('scroll', handleScrollReappear, true);
+    window.addEventListener('scroll', handlePersistentPaginationBarScroll, true);
     window.addEventListener('wheel', markMinervaFullPageManualScrollIntent, { passive: true });
     window.addEventListener('touchmove', markMinervaFullPageManualScrollIntent, { passive: true });
     window.addEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
@@ -13312,6 +13324,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateSuggestionVisibility);
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
     window.removeEventListener('scroll', handleScrollReappear, true);
+    window.removeEventListener('scroll', handlePersistentPaginationBarScroll, true);
     window.removeEventListener('wheel', markMinervaFullPageManualScrollIntent);
     window.removeEventListener('touchmove', markMinervaFullPageManualScrollIntent);
     window.removeEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
