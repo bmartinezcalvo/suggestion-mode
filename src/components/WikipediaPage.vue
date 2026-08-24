@@ -4118,14 +4118,14 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightUI(4)) || dismissFirstTimeCardId === 4)"
+            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightInCard(4)) || dismissFirstTimeCardId === 4)"
             ref="suggestionsSidebarRef4"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4 && !(!isMinervaSkin && showSuccessHighlightUI(4)) && dismissFirstTimeCardId !== 4,
-              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightUI(4)) || dismissFirstTimeCardId === 4,
+              'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4 && !(!isMinervaSkin && showSuccessHighlightInCard(4)) && dismissFirstTimeCardId !== 4,
+              'suggestion-card--expanded': isCardExpanded4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightInCard(4)) || dismissFirstTimeCardId === 4,
               'suggestion-card--hover': isHovered4,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightUI(4)),
-              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(4) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightInCard(4)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(4) && feedbackAfterActionMode === 'toast',
               'suggestion-card--dismiss-first': dismissFirstTimeCardId === 4,
               'suggestion-card--scale-out': scaleOutCardId === 4
             }"
@@ -4147,7 +4147,7 @@
                 </div>
               </div>
             </template>
-            <template v-else-if="!isMinervaSkin && showSuccessHighlightUI(4)">
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(4)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Link removed!</div>
@@ -4211,14 +4211,14 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightUI(5)) || dismissFirstTimeCardId === 5)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightInCard(5)) || dismissFirstTimeCardId === 5)"
             ref="suggestionsSidebarRef5"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5 && !(!isMinervaSkin && showSuccessHighlightUI(5)) && dismissFirstTimeCardId !== 5,
-              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightUI(5)) || dismissFirstTimeCardId === 5,
+              'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5 && !(!isMinervaSkin && showSuccessHighlightInCard(5)) && dismissFirstTimeCardId !== 5,
+              'suggestion-card--expanded': isCardExpanded5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightInCard(5)) || dismissFirstTimeCardId === 5,
               'suggestion-card--hover': isHovered5,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightUI(5)),
-              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(5) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightInCard(5)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(5) && feedbackAfterActionMode === 'toast',
               'suggestion-card--dismiss-first': dismissFirstTimeCardId === 5,
               'suggestion-card--scale-out': scaleOutCardId === 5
             }"
@@ -4240,7 +4240,7 @@
                 </div>
               </div>
             </template>
-            <template v-else-if="!isMinervaSkin && showSuccessHighlightUI(5)">
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(5)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Link updated!</div>
@@ -4282,14 +4282,14 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightUI(8)) || dismissFirstTimeCardId === 8)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightInCard(8)) || dismissFirstTimeCardId === 8)"
             ref="suggestionsSidebarRef8"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8 && !(!isMinervaSkin && showSuccessHighlightUI(8)) && dismissFirstTimeCardId !== 8,
-              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightUI(8)) || dismissFirstTimeCardId === 8,
+              'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8 && !(!isMinervaSkin && showSuccessHighlightInCard(8)) && dismissFirstTimeCardId !== 8,
+              'suggestion-card--expanded': isCardExpanded8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightInCard(8)) || dismissFirstTimeCardId === 8,
               'suggestion-card--hover': isHovered8,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightUI(8)),
-              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(8) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightInCard(8)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(8) && feedbackAfterActionMode === 'toast',
               'suggestion-card--dismiss-first': dismissFirstTimeCardId === 8,
               'suggestion-card--scale-out': scaleOutCardId === 8
             }"
@@ -4311,7 +4311,7 @@
                 </div>
               </div>
             </template>
-            <template v-else-if="!isMinervaSkin && showSuccessHighlightUI(8)">
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(8)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Link updated!</div>
@@ -4353,14 +4353,14 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightUI(6)) || dismissFirstTimeCardId === 6)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightInCard(6)) || dismissFirstTimeCardId === 6)"
             ref="suggestionsSidebarRef6"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6 && !(!isMinervaSkin && showSuccessHighlightUI(6)) && dismissFirstTimeCardId !== 6,
-              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightUI(6)) || dismissFirstTimeCardId === 6,
+              'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6 && !(!isMinervaSkin && showSuccessHighlightInCard(6)) && dismissFirstTimeCardId !== 6,
+              'suggestion-card--expanded': isCardExpanded6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightInCard(6)) || dismissFirstTimeCardId === 6,
               'suggestion-card--hover': isHovered6,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightUI(6)),
-              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(6) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightInCard(6)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(6) && feedbackAfterActionMode === 'toast',
               'suggestion-card--dismiss-first': dismissFirstTimeCardId === 6,
               'suggestion-card--scale-out': scaleOutCardId === 6
             }"
@@ -4382,7 +4382,7 @@
                 </div>
               </div>
             </template>
-            <template v-else-if="!isMinervaSkin && showSuccessHighlightUI(6)">
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(6)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Heading updated!</div>
@@ -4424,14 +4424,14 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightUI(7)) || dismissFirstTimeCardId === 7)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightInCard(7)) || dismissFirstTimeCardId === 7)"
             ref="suggestionsSidebarRef7"
             :class="{
-              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7 && !(!isMinervaSkin && showSuccessHighlightUI(7)) && dismissFirstTimeCardId !== 7,
-              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightUI(7)) || dismissFirstTimeCardId === 7,
+              'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7 && !(!isMinervaSkin && showSuccessHighlightInCard(7)) && dismissFirstTimeCardId !== 7,
+              'suggestion-card--expanded': isCardExpanded7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightInCard(7)) || dismissFirstTimeCardId === 7,
               'suggestion-card--hover': isHovered7,
-              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightUI(7)),
-              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(7) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightInCard(7)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(7) && feedbackAfterActionMode === 'toast',
               'suggestion-card--dismiss-first': dismissFirstTimeCardId === 7,
               'suggestion-card--scale-out': scaleOutCardId === 7
             }"
@@ -4453,7 +4453,7 @@
                 </div>
               </div>
             </template>
-            <template v-else-if="!isMinervaSkin && showSuccessHighlightUI(7)">
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(7)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
                 <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
                 <div class="suggestion-title">Link updated!</div>
@@ -8003,6 +8003,10 @@ function showSuccessHighlightUI(suggestionId) {
   return isSuccessHighlightActive(suggestionId) && feedbackAfterActionMode.value !== 'highlight-text-only';
 }
 
+function showSuccessHighlightInCard(suggestionId) {
+  return showSuccessHighlightUI(suggestionId) && feedbackAfterActionMode.value !== 'scale-card';
+}
+
 function activateSuccessHighlight(suggestionId) {
   if (!successHighlightOnCompleteEnabled.value) return;
   if (!successHighlightSuggestionIds.value.includes(suggestionId)) {
@@ -10426,7 +10430,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
     }
     if (feedbackAfterActionMode.value === 'scale-card') {
       if (wasCompleted) {
-        const SCALE_DURATION = 380;
+        const SCALE_DURATION = 240;
         if (isMinervaSkin.value) {
           isMinervaSheetScalingOut.value = true;
           window.setTimeout(() => {
@@ -17752,19 +17756,20 @@ function markArticleEdited() {
   to { stroke-dashoffset: 0; }
 }
 
-@keyframes card-scale-out {
-  0%   { transform: scale(1);    opacity: 1; }
-  60%  { transform: scale(0.85); opacity: 0.6; }
-  100% { transform: scale(0.4);  opacity: 0; }
+@keyframes card-scale-right {
+  0%   { transform: translateX(0) scale(1, 1);      opacity: 1; }
+  40%  { transform: translateX(12%) scale(0.9, 0.95); opacity: 0.8; }
+  100% { transform: translateX(55%) scale(0.2, 0.7);  opacity: 0; }
 }
 .suggestion-card--scale-out {
-  animation: card-scale-out 380ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  animation: card-scale-right 240ms cubic-bezier(0.55, 0, 0.9, 0.3) forwards;
   pointer-events: none;
+  transform-origin: right center;
 }
 .minerva-bottom-sheet--scale-out {
-  animation: card-scale-out 380ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  animation: card-scale-right 240ms cubic-bezier(0.55, 0, 0.9, 0.3) forwards;
   pointer-events: none;
-  transform-origin: center bottom;
+  transform-origin: right bottom;
 }
 
 .minerva-suggestions-on .article-content-edit {
