@@ -4126,7 +4126,8 @@
               'suggestion-card--hover': isHovered4,
               'suggestion-card--publish-prompt': publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightUI(4)),
               'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(4) && feedbackAfterActionMode === 'toast',
-              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 4
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 4,
+              'suggestion-card--scale-out': scaleOutCardId === 4
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset4}px` }"
@@ -4218,7 +4219,8 @@
               'suggestion-card--hover': isHovered5,
               'suggestion-card--publish-prompt': publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightUI(5)),
               'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(5) && feedbackAfterActionMode === 'toast',
-              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 5
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 5,
+              'suggestion-card--scale-out': scaleOutCardId === 5
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset5}px` }"
@@ -4288,7 +4290,8 @@
               'suggestion-card--hover': isHovered8,
               'suggestion-card--publish-prompt': publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightUI(8)),
               'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(8) && feedbackAfterActionMode === 'toast',
-              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 8
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 8,
+              'suggestion-card--scale-out': scaleOutCardId === 8
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset8}px` }"
@@ -4358,7 +4361,8 @@
               'suggestion-card--hover': isHovered6,
               'suggestion-card--publish-prompt': publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightUI(6)),
               'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(6) && feedbackAfterActionMode === 'toast',
-              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 6
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 6,
+              'suggestion-card--scale-out': scaleOutCardId === 6
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset6}px` }"
@@ -4428,7 +4432,8 @@
               'suggestion-card--hover': isHovered7,
               'suggestion-card--publish-prompt': publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightUI(7)),
               'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightUI(7) && feedbackAfterActionMode === 'toast',
-              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 7
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 7,
+              'suggestion-card--scale-out': scaleOutCardId === 7
             }"
             class="suggestion-card suggestion-card-positioned"
             :style="{ top: `${sidebarTopOffset7}px` }"
@@ -4892,7 +4897,8 @@
               'minerva-bottom-sheet--edit-check': isEditCheckSheet,
               'minerva-bottom-sheet--suggestion': !isEditCheckSheet,
               'minerva-bottom-sheet--rail-offset': !isEditCheckSheet && activePrototype === 'option-3',
-              'minerva-bottom-sheet--success-exit': isMinervaSuggestionSuccessExiting || isMinervaSheetClosing
+              'minerva-bottom-sheet--success-exit': isMinervaSuggestionSuccessExiting || isMinervaSheetClosing,
+              'minerva-bottom-sheet--scale-out': isMinervaSheetScalingOut
             }"
             role="dialog"
             aria-label="Suggestion"
@@ -5579,6 +5585,14 @@
                     class="prototype-suboption-radio"
                   >
                     {{ feedbackHighlightOnlyModeLabel }}
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="feedbackAfterActionMode"
+                    name="feedback-after-action-mode"
+                    input-value="scale-card"
+                    class="prototype-suboption-radio"
+                  >
+                    Highlighted text + Disappearing effect in card
                   </cdx-radio>
                   <cdx-radio
                     v-model="feedbackAfterActionMode"
@@ -6542,6 +6556,8 @@ const publishPromptMode = ref('card'); // 'card' | 'fixed-bottom'
 const publishPromptShown = ref(false);
 const publishPromptSuggestionId = ref(null);
 const showFixedBottomPublishPrompt = ref(false);
+const scaleOutCardId = ref(null);
+const isMinervaSheetScalingOut = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
 const persistentPaginationBarWaitForScroll = ref(false);
 let persistentPaginationBarIdleTimer = null;
@@ -10408,6 +10424,48 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         }
       }
     }
+    if (feedbackAfterActionMode.value === 'scale-card') {
+      if (wasCompleted) {
+        const SCALE_DURATION = 380;
+        if (isMinervaSkin.value) {
+          isMinervaSheetScalingOut.value = true;
+          window.setTimeout(() => {
+            isMinervaSheetScalingOut.value = false;
+            nextTick(() => {
+              if (!maybeShowMinervaNoMoreSuggestionsState()) closeMinervaSuggestion();
+            });
+            activateSuccessHighlight(currentId);
+          }, SCALE_DURATION);
+        } else {
+          scaleOutCardId.value = currentId;
+          window.setTimeout(() => {
+            scaleOutCardId.value = null;
+            activateSuccessHighlight(currentId);
+          }, SCALE_DURATION);
+        }
+      } else {
+        if (!dismissCardSeen.value) {
+          dismissCardSeen.value = true;
+          dismissedSuggestionIdForUndo.value = currentId;
+          if (isMinervaSkin.value) {
+            closeMinervaSuggestion();
+            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+          } else {
+            dismissFirstTimeCardId.value = currentId;
+          }
+          return;
+        }
+        if (isMinervaSkin.value) {
+          nextTick(() => {
+            if (!maybeShowMinervaNoMoreSuggestionsState()) {
+              if (isPaginationAutoMode.value) advanceMinervaSuggestion(currentId);
+              else closeMinervaSuggestion();
+            }
+          });
+        }
+      }
+      return;
+    }
     if (feedbackAfterActionMode.value === 'highlight-only' || feedbackAfterActionMode.value === 'highlight-text-only') {
       if (wasCompleted) {
         activateSuccessHighlight(currentId);
@@ -11639,7 +11697,7 @@ function handleDeclineGenericSuggestion(suggestionId) {
     if (feedbackAfterActionMode.value === 'toast') {
       triggerSuggestionDismissedToast(suggestionId);
       closeMinervaSuggestion();
-    } else if (feedbackAfterActionMode.value === 'card' || feedbackAfterActionMode.value === 'highlight-only' || feedbackAfterActionMode.value === 'highlight-text-only') {
+    } else if (feedbackAfterActionMode.value === 'card' || feedbackAfterActionMode.value === 'highlight-only' || feedbackAfterActionMode.value === 'highlight-text-only' || feedbackAfterActionMode.value === 'scale-card') {
       if (!dismissCardSeen.value) {
         dismissCardSeen.value = true;
         dismissedSuggestionIdForUndo.value = suggestionId;
@@ -17692,6 +17750,21 @@ function markArticleEdited() {
 
 @keyframes success-check-draw {
   to { stroke-dashoffset: 0; }
+}
+
+@keyframes card-scale-out {
+  0%   { transform: scale(1);    opacity: 1; }
+  60%  { transform: scale(0.85); opacity: 0.6; }
+  100% { transform: scale(0.4);  opacity: 0; }
+}
+.suggestion-card--scale-out {
+  animation: card-scale-out 380ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  pointer-events: none;
+}
+.minerva-bottom-sheet--scale-out {
+  animation: card-scale-out 380ms cubic-bezier(0.4, 0, 0.6, 1) forwards;
+  pointer-events: none;
+  transform-origin: center bottom;
 }
 
 .minerva-suggestions-on .article-content-edit {
