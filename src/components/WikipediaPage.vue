@@ -11637,7 +11637,10 @@ function handleNoSuggestion4() {
 }
 
 function handleResolveGenericSuggestion(suggestionId) {
-  activateSuccessHighlight(suggestionId);
+  const isScaleCard = feedbackAfterActionEnabled.value && feedbackAfterActionMode.value === 'scale-card';
+  if (!isScaleCard || isMinervaSkin.value) {
+    activateSuccessHighlight(suggestionId);
+  }
   if (suggestionId === 5) {
     isSuggestionResolved5.value = true;
     isCardExpanded5.value = false;
@@ -11653,6 +11656,12 @@ function handleResolveGenericSuggestion(suggestionId) {
   }
   if (isMinervaSkin.value) {
     handleMinervaSuggestionResolutionAfterAction(suggestionId, true);
+  } else if (isScaleCard) {
+    scaleOutCardId.value = suggestionId;
+    window.setTimeout(() => {
+      scaleOutCardId.value = null;
+      activateSuccessHighlight(suggestionId, 2000);
+    }, 260);
   } else {
     if (publishPromptEnabled.value && !publishPromptShown.value) {
       publishPromptShown.value = true;
