@@ -4118,7 +4118,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightInCard(4)) || dismissFirstTimeCardId === 4)"
+            v-if="showSuggestionsDisplay && (!showSuccessMessage4 && !isSuggestionResolved4 && !isSuggestionDeclined4 || publishPromptSuggestionId === 4 || (!isMinervaSkin && showSuccessHighlightInCard(4)) || dismissFirstTimeCardId === 4 || scaleOutCardId === 4)"
             ref="suggestionsSidebarRef4"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded4 && publishPromptSuggestionId !== 4 && !(!isMinervaSkin && showSuccessHighlightInCard(4)) && dismissFirstTimeCardId !== 4,
@@ -4211,7 +4211,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightInCard(5)) || dismissFirstTimeCardId === 5)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved5 && !isSuggestionDeclined5 || publishPromptSuggestionId === 5 || (!isMinervaSkin && showSuccessHighlightInCard(5)) || dismissFirstTimeCardId === 5 || scaleOutCardId === 5)"
             ref="suggestionsSidebarRef5"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded5 && publishPromptSuggestionId !== 5 && !(!isMinervaSkin && showSuccessHighlightInCard(5)) && dismissFirstTimeCardId !== 5,
@@ -4282,7 +4282,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightInCard(8)) || dismissFirstTimeCardId === 8)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved8 && !isSuggestionDeclined8 || publishPromptSuggestionId === 8 || (!isMinervaSkin && showSuccessHighlightInCard(8)) || dismissFirstTimeCardId === 8 || scaleOutCardId === 8)"
             ref="suggestionsSidebarRef8"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded8 && publishPromptSuggestionId !== 8 && !(!isMinervaSkin && showSuccessHighlightInCard(8)) && dismissFirstTimeCardId !== 8,
@@ -4353,7 +4353,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightInCard(6)) || dismissFirstTimeCardId === 6)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved6 && !isSuggestionDeclined6 || publishPromptSuggestionId === 6 || (!isMinervaSkin && showSuccessHighlightInCard(6)) || dismissFirstTimeCardId === 6 || scaleOutCardId === 6)"
             ref="suggestionsSidebarRef6"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded6 && publishPromptSuggestionId !== 6 && !(!isMinervaSkin && showSuccessHighlightInCard(6)) && dismissFirstTimeCardId !== 6,
@@ -4424,7 +4424,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightInCard(7)) || dismissFirstTimeCardId === 7)"
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved7 && !isSuggestionDeclined7 || publishPromptSuggestionId === 7 || (!isMinervaSkin && showSuccessHighlightInCard(7)) || dismissFirstTimeCardId === 7 || scaleOutCardId === 7)"
             ref="suggestionsSidebarRef7"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded7 && publishPromptSuggestionId !== 7 && !(!isMinervaSkin && showSuccessHighlightInCard(7)) && dismissFirstTimeCardId !== 7,
@@ -8000,7 +8000,9 @@ function isSuccessHighlightActive(suggestionId) {
 }
 
 function showSuccessHighlightUI(suggestionId) {
-  return isSuccessHighlightActive(suggestionId) && feedbackAfterActionMode.value !== 'highlight-text-only';
+  return isSuccessHighlightActive(suggestionId) &&
+    feedbackAfterActionMode.value !== 'highlight-text-only' &&
+    feedbackAfterActionMode.value !== 'scale-card';
 }
 
 function showSuccessHighlightInCard(suggestionId) {
@@ -10430,7 +10432,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
     }
     if (feedbackAfterActionMode.value === 'scale-card') {
       if (wasCompleted) {
-        const SCALE_DURATION = 240;
+        const SCALE_DURATION = isMinervaSkin.value ? 280 : 240;
         if (isMinervaSkin.value) {
           isMinervaSheetScalingOut.value = true;
           window.setTimeout(() => {
@@ -17757,9 +17759,13 @@ function markArticleEdited() {
 }
 
 @keyframes card-scale-right {
-  0%   { transform: translateX(0) scale(1, 1);      opacity: 1; }
+  0%   { transform: translateX(0) scale(1, 1);        opacity: 1; }
   40%  { transform: translateX(12%) scale(0.9, 0.95); opacity: 0.8; }
   100% { transform: translateX(55%) scale(0.2, 0.7);  opacity: 0; }
+}
+@keyframes sheet-move-right {
+  0%   { transform: translateX(0);    opacity: 1; }
+  100% { transform: translateX(110%); opacity: 0; }
 }
 .suggestion-card--scale-out {
   animation: card-scale-right 240ms cubic-bezier(0.55, 0, 0.9, 0.3) forwards;
@@ -17767,9 +17773,8 @@ function markArticleEdited() {
   transform-origin: right center;
 }
 .minerva-bottom-sheet--scale-out {
-  animation: card-scale-right 240ms cubic-bezier(0.55, 0, 0.9, 0.3) forwards;
+  animation: sheet-move-right 280ms cubic-bezier(0.4, 0, 0.8, 0.2) forwards;
   pointer-events: none;
-  transform-origin: right bottom;
 }
 
 .minerva-suggestions-on .article-content-edit {
