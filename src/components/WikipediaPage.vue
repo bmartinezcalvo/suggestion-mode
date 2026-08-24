@@ -8009,7 +8009,7 @@ function showSuccessHighlightInCard(suggestionId) {
   return showSuccessHighlightUI(suggestionId) && feedbackAfterActionMode.value !== 'scale-card';
 }
 
-function activateSuccessHighlight(suggestionId) {
+function activateSuccessHighlight(suggestionId, duration = 4000) {
   if (!successHighlightOnCompleteEnabled.value) return;
   if (!successHighlightSuggestionIds.value.includes(suggestionId)) {
     successHighlightSuggestionIds.value = [ ...successHighlightSuggestionIds.value, suggestionId ];
@@ -8017,7 +8017,7 @@ function activateSuccessHighlight(suggestionId) {
   window.setTimeout(() => {
     if (publishPromptEnabled.value && publishPromptSuggestionId.value === suggestionId) return;
     successHighlightSuggestionIds.value = successHighlightSuggestionIds.value.filter((id) => id !== suggestionId);
-  }, 4000);
+  }, duration);
 }
 
 function getNextMinervaSuggestionId(currentId) {
@@ -10432,7 +10432,7 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
     }
     if (feedbackAfterActionMode.value === 'scale-card') {
       if (wasCompleted) {
-        const SCALE_DURATION = isMinervaSkin.value ? 280 : 240;
+        const SCALE_DURATION = isMinervaSkin.value ? 280 : 260;
         if (isMinervaSkin.value) {
           isMinervaSheetScalingOut.value = true;
           window.setTimeout(() => {
@@ -10440,13 +10440,13 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
             nextTick(() => {
               if (!maybeShowMinervaNoMoreSuggestionsState()) closeMinervaSuggestion();
             });
-            activateSuccessHighlight(currentId);
+            activateSuccessHighlight(currentId, 2000);
           }, SCALE_DURATION);
         } else {
           scaleOutCardId.value = currentId;
           window.setTimeout(() => {
             scaleOutCardId.value = null;
-            activateSuccessHighlight(currentId);
+            activateSuccessHighlight(currentId, 2000);
           }, SCALE_DURATION);
         }
       } else {
@@ -17759,16 +17759,16 @@ function markArticleEdited() {
 }
 
 @keyframes card-scale-right {
-  0%   { transform: translateX(0) scale(1, 1);        opacity: 1; }
-  40%  { transform: translateX(12%) scale(0.9, 0.95); opacity: 0.8; }
-  100% { transform: translateX(55%) scale(0.2, 0.7);  opacity: 0; }
+  0%   { transform: scaleX(1);    opacity: 1; }
+  25%  { transform: scaleX(0.88); opacity: 0.9; }
+  100% { transform: scaleX(0);    opacity: 0; }
 }
 @keyframes sheet-move-right {
   0%   { transform: translateX(0);    opacity: 1; }
   100% { transform: translateX(110%); opacity: 0; }
 }
 .suggestion-card--scale-out {
-  animation: card-scale-right 240ms cubic-bezier(0.55, 0, 0.9, 0.3) forwards;
+  animation: card-scale-right 260ms cubic-bezier(0.6, 0, 1, 0.4) forwards;
   pointer-events: none;
   transform-origin: right center;
 }
