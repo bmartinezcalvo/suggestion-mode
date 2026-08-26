@@ -4136,7 +4136,12 @@
           >
             <template v-if="publishPromptSuggestionId === 4">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
@@ -4149,7 +4154,12 @@
             </template>
             <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(4)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Link removed!</div>
               </div>
             </template>
@@ -4229,7 +4239,12 @@
           >
             <template v-if="publishPromptSuggestionId === 5">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
@@ -4242,7 +4257,12 @@
             </template>
             <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(5)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
@@ -4300,7 +4320,12 @@
           >
             <template v-if="publishPromptSuggestionId === 8">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
@@ -4313,7 +4338,12 @@
             </template>
             <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(8)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
@@ -4371,7 +4401,12 @@
           >
             <template v-if="publishPromptSuggestionId === 6">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
@@ -4384,7 +4419,12 @@
             </template>
             <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(6)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Heading updated!</div>
               </div>
             </template>
@@ -4442,7 +4482,12 @@
           >
             <template v-if="publishPromptSuggestionId === 7">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Suggestion completed!</div>
               </div>
               <div class="suggestion-content">
@@ -4455,7 +4500,12 @@
             </template>
             <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(7)">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Link updated!</div>
               </div>
             </template>
@@ -4681,7 +4731,12 @@
           <transition name="fixed-bottom-publish-prompt-reveal">
             <div v-if="showFixedBottomPublishPrompt" class="suggestion-card suggestion-card--expanded suggestion-card--publish-prompt suggestion-card--fixed-bottom">
               <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
-                <div class="suggestion-icon suggestion-icon--success"><cdx-icon :icon="cdxIconSuccess" size="medium" /></div>
+                <div class="suggestion-icon suggestion-icon--success">
+                  <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
+                    <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                  </svg>
+                </div>
                 <div class="suggestion-title">Suggestion completed!</div>
                 <button class="suggestion-close-btn" type="button" aria-label="Close" @click="showFixedBottomPublishPrompt = false"><cdx-icon :icon="cdxIconClose" size="small" /></button>
               </div>
