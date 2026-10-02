@@ -6117,7 +6117,7 @@
             <cdx-button
               class="edit-menu-btn edit-menu-btn--suggestions"
               action="progressive"
-              weight="quiet"
+              weight="normal"
               @click="handleEditMenuViewSuggestions"
             >
               <cdx-icon :icon="cdxIconLightbulb" size="medium" class="edit-menu-btn__icon" />
@@ -22876,13 +22876,6 @@ function markArticleEdited() {
   min-height: 48px;
 }
 
-.edit-menu-btn--suggestions {
-  color: var(--color-progressive, #3366cc);
-}
-
-.edit-menu-btn--suggestions .edit-menu-btn__icon {
-  color: var(--color-progressive, #3366cc);
-}
 
 
 </style>
