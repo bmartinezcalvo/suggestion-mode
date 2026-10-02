@@ -650,6 +650,24 @@
           </div>
         </transition>
 
+        <!-- Suggestion preview button — appears on scroll when suggestion is in viewport -->
+        <transition name="scroll-preview-reveal">
+          <div
+            v-if="isMinervaSkin && isEditMode && suggestionPreviewWhileScrollingEnabled && scrollPreviewSuggestionId !== null && !isMinervaSheetOpen"
+            class="minerva-scroll-preview-anchor"
+          >
+            <button
+              type="button"
+              class="minerva-scroll-preview-btn"
+              @mousedown.prevent
+              @touchstart.stop.prevent="openMinervaSuggestion(scrollPreviewSuggestionId)"
+              @click.stop="openMinervaSuggestion(scrollPreviewSuggestionId)"
+            >
+              {{ getMinervaSuggestionCardTitle(scrollPreviewSuggestionId) }}
+            </button>
+          </div>
+        </transition>
+
         <div
           v-if="showMinervaBanner || showMinervaHelpButton || showMinervaArrowOnly"
           class="minerva-suggestions-bar"
@@ -1538,10 +1556,11 @@
                         v-if="isSuggestion5Pending || isSuccessHighlightActive(5)"
                         ref="highlightedTextRef5"
                         class="suggestion-target suggestion-target--inline"
+                        data-preview-suggestion-id="5"
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
-                          'highlighted-text-wrapper--selected': isSuggestion5Pending && showSuggestions && (isCardExpanded5 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 5)),
+                          'highlighted-text-wrapper--selected': isSuggestion5Pending && showSuggestions && (isCardExpanded5 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 5) || isScrollPreviewingId(5)),
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
                           'suggestion-dismiss-right': dismissedSuggestionId === 5
                         }"
@@ -2925,7 +2944,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion1Pending && isHovered && showSuggestions && !isCardExpanded,
-                      'highlighted-text-wrapper--selected': isSuggestion1Pending && showSuggestions && (isCardExpanded || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 1)),
+                      'highlighted-text-wrapper--selected': isSuggestion1Pending && showSuggestions && (isCardExpanded || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 1) || isScrollPreviewingId(1)),
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(1),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion1Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 1
@@ -2951,6 +2970,7 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 1 }"
+                      data-preview-suggestion-id="1"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(1)"
@@ -3096,7 +3116,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion8Pending && isHovered8 && showSuggestions && !isCardExpanded8,
-                      'highlighted-text-wrapper--selected': isSuggestion8Pending && showSuggestions && (isCardExpanded8 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 8)),
+                      'highlighted-text-wrapper--selected': isSuggestion8Pending && showSuggestions && (isCardExpanded8 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 8) || isScrollPreviewingId(8)),
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(8),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion8Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 8
@@ -3119,6 +3139,7 @@
                       v-if="isMinervaSkin && isSuggestion8Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      data-preview-suggestion-id="8"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(8)"
@@ -3156,7 +3177,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion6Pending && isHovered6 && showSuggestions && !isCardExpanded6,
-                      'highlighted-text-wrapper--selected': isSuggestion6Pending && showSuggestions && (isCardExpanded6 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 6)),
+                      'highlighted-text-wrapper--selected': isSuggestion6Pending && showSuggestions && (isCardExpanded6 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 6) || isScrollPreviewingId(6)),
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(6),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion6Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 6
@@ -3179,6 +3200,7 @@
                       v-if="isMinervaSkin && isSuggestion6Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      data-preview-suggestion-id="6"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(6)"
@@ -3208,7 +3230,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion2Pending && isHovered2 && showSuggestions && !isCardExpanded2,
-                      'highlighted-text-wrapper--selected': isSuggestion2Pending && showSuggestions && (isCardExpanded2 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 2)),
+                      'highlighted-text-wrapper--selected': isSuggestion2Pending && showSuggestions && (isCardExpanded2 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 2) || isScrollPreviewingId(2)),
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(2),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion2Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 2
@@ -3229,7 +3251,7 @@
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion4Pending && isHovered4 && showSuggestions && !isCardExpanded4,
-                          'highlighted-text-wrapper--selected': isSuggestion4Pending && showSuggestions && (isCardExpanded4 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 4)),
+                          'highlighted-text-wrapper--selected': isSuggestion4Pending && showSuggestions && (isCardExpanded4 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 4) || isScrollPreviewingId(4)),
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(4)
                         }"
                         @mouseenter.stop="isTextHovered4 = true"
@@ -3256,6 +3278,7 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 2 }"
+                      data-preview-suggestion-id="2"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(2)"
@@ -3287,7 +3310,7 @@
                       :class="{
                         [nonSelectedHighlightClass]: showSuggestions,
                         'highlighted-text-wrapper--hover': isSuggestion4Pending && isHovered4 && showSuggestions && !isCardExpanded4,
-                        'highlighted-text-wrapper--selected': isSuggestion4Pending && showSuggestions && (isCardExpanded4 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 4)),
+                        'highlighted-text-wrapper--selected': isSuggestion4Pending && showSuggestions && (isCardExpanded4 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 4) || isScrollPreviewingId(4)),
                         'highlighted-text-wrapper--success': isSuccessHighlightActive(4),
                         'suggestion-dismiss-right': dismissedSuggestionId === 4
                       }"
@@ -3313,6 +3336,7 @@
                       v-if="isMinervaSkin && isSuggestion4Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      data-preview-suggestion-id="4"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(4)"
@@ -3427,7 +3451,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion7Pending && isHovered7 && showSuggestions && !isCardExpanded7,
-                      'highlighted-text-wrapper--selected': isSuggestion7Pending && showSuggestions && (isCardExpanded7 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 7)),
+                      'highlighted-text-wrapper--selected': isSuggestion7Pending && showSuggestions && (isCardExpanded7 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 7) || isScrollPreviewingId(7)),
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(7),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion7Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 7
@@ -3450,6 +3474,7 @@
                       v-if="isMinervaSkin && isSuggestion7Pending"
                       type="button"
                       class="minerva-suggestion-trigger"
+                      data-preview-suggestion-id="7"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(7)"
@@ -3500,7 +3525,7 @@
                       'highlighted-text-wrapper': showSuggestions,
                       [nonSelectedHighlightClass]: showSuggestions,
                       'highlighted-text-wrapper--hover': isSuggestion3Pending && isHovered3 && showSuggestions && !isCardExpanded3,
-                      'highlighted-text-wrapper--selected': isSuggestion3Pending && showSuggestions && (isCardExpanded3 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 3)),
+                      'highlighted-text-wrapper--selected': isSuggestion3Pending && showSuggestions && (isCardExpanded3 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 3) || isScrollPreviewingId(3)),
                       'highlighted-text-wrapper--success': isSuccessHighlightActive(3),
                       'minerva-suggestion-target': isMinervaSkin && isSuggestion3Pending,
                       'suggestion-dismiss-right': dismissedSuggestionId === 3
@@ -3526,6 +3551,7 @@
                       type="button"
                       class="minerva-suggestion-trigger"
                       :class="{ 'minerva-suggestion-trigger--bounce': firstSuggestionBounceActiveId === 3 }"
+                      data-preview-suggestion-id="3"
                       aria-label="Show suggestion"
                       @mousedown.prevent
                       @touchstart.stop.prevent="openMinervaSuggestion(3)"
@@ -3711,10 +3737,11 @@
                         v-if="isSuggestion5Pending || isSuccessHighlightActive(5)"
                         ref="highlightedTextRef5"
                         class="suggestion-target suggestion-target--inline"
+                        data-preview-suggestion-id="5"
                         :class="{
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
-                          'highlighted-text-wrapper--selected': isSuggestion5Pending && showSuggestions && (isCardExpanded5 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 5)),
+                          'highlighted-text-wrapper--selected': isSuggestion5Pending && showSuggestions && (isCardExpanded5 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 5) || isScrollPreviewingId(5)),
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
                           'suggestion-dismiss-right': dismissedSuggestionId === 5
                         }"
@@ -5610,13 +5637,11 @@
               </cdx-field>
               <cdx-field>
                 <template #label>Other features</template>
-                <cdx-checkbox v-model="publishPromptEnabled">
-                  Enable Publish prompt para newcomers (<a href="https://phabricator.wikimedia.org/T432622" target="_blank" rel="noopener">T432622</a>)
+                <cdx-checkbox v-if="isMinervaSkin" v-model="suggestionPreviewWhileScrollingEnabled">
+                  Enable suggestion preview while scrolling
                 </cdx-checkbox>
-                <cdx-checkbox v-model="feedbackAfterActionEnabled">
-                  Enable feedback after completing/dismissing suggestion (<a href="https://phabricator.wikimedia.org/T404607" target="_blank" rel="noopener">T404607</a>)
-                </cdx-checkbox>
-                <div v-if="feedbackAfterActionEnabled" class="prototype-suboptions prototype-suboptions--indexed-radios">
+                <p class="prototype-subsection-label">Feedback after action</p>
+                <div class="prototype-suboptions prototype-suboptions--indexed-radios">
                   <cdx-radio
                     v-model="feedbackAfterActionMode"
                     name="feedback-after-action-mode"
@@ -5658,9 +5683,6 @@
                     Just highlighted text
                   </cdx-radio>
                 </div>
-                <cdx-checkbox v-model="editToolbarImprovementsEnabled">
-                  Enable Edit Toolbar improvements (<a href="https://phabricator.wikimedia.org/T400903" target="_blank" rel="noopener">T400903</a>)
-                </cdx-checkbox>
                 <!-- success state is always enabled, no longer a toggle -->
                 <cdx-checkbox v-model="noMoreSuggestionsEmptyStateEnabled">
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
@@ -6615,6 +6637,9 @@ const scaleOutCardId = ref(null);
 const isMinervaSheetScalingOut = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
 const persistentPaginationBarWaitForScroll = ref(false);
+const suggestionPreviewWhileScrollingEnabled = ref(false);
+const scrollPreviewSuggestionId = ref(null);
+let scrollPreviewScrollStopTimer = null;
 let persistentPaginationBarIdleTimer = null;
 let persistentPaginationBarScrollTimer = null;
 const persistentPaginationSuccessLabel = ref('');
@@ -8062,6 +8087,10 @@ function showSuccessHighlightUI(suggestionId) {
 
 function showSuccessHighlightInCard(suggestionId) {
   return showSuccessHighlightUI(suggestionId) && feedbackAfterActionMode.value !== 'scale-card';
+}
+
+function isScrollPreviewingId(id) {
+  return isMinervaSkin.value && suggestionPreviewWhileScrollingEnabled.value && scrollPreviewSuggestionId.value === id;
 }
 
 function activateSuccessHighlight(suggestionId, duration = 4000) {
@@ -11201,6 +11230,50 @@ function handlePersistentPaginationBarScroll() {
   persistentPaginationBarWaitForScroll.value = false;
 }
 
+function updateScrollPreviewSuggestion() {
+  if (!suggestionPreviewWhileScrollingEnabled.value || !isMinervaSkin.value || !isEditMode.value) return;
+  if (isMinervaSheetOpen.value) {
+    scrollPreviewSuggestionId.value = null;
+    return;
+  }
+  const centerY = window.innerHeight / 2;
+  const pendingIds = getPendingSuggestionIdsForContext();
+  let bestId = null;
+  let bestDistance = Infinity;
+  const triggers = document.querySelectorAll('[data-preview-suggestion-id]');
+  triggers.forEach((trigger) => {
+    const rawId = trigger.dataset.previewSuggestionId;
+    const id = isNaN(rawId) ? rawId : parseInt(rawId);
+    if (!pendingIds.includes(id)) return;
+    const rect = trigger.getBoundingClientRect();
+    if (rect.bottom < 0 || rect.top > window.innerHeight) return;
+    const triggerCenter = (rect.top + rect.bottom) / 2;
+    const distance = Math.abs(triggerCenter - centerY);
+    if (distance < bestDistance) {
+      bestDistance = distance;
+      bestId = id;
+    }
+  });
+  // For stacked suggestions: prefer suggestion 2 over 4
+  if (bestId === 4 && pendingIds.includes(2)) bestId = 2;
+  scrollPreviewSuggestionId.value = bestId;
+}
+
+function handleSuggestionPreviewScroll() {
+  if (!suggestionPreviewWhileScrollingEnabled.value || !isMinervaSkin.value) return;
+  if (scrollPreviewScrollStopTimer) {
+    clearTimeout(scrollPreviewScrollStopTimer);
+    scrollPreviewScrollStopTimer = null;
+  }
+  updateScrollPreviewSuggestion();
+  scrollPreviewScrollStopTimer = setTimeout(() => {
+    scrollPreviewScrollStopTimer = setTimeout(() => {
+      scrollPreviewSuggestionId.value = null;
+      scrollPreviewScrollStopTimer = null;
+    }, 2000);
+  }, 150);
+}
+
 function handleScrollReappear() {
   if (activePrototype.value !== 'option-3') return;
   if (!isMinervaSkin.value) return;
@@ -13429,6 +13502,7 @@ onMounted(() => {
     window.addEventListener('scroll', updateEditToolbarScrolled, true);
     window.addEventListener('scroll', handleScrollReappear, true);
     window.addEventListener('scroll', handlePersistentPaginationBarScroll, true);
+    window.addEventListener('scroll', handleSuggestionPreviewScroll, true);
     window.addEventListener('wheel', markMinervaFullPageManualScrollIntent, { passive: true });
     window.addEventListener('touchmove', markMinervaFullPageManualScrollIntent, { passive: true });
     window.addEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
@@ -13458,6 +13532,11 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', updateEditToolbarScrolled, true);
     window.removeEventListener('scroll', handleScrollReappear, true);
     window.removeEventListener('scroll', handlePersistentPaginationBarScroll, true);
+    window.removeEventListener('scroll', handleSuggestionPreviewScroll, true);
+    if (scrollPreviewScrollStopTimer) {
+      clearTimeout(scrollPreviewScrollStopTimer);
+      scrollPreviewScrollStopTimer = null;
+    }
     window.removeEventListener('wheel', markMinervaFullPageManualScrollIntent);
     window.removeEventListener('touchmove', markMinervaFullPageManualScrollIntent);
     window.removeEventListener('scroll', handleMinervaFullPageTocScrollVisibility, true);
@@ -16282,6 +16361,13 @@ function markArticleEdited() {
   gap: 0;
 }
 
+.prototype-subsection-label {
+  margin: 4px 0 0;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--color-subtle, #54595d);
+}
+
 .minerva-full-page-sections-nav {
   position: fixed;
   right: 0;
@@ -18147,6 +18233,64 @@ function markArticleEdited() {
   box-shadow: var(--box-shadow-medium, 0 4px 4px 0 rgba(0, 0, 0, 0.06), 0 0 8px 0 rgba(0, 0, 0, 0.06));
   font-size: 16px;
   line-height: 24px;
+}
+
+.minerva-scroll-preview-anchor {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 16px;
+  z-index: 68;
+  display: flex;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.minerva-scroll-preview-btn {
+  pointer-events: all;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 20px;
+  border-radius: 9999px;
+  border: 1px solid var(--color-progressive, #3366cc);
+  background: var(--background-color-base, #fff);
+  color: var(--color-progressive, #3366cc);
+  font-size: 16px;
+  font-weight: 500;
+  line-height: 1.375;
+  cursor: pointer;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  white-space: nowrap;
+}
+
+.minerva-scroll-preview-btn:hover {
+  background: var(--background-color-progressive-subtle, #eaf3ff);
+}
+
+.minerva-scroll-preview-btn:active {
+  background: var(--background-color-progressive-subtle, #eaf3ff);
+  opacity: 0.8;
+}
+
+.scroll-preview-reveal-enter-active {
+  transition: opacity 180ms ease, transform 180ms ease;
+}
+
+.scroll-preview-reveal-leave-active {
+  transition: opacity 150ms ease, transform 150ms ease;
+}
+
+.scroll-preview-reveal-enter-from,
+.scroll-preview-reveal-leave-to {
+  opacity: 0;
+  transform: translateY(8px);
+}
+
+.scroll-preview-reveal-enter-to,
+.scroll-preview-reveal-leave-from {
+  opacity: 1;
+  transform: translateY(0);
 }
 
 .persistent-bar-reveal-enter-active {
