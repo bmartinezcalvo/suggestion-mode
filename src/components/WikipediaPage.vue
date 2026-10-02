@@ -5640,49 +5640,6 @@
                 <cdx-checkbox v-if="isMinervaSkin" v-model="suggestionPreviewWhileScrollingEnabled">
                   Enable suggestion preview while scrolling
                 </cdx-checkbox>
-                <p class="prototype-subsection-label">Feedback after action</p>
-                <div class="prototype-suboptions prototype-suboptions--indexed-radios">
-                  <cdx-radio
-                    v-model="feedbackAfterActionMode"
-                    name="feedback-after-action-mode"
-                    input-value="card"
-                    class="prototype-suboption-radio"
-                  >
-                    Custom card
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackAfterActionMode"
-                    name="feedback-after-action-mode"
-                    input-value="toast"
-                    class="prototype-suboption-radio"
-                  >
-                    Toast
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackAfterActionMode"
-                    name="feedback-after-action-mode"
-                    input-value="highlight-only"
-                    class="prototype-suboption-radio"
-                  >
-                    {{ feedbackHighlightOnlyModeLabel }}
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackAfterActionMode"
-                    name="feedback-after-action-mode"
-                    input-value="scale-card"
-                    class="prototype-suboption-radio"
-                  >
-                    Highlighted text + Disappearing effect in card
-                  </cdx-radio>
-                  <cdx-radio
-                    v-model="feedbackAfterActionMode"
-                    name="feedback-after-action-mode"
-                    input-value="highlight-text-only"
-                    class="prototype-suboption-radio prototype-suboption-radio--last"
-                  >
-                    Just highlighted text
-                  </cdx-radio>
-                </div>
                 <!-- success state is always enabled, no longer a toggle -->
                 <cdx-checkbox v-model="noMoreSuggestionsEmptyStateEnabled">
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
@@ -6637,7 +6594,7 @@ const scaleOutCardId = ref(null);
 const isMinervaSheetScalingOut = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
 const persistentPaginationBarWaitForScroll = ref(false);
-const suggestionPreviewWhileScrollingEnabled = ref(false);
+const suggestionPreviewWhileScrollingEnabled = ref(true);
 const scrollPreviewSuggestionId = ref(null);
 let scrollPreviewScrollStopTimer = null;
 let persistentPaginationBarIdleTimer = null;
@@ -18254,7 +18211,7 @@ function markArticleEdited() {
   padding: 10px 20px;
   border-radius: 9999px;
   border: 1px solid var(--color-progressive, #3366cc);
-  background: var(--background-color-base, #fff);
+  background: var(--background-color-progressive-subtle, #eaf3ff);
   color: var(--color-progressive, #3366cc);
   font-size: 16px;
   font-weight: 500;
@@ -18265,11 +18222,10 @@ function markArticleEdited() {
 }
 
 .minerva-scroll-preview-btn:hover {
-  background: var(--background-color-progressive-subtle, #eaf3ff);
+  background: color-mix(in srgb, var(--background-color-progressive-subtle, #eaf3ff) 80%, transparent);
 }
 
 .minerva-scroll-preview-btn:active {
-  background: var(--background-color-progressive-subtle, #eaf3ff);
   opacity: 0.8;
 }
 
