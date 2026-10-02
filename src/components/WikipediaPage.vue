@@ -2930,14 +2930,25 @@
                   </aside>
                 </div>
 
-                <!-- Intro-only mode: expand to full page button -->
-                <div v-if="isMinervaSkin && isIntroOnlyMode" class="intro-only-expand">
+                <!-- Intro-only mode: expand to full page button (same pattern as edit-full-page-btn) -->
+                <div v-if="isMinervaSkin && isIntroOnlyMode" class="edit-full-page-btn-wrapper">
                   <cdx-button
-                    class="intro-only-expand__btn"
+                    v-if="isEditToolbarScrolled"
+                    class="edit-full-page-btn"
+                    :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
                     action="default"
-                    weight="normal"
+                    :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                    :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                     @click="expandIntroToFullPage"
-                  >Edit full page</cdx-button>
+                  ><span class="edit-full-page-btn-content">
+                    <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
+                    <span>Edit full page</span>
+                    <span v-if="showSuggestions && availableSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                    <span v-if="showSuggestions && availableSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
+                      <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                      <span class="edit-full-page-badge-dot"></span>
+                    </span>
+                  </span></cdx-button>
                 </div>
 
                 <template v-if="selectedArticle === 'audre-lorde' && !isIntroOnlyMode">
@@ -6095,37 +6106,41 @@
         </aside>
 
         <!-- Edit menu bottom sheet: "What do you want to edit?" -->
-        <Transition name="edit-menu-sheet">
-          <div
-            v-if="isMinervaSkin && !isEditMode && isEditMenuSheetOpen"
-            class="edit-menu-sheet"
-            role="dialog"
-            aria-modal="true"
-            aria-label="What do you want to edit?"
-          >
-            <div class="edit-menu-sheet__overlay" @click="closeEditMenuSheet" />
-            <div class="edit-menu-sheet__panel">
-              <div class="edit-menu-sheet__header">
-                <span class="edit-menu-sheet__title">What do you want to edit?</span>
-                <button class="edit-menu-sheet__close" aria-label="Close" @click="closeEditMenuSheet">
-                  <cdx-icon :icon="cdxIconClose" size="medium" />
-                </button>
-              </div>
-              <div class="edit-menu-sheet__actions">
-                <button class="edit-menu-sheet__btn edit-menu-sheet__btn--suggestions" @click="handleEditMenuViewSuggestions">
-                  <cdx-icon :icon="cdxIconLightbulb" size="medium" class="edit-menu-sheet__btn-icon" />
-                  <span>View suggested edits</span>
-                </button>
-                <button class="edit-menu-sheet__btn" @click="handleEditMenuEditIntro">
-                  <span>Edit introduction</span>
-                </button>
-                <button class="edit-menu-sheet__btn" @click="handleEditMenuEditFullPage">
-                  <span>Edit full page</span>
-                </button>
-              </div>
-            </div>
+        <cdx-popover
+          v-if="isMinervaSkin && !isEditMode"
+          v-model:open="isEditMenuSheetOpen"
+          title="What do you want to edit?"
+          use-bottom-sheet
+          use-close-button
+        >
+          <div class="edit-menu-actions">
+            <cdx-button
+              class="edit-menu-btn edit-menu-btn--suggestions"
+              action="progressive"
+              weight="quiet"
+              @click="handleEditMenuViewSuggestions"
+            >
+              <cdx-icon :icon="cdxIconLightbulb" size="medium" class="edit-menu-btn__icon" />
+              View suggested edits
+            </cdx-button>
+            <cdx-button
+              class="edit-menu-btn"
+              action="default"
+              weight="normal"
+              @click="handleEditMenuEditIntro"
+            >
+              Edit introduction
+            </cdx-button>
+            <cdx-button
+              class="edit-menu-btn"
+              action="default"
+              weight="normal"
+              @click="handleEditMenuEditFullPage"
+            >
+              Edit full page
+            </cdx-button>
           </div>
-        </Transition>
+        </cdx-popover>
 
         <cdx-dialog
           v-model:open="isPrototypeDialogOpen"
@@ -7208,7 +7223,7 @@ const scaleOutCardId = ref(null);
 const isMinervaSheetScalingOut = ref(false);
 const persistentPaginationBarScrollPending = ref(false);
 const persistentPaginationBarWaitForScroll = ref(false);
-const suggestionPreviewWhileScrollingEnabled = ref(true);
+const suggestionPreviewWhileScrollingEnabled = ref(false); // off by default when showEditMenuOnMobile is on
 const scrollPreviewSuggestionId = ref(null);
 let scrollPreviewScrollStopTimer = null;
 
@@ -9014,24 +9029,14 @@ function closeEditMenuSheet() {
 function handleEditMenuViewSuggestions() {
   closeEditMenuSheet();
   isIntroOnlyMode.value = false;
-  feedbackAndNextEnabled.value = true;
-  feedbackAndNextMode.value = 'persistent-pagination';
   minervaEditSectionOnly.value = null;
   applyPrototypeMode(selectedPrototype.value);
   enterEditMode();
-  // Scroll to first pending suggestion after edit mode loads
+  // After edit mode loads, open the first suggestion's bottom sheet
   setTimeout(() => {
-    const targets = getPendingSuggestionTargets();
-    if (!targets.length) return;
-    const sorted = targets
-      .filter(t => t.ref.value)
-      .map(t => ({ ...t, top: t.ref.value.getBoundingClientRect().top + window.scrollY }))
-      .sort((a, b) => a.top - b.top);
-    if (sorted.length) {
-      const target = sorted[0].ref.value;
-      const targetTop = target.getBoundingClientRect().top + window.scrollY;
-      window.scrollTo({ top: Math.max(0, targetTop - window.innerHeight * 0.3), behavior: 'smooth' });
-    }
+    nextTick(() => {
+      openFirstPendingSuggestionForContext({ openMinervaAfterScroll: true });
+    });
   }, 2200);
 }
 
@@ -9053,6 +9058,7 @@ function handleEditMenuEditFullPage() {
 }
 
 function expandIntroToFullPage() {
+  expandToFullPageEdit(null);
   isIntroOnlyMode.value = false;
 }
 
@@ -9339,6 +9345,8 @@ function resetPrototypeDialog() {
   nonSelectedHighlightUnderlineEnabled.value = false;
   editFullPageImprovedEnabled.value = false;
   paginationManualNavigableButtonEnabled.value = false;
+  showEditMenuOnMobile.value = true;
+  suggestionPreviewWhileScrollingEnabled.value = false;
 }
 
 function openEditAtSection(sectionId) {
@@ -13025,6 +13033,14 @@ watch(isMinervaSheetOpen, (isOpen) => {
   if (!isOpen && showRailOnReach.value && isMinervaSkin.value && isEditMode.value) {
     nextTick(() => updateActiveRail());
   }
+});
+
+// Mutual exclusivity: edit menu and scroll preview
+watch(showEditMenuOnMobile, (enabled) => {
+  if (enabled) suggestionPreviewWhileScrollingEnabled.value = false;
+});
+watch(suggestionPreviewWhileScrollingEnabled, (enabled) => {
+  if (enabled) showEditMenuOnMobile.value = false;
 });
 
 watch(toastsEnabled, (enabled) => {
@@ -22843,142 +22859,29 @@ function markArticleEdited() {
   }
 }
 
-/* ── Edit menu sheet ("What do you want to edit?") ───────────── */
+/* ── Edit menu bottom sheet (CdxPopover content) ─────────────── */
 
-.edit-menu-sheet {
-  position: fixed;
-  inset: 0;
-  z-index: 200;
-}
-
-.edit-menu-sheet__overlay {
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.4);
-}
-
-.edit-menu-sheet__panel {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  background: #fff;
-  border-radius: 12px 12px 0 0;
-  padding: 16px 16px 32px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.edit-menu-sheet__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 4px;
-}
-
-.edit-menu-sheet__title {
-  font-size: 1rem;
-  font-weight: 700;
-  color: var(--color-base, #202122);
-  flex: 1;
-}
-
-.edit-menu-sheet__close {
-  background: none;
-  border: none;
-  cursor: pointer;
-  padding: 4px;
-  color: var(--color-base, #202122);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 4px;
-}
-
-.edit-menu-sheet__close:hover {
-  background: var(--background-color-interactive-subtle, #eaecf0);
-}
-
-.edit-menu-sheet__actions {
+.edit-menu-actions {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding: 8px 0;
 }
 
-.edit-menu-sheet__btn {
-  display: flex;
-  align-items: center;
+.edit-menu-btn {
+  width: 100%;
   justify-content: center;
-  gap: 8px;
-  padding: 14px 16px;
-  border: 1px solid var(--border-color-base, #a2a9b1);
-  border-radius: 4px;
-  background: #fff;
   font-size: 0.9375rem;
   font-weight: 600;
-  color: var(--color-base, #202122);
-  cursor: pointer;
-  text-align: center;
-  width: 100%;
-  transition: background 150ms;
+  min-height: 48px;
 }
 
-.edit-menu-sheet__btn:hover {
-  background: var(--background-color-interactive-subtle, #eaecf0);
-}
-
-.edit-menu-sheet__btn--suggestions {
-  border-color: var(--color-progressive, #3366cc);
-  background: var(--background-color-progressive-subtle, #e8eeff);
+.edit-menu-btn--suggestions {
   color: var(--color-progressive, #3366cc);
 }
 
-.edit-menu-sheet__btn--suggestions:hover {
-  background: #d0dbf5;
-}
-
-.edit-menu-sheet__btn-icon {
-  flex-shrink: 0;
-}
-
-/* Sheet slide-up transition */
-.edit-menu-sheet-enter-active .edit-menu-sheet__panel,
-.edit-menu-sheet-leave-active .edit-menu-sheet__panel {
-  transition: transform 300ms ease;
-}
-.edit-menu-sheet-enter-from .edit-menu-sheet__panel,
-.edit-menu-sheet-leave-to .edit-menu-sheet__panel {
-  transform: translateY(100%);
-}
-.edit-menu-sheet-enter-active .edit-menu-sheet__overlay,
-.edit-menu-sheet-leave-active .edit-menu-sheet__overlay {
-  transition: opacity 200ms ease;
-}
-.edit-menu-sheet-enter-from .edit-menu-sheet__overlay,
-.edit-menu-sheet-leave-to .edit-menu-sheet__overlay {
-  opacity: 0;
-}
-
-/* ── Intro-only expand button ─────────────────────────────────── */
-
-.intro-only-expand {
-  display: flex;
-  justify-content: center;
-  padding: 24px 16px 8px;
-}
-
-.intro-only-expand__btn {
-  width: 100%;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .edit-menu-sheet-enter-active .edit-menu-sheet__panel,
-  .edit-menu-sheet-leave-active .edit-menu-sheet__panel,
-  .edit-menu-sheet-enter-active .edit-menu-sheet__overlay,
-  .edit-menu-sheet-leave-active .edit-menu-sheet__overlay {
-    transition: none;
-  }
+.edit-menu-btn--suggestions .edit-menu-btn__icon {
+  color: var(--color-progressive, #3366cc);
 }
 
 
