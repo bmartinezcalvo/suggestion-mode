@@ -913,7 +913,7 @@
                   <cdx-icon :icon="cdxIconHistory" size="medium" />
                 </button>
                 <div class="minerva-edit-wrapper">
-                  <button class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="toggleEditMode">
+                  <button class="minerva-action-btn minerva-action-btn--edit" aria-label="Edit" @click="handleMinervaEditButtonClick">
                     <span class="pulsating-lightbulb-wrapper">
                       <cdx-icon :icon="cdxIconEdit" size="medium" />
                       <span v-if="showPulsatingLightbulb" class="lightbulb-indicator-pulse"></span>
@@ -2930,7 +2930,17 @@
                   </aside>
                 </div>
 
-                <template v-if="selectedArticle === 'audre-lorde'">
+                <!-- Intro-only mode: expand to full page button -->
+                <div v-if="isMinervaSkin && isIntroOnlyMode" class="intro-only-expand">
+                  <cdx-button
+                    class="intro-only-expand__btn"
+                    action="default"
+                    weight="normal"
+                    @click="expandIntroToFullPage"
+                  >Edit full page</cdx-button>
+                </div>
+
+                <template v-if="selectedArticle === 'audre-lorde' && !isIntroOnlyMode">
                 <!-- Early Life Section -->
                 <div v-if="shouldRenderSection('early-life')" class="minerva-edit-section" data-section="early-life">
                 <div class="edit-full-page-btn-wrapper">
@@ -3919,7 +3929,7 @@
                   </div>
                 </div>
                 </template>
-                <template v-else>
+                <template v-else-if="!isIntroOnlyMode">
                 <!-- Regent's Park Sections -->
 
                 <!-- Description -->
@@ -6084,6 +6094,39 @@
           </div>
         </aside>
 
+        <!-- Edit menu bottom sheet: "What do you want to edit?" -->
+        <Transition name="edit-menu-sheet">
+          <div
+            v-if="isMinervaSkin && !isEditMode && isEditMenuSheetOpen"
+            class="edit-menu-sheet"
+            role="dialog"
+            aria-modal="true"
+            aria-label="What do you want to edit?"
+          >
+            <div class="edit-menu-sheet__overlay" @click="closeEditMenuSheet" />
+            <div class="edit-menu-sheet__panel">
+              <div class="edit-menu-sheet__header">
+                <span class="edit-menu-sheet__title">What do you want to edit?</span>
+                <button class="edit-menu-sheet__close" aria-label="Close" @click="closeEditMenuSheet">
+                  <cdx-icon :icon="cdxIconClose" size="medium" />
+                </button>
+              </div>
+              <div class="edit-menu-sheet__actions">
+                <button class="edit-menu-sheet__btn edit-menu-sheet__btn--suggestions" @click="handleEditMenuViewSuggestions">
+                  <cdx-icon :icon="cdxIconLightbulb" size="medium" class="edit-menu-sheet__btn-icon" />
+                  <span>View suggested edits</span>
+                </button>
+                <button class="edit-menu-sheet__btn" @click="handleEditMenuEditIntro">
+                  <span>Edit introduction</span>
+                </button>
+                <button class="edit-menu-sheet__btn" @click="handleEditMenuEditFullPage">
+                  <span>Edit full page</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </Transition>
+
         <cdx-dialog
           v-model:open="isPrototypeDialogOpen"
           title="Choose prototype"
@@ -6169,6 +6212,9 @@
                 </cdx-checkbox>
                 <cdx-checkbox v-model="showRailOnReach">
                   Show rail just when reaching suggestions
+                </cdx-checkbox>
+                <cdx-checkbox v-model="showEditMenuOnMobile">
+                  Menu to ask users what to edit
                 </cdx-checkbox>
               </cdx-field>
               <cdx-field>
@@ -7165,6 +7211,13 @@ const persistentPaginationBarWaitForScroll = ref(false);
 const suggestionPreviewWhileScrollingEnabled = ref(true);
 const scrollPreviewSuggestionId = ref(null);
 let scrollPreviewScrollStopTimer = null;
+
+// Edit menu ("What do you want to edit?" bottom sheet)
+const showEditMenuOnMobile = ref(true);
+const isEditMenuSheetOpen = ref(false);
+
+// Intro-only edit mode
+const isIntroOnlyMode = ref(false);
 
 // Rail on reach
 const showRailOnReach = ref(false);
@@ -8946,10 +8999,69 @@ function maybeShowMinervaNoMoreSuggestionsState() {
   return false;
 }
 
+function handleMinervaEditButtonClick() {
+  if (!isEditMode.value && showEditMenuOnMobile.value) {
+    isEditMenuSheetOpen.value = true;
+  } else {
+    toggleEditMode();
+  }
+}
+
+function closeEditMenuSheet() {
+  isEditMenuSheetOpen.value = false;
+}
+
+function handleEditMenuViewSuggestions() {
+  closeEditMenuSheet();
+  isIntroOnlyMode.value = false;
+  feedbackAndNextEnabled.value = true;
+  feedbackAndNextMode.value = 'persistent-pagination';
+  minervaEditSectionOnly.value = null;
+  applyPrototypeMode(selectedPrototype.value);
+  enterEditMode();
+  // Scroll to first pending suggestion after edit mode loads
+  setTimeout(() => {
+    const targets = getPendingSuggestionTargets();
+    if (!targets.length) return;
+    const sorted = targets
+      .filter(t => t.ref.value)
+      .map(t => ({ ...t, top: t.ref.value.getBoundingClientRect().top + window.scrollY }))
+      .sort((a, b) => a.top - b.top);
+    if (sorted.length) {
+      const target = sorted[0].ref.value;
+      const targetTop = target.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({ top: Math.max(0, targetTop - window.innerHeight * 0.3), behavior: 'smooth' });
+    }
+  }, 2200);
+}
+
+function handleEditMenuEditIntro() {
+  closeEditMenuSheet();
+  isIntroOnlyMode.value = true;
+  minervaEditSectionOnly.value = null;
+  applyPrototypeMode(selectedPrototype.value);
+  enterEditMode();
+  window.scrollTo({ top: 0, behavior: 'instant' });
+}
+
+function handleEditMenuEditFullPage() {
+  closeEditMenuSheet();
+  isIntroOnlyMode.value = false;
+  minervaEditSectionOnly.value = null;
+  applyPrototypeMode(selectedPrototype.value);
+  enterEditMode();
+}
+
+function expandIntroToFullPage() {
+  isIntroOnlyMode.value = false;
+}
+
 function clearEditModeUiState() {
   closeMinervaSuggestion();
   closeVectorNoMoreSuggestionsDialog();
   isEditMode.value = false;
+  isIntroOnlyMode.value = false;
+  isEditMenuSheetOpen.value = false;
   persistentPaginationHasOpenedSheet.value = false;
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
@@ -9209,9 +9321,6 @@ function stopPostPublishConfetti() {
 function startPrototype() {
   applyPrototypeMode(selectedPrototype.value);
   closePrototypeDialog();
-  if (!isEditMode.value) {
-    enterEditMode();
-  }
 }
 
 function resetPrototypeDialog() {
@@ -22731,6 +22840,144 @@ function markArticleEdited() {
   .pulsating-lightbulb,
   .lightbulb-indicator-pulse {
     animation: none;
+  }
+}
+
+/* ── Edit menu sheet ("What do you want to edit?") ───────────── */
+
+.edit-menu-sheet {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+}
+
+.edit-menu-sheet__overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.edit-menu-sheet__panel {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #fff;
+  border-radius: 12px 12px 0 0;
+  padding: 16px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.edit-menu-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 4px;
+}
+
+.edit-menu-sheet__title {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--color-base, #202122);
+  flex: 1;
+}
+
+.edit-menu-sheet__close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 4px;
+  color: var(--color-base, #202122);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 4px;
+}
+
+.edit-menu-sheet__close:hover {
+  background: var(--background-color-interactive-subtle, #eaecf0);
+}
+
+.edit-menu-sheet__actions {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.edit-menu-sheet__btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px 16px;
+  border: 1px solid var(--border-color-base, #a2a9b1);
+  border-radius: 4px;
+  background: #fff;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  color: var(--color-base, #202122);
+  cursor: pointer;
+  text-align: center;
+  width: 100%;
+  transition: background 150ms;
+}
+
+.edit-menu-sheet__btn:hover {
+  background: var(--background-color-interactive-subtle, #eaecf0);
+}
+
+.edit-menu-sheet__btn--suggestions {
+  border-color: var(--color-progressive, #3366cc);
+  background: var(--background-color-progressive-subtle, #e8eeff);
+  color: var(--color-progressive, #3366cc);
+}
+
+.edit-menu-sheet__btn--suggestions:hover {
+  background: #d0dbf5;
+}
+
+.edit-menu-sheet__btn-icon {
+  flex-shrink: 0;
+}
+
+/* Sheet slide-up transition */
+.edit-menu-sheet-enter-active .edit-menu-sheet__panel,
+.edit-menu-sheet-leave-active .edit-menu-sheet__panel {
+  transition: transform 300ms ease;
+}
+.edit-menu-sheet-enter-from .edit-menu-sheet__panel,
+.edit-menu-sheet-leave-to .edit-menu-sheet__panel {
+  transform: translateY(100%);
+}
+.edit-menu-sheet-enter-active .edit-menu-sheet__overlay,
+.edit-menu-sheet-leave-active .edit-menu-sheet__overlay {
+  transition: opacity 200ms ease;
+}
+.edit-menu-sheet-enter-from .edit-menu-sheet__overlay,
+.edit-menu-sheet-leave-to .edit-menu-sheet__overlay {
+  opacity: 0;
+}
+
+/* ── Intro-only expand button ─────────────────────────────────── */
+
+.intro-only-expand {
+  display: flex;
+  justify-content: center;
+  padding: 24px 16px 8px;
+}
+
+.intro-only-expand__btn {
+  width: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .edit-menu-sheet-enter-active .edit-menu-sheet__panel,
+  .edit-menu-sheet-leave-active .edit-menu-sheet__panel,
+  .edit-menu-sheet-enter-active .edit-menu-sheet__overlay,
+  .edit-menu-sheet-leave-active .edit-menu-sheet__overlay {
+    transition: none;
   }
 }
 
