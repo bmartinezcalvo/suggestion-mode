@@ -7147,16 +7147,19 @@
                   </cdx-radio>
                 </div>
               </cdx-field>
-              <cdx-field v-if="isMinervaSkin">
-                <template #label>Ensure suggestions are found on mobile</template>
-                <cdx-checkbox v-model="suggestionPreviewWhileScrollingEnabled">
-                  Enable suggestion preview while scrolling
+              <cdx-field>
+                <template #label>Ensure people see suggestions</template>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="suggestionPreviewWhileScrollingEnabled">
+                  Suggestion preview while scrolling
                 </cdx-checkbox>
                 <cdx-checkbox v-model="showRailOnReach">
                   Show rail when reaching suggestions
                 </cdx-checkbox>
-                <cdx-checkbox v-model="showEditMenuOnMobile">
-                  Menu to ask users what to edit
+                <cdx-checkbox v-if="isMinervaSkin" v-model="showEditMenuOnMobile">
+                  Menu to choose what to edit
+                </cdx-checkbox>
+                <cdx-checkbox v-model="expandFirstSuggestionOnReach">
+                  Expand the first suggestion on first reach
                 </cdx-checkbox>
               </cdx-field>
               <cdx-field>
@@ -8223,6 +8226,9 @@ const activeRailSuggestionIds = ref([]);
 const railHeights = ref({});
 let railRafId = null;
 
+const expandFirstSuggestionOnReach = ref(false);
+const firstSuggestionAutoExpanded = ref(false);
+
 function getSuggestionRefs() {
   return [
     { id: 1, ref: highlightedTextRef, pending: isSuggestion1Pending.value },
@@ -8300,6 +8306,72 @@ function handleRailScroll() {
     updateActiveRail();
     railRafId = null;
   });
+}
+
+function expandVectorCard(id) {
+  const map = {
+    1: isCardExpanded, 2: isCardExpanded2, 3: isCardExpanded3,
+    4: isCardExpanded4, 5: isCardExpanded5, 6: isCardExpanded6,
+    7: isCardExpanded7, 8: isCardExpanded8, 9: isCardExpanded9,
+    10: isCardExpanded10, 11: isCardExpanded11, 12: isCardExpanded12,
+    13: isCardExpanded13, 14: isCardExpanded14, 15: isCardExpanded15,
+    16: isCardExpanded16, 17: isCardExpanded17,
+  };
+  const cardRef = map[id];
+  if (cardRef) cardRef.value = true;
+}
+
+// Animated sequence: 1) highlight flashes blue → 2) lightbulb trigger pulses → 3) expand
+function triggerAutoExpandSequence(id, onExpand) {
+  nextTick(() => {
+    const triggerEl = document.querySelector(`[data-preview-suggestion-id="${id}"]`);
+    const wrapper = triggerEl?.closest('.highlighted-text-wrapper');
+    const lightbulb = document.querySelector(`.minerva-suggestion-trigger[data-preview-suggestion-id="${id}"]`);
+
+    // Step 1: flash the highlighted text to blue
+    if (wrapper) wrapper.classList.add('highlighted-text-wrapper--auto-expand-flash');
+
+    // Step 2: pulse the lightbulb trigger (Minerva: floating button; Vector: wrapper itself)
+    setTimeout(() => {
+      if (lightbulb) {
+        lightbulb.classList.add('minerva-suggestion-trigger--auto-expand-pulse');
+      } else if (wrapper) {
+        wrapper.classList.add('highlighted-text-wrapper--auto-expand-pulse');
+      }
+
+      // Step 3: expand the card/sheet and clean up
+      setTimeout(() => {
+        onExpand();
+        wrapper?.classList.remove(
+          'highlighted-text-wrapper--auto-expand-flash',
+          'highlighted-text-wrapper--auto-expand-pulse'
+        );
+        lightbulb?.classList.remove('minerva-suggestion-trigger--auto-expand-pulse');
+      }, 650);
+    }, 600);
+  });
+}
+
+function handleExpandFirstSuggestionScroll() {
+  if (!expandFirstSuggestionOnReach.value || firstSuggestionAutoExpanded.value || !isEditMode.value) return;
+  const pendingRefs = getSuggestionRefs().filter(r => r.pending);
+  if (!pendingRefs.length) return;
+  const viewportMid = window.innerHeight * 0.55;
+  for (const { id, ref } of pendingRefs) {
+    if (!ref.value) continue;
+    const rect = ref.value.getBoundingClientRect();
+    if (rect.top < viewportMid && rect.bottom > 0) {
+      firstSuggestionAutoExpanded.value = true;
+      triggerAutoExpandSequence(id, () => {
+        if (isMinervaSkin.value) {
+          openMinervaSuggestion(id);
+        } else {
+          expandVectorCard(id);
+        }
+      });
+      break;
+    }
+  }
 }
 
 function updateFirstVisibleRail() {
@@ -14055,6 +14127,7 @@ watch(showSuggestions, (newValue) => {
     firstSuggestionAutoExpandedId.value = null;
     firstSuggestionBounceActiveId.value = null;
     firstSuggestionBounceDoneId.value = null;
+    firstSuggestionAutoExpanded.value = false;
   }
 });
 
@@ -14205,7 +14278,13 @@ watch(showEditMenuOnMobile, (enabled) => {
   if (enabled) suggestionPreviewWhileScrollingEnabled.value = false;
 });
 watch(suggestionPreviewWhileScrollingEnabled, (enabled) => {
-  if (enabled) showEditMenuOnMobile.value = false;
+  if (enabled) {
+    showEditMenuOnMobile.value = false;
+    expandFirstSuggestionOnReach.value = false;
+  }
+});
+watch(expandFirstSuggestionOnReach, (enabled) => {
+  if (enabled) suggestionPreviewWhileScrollingEnabled.value = false;
 });
 
 watch(toastsEnabled, (enabled) => {
@@ -15531,6 +15610,7 @@ onMounted(() => {
     window.addEventListener('scroll', updateMinervaFullPageTocActiveSection, true);
     window.addEventListener('scroll', handleReadModeScroll, true);
     window.addEventListener('scroll', handleRailScroll, true);
+    window.addEventListener('scroll', handleExpandFirstSuggestionScroll, true);
     window.addEventListener('resize', updateMinervaFullPageTocActiveSection);
     window.addEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
     updateEditToolbarScrolled();
@@ -15568,6 +15648,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('resize', updateMinervaFullPageTocActiveSection);
     window.removeEventListener('scroll', handleReadModeScroll, true);
     window.removeEventListener('scroll', handleRailScroll, true);
+    window.removeEventListener('scroll', handleExpandFirstSuggestionScroll, true);
     if (railRafId) { cancelAnimationFrame(railRafId); railRafId = null; }
     window.removeEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
   }
@@ -23111,6 +23192,46 @@ function markArticleEdited() {
 
 .suggestion-card--bounce {
   animation: suggestion-card-bounce 3.2s ease-in-out 0s infinite;
+}
+
+/* Step 1: highlight text flashes to blue */
+.highlighted-text-wrapper--auto-expand-flash .highlighted-text-annotation {
+  animation: suggestion-auto-expand-flash 0.55s ease-out 1 forwards;
+}
+.highlighted-text-wrapper--auto-expand-flash .highlighted-text-rail {
+  animation: suggestion-rail-flash 0.55s ease-out 1 forwards;
+}
+
+/* Step 2: highlighted text secondary pulse (Vector — no floating lightbulb) */
+.highlighted-text-wrapper--auto-expand-pulse .highlighted-text-annotation {
+  animation: suggestion-auto-expand-pulse 0.6s ease-in-out 2;
+}
+
+/* Step 2: lightbulb trigger pulse (Minerva) */
+.minerva-suggestion-trigger--auto-expand-pulse {
+  animation: suggestion-trigger-pulse 0.65s ease-in-out 1;
+}
+
+@keyframes suggestion-auto-expand-flash {
+  0% { background-color: var(--suggestion-color-subtle, #e8eeff); }
+  30% { background-color: var(--suggestion-color, #36c); color: #fff; }
+  100% { background-color: var(--suggestion-color-subtle, #e8eeff); color: inherit; }
+}
+
+@keyframes suggestion-rail-flash {
+  0% { width: 2px; }
+  30% { width: 4px; }
+  100% { width: 2px; }
+}
+
+@keyframes suggestion-auto-expand-pulse {
+  0%, 100% { background-color: var(--suggestion-color-subtle, #e8eeff); }
+  50% { background-color: rgba(51, 102, 204, 0.3); }
+}
+
+@keyframes suggestion-trigger-pulse {
+  0%, 100% { transform: scale(1); box-shadow: none; }
+  40% { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(51, 102, 204, 0.25); }
 }
 
 .minerva-suggestion-trigger--bounce {
