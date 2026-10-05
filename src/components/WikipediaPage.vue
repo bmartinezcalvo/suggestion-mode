@@ -3072,6 +3072,7 @@
                       v-if="isMinervaSkin && isSuggestion1Pending && !isSuccessHighlightActive(1)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(1), 'minerva-highlight-rail--visible': isRailActive(1) }"
+                    :style="getRailStyle(1)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion1Pending"
@@ -3243,6 +3244,7 @@
                       v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(8), 'minerva-highlight-rail--visible': isRailActive(8) }"
+                    :style="getRailStyle(8)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion8Pending"
@@ -3305,6 +3307,7 @@
                       v-if="isMinervaSkin && isSuggestion6Pending && !isSuccessHighlightActive(6)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(6), 'minerva-highlight-rail--visible': isRailActive(6) }"
+                    :style="getRailStyle(6)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion6Pending"
@@ -3383,6 +3386,7 @@
                       v-if="isMinervaSkin && isSuggestion2Pending && !isSuccessHighlightActive(2)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(2), 'minerva-highlight-rail--visible': isRailActive(2) }"
+                    :style="getRailStyle(2)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion2Pending"
@@ -3443,6 +3447,7 @@
                       v-if="isMinervaSkin && isSuggestion4Pending && !isSuccessHighlightActive(4)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(4), 'minerva-highlight-rail--visible': isRailActive(4) }"
+                    :style="getRailStyle(4)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion4Pending"
@@ -3582,6 +3587,7 @@
                       v-if="isMinervaSkin && isSuggestion7Pending && !isSuccessHighlightActive(7)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(7), 'minerva-highlight-rail--visible': isRailActive(7) }"
+                    :style="getRailStyle(7)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion7Pending"
@@ -3659,6 +3665,7 @@
                       v-if="isMinervaSkin && isSuggestion3Pending && !isSuccessHighlightActive(3)"
                       class="minerva-highlight-rail"
                       :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(3), 'minerva-highlight-rail--visible': isRailActive(3) }"
+                    :style="getRailStyle(3)"
                     ></span>
                     <button
                       v-if="isMinervaSkin && isSuggestion3Pending"
@@ -3774,18 +3781,266 @@
                   </div>
 
                   <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion11Pending || isSuccessHighlightActive(11))"
+                      ref="highlightedTextRef11"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion11Pending && isHovered11 && showSuggestions && !isCardExpanded11,
+                        'highlighted-text-wrapper--selected': isSuggestion11Pending && showSuggestions && (isCardExpanded11 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 11) || isScrollPreviewingId(11)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(11),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion11Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 11,
+                        'highlighted-text-wrapper--rail-active': isRailActive(11)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered11 = true"
+                      @mouseleave="isTextHovered11 = false"
+                      @click="isSuggestion11Pending ? (isMinervaSkin ? openMinervaSuggestion(11) : (isCardExpanded11 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Lorde had several films that highlighted her journey as an <a href="https://en.wikipedia.org/wiki/Activism" target="_blank" rel="noopener">activist</a> in the 1980s and 1990s.<sup class="citation-marker">[50]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion11Pending && !isSuccessHighlightActive(11)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(11), 'minerva-highlight-rail--visible': isRailActive(11) }"
+                        :style="getRailStyle(11)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion11Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="11" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(11)" @click.stop="openMinervaSuggestion(11)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(11)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Lorde had several films that highlighted her journey as an <a href="https://en.wikipedia.org/wiki/Activism" target="_blank" rel="noopener">activist</a> in the 1980s and 1990s.<sup class="citation-marker">[50]</sup>
                     </p>
                     <h3 class="subsection-title">The Berlin years</h3>
                     <p>
                       <em>The Berlin Years: 1984–1992</em> documented Lorde's time in Germany as she led <a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-Germans</a> in a movement that would allow black people to establish identities for themselves outside of stereotypes and discrimination. After a long history of systemic racism in Germany, Lorde introduced a new sense of empowerment for minorities. As seen in the film, she walks through the streets with pride despite stares and words of discouragement. Including moments like these in a documentary was important for people to see during that time. It inspired them to take charge of their identities and discover who they are outside of the labels put on them by society. The film also educates people on the history of racism in Germany. This enables viewers to understand how Germany reached this point in history and how the society developed. Through her promotion of the study of history and her example of taking her experiences in her stride, she influenced people of many different backgrounds.<sup class="citation-marker">[51]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion13Pending || isSuccessHighlightActive(13))"
+                      ref="highlightedTextRef13"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion13Pending && showSuggestions,
+                        'highlighted-text-wrapper--selected': isSuggestion13Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 13) || isScrollPreviewingId(13)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(13),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion13Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 13,
+                        'highlighted-text-wrapper--rail-active': isRailActive(13)
+                      }"
+                      class="suggestion-target"
+                      @click="isSuggestion13Pending ? openMinervaSuggestion(13) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          The film documents Lorde's efforts to empower and encourage women to start the Afro-German movement. What began as a few friends meeting in a friend's home to get to know other black people, turned into what is now known as the Afro-German movement. Lorde inspired black women to refute the designation of "<a href="https://en.wikipedia.org/wiki/Mulatto" target="_blank" rel="noopener">Mulatto</a>", a label which was imposed on them, and switch to the newly coined, self-given "<a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-German</a>", a term that conveyed a sense of pride. Lorde inspired Afro-German women to create a community of like-minded people. Some Afro-German women, such as <a href="https://en.wikipedia.org/wiki/Ika_H%C3%BCgel-Marshall" target="_blank" rel="noopener">Ika Hügel-Marshall</a>, had never met another black person and the meetings offered opportunities to express thoughts and feelings.<sup class="citation-marker">[52]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion13Pending && !isSuccessHighlightActive(13)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--visible': isRailActive(13) }"
+                        :style="getRailStyle(13)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion13Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="13" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(13)" @click.stop="openMinervaSuggestion(13)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(13)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       The film documents Lorde's efforts to empower and encourage women to start the Afro-German movement. What began as a few friends meeting in a friend's home to get to know other black people, turned into what is now known as the Afro-German movement. Lorde inspired black women to refute the designation of "<a href="https://en.wikipedia.org/wiki/Mulatto" target="_blank" rel="noopener">Mulatto</a>", a label which was imposed on them, and switch to the newly coined, self-given "<a href="https://en.wikipedia.org/wiki/Afro-Germans" target="_blank" rel="noopener">Afro-German</a>", a term that conveyed a sense of pride. Lorde inspired Afro-German women to create a community of like-minded people. Some Afro-German women, such as <a href="https://en.wikipedia.org/wiki/Ika_H%C3%BCgel-Marshall" target="_blank" rel="noopener">Ika Hügel-Marshall</a>, had never met another black person and the meetings offered opportunities to express thoughts and feelings.<sup class="citation-marker">[52]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion12Pending || isSuccessHighlightActive(12))"
+                      ref="highlightedTextRef12"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion12Pending && isHovered12 && showSuggestions && !isCardExpanded12,
+                        'highlighted-text-wrapper--selected': isSuggestion12Pending && showSuggestions && (isCardExpanded12 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 12) || isScrollPreviewingId(12)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(12),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion12Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 12,
+                        'highlighted-text-wrapper--rail-active': isRailActive(12)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered12 = true"
+                      @mouseleave="isTextHovered12 = false"
+                      @click="isSuggestion12Pending ? (isMinervaSkin ? openMinervaSuggestion(12) : (isCardExpanded12 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          <em>Body of a Poet: 1995</em> was written as a tribute biopic written to honor Lorde. The film centers on the efforts of a young group of lesbians of color. The film celebrates the life and work of Audre Lorde from her birth to her death.<sup class="citation-marker">[53]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion12Pending && !isSuccessHighlightActive(12)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(12), 'minerva-highlight-rail--visible': isRailActive(12) }"
+                        :style="getRailStyle(12)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion12Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="12" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(12)" @click.stop="openMinervaSuggestion(12)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(12)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       <em>Body of a Poet: 1995</em> was written as a tribute biopic written to honor Lorde. The film centers on the efforts of a young group of lesbians of color. The film celebrates the life and work of Audre Lorde from her birth to her death.<sup class="citation-marker">[53]</sup>
+                    </p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion14Pending || isSuccessHighlightActive(14))"
+                      ref="highlightedTextRef14"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion14Pending && isHovered14 && showSuggestions && !isCardExpanded14,
+                        'highlighted-text-wrapper--selected': isSuggestion14Pending && showSuggestions && (isCardExpanded14 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 14) || isScrollPreviewingId(14)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(14),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion14Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 14,
+                        'highlighted-text-wrapper--rail-active': isRailActive(14)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered14 = true"
+                      @mouseleave="isTextHovered14 = false"
+                      @click="isSuggestion14Pending ? (isMinervaSkin ? openMinervaSuggestion(14) : (isCardExpanded14 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Lorde's work in Berlin not only documented racial identity struggles but also influenced the development of <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a> feminist theory across Europe, particularly in Germany and the Netherlands.<sup class="citation-marker">[54]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion14Pending && !isSuccessHighlightActive(14)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(14), 'minerva-highlight-rail--visible': isRailActive(14) }"
+                        :style="getRailStyle(14)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion14Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="14" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(14)" @click.stop="openMinervaSuggestion(14)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(14)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
+                      Lorde's work in Berlin not only documented racial identity struggles but also influenced the development of <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a> feminist theory across Europe, particularly in Germany and the Netherlands.<sup class="citation-marker">[54]</sup>
+                    </p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion15Pending || isSuccessHighlightActive(15))"
+                      ref="highlightedTextRef15"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion15Pending && isHovered15 && showSuggestions && !isCardExpanded15,
+                        'highlighted-text-wrapper--selected': isSuggestion15Pending && showSuggestions && (isCardExpanded15 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 15) || isScrollPreviewingId(15)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(15),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion15Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 15,
+                        'highlighted-text-wrapper--rail-active': isRailActive(15)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered15 = true"
+                      @mouseleave="isTextHovered15 = false"
+                      @click="isSuggestion15Pending ? (isMinervaSkin ? openMinervaSuggestion(15) : (isCardExpanded15 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Her visibility as a Black, lesbian, feminist poet in Germany came at a time when the country's civil rights movement was still in its infancy, making her advocacy there particularly significant.
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion15Pending && !isSuccessHighlightActive(15)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(15), 'minerva-highlight-rail--visible': isRailActive(15) }"
+                        :style="getRailStyle(15)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion15Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="15" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(15)" @click.stop="openMinervaSuggestion(15)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(15)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
+                      Her visibility as a Black, lesbian, feminist poet in Germany came at a time when the country's civil rights movement was still in its infancy, making her advocacy there particularly significant.
+                    </p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion16Pending || isSuccessHighlightActive(16))"
+                      ref="highlightedTextRef16"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion16Pending && isHovered16 && showSuggestions && !isCardExpanded16,
+                        'highlighted-text-wrapper--selected': isSuggestion16Pending && showSuggestions && (isCardExpanded16 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 16) || isScrollPreviewingId(16)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(16),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion16Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 16,
+                        'highlighted-text-wrapper--rail-active': isRailActive(16)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered16 = true"
+                      @mouseleave="isTextHovered16 = false"
+                      @click="isSuggestion16Pending ? (isMinervaSkin ? openMinervaSuggestion(16) : (isCardExpanded16 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          The films about Lorde were also shown at feminist film festivals worldwide, helping to spread her message beyond academic and literary circles to broader popular audiences.<sup class="citation-marker">[55]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion16Pending && !isSuccessHighlightActive(16)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(16), 'minerva-highlight-rail--visible': isRailActive(16) }"
+                        :style="getRailStyle(16)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion16Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="16" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(16)" @click.stop="openMinervaSuggestion(16)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(16)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
+                      The films about Lorde were also shown at feminist film festivals worldwide, helping to spread her message beyond academic and literary circles to broader popular audiences.<sup class="citation-marker">[55]</sup>
+                    </p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion17Pending || isSuccessHighlightActive(17))"
+                      ref="highlightedTextRef17"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion17Pending && isHovered17 && showSuggestions && !isCardExpanded17,
+                        'highlighted-text-wrapper--selected': isSuggestion17Pending && showSuggestions && (isCardExpanded17 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 17) || isScrollPreviewingId(17)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(17),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion17Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 17,
+                        'highlighted-text-wrapper--rail-active': isRailActive(17)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered17 = true"
+                      @mouseleave="isTextHovered17 = false"
+                      @click="isSuggestion17Pending ? (isMinervaSkin ? openMinervaSuggestion(17) : (isCardExpanded17 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Documentary filmmaking was a medium Lorde herself valued as a tool for activism and education, distinct from literary forms, allowing her voice to reach communities that might not otherwise encounter her written work.
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion17Pending && !isSuccessHighlightActive(17)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(17), 'minerva-highlight-rail--visible': isRailActive(17) }"
+                        :style="getRailStyle(17)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion17Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="17" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(17)" @click.stop="openMinervaSuggestion(17)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(17)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
+                      Documentary filmmaking was a medium Lorde herself valued as a tool for activism and education, distinct from literary forms, allowing her voice to reach communities that might not otherwise encounter her written work.
                     </p>
                   </div>
                 </div>
@@ -3972,7 +4227,7 @@
                       <span class="highlighted-text-content">
                         Regent's Park covers 410 acres (166 ha) with an outer ring road, the <a href="#">Outer Circle</a>, of 4.45 kilometres (2.77 mi), and an inner road, the Inner Circle, of approximately 1 kilometre (0.62 mi). It is located in the north-west of <a href="#">Inner London</a>.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span>
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion1Pending && !isSuccessHighlightActive(1)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(1) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion1Pending && !isSuccessHighlightActive(1)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(1) }" :style="getRailStyle(1)"></span>
                       <button v-if="isMinervaSkin && isSuggestion1Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="1" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(1)" @click.stop="openMinervaSuggestion(1)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4008,7 +4263,7 @@
                       <span class="highlighted-text-content">
                         <a href="#">Regent's University London</a> is situated south of the Inner Circle.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span> <a href="#">Regent's Canal</a> runs along the northern edge of the park. The park is bounded to the south by <a href="#">Marylebone Road</a> and to the north by Outer Circle.
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion2Pending && !isSuccessHighlightActive(2)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(2) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion2Pending && !isSuccessHighlightActive(2)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(2) }" :style="getRailStyle(2)"></span>
                       <button v-if="isMinervaSkin && isSuggestion2Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="2" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(2)" @click.stop="openMinervaSuggestion(2)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4054,7 +4309,7 @@
                       <span class="highlighted-text-content">
                         The <a href="#">Crown Estate Paving Commission</a> is responsible for the maintenance of the roads, footways and lighting in the outer parts of the park. For more information, see <span class="highlighted-text-annotation"><a href="https://www.royalparks.org.uk/parks/the-regents-park">https://www.royalparks.org.uk</a></span>.
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion7Pending && !isSuccessHighlightActive(7)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(7) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion7Pending && !isSuccessHighlightActive(7)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(7) }" :style="getRailStyle(7)"></span>
                       <button v-if="isMinervaSkin && isSuggestion7Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="7" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(7)" @click.stop="openMinervaSuggestion(7)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4102,7 +4357,7 @@
                         <h4 class="subsection-title">Nash's Plan</h4>
                         In 1811, <a href="#">John Nash</a> was commissioned to lay out the land as a residential park. His plan envisaged 56 villas set among informal gardens, a new pleasure palace for the <a href="#">Prince Regent</a>, a canal, barracks, and a double circus. The plan was never fully realised, but the park and the terraces that ring it were largely completed by the 1830s.
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(8) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(8) }" :style="getRailStyle(8)"></span>
                       <button v-if="isMinervaSkin && isSuggestion8Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="8" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(8)" @click.stop="openMinervaSuggestion(8)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4143,7 +4398,7 @@
                       <span class="highlighted-text-content">
                         On 15 January 1867, forty people drowned when the ice on the boating lake broke under a large crowd.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span> The lake was subsequently drained and made shallower.
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion3Pending && !isSuccessHighlightActive(3)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(3) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion3Pending && !isSuccessHighlightActive(3)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(3) }" :style="getRailStyle(3)"></span>
                       <button v-if="isMinervaSkin && isSuggestion3Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="3" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(3)" @click.stop="openMinervaSuggestion(3)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4189,7 +4444,7 @@
                       <span class="highlighted-text-content">
                         The Hub sports pavilion, designed by <a href="#">David Morley Architects</a>, was opened in 2005 by <a href="#">Queen Elizabeth II</a> and won an <a href="#">IStructE</a> Award.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span> It provides changing facilities and supports a wide range of sports in the park.
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion9Pending && !isSuccessHighlightActive(9)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(9) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion9Pending && !isSuccessHighlightActive(9)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(9) }" :style="getRailStyle(9)"></span>
                       <button v-if="isMinervaSkin && isSuggestion9Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="9" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(9)" @click.stop="openMinervaSuggestion(9)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4235,7 +4490,7 @@
                       <span class="highlighted-text-content">
                         The park is ringed by neoclassical <a href="#">Nash</a>-era terraces. <a href="#">Cumberland Terrace</a> (1826), the most ornate, was built by James Burton to a design by Nash with a large central arch crowned by sculptured figures.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span>
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion10Pending && !isSuccessHighlightActive(10)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(10) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion10Pending && !isSuccessHighlightActive(10)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(10) }" :style="getRailStyle(10)"></span>
                       <button v-if="isMinervaSkin && isSuggestion10Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="10" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(10)" @click.stop="openMinervaSuggestion(10)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4271,7 +4526,7 @@
                       <span class="highlighted-text-content">
                         <a href="#">Park Crescent</a>, which faces the park at its southern tip, retains Nash's original stucco facades, although the interiors were rebuilt as offices in the 1960s. See also <span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Nash_terraces">Nash terraces</a></span> for the full list of London Nash terraces.
                       </span>
-                      <span v-if="isMinervaSkin && isSuggestion6Pending && !isSuccessHighlightActive(6)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(6) }"></span>
+                      <span v-if="isMinervaSkin && isSuggestion6Pending && !isSuccessHighlightActive(6)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(6) }" :style="getRailStyle(6)"></span>
                       <button v-if="isMinervaSkin && isSuggestion6Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="6" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(6)" @click.stop="openMinervaSuggestion(6)">
                         <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                       </button>
@@ -4296,11 +4551,76 @@
                     <p>
                       Nine villas were originally planned for the western and northern parts of the park. <a href="#">Hertford Villa</a> was rebuilt in the 1950s as <a href="#">Winfield House</a>, now the residence of the <a href="#">United States Ambassador to the United Kingdom</a>. <a href="#">Nuffield Lodge</a> is occupied by the <a href="#">Omani</a> royal family. <a href="#">Holford House</a> was destroyed in <a href="#">World War II</a>. The <a href="#">London Central Mosque</a> now stands on the site of <a href="#">Albany Cottage</a>.<sup class="citation-marker">[12]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion20Pending || isSuccessHighlightActive(20))"
+                      ref="highlightedTextRef20"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion20Pending && showSuggestions,
+                        'highlighted-text-wrapper--selected': isSuggestion20Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 20) || isScrollPreviewingId(20)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(20),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion20Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 20,
+                        'highlighted-text-wrapper--rail-active': isRailActive(20)
+                      }"
+                      class="suggestion-target"
+                      @click="isSuggestion20Pending ? openMinervaSuggestion(20) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Six new classical villas were built between 1988 and 2004 by architect <a href="#">Quinlan Terry</a>: the Veneto, Doric, Corinthian, Ionic, Gothick, and Regency villas.
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion20Pending && !isSuccessHighlightActive(20)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--visible': isRailActive(20) }"
+                        :style="getRailStyle(20)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion20Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="20" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(20)" @click.stop="openMinervaSuggestion(20)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(20)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Six new classical villas were built between 1988 and 2004 by architect <a href="#">Quinlan Terry</a>: the Veneto, Doric, Corinthian, Ionic, Gothick, and Regency villas.
                     </p>
+
                     <h3 class="subsection-title">Around the Inner Circle</h3>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion21Pending || isSuccessHighlightActive(21))"
+                      ref="highlightedTextRef21"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion21Pending && showSuggestions,
+                        'highlighted-text-wrapper--selected': isSuggestion21Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 21) || isScrollPreviewingId(21)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(21),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion21Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 21,
+                        'highlighted-text-wrapper--rail-active': isRailActive(21)
+                      }"
+                      class="suggestion-target"
+                      @click="isSuggestion21Pending ? openMinervaSuggestion(21) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          <a href="#">St John's Lodge</a>, built in 1817–1819 to designs by <a href="#">John Raffield</a>, was the first villa to be built in the park. It is now occupied by the <a href="#">Brunei</a> royal family; part of its garden is open to the public. <a href="#">The Holme</a>, described as "one of the most desirable private homes in London", is now the residence of the <a href="#">Saudi Arabian</a> royal family. The site of the former South Villa is now occupied by <a href="#">Regent's University London</a>.<sup class="citation-marker">[13]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion21Pending && !isSuccessHighlightActive(21)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--visible': isRailActive(21) }"
+                        :style="getRailStyle(21)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion21Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="21" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(21)" @click.stop="openMinervaSuggestion(21)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(21)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       <a href="#">St John's Lodge</a>, built in 1817–1819 to designs by <a href="#">John Raffield</a>, was the first villa to be built in the park. It is now occupied by the <a href="#">Brunei</a> royal family; part of its garden is open to the public. <a href="#">The Holme</a>, described as "one of the most desirable private homes in London", is now the residence of the <a href="#">Saudi Arabian</a> royal family. The site of the former South Villa is now occupied by <a href="#">Regent's University London</a>.<sup class="citation-marker">[13]</sup>
                     </p>
                     <h3 class="subsection-title">Close to the eastern edge</h3>
@@ -4320,9 +4640,42 @@
                     <p>
                       The <a href="#">Broad Walk</a> is a tree-lined avenue that bisects the park from north to south. The <a href="#">Cowasji Jehangir Readymoney Fountain</a> stands on the Broadwalk and was donated to the people of London by Indian philanthropist <a href="#">Cowasji Jehangir Readymoney</a> in 1869.<sup class="citation-marker">[15]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion22Pending || isSuccessHighlightActive(22))"
+                      ref="highlightedTextRef22"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion22Pending && showSuggestions,
+                        'highlighted-text-wrapper--selected': isSuggestion22Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 22) || isScrollPreviewingId(22)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(22),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion22Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 22,
+                        'highlighted-text-wrapper--rail-active': isRailActive(22)
+                      }"
+                      class="suggestion-target"
+                      @click="isSuggestion22Pending ? openMinervaSuggestion(22) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          The <a href="#">Open Air Theatre</a> in the park has staged performances every summer since 1932. The <a href="#">Boating Lake</a> offers rowing boats and pedalos for hire. The annual <a href="#">Frieze Art Fair</a> is held in the park each October. <a href="#">London Zoo</a>, located at the northern end of the park, is one of the world's oldest scientific zoos, founded in 1828.<sup class="citation-marker">[16]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion22Pending && !isSuccessHighlightActive(22)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--visible': isRailActive(22) }"
+                        :style="getRailStyle(22)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion22Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="22" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(22)" @click.stop="openMinervaSuggestion(22)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(22)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       The <a href="#">Open Air Theatre</a> in the park has staged performances every summer since 1932. The <a href="#">Boating Lake</a> offers rowing boats and pedalos for hire. The annual <a href="#">Frieze Art Fair</a> is held in the park each October. <a href="#">London Zoo</a>, located at the northern end of the park, is one of the world's oldest scientific zoos, founded in 1828.<sup class="citation-marker">[16]</sup>
                     </p>
+
                   </div>
                 </div>
 
@@ -4356,7 +4709,39 @@
                       The park has featured in numerous films and television productions, including <i><a href="#">28 Weeks Later</a></i> (2007), <i><a href="#">Withnail and I</a></i> (1987, the closing scene), <i><a href="#">Cruella</a></i> (2021), and <i><a href="#">Slow Horses</a></i> (2022, depicting the MI5 headquarters). <i><a href="#">One Hundred and One Dalmatians</a></i> (1961) also features the park prominently.<sup class="citation-marker">[17]</sup>
                     </p>
                     <h3 class="subsection-title">In literature</h3>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion23Pending || isSuccessHighlightActive(23))"
+                      ref="highlightedTextRef23"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion23Pending && showSuggestions,
+                        'highlighted-text-wrapper--selected': isSuggestion23Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 23) || isScrollPreviewingId(23)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(23),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion23Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 23,
+                        'highlighted-text-wrapper--rail-active': isRailActive(23)
+                      }"
+                      class="suggestion-target"
+                      @click="isSuggestion23Pending ? openMinervaSuggestion(23) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Regent's Park has been referenced in works by <a href="#">Elizabeth Bowen</a> (<i>The Heat of the Day</i>), <a href="#">Agatha Christie</a>, <a href="#">Ian Fleming</a> (who placed <a href="#">MI6</a> headquarters "near Regent's Park" in his <a href="#">James Bond</a> novels), <a href="#">J.K. Rowling</a> (<i>Harry Potter</i>), <a href="#">Virginia Woolf</a> (<i>Mrs Dalloway</i>), and <a href="#">Mick Herron</a> (<i>Slough House</i> series).<sup class="citation-marker">[18]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion23Pending && !isSuccessHighlightActive(23)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--visible': isRailActive(23) }"
+                        :style="getRailStyle(23)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion23Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="23" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(23)" @click.stop="openMinervaSuggestion(23)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(23)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Regent's Park has been referenced in works by <a href="#">Elizabeth Bowen</a> (<i>The Heat of the Day</i>), <a href="#">Agatha Christie</a>, <a href="#">Ian Fleming</a> (who placed <a href="#">MI6</a> headquarters "near Regent's Park" in his <a href="#">James Bond</a> novels), <a href="#">J.K. Rowling</a> (<i>Harry Potter</i>), <a href="#">Virginia Woolf</a> (<i>Mrs Dalloway</i>), and <a href="#">Mick Herron</a> (<i>Slough House</i> series).<sup class="citation-marker">[18]</sup>
                     </p>
                   </div>
@@ -5110,6 +5495,489 @@
             </template>
           </div>
 
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved11 && !isSuggestionDeclined11 || publishPromptSuggestionId === 11 || (!isMinervaSkin && showSuccessHighlightInCard(11)) || dismissFirstTimeCardId === 11 || scaleOutCardId === 11)"
+            ref="suggestionsSidebarRef11"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded11 && publishPromptSuggestionId !== 11 && !(!isMinervaSkin && showSuccessHighlightInCard(11)) && dismissFirstTimeCardId !== 11,
+              'suggestion-card--expanded': isCardExpanded11 || publishPromptSuggestionId === 11 || (!isMinervaSkin && showSuccessHighlightInCard(11)) || dismissFirstTimeCardId === 11,
+              'suggestion-card--hover': isHovered11,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 11 || (!isMinervaSkin && showSuccessHighlightInCard(11)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(11) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 11,
+              'suggestion-card--scale-out': scaleOutCardId === 11
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset11}px` }"
+            @mouseenter="isCardHovered11 = true"
+            @mouseleave="isCardHovered11 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 11">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(11)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 11">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded11" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded11 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded11 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded11" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(11)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(11)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved12 && !isSuggestionDeclined12 || publishPromptSuggestionId === 12 || (!isMinervaSkin && showSuccessHighlightInCard(12)) || dismissFirstTimeCardId === 12 || scaleOutCardId === 12)"
+            ref="suggestionsSidebarRef12"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded12 && publishPromptSuggestionId !== 12 && !(!isMinervaSkin && showSuccessHighlightInCard(12)) && dismissFirstTimeCardId !== 12,
+              'suggestion-card--expanded': isCardExpanded12 || publishPromptSuggestionId === 12 || (!isMinervaSkin && showSuccessHighlightInCard(12)) || dismissFirstTimeCardId === 12,
+              'suggestion-card--hover': isHovered12,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 12 || (!isMinervaSkin && showSuccessHighlightInCard(12)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(12) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 12,
+              'suggestion-card--scale-out': scaleOutCardId === 12
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset12}px` }"
+            @mouseenter="isCardHovered12 = true"
+            @mouseleave="isCardHovered12 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 12">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(12)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 12">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded12" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded12 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded12 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded12" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(12)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(12)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved13 && !isSuggestionDeclined13 || publishPromptSuggestionId === 13 || (!isMinervaSkin && showSuccessHighlightInCard(13)) || dismissFirstTimeCardId === 13 || scaleOutCardId === 13)"
+            ref="suggestionsSidebarRef13"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded13 && publishPromptSuggestionId !== 13 && !(!isMinervaSkin && showSuccessHighlightInCard(13)) && dismissFirstTimeCardId !== 13,
+              'suggestion-card--expanded': isCardExpanded13 || publishPromptSuggestionId === 13 || (!isMinervaSkin && showSuccessHighlightInCard(13)) || dismissFirstTimeCardId === 13,
+              'suggestion-card--hover': isHovered13,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 13 || (!isMinervaSkin && showSuccessHighlightInCard(13)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(13) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 13,
+              'suggestion-card--scale-out': scaleOutCardId === 13
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset13}px` }"
+            @mouseenter="isCardHovered13 = true"
+            @mouseleave="isCardHovered13 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 13">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(13)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 13">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded13" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded13 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Restructure sentence</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded13 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Restructure sentence</div>
+              </button>
+              <div v-if="isCardExpanded13" class="suggestion-content">
+                <p class="suggestion-description">This sentence is long and may be difficult to read. Consider breaking it into shorter, clearer sentences.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(13)">Restructure</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(13)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved14 && !isSuggestionDeclined14 || publishPromptSuggestionId === 14 || (!isMinervaSkin && showSuccessHighlightInCard(14)) || dismissFirstTimeCardId === 14 || scaleOutCardId === 14)"
+            ref="suggestionsSidebarRef14"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded14 && publishPromptSuggestionId !== 14 && !(!isMinervaSkin && showSuccessHighlightInCard(14)) && dismissFirstTimeCardId !== 14,
+              'suggestion-card--expanded': isCardExpanded14 || publishPromptSuggestionId === 14 || (!isMinervaSkin && showSuccessHighlightInCard(14)) || dismissFirstTimeCardId === 14,
+              'suggestion-card--hover': isHovered14,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 14 || (!isMinervaSkin && showSuccessHighlightInCard(14)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(14) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 14,
+              'suggestion-card--scale-out': scaleOutCardId === 14
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset14}px` }"
+            @mouseenter="isCardHovered14 = true"
+            @mouseleave="isCardHovered14 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 14">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(14)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 14">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded14" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded14 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Fix redirect link</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded14 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Fix redirect link</div>
+              </button>
+              <div v-if="isCardExpanded14" class="suggestion-content">
+                <p class="suggestion-description">This link points to a redirect. Help readers get to the right destination by linking directly to the target page.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(14)">Update link</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(14)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved15 && !isSuggestionDeclined15 || publishPromptSuggestionId === 15 || (!isMinervaSkin && showSuccessHighlightInCard(15)) || dismissFirstTimeCardId === 15 || scaleOutCardId === 15)"
+            ref="suggestionsSidebarRef15"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded15 && publishPromptSuggestionId !== 15 && !(!isMinervaSkin && showSuccessHighlightInCard(15)) && dismissFirstTimeCardId !== 15,
+              'suggestion-card--expanded': isCardExpanded15 || publishPromptSuggestionId === 15 || (!isMinervaSkin && showSuccessHighlightInCard(15)) || dismissFirstTimeCardId === 15,
+              'suggestion-card--hover': isHovered15,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 15 || (!isMinervaSkin && showSuccessHighlightInCard(15)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(15) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 15,
+              'suggestion-card--scale-out': scaleOutCardId === 15
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset15}px` }"
+            @mouseenter="isCardHovered15 = true"
+            @mouseleave="isCardHovered15 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 15">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(15)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 15">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded15" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded15 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded15 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded15" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(15)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(15)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved16 && !isSuggestionDeclined16 || publishPromptSuggestionId === 16 || (!isMinervaSkin && showSuccessHighlightInCard(16)) || dismissFirstTimeCardId === 16 || scaleOutCardId === 16)"
+            ref="suggestionsSidebarRef16"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded16 && publishPromptSuggestionId !== 16 && !(!isMinervaSkin && showSuccessHighlightInCard(16)) && dismissFirstTimeCardId !== 16,
+              'suggestion-card--expanded': isCardExpanded16 || publishPromptSuggestionId === 16 || (!isMinervaSkin && showSuccessHighlightInCard(16)) || dismissFirstTimeCardId === 16,
+              'suggestion-card--hover': isHovered16,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 16 || (!isMinervaSkin && showSuccessHighlightInCard(16)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(16) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 16,
+              'suggestion-card--scale-out': scaleOutCardId === 16
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset16}px` }"
+            @mouseenter="isCardHovered16 = true"
+            @mouseleave="isCardHovered16 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 16">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(16)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 16">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded16" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded16 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded16 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded16" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(16)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(16)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved17 && !isSuggestionDeclined17 || publishPromptSuggestionId === 17 || (!isMinervaSkin && showSuccessHighlightInCard(17)) || dismissFirstTimeCardId === 17 || scaleOutCardId === 17)"
+            ref="suggestionsSidebarRef17"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded17 && publishPromptSuggestionId !== 17 && !(!isMinervaSkin && showSuccessHighlightInCard(17)) && dismissFirstTimeCardId !== 17,
+              'suggestion-card--expanded': isCardExpanded17 || publishPromptSuggestionId === 17 || (!isMinervaSkin && showSuccessHighlightInCard(17)) || dismissFirstTimeCardId === 17,
+              'suggestion-card--hover': isHovered17,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 17 || (!isMinervaSkin && showSuccessHighlightInCard(17)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(17) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 17,
+              'suggestion-card--scale-out': scaleOutCardId === 17
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset17}px` }"
+            @mouseenter="isCardHovered17 = true"
+            @mouseleave="isCardHovered17 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 17">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(17)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 17">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded17" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded17 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded17 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded17" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(17)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(17)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
           <!-- Empty State - Show when all suggestions are completed or declined -->
           <div 
             v-if="isMinervaSkin && ((showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge))"
@@ -5716,6 +6584,45 @@
           <p v-else-if="activeMinervaSuggestion === 8" class="minerva-sheet-description">
             This link points to a redirect. Help readers get to the right destination by linking directly to the target page.
           </p>
+          <p v-else-if="activeMinervaSuggestion === 11" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 12" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 13" class="minerva-sheet-description">
+            This sentence is long and may be difficult to read. Consider breaking it into shorter, clearer sentences.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 14" class="minerva-sheet-description">
+            This link points to a redirect. Help readers get to the right destination by linking directly to the target page.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 15" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 16" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 17" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 20" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 21" class="minerva-sheet-description">
+            This link points to a redirect. Help readers get to the right destination by linking directly to the target page.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 22" class="minerva-sheet-description">
+            This year is linked unnecessarily. Help readers stay focused on the article by removing this year link.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 23" class="minerva-sheet-description">
+            This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.
+          </p>
           <p v-else class="minerva-sheet-description">
             This information has no source. Help readers understand where this information is coming from by adding a
             <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
@@ -5975,6 +6882,28 @@
             >
               Dismiss
             </cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 11" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(11)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 11" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(11)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 12" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(12)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 12" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(12)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 13" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(13)">Restructure</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 13" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(13)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 14" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(14)">Update link</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 14" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(14)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 15" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(15)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 15" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(15)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 16" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(16)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 16" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(16)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 17" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(17)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 17" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(17)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 20" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(20)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 20" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(20)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 21" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(21)">Update link</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 21" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(21)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 22" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(22)">Fix year link</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 22" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(22)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 23" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(23)">Fix link</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 23" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(23)">Dismiss</cdx-button>
             <cdx-button
               class="minerva-sheet-btn minerva-sheet-more-actions"
               action="default"
@@ -6226,7 +7155,7 @@
                   Enable suggestion preview while scrolling
                 </cdx-checkbox>
                 <cdx-checkbox v-model="showRailOnReach">
-                  Show rail just when reaching suggestions
+                  Show rail when reaching suggestions
                 </cdx-checkbox>
                 <cdx-checkbox v-model="showEditMenuOnMobile">
                   Menu to ask users what to edit
@@ -7119,6 +8048,59 @@ const sidebarTopOffset9 = ref(0);
 const highlightedTextRef10 = ref(null);
 const suggestionsSidebarRef10 = ref(null);
 const sidebarTopOffset10 = ref(0);
+const highlightedTextRef11 = ref(null);
+const suggestionsSidebarRef11 = ref(null);
+const sidebarTopOffset11 = ref(0);
+const isHovered11 = ref(false);
+const isCardHovered11 = ref(false);
+const isTextHovered11 = ref(false);
+const isCardExpanded11 = ref(false);
+const highlightedTextRef12 = ref(null);
+const suggestionsSidebarRef12 = ref(null);
+const sidebarTopOffset12 = ref(0);
+const isHovered12 = ref(false);
+const isCardHovered12 = ref(false);
+const isTextHovered12 = ref(false);
+const isCardExpanded12 = ref(false);
+const highlightedTextRef13 = ref(null);
+const suggestionsSidebarRef13 = ref(null);
+const sidebarTopOffset13 = ref(0);
+const isHovered13 = ref(false);
+const isCardHovered13 = ref(false);
+const isTextHovered13 = ref(false);
+const isCardExpanded13 = ref(false);
+const highlightedTextRef14 = ref(null);
+const suggestionsSidebarRef14 = ref(null);
+const sidebarTopOffset14 = ref(0);
+const isHovered14 = ref(false);
+const isCardHovered14 = ref(false);
+const isTextHovered14 = ref(false);
+const isCardExpanded14 = ref(false);
+const highlightedTextRef15 = ref(null);
+const suggestionsSidebarRef15 = ref(null);
+const sidebarTopOffset15 = ref(0);
+const isHovered15 = ref(false);
+const isCardHovered15 = ref(false);
+const isTextHovered15 = ref(false);
+const isCardExpanded15 = ref(false);
+const highlightedTextRef16 = ref(null);
+const suggestionsSidebarRef16 = ref(null);
+const sidebarTopOffset16 = ref(0);
+const isHovered16 = ref(false);
+const isCardHovered16 = ref(false);
+const isTextHovered16 = ref(false);
+const isCardExpanded16 = ref(false);
+const highlightedTextRef17 = ref(null);
+const suggestionsSidebarRef17 = ref(null);
+const sidebarTopOffset17 = ref(0);
+const isHovered17 = ref(false);
+const isCardHovered17 = ref(false);
+const isTextHovered17 = ref(false);
+const isCardExpanded17 = ref(false);
+const highlightedTextRef20 = ref(null);
+const highlightedTextRef21 = ref(null);
+const highlightedTextRef22 = ref(null);
+const highlightedTextRef23 = ref(null);
 const vectorSuggestionsControlsRef = ref(null);
 const desktopSuggestionsControlsHidden = ref(false);
 const hasOpenedDesktopPagination = ref(false);
@@ -7236,7 +8218,8 @@ const isIntroOnlyMode = ref(false);
 
 // Rail on reach
 const showRailOnReach = ref(false);
-const activeRailSuggestionId = ref(null);
+const activeRailSuggestionIds = ref([]);
+const railHeights = ref({});
 let railRafId = null;
 
 function getSuggestionRefs() {
@@ -7251,38 +8234,62 @@ function getSuggestionRefs() {
     { id: 8, ref: highlightedTextRef8, pending: isSuggestion8Pending.value },
     { id: 9, ref: highlightedTextRef9, pending: isSuggestion9Pending.value },
     { id: 10, ref: highlightedTextRef10, pending: isSuggestion10Pending.value },
+    { id: 11, ref: highlightedTextRef11, pending: isSuggestion11Pending.value },
+    { id: 12, ref: highlightedTextRef12, pending: isSuggestion12Pending.value },
+    { id: 13, ref: highlightedTextRef13, pending: isSuggestion13Pending.value },
+    { id: 14, ref: highlightedTextRef14, pending: isSuggestion14Pending.value },
+    { id: 15, ref: highlightedTextRef15, pending: isSuggestion15Pending.value },
+    { id: 16, ref: highlightedTextRef16, pending: isSuggestion16Pending.value },
+    { id: 17, ref: highlightedTextRef17, pending: isSuggestion17Pending.value },
+    { id: 20, ref: highlightedTextRef20, pending: isSuggestion20Pending.value },
+    { id: 21, ref: highlightedTextRef21, pending: isSuggestion21Pending.value },
+    { id: 22, ref: highlightedTextRef22, pending: isSuggestion22Pending.value },
+    { id: 23, ref: highlightedTextRef23, pending: isSuggestion23Pending.value },
   ].filter(s => s.pending && s.ref.value);
 }
 
 function isRailActive(id) {
   if (!showRailOnReach.value || !isMinervaSkin.value || !isEditMode.value) return false;
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === id) return true;
-  return activeRailSuggestionId.value === id;
+  return activeRailSuggestionIds.value.includes(id);
+}
+
+function getRailStyle(id) {
+  const h = railHeights.value[id];
+  return h != null ? { height: h + 'px' } : {};
+}
+
+function updateRailHeights() {
+  const newHeights = {};
+  for (const { id, ref } of getSuggestionRefs()) {
+    if (!ref.value) continue;
+    const annotation = ref.value.querySelector('.highlighted-text-annotation');
+    const el = annotation || ref.value;
+    newHeights[id] = el.getBoundingClientRect().height;
+  }
+  railHeights.value = newHeights;
 }
 
 function updateActiveRail() {
   if (!showRailOnReach.value || !isMinervaSkin.value || !isEditMode.value) {
-    activeRailSuggestionId.value = null;
+    activeRailSuggestionIds.value = [];
     return;
   }
   if (isMinervaSheetOpen.value) {
-    activeRailSuggestionId.value = activeMinervaSuggestion.value;
+    activeRailSuggestionIds.value = activeMinervaSuggestion.value ? [activeMinervaSuggestion.value] : [];
     return;
   }
   const vh = window.innerHeight;
-  const zoneTop = vh * 0.3;
-  const zoneBottom = vh * 0.7;
-  const center = vh * 0.5;
-  const candidates = [];
+  const visible = [];
   for (const { id, ref } of getSuggestionRefs()) {
+    if (!ref.value) continue;
     const rect = ref.value.getBoundingClientRect();
-    const elCenter = (rect.top + rect.bottom) / 2;
-    if (elCenter >= zoneTop && elCenter <= zoneBottom) {
-      candidates.push({ id, dist: Math.abs(elCenter - center) });
+    if (rect.bottom > 0 && rect.top < vh) {
+      visible.push(id);
     }
   }
-  candidates.sort((a, b) => a.dist - b.dist);
-  activeRailSuggestionId.value = candidates.length > 0 ? candidates[0].id : null;
+  activeRailSuggestionIds.value = visible;
+  updateRailHeights();
 }
 
 function handleRailScroll() {
@@ -7306,7 +8313,7 @@ function updateFirstVisibleRail() {
       firstId = id;
     }
   }
-  if (firstId !== null) activeRailSuggestionId.value = firstId;
+  if (firstVisible !== null) activeRailSuggestionIds.value = [firstVisible];
 }
 let persistentPaginationBarIdleTimer = null;
 let persistentPaginationBarScrollTimer = null;
@@ -7571,6 +8578,61 @@ const isSuggestion9Pending = computed(() => (
 const isSuggestion10Pending = computed(() => (
   !isSuggestionResolved10.value && !isSuggestionDeclined10.value
 ));
+const isSuggestionResolved11 = ref(false);
+const isSuggestionDeclined11 = ref(false);
+const isSuggestionResolved12 = ref(false);
+const isSuggestionDeclined12 = ref(false);
+const isSuggestionResolved13 = ref(false);
+const isSuggestionDeclined13 = ref(false);
+const isSuggestionResolved14 = ref(false);
+const isSuggestionDeclined14 = ref(false);
+const isSuggestionResolved15 = ref(false);
+const isSuggestionDeclined15 = ref(false);
+const isSuggestionResolved16 = ref(false);
+const isSuggestionDeclined16 = ref(false);
+const isSuggestionResolved17 = ref(false);
+const isSuggestionDeclined17 = ref(false);
+const isSuggestionResolved20 = ref(false);
+const isSuggestionDeclined20 = ref(false);
+const isSuggestionResolved21 = ref(false);
+const isSuggestionDeclined21 = ref(false);
+const isSuggestionResolved22 = ref(false);
+const isSuggestionDeclined22 = ref(false);
+const isSuggestionResolved23 = ref(false);
+const isSuggestionDeclined23 = ref(false);
+const isSuggestion11Pending = computed(() => (
+  !isSuggestionResolved11.value && !isSuggestionDeclined11.value
+));
+const isSuggestion12Pending = computed(() => (
+  !isSuggestionResolved12.value && !isSuggestionDeclined12.value
+));
+const isSuggestion13Pending = computed(() => (
+  !isSuggestionResolved13.value && !isSuggestionDeclined13.value
+));
+const isSuggestion14Pending = computed(() => (
+  !isSuggestionResolved14.value && !isSuggestionDeclined14.value
+));
+const isSuggestion15Pending = computed(() => (
+  !isSuggestionResolved15.value && !isSuggestionDeclined15.value
+));
+const isSuggestion16Pending = computed(() => (
+  !isSuggestionResolved16.value && !isSuggestionDeclined16.value
+));
+const isSuggestion17Pending = computed(() => (
+  !isSuggestionResolved17.value && !isSuggestionDeclined17.value
+));
+const isSuggestion20Pending = computed(() => (
+  !isSuggestionResolved20.value && !isSuggestionDeclined20.value
+));
+const isSuggestion21Pending = computed(() => (
+  !isSuggestionResolved21.value && !isSuggestionDeclined21.value
+));
+const isSuggestion22Pending = computed(() => (
+  !isSuggestionResolved22.value && !isSuggestionDeclined22.value
+));
+const isSuggestion23Pending = computed(() => (
+  !isSuggestionResolved23.value && !isSuggestionDeclined23.value
+));
 const availableSuggestionCount = computed(() => (
   (isSuggestion1Pending.value ? 1 : 0) +
   (isSuggestion2Pending.value ? 1 : 0) +
@@ -7581,7 +8643,18 @@ const availableSuggestionCount = computed(() => (
   (isSuggestion7Pending.value ? 1 : 0) +
   (isSuggestion8Pending.value ? 1 : 0) +
   (isSuggestion9Pending.value ? 1 : 0) +
-  (isSuggestion10Pending.value ? 1 : 0)
+  (isSuggestion10Pending.value ? 1 : 0) +
+  (isSuggestion11Pending.value ? 1 : 0) +
+  (isSuggestion12Pending.value ? 1 : 0) +
+  (isSuggestion13Pending.value ? 1 : 0) +
+  (isSuggestion14Pending.value ? 1 : 0) +
+  (isSuggestion15Pending.value ? 1 : 0) +
+  (isSuggestion16Pending.value ? 1 : 0) +
+  (isSuggestion17Pending.value ? 1 : 0) +
+  (isSuggestion20Pending.value ? 1 : 0) +
+  (isSuggestion21Pending.value ? 1 : 0) +
+  (isSuggestion22Pending.value ? 1 : 0) +
+  (isSuggestion23Pending.value ? 1 : 0)
 ));
 const sectionSuggestionCount = computed(() => {
   if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
@@ -10880,7 +11953,7 @@ function getPersistentPaginationAllTargets() {
 }
 
 const ADD_CITATION_IDS = computed(() =>
-  selectedArticle.value === 'regents-park' ? [1, 2, 3, 9, 10] : [1, 2, 3]
+  selectedArticle.value === 'regents-park' ? [1, 2, 3, 9, 10, 20] : [1, 2, 3, 11, 12]
 );
 
 function getPublishPromptNextId(currentId = null) {
@@ -11525,7 +12598,7 @@ function getSuggestionIdsForCurrentContext() {
 
 function getPendingSuggestionIdsForContext() {
   if (selectedArticle.value === 'regents-park') {
-    const rpOrder = [1, 2, 9, 3, 6, 10, 7, 8];
+    const rpOrder = [1, 2, 9, 3, 20, 6, 10, 7, 21, 8, 22, 23];
     return rpOrder.filter(id => {
       if (id === 1) return isSuggestion1Pending.value;
       if (id === 2) return isSuggestion2Pending.value;
@@ -11535,6 +12608,10 @@ function getPendingSuggestionIdsForContext() {
       if (id === 8) return isSuggestion8Pending.value;
       if (id === 9) return isSuggestion9Pending.value;
       if (id === 10) return isSuggestion10Pending.value;
+      if (id === 20) return isSuggestion20Pending.value;
+      if (id === 21) return isSuggestion21Pending.value;
+      if (id === 22) return isSuggestion22Pending.value;
+      if (id === 23) return isSuggestion23Pending.value;
       return false;
     });
   }
@@ -11558,6 +12635,13 @@ function getPendingSuggestionIdsForContext() {
   if (isSuggestion7Pending.value) ids.push(7);
   if (isSuggestion3Pending.value) ids.push(3);
   if (isSuggestion5Pending.value) ids.push(5);
+  if (isSuggestion11Pending.value) ids.push(11);
+  if (isSuggestion12Pending.value) ids.push(12);
+  if (isSuggestion13Pending.value) ids.push(13);
+  if (isSuggestion14Pending.value) ids.push(14);
+  if (isSuggestion15Pending.value) ids.push(15);
+  if (isSuggestion16Pending.value) ids.push(16);
+  if (isSuggestion17Pending.value) ids.push(17);
   return ids;
 }
 
@@ -12563,6 +13647,35 @@ function handleResolveGenericSuggestion(suggestionId) {
   } else if (suggestionId === 10) {
     isSuggestionResolved10.value = true;
     isCardExpanded10.value = false;
+  } else if (suggestionId === 11) {
+    isSuggestionResolved11.value = true;
+    isCardExpanded11.value = false;
+  } else if (suggestionId === 12) {
+    isSuggestionResolved12.value = true;
+    isCardExpanded12.value = false;
+  } else if (suggestionId === 13) {
+    isSuggestionResolved13.value = true;
+    isCardExpanded13.value = false;
+  } else if (suggestionId === 14) {
+    isSuggestionResolved14.value = true;
+    isCardExpanded14.value = false;
+  } else if (suggestionId === 15) {
+    isSuggestionResolved15.value = true;
+    isCardExpanded15.value = false;
+  } else if (suggestionId === 16) {
+    isSuggestionResolved16.value = true;
+    isCardExpanded16.value = false;
+  } else if (suggestionId === 17) {
+    isSuggestionResolved17.value = true;
+    isCardExpanded17.value = false;
+  } else if (suggestionId === 20) {
+    isSuggestionResolved20.value = true;
+  } else if (suggestionId === 21) {
+    isSuggestionResolved21.value = true;
+  } else if (suggestionId === 22) {
+    isSuggestionResolved22.value = true;
+  } else if (suggestionId === 23) {
+    isSuggestionResolved23.value = true;
   }
   if (isMinervaSkin.value) {
     handleMinervaSuggestionResolutionAfterAction(suggestionId, true);
@@ -12616,6 +13729,35 @@ function handleDeclineGenericSuggestion(suggestionId) {
   } else if (suggestionId === 10) {
     isSuggestionDeclined10.value = true;
     isCardExpanded10.value = false;
+  } else if (suggestionId === 11) {
+    isSuggestionDeclined11.value = true;
+    isCardExpanded11.value = false;
+  } else if (suggestionId === 12) {
+    isSuggestionDeclined12.value = true;
+    isCardExpanded12.value = false;
+  } else if (suggestionId === 13) {
+    isSuggestionDeclined13.value = true;
+    isCardExpanded13.value = false;
+  } else if (suggestionId === 14) {
+    isSuggestionDeclined14.value = true;
+    isCardExpanded14.value = false;
+  } else if (suggestionId === 15) {
+    isSuggestionDeclined15.value = true;
+    isCardExpanded15.value = false;
+  } else if (suggestionId === 16) {
+    isSuggestionDeclined16.value = true;
+    isCardExpanded16.value = false;
+  } else if (suggestionId === 17) {
+    isSuggestionDeclined17.value = true;
+    isCardExpanded17.value = false;
+  } else if (suggestionId === 20) {
+    isSuggestionDeclined20.value = true;
+  } else if (suggestionId === 21) {
+    isSuggestionDeclined21.value = true;
+  } else if (suggestionId === 22) {
+    isSuggestionDeclined22.value = true;
+  } else if (suggestionId === 23) {
+    isSuggestionDeclined23.value = true;
   }
   if (isMinervaSkin.value && (activePrototype.value === 'option-1' || isArrowOnceMode.value)) {
     triggerMinervaDismiss(suggestionId);
@@ -13024,7 +14166,7 @@ watch(isEditMode, (newVal) => {
   if (newVal && showRailOnReach.value && isMinervaSkin.value) {
     nextTick(() => updateFirstVisibleRail());
   } else if (!newVal) {
-    activeRailSuggestionId.value = null;
+    activeRailSuggestionIds.value = [];
   }
 });
 
