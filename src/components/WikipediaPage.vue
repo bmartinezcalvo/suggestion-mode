@@ -7056,18 +7056,16 @@
               class="edit-menu-btn"
               action="default"
               weight="normal"
-              @click="handleEditMenuEditIntro"
-            >
-              Edit introduction
-            </cdx-button>
-            <cdx-button
-              class="edit-menu-btn"
-              action="default"
-              weight="normal"
               @click="handleEditMenuEditFullPage"
             >
-              Edit full page
+              Edit article
             </cdx-button>
+            <cdx-checkbox
+              v-model="editMenuRememberChoice"
+              class="edit-menu-remember"
+            >
+              Remember this choice
+            </cdx-checkbox>
           </div>
         </cdx-popover>
 
@@ -8212,6 +8210,9 @@ let scrollPreviewScrollStopTimer = null;
 // Edit menu ("What do you want to edit?" bottom sheet)
 const showEditMenuOnMobile = ref(true);
 const isEditMenuSheetOpen = ref(false);
+const editMenuRememberChoice = ref(false);
+const EDIT_MENU_REMEMBER_KEY = 'wikiEditMenuRememberedChoice';
+const editMenuRememberedChoice = ref(localStorage.getItem(EDIT_MENU_REMEMBER_KEY) || null);
 
 // Intro-only edit mode
 const isIntroOnlyMode = ref(false);
@@ -10089,7 +10090,16 @@ function maybeShowMinervaNoMoreSuggestionsState() {
 
 function handleMinervaEditButtonClick() {
   if (!isEditMode.value && showEditMenuOnMobile.value) {
-    isEditMenuSheetOpen.value = true;
+    const remembered = editMenuRememberedChoice.value;
+    if (remembered === 'suggestions') {
+      handleEditMenuViewSuggestions();
+    } else if (remembered === 'full-page') {
+      handleEditMenuEditFullPage();
+    } else if (remembered === 'intro') {
+      handleEditMenuEditIntro();
+    } else {
+      isEditMenuSheetOpen.value = true;
+    }
   } else {
     toggleEditMode();
   }
@@ -10099,7 +10109,18 @@ function closeEditMenuSheet() {
   isEditMenuSheetOpen.value = false;
 }
 
+function saveEditMenuRememberedChoice(choice) {
+  if (editMenuRememberChoice.value) {
+    localStorage.setItem(EDIT_MENU_REMEMBER_KEY, choice);
+    editMenuRememberedChoice.value = choice;
+  } else {
+    localStorage.removeItem(EDIT_MENU_REMEMBER_KEY);
+    editMenuRememberedChoice.value = null;
+  }
+}
+
 function handleEditMenuViewSuggestions() {
+  saveEditMenuRememberedChoice('suggestions');
   closeEditMenuSheet();
   isIntroOnlyMode.value = false;
   minervaEditSectionOnly.value = null;
@@ -10114,6 +10135,7 @@ function handleEditMenuViewSuggestions() {
 }
 
 function handleEditMenuEditIntro() {
+  saveEditMenuRememberedChoice('intro');
   closeEditMenuSheet();
   isIntroOnlyMode.value = true;
   minervaEditSectionOnly.value = null;
@@ -10123,6 +10145,7 @@ function handleEditMenuEditIntro() {
 }
 
 function handleEditMenuEditFullPage() {
+  saveEditMenuRememberedChoice('full-page');
   closeEditMenuSheet();
   isIntroOnlyMode.value = false;
   minervaEditSectionOnly.value = null;
@@ -24016,6 +24039,11 @@ function markArticleEdited() {
   font-size: 0.9375rem;
   font-weight: 600;
   min-height: 48px;
+}
+
+.edit-menu-remember {
+  margin-top: 4px;
+  padding: 4px 0;
 }
 
 
