@@ -958,17 +958,119 @@
                   </div>
 
                   <div class="body-text">
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion18Pending || isSuccessHighlightActive(18))"
+                      ref="highlightedTextRef18"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion18Pending && isHovered18 && showSuggestions && !isCardExpanded18,
+                        'highlighted-text-wrapper--selected': isSuggestion18Pending && showSuggestions && (isCardExpanded18 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 18) || isScrollPreviewingId(18)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(18),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion18Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 18,
+                        'highlighted-text-wrapper--rail-active': isRailActive(18)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered18 = true"
+                      @mouseleave="isTextHovered18 = false"
+                      @click="isSuggestion18Pending ? (isMinervaSkin ? openMinervaSuggestion(18) : (isCardExpanded18 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                      Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion18Pending && !isSuccessHighlightActive(18)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18) }"
+                        :style="getRailStyle(18)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion18Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="18" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(18)" @click.stop="openMinervaSuggestion(18)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(18)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion19Pending || isSuccessHighlightActive(19))"
+                      ref="highlightedTextRef19"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion19Pending && isHovered19 && showSuggestions && !isCardExpanded19,
+                        'highlighted-text-wrapper--selected': isSuggestion19Pending && showSuggestions && (isCardExpanded19 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 19) || isScrollPreviewingId(19)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(19),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion19Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 19,
+                        'highlighted-text-wrapper--rail-active': isRailActive(19)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered19 = true"
+                      @mouseleave="isTextHovered19 = false"
+                      @click="isSuggestion19Pending ? (isMinervaSkin ? openMinervaSuggestion(19) : (isCardExpanded19 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                      The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion19Pending && !isSuccessHighlightActive(19)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19) }"
+                        :style="getRailStyle(19)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion19Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="19" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(19)" @click.stop="openMinervaSuggestion(19)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(19)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion24Pending || isSuccessHighlightActive(24))"
+                      ref="highlightedTextRef24"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion24Pending && isHovered24 && showSuggestions && !isCardExpanded24,
+                        'highlighted-text-wrapper--selected': isSuggestion24Pending && showSuggestions && (isCardExpanded24 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 24) || isScrollPreviewingId(24)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(24),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion24Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 24,
+                        'highlighted-text-wrapper--rail-active': isRailActive(24)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered24 = true"
+                      @mouseleave="isTextHovered24 = false"
+                      @click="isSuggestion24Pending ? (isMinervaSkin ? openMinervaSuggestion(24) : (isCardExpanded24 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion24Pending && !isSuccessHighlightActive(24)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24) }"
+                        :style="getRailStyle(24)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion24Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="24" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(24)" @click.stop="openMinervaSuggestion(24)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(24)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
                     </p>
                     <p>
-                      Lorde later wrote that poetry became an essential way to understand and articulate her feelings, and she described herself as someone who thought in poetry from childhood onward.<sup class="citation-marker">[16]</sup>
+                       Lorde later wrote that poetry became an essential way to understand and articulate her feelings, and she described herself as someone who thought in poetry from childhood onward.<sup class="citation-marker">[16]</sup>
                     </p>
                   </div>
                 </div>
@@ -1381,13 +1483,115 @@
                 </div>
                 <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
                   <div class="body-text">
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion18Pending || isSuccessHighlightActive(18))"
+                      ref="highlightedTextRef18"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion18Pending && isHovered18 && showSuggestions && !isCardExpanded18,
+                        'highlighted-text-wrapper--selected': isSuggestion18Pending && showSuggestions && (isCardExpanded18 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 18) || isScrollPreviewingId(18)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(18),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion18Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 18,
+                        'highlighted-text-wrapper--rail-active': isRailActive(18)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered18 = true"
+                      @mouseleave="isTextHovered18 = false"
+                      @click="isSuggestion18Pending ? (isMinervaSkin ? openMinervaSuggestion(18) : (isCardExpanded18 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                      Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion18Pending && !isSuccessHighlightActive(18)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18) }"
+                        :style="getRailStyle(18)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion18Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="18" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(18)" @click.stop="openMinervaSuggestion(18)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(18)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion19Pending || isSuccessHighlightActive(19))"
+                      ref="highlightedTextRef19"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion19Pending && isHovered19 && showSuggestions && !isCardExpanded19,
+                        'highlighted-text-wrapper--selected': isSuggestion19Pending && showSuggestions && (isCardExpanded19 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 19) || isScrollPreviewingId(19)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(19),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion19Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 19,
+                        'highlighted-text-wrapper--rail-active': isRailActive(19)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered19 = true"
+                      @mouseleave="isTextHovered19 = false"
+                      @click="isSuggestion19Pending ? (isMinervaSkin ? openMinervaSuggestion(19) : (isCardExpanded19 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                      The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion19Pending && !isSuccessHighlightActive(19)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19) }"
+                        :style="getRailStyle(19)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion19Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="19" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(19)" @click.stop="openMinervaSuggestion(19)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(19)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion24Pending || isSuccessHighlightActive(24))"
+                      ref="highlightedTextRef24"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion24Pending && isHovered24 && showSuggestions && !isCardExpanded24,
+                        'highlighted-text-wrapper--selected': isSuggestion24Pending && showSuggestions && (isCardExpanded24 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 24) || isScrollPreviewingId(24)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(24),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion24Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 24,
+                        'highlighted-text-wrapper--rail-active': isRailActive(24)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered24 = true"
+                      @mouseleave="isTextHovered24 = false"
+                      @click="isSuggestion24Pending ? (isMinervaSkin ? openMinervaSuggestion(24) : (isCardExpanded24 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                      Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion24Pending && !isSuccessHighlightActive(24)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24) }"
+                        :style="getRailStyle(24)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion24Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="24" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(24)" @click.stop="openMinervaSuggestion(24)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(24)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Born Audrey Geraldine Lorde, she dropped the "y" from her first name while still a child, later explaining in <em><a href="https://en.wikipedia.org/wiki/Zami:_A_New_Spelling_of_My_Name" target="_blank" rel="noopener">Zami: A New Spelling of My Name</a></em> that she preferred the visual symmetry of “Audre Lorde.”<sup class="citation-marker">[12]</sup> She attended Catholic schools, later studied at <a href="https://en.wikipedia.org/wiki/Hunter_College_High_School" target="_blank" rel="noopener">Hunter College High School</a>, and published her first poem in <a href="https://en.wikipedia.org/wiki/Seventeen_(American_magazine)" target="_blank" rel="noopener">Seventeen</a> after her school literary journal rejected it.<sup class="citation-marker">[13]</sup><sup class="citation-marker">[14]</sup><sup class="citation-marker">[15]</sup>
                     </p>
                     <p>
@@ -2941,8 +3145,8 @@
                     :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                     @click="expandIntroToFullPage"
                   ><span class="edit-full-page-btn-content">
-                    <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                     <span>Edit full page</span>
+                    <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                     <span v-if="showSuggestions && availableSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                     <span v-if="showSuggestions && availableSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                       <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -2964,8 +3168,8 @@
                     :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                     @click="showFullPageEdit($event)"
                   ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3000,8 +3204,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3024,8 +3228,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3168,8 +3372,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3192,8 +3396,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3521,8 +3725,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3545,8 +3749,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3741,8 +3945,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -3765,8 +3969,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -4056,8 +4260,8 @@
                       :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
                       @click="showFullPageEdit($event)"
                     ><span class="edit-full-page-btn-content">
-                        <cdx-icon v-if="editFullPageImprovedEnabled && isMinervaSkin" :icon="cdxIconEdit" size="small" class="edit-full-page-start-icon" />
                         <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
                         <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
                           <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
@@ -8321,34 +8525,34 @@ function expandVectorCard(id) {
   if (cardRef) cardRef.value = true;
 }
 
-// Animated sequence: 1) highlight flashes blue → 2) lightbulb trigger pulses → 3) expand
+function getVectorCardEl(id) {
+  const refs = {
+    1: suggestionsSidebarRef, 2: suggestionsSidebarRef2, 3: suggestionsSidebarRef3,
+    4: suggestionsSidebarRef4, 5: suggestionsSidebarRef5, 6: suggestionsSidebarRef6,
+    7: suggestionsSidebarRef7, 8: suggestionsSidebarRef8, 9: suggestionsSidebarRef9,
+    10: suggestionsSidebarRef10, 11: suggestionsSidebarRef11, 12: suggestionsSidebarRef12,
+    13: suggestionsSidebarRef13, 14: suggestionsSidebarRef14, 15: suggestionsSidebarRef15,
+    16: suggestionsSidebarRef16, 17: suggestionsSidebarRef17,
+  };
+  return refs[id]?.value;
+}
+
+// Beat animation on the lightbulb icon only, then expand
 function triggerAutoExpandSequence(id, onExpand) {
   nextTick(() => {
-    const triggerEl = document.querySelector(`[data-preview-suggestion-id="${id}"]`);
-    const wrapper = triggerEl?.closest('.highlighted-text-wrapper');
     const lightbulb = document.querySelector(`.minerva-suggestion-trigger[data-preview-suggestion-id="${id}"]`);
+    let iconEl = lightbulb?.querySelector('svg');
+    if (!iconEl) {
+      const cardEl = getVectorCardEl(id);
+      iconEl = cardEl?.querySelector('.suggestion-icon svg');
+    }
 
-    // Step 1: flash the highlighted text to blue
-    if (wrapper) wrapper.classList.add('highlighted-text-wrapper--auto-expand-flash');
+    if (iconEl) iconEl.classList.add('auto-expand-beat-icon');
 
-    // Step 2: pulse the lightbulb trigger (Minerva: floating button; Vector: wrapper itself)
     setTimeout(() => {
-      if (lightbulb) {
-        lightbulb.classList.add('minerva-suggestion-trigger--auto-expand-pulse');
-      } else if (wrapper) {
-        wrapper.classList.add('highlighted-text-wrapper--auto-expand-pulse');
-      }
-
-      // Step 3: expand the card/sheet and clean up
-      setTimeout(() => {
-        onExpand();
-        wrapper?.classList.remove(
-          'highlighted-text-wrapper--auto-expand-flash',
-          'highlighted-text-wrapper--auto-expand-pulse'
-        );
-        lightbulb?.classList.remove('minerva-suggestion-trigger--auto-expand-pulse');
-      }, 650);
-    }, 600);
+      onExpand();
+      iconEl?.classList.remove('auto-expand-beat-icon');
+    }, 700);
   });
 }
 
@@ -17410,7 +17614,36 @@ function markArticleEdited() {
   width: 100%;
   margin: 0;
   padding: 24px 0;
-  background-color: var(--background-color-neutral-subtle, #f8f9fa);
+  position: relative;
+  overflow: hidden;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .edit-full-page-btn-wrapper::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    180deg,
+    transparent 0px,
+    transparent 6px,
+    #e3e3e3 6px,
+    #e3e3e3 16px,
+    transparent 16px,
+    transparent 28px
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.7) 30%,
+    rgba(0, 0, 0, 0.7) 70%,
+    rgba(0, 0, 0, 0) 100%
+  );
+  pointer-events: none;
+}
+
+.minerva-skin.edit-mode.minerva-edit-full-page-improved .edit-full-page-btn {
+  position: relative;
+  z-index: 1;
 }
 
 .minerva-skin.edit-mode.minerva-edit-full-page-improved .article-content-edit:not(.article-content-edit--section-only) .minerva-edit-section > .edit-full-page-btn-wrapper {
@@ -17440,6 +17673,11 @@ function markArticleEdited() {
 
 .edit-full-page-start-icon {
   color: var(--color-subtle, #54595d);
+}
+
+.edit-full-page-lightbulb-badge {
+  display: inline-block;
+  flex-shrink: 0;
 }
 
 .edit-full-page-btn--improved,
@@ -23194,44 +23432,22 @@ function markArticleEdited() {
   animation: suggestion-card-bounce 3.2s ease-in-out 0s infinite;
 }
 
-/* Step 1: highlight text flashes to blue */
-.highlighted-text-wrapper--auto-expand-flash .highlighted-text-annotation {
-  animation: suggestion-auto-expand-flash 0.55s ease-out 1 forwards;
-}
-.highlighted-text-wrapper--auto-expand-flash .highlighted-text-rail {
-  animation: suggestion-rail-flash 0.55s ease-out 1 forwards;
+.auto-expand-beat-icon {
+  transform-origin: center;
+  animation: beat 700ms ease-in-out 1;
 }
 
-/* Step 2: highlighted text secondary pulse (Vector — no floating lightbulb) */
-.highlighted-text-wrapper--auto-expand-pulse .highlighted-text-annotation {
-  animation: suggestion-auto-expand-pulse 0.6s ease-in-out 2;
+@keyframes beat {
+  0%, 100% { transform: scale(1); }
+  20% { transform: scale(1.35); }
+  40% { transform: scale(1); }
+  60% { transform: scale(1.25); }
 }
 
-/* Step 2: lightbulb trigger pulse (Minerva) */
-.minerva-suggestion-trigger--auto-expand-pulse {
-  animation: suggestion-trigger-pulse 0.65s ease-in-out 1;
-}
-
-@keyframes suggestion-auto-expand-flash {
-  0% { background-color: var(--suggestion-color-subtle, #e8eeff); }
-  30% { background-color: var(--suggestion-color, #36c); color: #fff; }
-  100% { background-color: var(--suggestion-color-subtle, #e8eeff); color: inherit; }
-}
-
-@keyframes suggestion-rail-flash {
-  0% { width: 2px; }
-  30% { width: 4px; }
-  100% { width: 2px; }
-}
-
-@keyframes suggestion-auto-expand-pulse {
-  0%, 100% { background-color: var(--suggestion-color-subtle, #e8eeff); }
-  50% { background-color: rgba(51, 102, 204, 0.3); }
-}
-
-@keyframes suggestion-trigger-pulse {
-  0%, 100% { transform: scale(1); box-shadow: none; }
-  40% { transform: scale(1.25); box-shadow: 0 0 0 6px rgba(51, 102, 204, 0.25); }
+@media (prefers-reduced-motion: reduce) {
+  .auto-expand-beat-icon {
+    animation: none;
+  }
 }
 
 .minerva-suggestion-trigger--bounce {
