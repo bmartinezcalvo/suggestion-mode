@@ -3184,7 +3184,41 @@
                   </div>
                   
                   <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
-                    <p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion18Pending || isSuccessHighlightActive(18))"
+                      ref="highlightedTextRef18"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion18Pending && isHovered18 && showSuggestions && !isCardExpanded18,
+                        'highlighted-text-wrapper--selected': isSuggestion18Pending && showSuggestions && (isCardExpanded18 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 18) || isScrollPreviewingId(18)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(18),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion18Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 18,
+                        'highlighted-text-wrapper--rail-active': isRailActive(18)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered18 = true"
+                      @mouseleave="isTextHovered18 = false"
+                      @click="isSuggestion18Pending ? (isMinervaSkin ? openMinervaSuggestion(18) : (isCardExpanded18 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Lorde was born in New York City. Her father, Byron Lorde, was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother, Linda Gertrude Belmar Lorde, was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[9]</sup> Her mother was a light-skinned Black woman who at times passed as Spanish for employment opportunities, while Byron Lorde was darker than the Belmar family preferred.<sup class="citation-marker">[10]</sup><sup class="citation-marker">[11]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion18Pending && !isSuccessHighlightActive(18)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18) }"
+                        :style="getRailStyle(18)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion18Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="18" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(18)" @click.stop="openMinervaSuggestion(18)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(18)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
                       Lorde was born in New York City. Her father, Byron Lorde, was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother, Linda Gertrude Belmar Lorde, was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[9]</sup> Her mother was a light-skinned Black woman who at times passed as Spanish for employment opportunities, while Byron Lorde was darker than the Belmar family preferred.<sup class="citation-marker">[10]</sup><sup class="citation-marker">[11]</sup>
                     </p>
                     <p>
@@ -3343,10 +3377,78 @@
                     In 1968 Lorde was writer-in-residence at <a href="#">Tougaloo College</a> in Mississippi. Lorde's time at Tougaloo College, like her year at the <a href="#">National University of Mexico</a>, was a formative experience for her as an artist. She led workshops with her young, black undergraduate students, many of whom were eager to discuss the <a href="#">civil rights</a> issues of that time. Through these discussions with her students, she reaffirmed her desire not only to live out her "crazy and queer" identity, but also to devote attention to the formal aspects of her craft as a poet. Her book of poems, <em>Cables to Rage</em>, came out of her time and experiences at Tougaloo.
                     <sup v-if="citationNumber1" class="citation-marker">[{{ citationNumber1 }}]</sup>
                   </p>
-                                    <p>
+                  <p
+                    v-if="showSuggestionsDisplay && (isSuggestion19Pending || isSuccessHighlightActive(19))"
+                    ref="highlightedTextRef19"
+                    :class="{
+                      'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
+                      'highlighted-text-wrapper--hover': isSuggestion19Pending && isHovered19 && showSuggestions && !isCardExpanded19,
+                      'highlighted-text-wrapper--selected': isSuggestion19Pending && showSuggestions && (isCardExpanded19 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 19) || isScrollPreviewingId(19)),
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(19),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion19Pending,
+                      'suggestion-dismiss-right': dismissedSuggestionId === 19,
+                      'highlighted-text-wrapper--rail-active': isRailActive(19)
+                    }"
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered19 = true"
+                    @mouseleave="isTextHovered19 = false"
+                    @click="isSuggestion19Pending ? (isMinervaSkin ? openMinervaSuggestion(19) : (isCardExpanded19 = true)) : null"
+                  >
+                    <span class="highlighted-text-content">
+                      <span class="highlighted-text-annotation">
+                        From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
+                      </span>
+                    </span>
+                    <span
+                      v-if="isMinervaSkin && isSuggestion19Pending && !isSuccessHighlightActive(19)"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19) }"
+                      :style="getRailStyle(19)"
+                    ></span>
+                    <button v-if="isMinervaSkin && isSuggestion19Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="19" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(19)" @click.stop="openMinervaSuggestion(19)">
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
+                    <span v-else-if="isMinervaSkin && showSuccessHighlightUI(19)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                  </p>
+                  <p v-else>
                     From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
                   </p>
-                                    <p>
+                  <p
+                    v-if="showSuggestionsDisplay && (isSuggestion24Pending || isSuccessHighlightActive(24))"
+                    ref="highlightedTextRef24"
+                    :class="{
+                      'highlighted-text-wrapper': showSuggestions,
+                      [nonSelectedHighlightClass]: showSuggestions,
+                      'highlighted-text-wrapper--hover': isSuggestion24Pending && isHovered24 && showSuggestions && !isCardExpanded24,
+                      'highlighted-text-wrapper--selected': isSuggestion24Pending && showSuggestions && (isCardExpanded24 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 24) || isScrollPreviewingId(24)),
+                      'highlighted-text-wrapper--success': isSuccessHighlightActive(24),
+                      'minerva-suggestion-target': isMinervaSkin && isSuggestion24Pending,
+                      'suggestion-dismiss-right': dismissedSuggestionId === 24,
+                      'highlighted-text-wrapper--rail-active': isRailActive(24)
+                    }"
+                    class="suggestion-target"
+                    @mouseenter="isTextHovered24 = true"
+                    @mouseleave="isTextHovered24 = false"
+                    @click="isSuggestion24Pending ? (isMinervaSkin ? openMinervaSuggestion(24) : (isCardExpanded24 = true)) : null"
+                  >
+                    <span class="highlighted-text-content">
+                      <span class="highlighted-text-annotation">
+                        In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
+                      </span>
+                    </span>
+                    <span
+                      v-if="isMinervaSkin && isSuggestion24Pending && !isSuccessHighlightActive(24)"
+                      class="minerva-highlight-rail"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24) }"
+                      :style="getRailStyle(24)"
+                    ></span>
+                    <button v-if="isMinervaSkin && isSuggestion24Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="24" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(24)" @click.stop="openMinervaSuggestion(24)">
+                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                    </button>
+                    <span v-else-if="isMinervaSkin && showSuccessHighlightUI(24)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                  </p>
+                  <p v-else>
                     In 1977, Lorde became an associate of the <a href="#">Women's Institute for Freedom of the Press</a> (WIFP). WIFP is an American nonprofit publishing organization. The organization works to increase communication between women and connect the public with forms of women-based media.
                   </p>
                                     <p>
@@ -6182,6 +6284,213 @@
             </template>
           </div>
 
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved18 && !isSuggestionDeclined18 || publishPromptSuggestionId === 18 || (!isMinervaSkin && showSuccessHighlightInCard(18)) || dismissFirstTimeCardId === 18 || scaleOutCardId === 18)"
+            ref="suggestionsSidebarRef18"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded18 && publishPromptSuggestionId !== 18 && !(!isMinervaSkin && showSuccessHighlightInCard(18)) && dismissFirstTimeCardId !== 18,
+              'suggestion-card--expanded': isCardExpanded18 || publishPromptSuggestionId === 18 || (!isMinervaSkin && showSuccessHighlightInCard(18)) || dismissFirstTimeCardId === 18,
+              'suggestion-card--hover': isHovered18,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 18 || (!isMinervaSkin && showSuccessHighlightInCard(18)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(18) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 18,
+              'suggestion-card--scale-out': scaleOutCardId === 18
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset18}px` }"
+            @mouseenter="isCardHovered18 = true"
+            @mouseleave="isCardHovered18 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 18">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(18)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 18">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded18" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded18 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded18 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded18" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(18)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(18)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved19 && !isSuggestionDeclined19 || publishPromptSuggestionId === 19 || (!isMinervaSkin && showSuccessHighlightInCard(19)) || dismissFirstTimeCardId === 19 || scaleOutCardId === 19)"
+            ref="suggestionsSidebarRef19"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded19 && publishPromptSuggestionId !== 19 && !(!isMinervaSkin && showSuccessHighlightInCard(19)) && dismissFirstTimeCardId !== 19,
+              'suggestion-card--expanded': isCardExpanded19 || publishPromptSuggestionId === 19 || (!isMinervaSkin && showSuccessHighlightInCard(19)) || dismissFirstTimeCardId === 19,
+              'suggestion-card--hover': isHovered19,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 19 || (!isMinervaSkin && showSuccessHighlightInCard(19)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(19) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 19,
+              'suggestion-card--scale-out': scaleOutCardId === 19
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset19}px` }"
+            @mouseenter="isCardHovered19 = true"
+            @mouseleave="isCardHovered19 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 19">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(19)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 19">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded19" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded19 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded19 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded19" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(19)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(19)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
+          <div
+            v-if="showSuggestionsDisplay && (!isSuggestionResolved24 && !isSuggestionDeclined24 || publishPromptSuggestionId === 24 || (!isMinervaSkin && showSuccessHighlightInCard(24)) || dismissFirstTimeCardId === 24 || scaleOutCardId === 24)"
+            ref="suggestionsSidebarRef24"
+            :class="{
+              'suggestion-card--collapsed': !isCardExpanded24 && publishPromptSuggestionId !== 24 && !(!isMinervaSkin && showSuccessHighlightInCard(24)) && dismissFirstTimeCardId !== 24,
+              'suggestion-card--expanded': isCardExpanded24 || publishPromptSuggestionId === 24 || (!isMinervaSkin && showSuccessHighlightInCard(24)) || dismissFirstTimeCardId === 24,
+              'suggestion-card--hover': isHovered24,
+              'suggestion-card--publish-prompt': publishPromptSuggestionId === 24 || (!isMinervaSkin && showSuccessHighlightInCard(24)),
+              'suggestion-card--success-toast': !isMinervaSkin && showSuccessHighlightInCard(24) && feedbackAfterActionMode === 'toast',
+              'suggestion-card--dismiss-first': dismissFirstTimeCardId === 24,
+              'suggestion-card--scale-out': scaleOutCardId === 24
+            }"
+            class="suggestion-card suggestion-card-positioned"
+            :style="{ top: `${sidebarTopOffset24}px` }"
+            @mouseenter="isCardHovered24 = true"
+            @mouseleave="isCardHovered24 = false"
+          >
+            <template v-if="publishPromptSuggestionId === 24">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Suggestion completed!</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">Your change is ready to go live on Wikipedia. Publish it now or keep finding more improvements.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handlePublishPromptViewMore">View more suggestions</button>
+                  <cdx-button action="progressive" weight="normal" class="suggestion-btn-publish" @click="requestPublishChanges">Publish</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else-if="!isMinervaSkin && showSuccessHighlightInCard(24)">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--publish-prompt">
+                <div class="suggestion-icon suggestion-icon--success"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></div>
+                <div class="suggestion-title">Completed!</div>
+              </div>
+            </template>
+            <template v-else-if="dismissFirstTimeCardId === 24">
+              <div class="suggestion-header suggestion-header--expanded suggestion-header--dismiss-first">
+                <div class="suggestion-icon suggestion-icon--dismissed"><cdx-icon :icon="cdxIconClear" size="medium" /></div>
+                <div class="suggestion-title">Suggestion dismissed</div>
+              </div>
+              <div class="suggestion-content">
+                <p class="suggestion-description">This suggestion has been hidden for your edit session, but it will still be visible for other editors.</p>
+                <div class="suggestion-actions">
+                  <cdx-button action="default" weight="normal" @click="handleDismissCardUndo">Undo</cdx-button>
+                  <cdx-button action="progressive" weight="normal" @click="handleDismissCardGotIt">Got it</cdx-button>
+                </div>
+              </div>
+            </template>
+            <template v-else>
+              <button v-if="!isCardExpanded24" class="suggestion-header suggestion-header--collapsed" @click="isCardExpanded24 = true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <button v-else class="suggestion-header suggestion-header--expanded" @click="isCardExpanded24 = false" aria-expanded="true">
+                <div class="suggestion-icon"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></div>
+                <div class="suggestion-title">Add a citation</div>
+              </button>
+              <div v-if="isCardExpanded24" class="suggestion-content">
+                <p class="suggestion-description">This information has no source. Help readers understand where this information is coming from by adding a citation.</p>
+                <div class="suggestion-actions">
+                  <button class="suggestion-btn" @click="handleResolveGenericSuggestion(24)">Add citation</button>
+                  <button class="suggestion-btn suggestion-btn-secondary" @click="handleDeclineGenericSuggestion(24)">Dismiss</button>
+                  <cdx-button class="suggestion-more-actions" action="default" weight="quiet" aria-label="More actions"><cdx-icon :icon="cdxIconEllipsis" size="small" /></cdx-button>
+                </div>
+              </div>
+            </template>
+          </div>
+
           <!-- Empty State - Show when all suggestions are completed or declined -->
           <div 
             v-if="isMinervaSkin && ((showSuggestionBadge && availableSuggestionCount === 0) || (showSuggestions && allSuggestionsHandled && !showSuggestionNotification && !showSuggestionBadge))"
@@ -6206,7 +6515,7 @@
           >
             <transition name="banner-reveal" appear>
               <div
-                v-if="isBannerDelayReady && !isBannerDismissed && !(activePrototype === 'option-3' && isAutoScrollActive) && (isArrowOnceMode
+                v-if="isBannerDelayReady && !isBannerDismissed && !firstPendingSuggestionInView && !(activePrototype === 'option-3' && isAutoScrollActive) && (isArrowOnceMode
                   ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
                   : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
                 class="suggestions-banner"
@@ -6814,6 +7123,18 @@
             This information has no source. Help readers understand where this information is coming from by adding a
             <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
           </p>
+          <p v-else-if="activeMinervaSuggestion === 18" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 19" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
+          <p v-else-if="activeMinervaSuggestion === 24" class="minerva-sheet-description">
+            This information has no source. Help readers understand where this information is coming from by adding a
+            <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
+          </p>
           <p v-else-if="activeMinervaSuggestion === 20" class="minerva-sheet-description">
             This information has no source. Help readers understand where this information is coming from by adding a
             <a href="https://en.wikipedia.org/wiki/Wikipedia:Citing_sources" target="_blank" rel="noopener">citation</a>.
@@ -7100,6 +7421,12 @@
             <cdx-button v-if="activeMinervaSuggestion === 16" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(16)">Dismiss</cdx-button>
             <cdx-button v-if="activeMinervaSuggestion === 17" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(17)">Add citation</cdx-button>
             <cdx-button v-if="activeMinervaSuggestion === 17" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(17)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 18" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(18)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 18" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(18)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 19" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(19)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 19" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(19)">Dismiss</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 24" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(24)">Add citation</cdx-button>
+            <cdx-button v-if="activeMinervaSuggestion === 24" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(24)">Dismiss</cdx-button>
             <cdx-button v-if="activeMinervaSuggestion === 20" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(20)">Add citation</cdx-button>
             <cdx-button v-if="activeMinervaSuggestion === 20" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(20)">Dismiss</cdx-button>
             <cdx-button v-if="activeMinervaSuggestion === 21" class="minerva-sheet-btn" action="default" weight="normal" @click="handleResolveGenericSuggestion(21)">Update link</cdx-button>
@@ -8156,7 +8483,7 @@ const isHeaderFixed = ref(false);
 
 // Pulsating lightbulb (read mode entry point)
 const hasInteractedWithSuggestion = ref(false);
-const SECTIONS_WITH_SUGGESTIONS_READ = new Set(['career', 'poetry', 'prose']);
+const SECTIONS_WITH_SUGGESTIONS_READ = new Set(['early-life', 'career', 'poetry', 'prose']);
 function sectionHasSuggestionsRead(sectionId) {
   return SECTIONS_WITH_SUGGESTIONS_READ.has(sectionId);
 }
@@ -8302,6 +8629,33 @@ const isHovered17 = ref(false);
 const isCardHovered17 = ref(false);
 const isTextHovered17 = ref(false);
 const isCardExpanded17 = ref(false);
+const highlightedTextRef18 = ref(null);
+const suggestionsSidebarRef18 = ref(null);
+const sidebarTopOffset18 = ref(0);
+const isHovered18 = ref(false);
+const isCardHovered18 = ref(false);
+const isTextHovered18 = ref(false);
+const isCardExpanded18 = ref(false);
+const isSuggestionResolved18 = ref(false);
+const isSuggestionDeclined18 = ref(false);
+const highlightedTextRef19 = ref(null);
+const suggestionsSidebarRef19 = ref(null);
+const sidebarTopOffset19 = ref(0);
+const isHovered19 = ref(false);
+const isCardHovered19 = ref(false);
+const isTextHovered19 = ref(false);
+const isCardExpanded19 = ref(false);
+const isSuggestionResolved19 = ref(false);
+const isSuggestionDeclined19 = ref(false);
+const highlightedTextRef24 = ref(null);
+const suggestionsSidebarRef24 = ref(null);
+const sidebarTopOffset24 = ref(0);
+const isHovered24 = ref(false);
+const isCardHovered24 = ref(false);
+const isTextHovered24 = ref(false);
+const isCardExpanded24 = ref(false);
+const isSuggestionResolved24 = ref(false);
+const isSuggestionDeclined24 = ref(false);
 const highlightedTextRef20 = ref(null);
 const highlightedTextRef21 = ref(null);
 const highlightedTextRef22 = ref(null);
@@ -8425,12 +8779,16 @@ const editMenuRememberedChoice = ref(localStorage.getItem(EDIT_MENU_REMEMBER_KEY
 const isIntroOnlyMode = ref(false);
 
 // Rail on reach
-const showRailOnReach = ref(false);
+const showRailOnReach = ref(true);
 const activeRailSuggestionIds = ref([]);
 const railHeights = ref({});
 let railRafId = null;
+let railScrollTimer = null;
+const isActivelyScrolling = ref(false);
+const firstPendingSuggestionInView = ref(false);
+const autoExpandAnimatingId = ref(null);
 
-const expandFirstSuggestionOnReach = ref(false);
+const expandFirstSuggestionOnReach = ref(true);
 const firstSuggestionAutoExpanded = ref(false);
 
 function getSuggestionRefs() {
@@ -8452,6 +8810,9 @@ function getSuggestionRefs() {
     { id: 15, ref: highlightedTextRef15, pending: isSuggestion15Pending.value },
     { id: 16, ref: highlightedTextRef16, pending: isSuggestion16Pending.value },
     { id: 17, ref: highlightedTextRef17, pending: isSuggestion17Pending.value },
+    { id: 18, ref: highlightedTextRef18, pending: isSuggestion18Pending.value },
+    { id: 19, ref: highlightedTextRef19, pending: isSuggestion19Pending.value },
+    { id: 24, ref: highlightedTextRef24, pending: isSuggestion24Pending.value },
     { id: 20, ref: highlightedTextRef20, pending: isSuggestion20Pending.value },
     { id: 21, ref: highlightedTextRef21, pending: isSuggestion21Pending.value },
     { id: 22, ref: highlightedTextRef22, pending: isSuggestion22Pending.value },
@@ -8460,9 +8821,11 @@ function getSuggestionRefs() {
 }
 
 function isRailActive(id) {
-  if (!showRailOnReach.value || !isMinervaSkin.value || !isEditMode.value) return false;
+  if (!isMinervaSkin.value || !isEditMode.value) return false;
+  if (autoExpandAnimatingId.value === id) return true;
+  if (!showRailOnReach.value) return false;
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === id) return true;
-  return activeRailSuggestionIds.value.includes(id);
+  return isActivelyScrolling.value && activeRailSuggestionIds.value.includes(id);
 }
 
 function getRailStyle(id) {
@@ -8505,11 +8868,27 @@ function updateActiveRail() {
 
 function handleRailScroll() {
   if (!showRailOnReach.value || !isMinervaSkin.value || !isEditMode.value) return;
+  isActivelyScrolling.value = true;
+  clearTimeout(railScrollTimer);
+  railScrollTimer = setTimeout(() => { isActivelyScrolling.value = false; }, 200);
   if (railRafId) return;
   railRafId = requestAnimationFrame(() => {
     updateActiveRail();
     railRafId = null;
   });
+}
+
+function updateFirstPendingSuggestionInView() {
+  if (firstPendingSuggestionInView.value || !isEditMode.value) return;
+  const pendingRefs = getSuggestionRefs().filter(r => r.pending);
+  const vh = window.innerHeight;
+  if (pendingRefs.some(({ ref }) => {
+    if (!ref.value) return false;
+    const rect = ref.value.getBoundingClientRect();
+    return rect.bottom > 0 && rect.top < vh;
+  })) {
+    firstPendingSuggestionInView.value = true;
+  }
 }
 
 function expandVectorCard(id) {
@@ -8520,6 +8899,7 @@ function expandVectorCard(id) {
     10: isCardExpanded10, 11: isCardExpanded11, 12: isCardExpanded12,
     13: isCardExpanded13, 14: isCardExpanded14, 15: isCardExpanded15,
     16: isCardExpanded16, 17: isCardExpanded17,
+    18: isCardExpanded18, 19: isCardExpanded19, 24: isCardExpanded24,
   };
   const cardRef = map[id];
   if (cardRef) cardRef.value = true;
@@ -8533,25 +8913,29 @@ function getVectorCardEl(id) {
     10: suggestionsSidebarRef10, 11: suggestionsSidebarRef11, 12: suggestionsSidebarRef12,
     13: suggestionsSidebarRef13, 14: suggestionsSidebarRef14, 15: suggestionsSidebarRef15,
     16: suggestionsSidebarRef16, 17: suggestionsSidebarRef17,
+    18: suggestionsSidebarRef18, 19: suggestionsSidebarRef19, 24: suggestionsSidebarRef24,
   };
   return refs[id]?.value;
 }
 
-// Beat animation on the lightbulb icon only, then expand
+// Scale animation on both Minerva trigger and Vector card lightbulb icons simultaneously, then expand
 function triggerAutoExpandSequence(id, onExpand) {
   nextTick(() => {
-    const lightbulb = document.querySelector(`.minerva-suggestion-trigger[data-preview-suggestion-id="${id}"]`);
-    let iconEl = lightbulb?.querySelector('svg');
-    if (!iconEl) {
-      const cardEl = getVectorCardEl(id);
-      iconEl = cardEl?.querySelector('.suggestion-icon svg');
-    }
+    const icons = [];
+    const minervaLightbulb = document.querySelector(`.minerva-suggestion-trigger[data-preview-suggestion-id="${id}"]`);
+    const minervaSvg = minervaLightbulb?.querySelector('svg');
+    if (minervaSvg) icons.push(minervaSvg);
+    const cardEl = getVectorCardEl(id);
+    const cardSvg = cardEl?.querySelector('.suggestion-icon svg');
+    if (cardSvg) icons.push(cardSvg);
 
-    if (iconEl) iconEl.classList.add('auto-expand-beat-icon');
+    autoExpandAnimatingId.value = id;
+    icons.forEach(el => el.classList.add('auto-expand-beat-icon'));
 
     setTimeout(() => {
+      autoExpandAnimatingId.value = null;
+      icons.forEach(el => el.classList.remove('auto-expand-beat-icon'));
       onExpand();
-      iconEl?.classList.remove('auto-expand-beat-icon');
     }, 700);
   });
 }
@@ -8898,6 +9282,15 @@ const isSuggestion16Pending = computed(() => (
 const isSuggestion17Pending = computed(() => (
   !isSuggestionResolved17.value && !isSuggestionDeclined17.value
 ));
+const isSuggestion18Pending = computed(() => (
+  !isSuggestionResolved18.value && !isSuggestionDeclined18.value
+));
+const isSuggestion19Pending = computed(() => (
+  !isSuggestionResolved19.value && !isSuggestionDeclined19.value
+));
+const isSuggestion24Pending = computed(() => (
+  !isSuggestionResolved24.value && !isSuggestionDeclined24.value
+));
 const isSuggestion20Pending = computed(() => (
   !isSuggestionResolved20.value && !isSuggestionDeclined20.value
 ));
@@ -8931,7 +9324,10 @@ const availableSuggestionCount = computed(() => (
   (isSuggestion20Pending.value ? 1 : 0) +
   (isSuggestion21Pending.value ? 1 : 0) +
   (isSuggestion22Pending.value ? 1 : 0) +
-  (isSuggestion23Pending.value ? 1 : 0)
+  (isSuggestion23Pending.value ? 1 : 0) +
+  (isSuggestion18Pending.value ? 1 : 0) +
+  (isSuggestion19Pending.value ? 1 : 0) +
+  (isSuggestion24Pending.value ? 1 : 0)
 ));
 const sectionSuggestionCount = computed(() => {
   if (!isMinervaSkin.value || !minervaEditSectionOnly.value) {
@@ -9021,7 +9417,7 @@ const firstSuggestionBounceDoneId = ref(null);
 const toggleBadgeCount = computed(() => (
   isMinervaSkin.value && minervaEditSectionOnly.value
     ? sectionSuggestionCount.value
-    : availableSuggestionCount.value
+    : getPendingSuggestionIdsForContext().length
 ));
 const badgePulse = ref(false);
 const showToggleBadge = computed(() => {
@@ -9723,6 +10119,7 @@ const isSuggestionSheetMode = computed(() => (
 const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
+  if (firstPendingSuggestionInView.value) return false;
   // In PP mode, show the entry banner only until the user has opened the first sheet
   if (isPersistentPaginationMode.value) {
     if (persistentPaginationHasOpenedSheet.value) return false;
@@ -9963,6 +10360,7 @@ const showMinervaPagination = computed(() => {
 });
 
 function resetSuggestionState() {
+  firstPendingSuggestionInView.value = false;
   clearMinervaNoMoreSuggestionsState();
   clearMinervaSuggestionSuccessState();
   clearMinervaSheetClosingState();
@@ -12899,9 +13297,9 @@ function getPendingSuggestionIdsForContext() {
   if (selectedArticle.value === 'regents-park') {
     const rpOrder = [1, 2, 9, 3, 20, 6, 10, 7, 21, 8, 22, 23];
     return rpOrder.filter(id => {
-      if (id === 1) return isSuggestion1Pending.value;
-      if (id === 2) return isSuggestion2Pending.value;
-      if (id === 3) return isSuggestion3Pending.value;
+      if (id === 1) return !publishPromptEnabled.value && isSuggestion1Pending.value;
+      if (id === 2) return !publishPromptEnabled.value && isSuggestion2Pending.value;
+      if (id === 3) return !publishPromptEnabled.value && isSuggestion3Pending.value;
       if (id === 6) return isSuggestion6Pending.value;
       if (id === 7) return isSuggestion7Pending.value;
       if (id === 8) return isSuggestion8Pending.value;
@@ -12926,14 +13324,17 @@ function getPendingSuggestionIdsForContext() {
     if (minervaEditSectionOnly.value === 'theory' && isSuggestion5Pending.value) ids.push(5);
     return ids;
   }
-  if (isSuggestion1Pending.value) ids.push(1);
+  if (!publishPromptEnabled.value && isSuggestion1Pending.value) ids.push(1);
   if (isSuggestion8Pending.value) ids.push(8);
+  if (isSuggestion18Pending.value) ids.push(18);
   if (isSuggestion6Pending.value) ids.push(6);
-  if (isSuggestion2Pending.value) ids.push(2);
+  if (!publishPromptEnabled.value && isSuggestion2Pending.value) ids.push(2);
   if (isSuggestion4Pending.value) ids.push(4);
   if (isSuggestion7Pending.value) ids.push(7);
-  if (isSuggestion3Pending.value) ids.push(3);
+  if (!publishPromptEnabled.value && isSuggestion3Pending.value) ids.push(3);
   if (isSuggestion5Pending.value) ids.push(5);
+  if (isSuggestion19Pending.value) ids.push(19);
+  if (isSuggestion24Pending.value) ids.push(24);
   if (isSuggestion11Pending.value) ids.push(11);
   if (isSuggestion12Pending.value) ids.push(12);
   if (isSuggestion13Pending.value) ids.push(13);
@@ -14477,19 +14878,6 @@ watch(isMinervaSheetOpen, (isOpen) => {
   }
 });
 
-// Mutual exclusivity: edit menu and scroll preview
-watch(showEditMenuOnMobile, (enabled) => {
-  if (enabled) suggestionPreviewWhileScrollingEnabled.value = false;
-});
-watch(suggestionPreviewWhileScrollingEnabled, (enabled) => {
-  if (enabled) {
-    showEditMenuOnMobile.value = false;
-    expandFirstSuggestionOnReach.value = false;
-  }
-});
-watch(expandFirstSuggestionOnReach, (enabled) => {
-  if (enabled) suggestionPreviewWhileScrollingEnabled.value = false;
-});
 
 watch(toastsEnabled, (enabled) => {
   if (enabled) return;
@@ -15815,6 +16203,7 @@ onMounted(() => {
     window.addEventListener('scroll', handleReadModeScroll, true);
     window.addEventListener('scroll', handleRailScroll, true);
     window.addEventListener('scroll', handleExpandFirstSuggestionScroll, true);
+    window.addEventListener('scroll', updateFirstPendingSuggestionInView, true);
     window.addEventListener('resize', updateMinervaFullPageTocActiveSection);
     window.addEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
     updateEditToolbarScrolled();
@@ -15854,6 +16243,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', handleRailScroll, true);
     window.removeEventListener('scroll', handleExpandFirstSuggestionScroll, true);
     if (railRafId) { cancelAnimationFrame(railRafId); railRafId = null; }
+    if (railScrollTimer) { clearTimeout(railScrollTimer); railScrollTimer = null; }
     window.removeEventListener('resize', updateMinervaFullPageSectionsButtonPosition);
   }
   document.removeEventListener('click', handleDocumentClick);
@@ -23439,9 +23829,7 @@ function markArticleEdited() {
 
 @keyframes beat {
   0%, 100% { transform: scale(1); }
-  20% { transform: scale(1.35); }
-  40% { transform: scale(1); }
-  60% { transform: scale(1.25); }
+  50% { transform: scale(1.3); }
 }
 
 @media (prefers-reduced-motion: reduce) {
