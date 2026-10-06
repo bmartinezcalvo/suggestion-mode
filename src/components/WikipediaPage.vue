@@ -12,6 +12,7 @@
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailOpen ? 'minerva-expandable-rail-open' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isMinervaSkin && isEditMode && showRailOnReach ? 'rail-on-reach' : '',
+      isActivelyScrolling ? 'rail-is-scrolling' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
       isSuggestionsFadingOut ? 'suggestion-markers-hiding' : '',
@@ -8785,6 +8786,7 @@ const railHeights = ref({});
 let railRafId = null;
 let railScrollTimer = null;
 const isActivelyScrolling = ref(false);
+const revealedRailIds = ref(new Set());
 const firstPendingSuggestionInView = ref(false);
 const autoExpandAnimatingId = ref(null);
 
@@ -8825,7 +8827,7 @@ function isRailActive(id) {
   if (autoExpandAnimatingId.value === id) return true;
   if (!showRailOnReach.value) return false;
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === id) return true;
-  return isActivelyScrolling.value && activeRailSuggestionIds.value.includes(id);
+  return revealedRailIds.value.has(id);
 }
 
 function getRailStyle(id) {
@@ -8855,13 +8857,19 @@ function updateActiveRail() {
   }
   const vh = window.innerHeight;
   const visible = [];
+  let changed = false;
   for (const { id, ref } of getSuggestionRefs()) {
     if (!ref.value) continue;
     const rect = ref.value.getBoundingClientRect();
-    if (rect.bottom > 0 && rect.top < vh) {
+    if (rect.bottom > 0 && rect.top <= vh / 2) {
       visible.push(id);
+      if (!revealedRailIds.value.has(id)) {
+        revealedRailIds.value.add(id);
+        changed = true;
+      }
     }
   }
+  if (changed) revealedRailIds.value = new Set(revealedRailIds.value);
   activeRailSuggestionIds.value = visible;
   updateRailHeights();
 }
@@ -10361,6 +10369,7 @@ const showMinervaPagination = computed(() => {
 
 function resetSuggestionState() {
   firstPendingSuggestionInView.value = false;
+  revealedRailIds.value = new Set();
   clearMinervaNoMoreSuggestionsState();
   clearMinervaSuggestionSuccessState();
   clearMinervaSheetClosingState();
@@ -24531,8 +24540,8 @@ function markArticleEdited() {
   transition: none;
 }
 
-/* Progressive-subtle background when rail is active for a suggestion */
-.rail-on-reach .highlighted-text-wrapper--rail-active .highlighted-text-annotation {
+/* Blue highlighted text only while actively scrolling past that suggestion */
+.rail-on-reach.rail-is-scrolling .highlighted-text-wrapper--rail-active .highlighted-text-annotation {
   background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff)) !important;
 }
 
