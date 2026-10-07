@@ -2976,19 +2976,34 @@
             </div>
 
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
-            <div v-if="showVEEntrySheet && isMinervaSkin" class="ve-entry-sheet-overlay">
-              <div class="ve-entry-sheet">
-                <cdx-icon :icon="cdxIconLightbulb" class="ve-entry-sheet__icon" />
-                <h3 class="ve-entry-sheet__title">Would you like to see suggested edits?</h3>
+            <cdx-popover
+              v-if="isMinervaSkin"
+              v-model:open="showVEEntrySheet"
+              title="Suggested edits available"
+              use-bottom-sheet
+            >
+              <div class="ve-entry-sheet-content">
                 <p class="ve-entry-sheet__subtitle">Start with a few guided tasks to improve this article. You can skip any of them.</p>
-                <cdx-button weight="primary" action="progressive" class="ve-entry-sheet__btn-primary" @click="handleVEEntryViewSuggestions">
+                <cdx-button
+                  weight="normal"
+                  action="progressive"
+                  size="large"
+                  class="ve-entry-sheet__btn-primary"
+                  @click="handleVEEntryViewSuggestions"
+                >
                   View suggestions
                 </cdx-button>
-                <cdx-button weight="normal" class="ve-entry-sheet__btn-secondary" @click="showVEEntrySheet = false">
+                <cdx-button
+                  weight="normal"
+                  action="default"
+                  size="large"
+                  class="ve-entry-sheet__btn-secondary"
+                  @click="handleVEEntryEditOnMyOwn"
+                >
                   Edit on my own
                 </cdx-button>
               </div>
-            </div>
+            </cdx-popover>
 
             <!-- Article Content Edit -->
             <div
@@ -4179,6 +4194,119 @@
                     <p v-else>
                       <em>Body of a Poet: 1995</em> was written as a tribute biopic written to honor Lorde. The film centers on the efforts of a young group of lesbians of color. The film celebrates the life and work of Audre Lorde from her birth to her death.<sup class="citation-marker">[53]</sup>
                     </p>
+                    <p>
+                      Lorde's work in Berlin not only documented racial identity struggles but also influenced the development of <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a> feminist theory across Europe, particularly in Germany and the Netherlands.<sup class="citation-marker">[54]</sup>
+                    </p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion16Pending || isSuccessHighlightActive(16))"
+                      ref="highlightedTextRef16"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion16Pending && isHovered16 && showSuggestions && !isCardExpanded16,
+                        'highlighted-text-wrapper--selected': isSuggestion16Pending && showSuggestions && (isCardExpanded16 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 16) || isScrollPreviewingId(16)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(16),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion16Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 16,
+                        'highlighted-text-wrapper--rail-active': isRailActive(16)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered16 = true"
+                      @mouseleave="isTextHovered16 = false"
+                      @click="isSuggestion16Pending ? (isMinervaSkin ? openMinervaSuggestion(16) : (isCardExpanded16 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          The films about Lorde were also shown at feminist film festivals worldwide, helping to spread her message beyond academic and literary circles to broader popular audiences.<sup class="citation-marker">[55]</sup>
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion16Pending && !isSuccessHighlightActive(16)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(16), 'minerva-highlight-rail--visible': isRailActive(16) }"
+                        :style="getRailStyle(16)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion16Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="16" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(16)" @click.stop="openMinervaSuggestion(16)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(16)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
+                      The films about Lorde were also shown at feminist film festivals worldwide, helping to spread her message beyond academic and literary circles to broader popular audiences.<sup class="citation-marker">[55]</sup>
+                    </p>
+                    <p>
+                      Her visibility as a Black, lesbian, feminist poet in Germany came at a time when the country's civil rights movement was still in its infancy, making her advocacy there particularly significant.
+                    </p>
+                    <p
+                      v-if="showSuggestionsDisplay && (isSuggestion17Pending || isSuccessHighlightActive(17))"
+                      ref="highlightedTextRef17"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion17Pending && isHovered17 && showSuggestions && !isCardExpanded17,
+                        'highlighted-text-wrapper--selected': isSuggestion17Pending && showSuggestions && (isCardExpanded17 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 17) || isScrollPreviewingId(17)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(17),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion17Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 17,
+                        'highlighted-text-wrapper--rail-active': isRailActive(17)
+                      }"
+                      class="suggestion-target"
+                      @mouseenter="isTextHovered17 = true"
+                      @mouseleave="isTextHovered17 = false"
+                      @click="isSuggestion17Pending ? (isMinervaSkin ? openMinervaSuggestion(17) : (isCardExpanded17 = true)) : null"
+                    >
+                      <span class="highlighted-text-content">
+                        <span class="highlighted-text-annotation">
+                          Documentary filmmaking was a medium Lorde herself valued as a tool for activism and education, distinct from literary forms, allowing her voice to reach communities that might not otherwise encounter her written work.
+                        </span>
+                      </span>
+                      <span
+                        v-if="isMinervaSkin && isSuggestion17Pending && !isSuccessHighlightActive(17)"
+                        class="minerva-highlight-rail"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(17), 'minerva-highlight-rail--visible': isRailActive(17) }"
+                        :style="getRailStyle(17)"
+                      ></span>
+                      <button v-if="isMinervaSkin && isSuggestion17Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="17" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(17)" @click.stop="openMinervaSuggestion(17)">
+                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
+                      </button>
+                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(17)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
+                    </p>
+                    <p v-else>
+                      Documentary filmmaking was a medium Lorde herself valued as a tool for activism and education, distinct from literary forms, allowing her voice to reach communities that might not otherwise encounter her written work.
+                    </p>
+                  </div>
+                </div>
+
+                <div v-if="shouldRenderSection('theory')" class="minerva-edit-section" data-section="theory">
+                  <div class="edit-full-page-btn-wrapper">
+                    <cdx-button
+                      v-if="showEditFullPageButtons('theory')"
+                      class="edit-full-page-btn"
+                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
+                      action="default"
+                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
+                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
+                      @click="showFullPageEdit($event)"
+                    ><span class="edit-full-page-btn-content">
+                        <span>Edit full page</span>
+                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
+                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
+                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
+                          <span class="edit-full-page-badge-dot"></span>
+                        </span>
+                      </span>
+                    </cdx-button>
+                  </div>
+                  <div class="section-heading-edit" ref="editSectionTheory">
+                    <h2 class="heading-text-edit">Theory</h2>
+                    <div class="heading-divider"></div>
+                  </div>
+
+                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
+                    <p>
+                      Her writings are based on the "theory of difference", the idea that the binary opposition between men and women is overly simplistic; although feminists have found it necessary to present the illusion of a solid, unified whole, the category of women itself is full of subdivisions.<sup class="citation-marker">[61]</sup>
+                    </p>
                     <p
                       v-if="showSuggestionsDisplay && (isSuggestion14Pending || isSuccessHighlightActive(14))"
                       ref="highlightedTextRef14"
@@ -4252,113 +4380,6 @@
                     </p>
                     <p v-else>
                       Her visibility as a Black, lesbian, feminist poet in Germany came at a time when the country's civil rights movement was still in its infancy, making her advocacy there particularly significant.
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion16Pending || isSuccessHighlightActive(16))"
-                      ref="highlightedTextRef16"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion16Pending && isHovered16 && showSuggestions && !isCardExpanded16,
-                        'highlighted-text-wrapper--selected': isSuggestion16Pending && showSuggestions && (isCardExpanded16 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 16) || isScrollPreviewingId(16)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(16),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion16Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 16,
-                        'highlighted-text-wrapper--rail-active': isRailActive(16)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered16 = true"
-                      @mouseleave="isTextHovered16 = false"
-                      @click="isSuggestion16Pending ? (isMinervaSkin ? openMinervaSuggestion(16) : (isCardExpanded16 = true)) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          The films about Lorde were also shown at feminist film festivals worldwide, helping to spread her message beyond academic and literary circles to broader popular audiences.<sup class="citation-marker">[55]</sup>
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion16Pending && !isSuccessHighlightActive(16)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(16), 'minerva-highlight-rail--visible': isRailActive(16) }"
-                        :style="getRailStyle(16)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion16Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="16" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(16)" @click.stop="openMinervaSuggestion(16)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(16)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      The films about Lorde were also shown at feminist film festivals worldwide, helping to spread her message beyond academic and literary circles to broader popular audiences.<sup class="citation-marker">[55]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion17Pending || isSuccessHighlightActive(17))"
-                      ref="highlightedTextRef17"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion17Pending && isHovered17 && showSuggestions && !isCardExpanded17,
-                        'highlighted-text-wrapper--selected': isSuggestion17Pending && showSuggestions && (isCardExpanded17 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 17) || isScrollPreviewingId(17)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(17),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion17Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 17,
-                        'highlighted-text-wrapper--rail-active': isRailActive(17)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered17 = true"
-                      @mouseleave="isTextHovered17 = false"
-                      @click="isSuggestion17Pending ? (isMinervaSkin ? openMinervaSuggestion(17) : (isCardExpanded17 = true)) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          Documentary filmmaking was a medium Lorde herself valued as a tool for activism and education, distinct from literary forms, allowing her voice to reach communities that might not otherwise encounter her written work.
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion17Pending && !isSuccessHighlightActive(17)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(17), 'minerva-highlight-rail--visible': isRailActive(17) }"
-                        :style="getRailStyle(17)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion17Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="17" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(17)" @click.stop="openMinervaSuggestion(17)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(17)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      Documentary filmmaking was a medium Lorde herself valued as a tool for activism and education, distinct from literary forms, allowing her voice to reach communities that might not otherwise encounter her written work.
-                    </p>
-                  </div>
-                </div>
-
-                <div v-if="shouldRenderSection('theory')" class="minerva-edit-section" data-section="theory">
-                  <div class="edit-full-page-btn-wrapper">
-                    <cdx-button
-                      v-if="showEditFullPageButtons('theory')"
-                      class="edit-full-page-btn"
-                      :class="{ 'edit-full-page-btn--improved': editFullPageImprovedEnabled && isMinervaSkin }"
-                      action="default"
-                      :weight="editFullPageImprovedEnabled && isMinervaSkin ? 'quiet' : 'normal'"
-                      :size="editFullPageImprovedEnabled && isMinervaSkin ? 'small' : undefined"
-                      @click="showFullPageEdit($event)"
-                    ><span class="edit-full-page-btn-content">
-                        <span>Edit full page</span>
-                        <img v-if="editFullPageImprovedEnabled && isMinervaSkin" :src="iconLightbulbBlueIndicator" width="12" height="12" alt="" aria-hidden="true" class="edit-full-page-lightbulb-badge" />
-                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-separator">|</span>
-                        <span v-if="showSuggestions && otherSuggestionCount > 0 && !editFullPageImprovedEnabled" class="edit-full-page-indicator">
-                          <cdx-icon :icon="cdxIconLightbulb" size="small" class="edit-full-page-icon" />
-                          <span class="edit-full-page-badge-dot"></span>
-                        </span>
-                      </span>
-                    </cdx-button>
-                  </div>
-                  <div class="section-heading-edit" ref="editSectionTheory">
-                    <h2 class="heading-text-edit">Theory</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-
-                  <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
-                    <p>
-                      Her writings are based on the "theory of difference", the idea that the binary opposition between men and women is overly simplistic; although feminists have found it necessary to present the illusion of a solid, unified whole, the category of women itself is full of subdivisions.<sup class="citation-marker">[61]</sup>
                     </p>
                     <p>
                       Lorde identified issues of race, class, age and ageism, sex and sexuality and, later in her life, chronic illness and disability; the latter becoming more prominent in her later years as she lived with cancer. She wrote of all of these factors as fundamental to her experience of being a woman. She argued that, although differences in gender have received all the focus, it is essential that these other differences are also recognized and addressed. "Lorde," writes <a href="https://de.wikipedia.org/wiki/Carmen_Birkle" target="_blank" rel="noopener">Carmen Birkle</a>, "puts her emphasis on the authenticity of experience. She wants her difference acknowledged but not judged; she does not want to be subsumed into the one general category of 'woman.'"<sup class="citation-marker">[62]</sup> This theory is today known as <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectionality</a>.<sup class="citation-marker">[63]</sup>
@@ -5941,7 +5962,7 @@
           >
             <transition name="banner-reveal" appear>
               <div
-                v-if="isBannerDelayReady && !isBannerDismissed && !firstPendingSuggestionInView && !(activePrototype === 'option-3' && isAutoScrollActive) && (isArrowOnceMode
+                v-if="isBannerDelayReady && !isBannerDismissed && !firstPendingSuggestionInView && !showVEEntrySheet && !(activePrototype === 'option-3' && isAutoScrollActive) && (isArrowOnceMode
                   ? (showSuggestions && shouldShowBanner && bannerSuggestionCount > 0)
                   : (shouldShowBanner || (showSuggestions && bannerSuggestionCount === 0)))"
                 class="suggestions-banner"
@@ -8212,6 +8233,7 @@ const autoExpandAnimatingId = ref(null);
 const expandFirstSuggestionOnReach = ref(false);
 const bottomSheetInVE = ref(true);
 const showVEEntrySheet = ref(false);
+const veEntrySheetShown = ref(false);
 const firstSuggestionAutoExpanded = ref(false);
 
 function getSuggestionRefs() {
@@ -9545,6 +9567,7 @@ const showMinervaBanner = computed(() => {
   if (!isMinervaSkin.value) return false;
   if (!isEditMode.value) return false;
   if (firstPendingSuggestionInView.value) return false;
+  if (showVEEntrySheet.value) return false;
   // In PP mode, show the entry banner only until the user has opened the first sheet
   if (isPersistentPaginationMode.value) {
     if (persistentPaginationHasOpenedSheet.value) return false;
@@ -9787,6 +9810,7 @@ const showMinervaPagination = computed(() => {
 function resetSuggestionState() {
   firstPendingSuggestionInView.value = false;
   revealedRailIds.value = new Set();
+  veEntrySheetShown.value = false;
   clearMinervaNoMoreSuggestionsState();
   clearMinervaSuggestionSuccessState();
   clearMinervaSheetClosingState();
@@ -11822,6 +11846,16 @@ function getSuggestionRefById(suggestionId) {
   if (suggestionId === 8) return highlightedTextRef8;
   if (suggestionId === 9) return highlightedTextRef9;
   if (suggestionId === 10) return highlightedTextRef10;
+  if (suggestionId === 11) return highlightedTextRef11;
+  if (suggestionId === 12) return highlightedTextRef12;
+  if (suggestionId === 13) return highlightedTextRef13;
+  if (suggestionId === 14) return highlightedTextRef14;
+  if (suggestionId === 15) return highlightedTextRef15;
+  if (suggestionId === 16) return highlightedTextRef16;
+  if (suggestionId === 17) return highlightedTextRef17;
+  if (suggestionId === 18) return highlightedTextRef18;
+  if (suggestionId === 19) return highlightedTextRef19;
+  if (suggestionId === 24) return highlightedTextRef24;
   return null;
 }
 
@@ -12651,6 +12685,12 @@ function handleVEEntryViewSuggestions() {
   });
 }
 
+function handleVEEntryEditOnMyOwn() {
+  showVEEntrySheet.value = false;
+  // Suppress banner so it never appears after choosing "Edit on my own"
+  firstPendingSuggestionInView.value = true;
+}
+
 function openFirstPendingSuggestionForContext({ openMinervaAfterScroll = false } = {}) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
@@ -12719,13 +12759,13 @@ function getPendingSuggestionIdsForContext() {
   if (isSuggestion7Pending.value) ids.push(7);
   if (!publishPromptEnabled.value && isSuggestion3Pending.value) ids.push(3);
   if (isSuggestion5Pending.value) ids.push(5);
+  if (isSuggestion14Pending.value) ids.push(14);
+  if (isSuggestion15Pending.value) ids.push(15);
   if (isSuggestion19Pending.value) ids.push(19);
   if (isSuggestion24Pending.value) ids.push(24);
   if (isSuggestion11Pending.value) ids.push(11);
   if (isSuggestion12Pending.value) ids.push(12);
   if (isSuggestion13Pending.value) ids.push(13);
-  if (isSuggestion14Pending.value) ids.push(14);
-  if (isSuggestion15Pending.value) ids.push(15);
   if (isSuggestion16Pending.value) ids.push(16);
   if (isSuggestion17Pending.value) ids.push(17);
   return ids;
@@ -15829,12 +15869,15 @@ function enterEditMode() {
   isBannerClosing.value = false;
   isBannerOpening.value = false;
   
-  // Hide loading overlay after 2 seconds, then show VE entry sheet if enabled
+  // Hide loading overlay after 2 seconds, then show VE entry sheet if enabled (first time only)
   setTimeout(() => {
     isLoading.value = false;
-    if (isMinervaSkin.value && bottomSheetInVE.value && availableSuggestionCount.value > 0) {
-      showVEEntrySheet.value = true;
-    }
+    setTimeout(() => {
+      if (isMinervaSkin.value && bottomSheetInVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
+        showVEEntrySheet.value = true;
+        veEntrySheetShown.value = true;
+      }
+    }, 1000);
   }, 2000);
 }
 
@@ -19053,39 +19096,11 @@ function markArticleEdited() {
   max-width: calc(100% - 64px); /* Responsive with 32px padding on each side */
 }
 
-/* VE Entry Sheet */
-.ve-entry-sheet-overlay {
-  position: fixed;
-  inset: 0;
-  background-color: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
-  z-index: 99;
-  display: flex;
-  align-items: flex-end;
-}
-
-.ve-entry-sheet {
-  width: 100%;
-  background: var(--background-color-base, #fff);
-  border-radius: 12px 12px 0 0;
-  padding: 24px 16px 32px;
+/* VE Entry Sheet (inside cdx-popover bottom sheet) */
+.ve-entry-sheet-content {
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
   gap: 8px;
-  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.12);
-}
-
-.ve-entry-sheet__icon {
-  color: var(--color-progressive, #3366cc);
-  font-size: 24px;
-  margin-bottom: 4px;
-}
-
-.ve-entry-sheet__title {
-  font-size: 1.125rem;
-  font-weight: 700;
-  margin: 0;
-  color: var(--color-base, #202122);
 }
 
 .ve-entry-sheet__subtitle {
