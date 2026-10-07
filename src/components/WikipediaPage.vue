@@ -416,7 +416,7 @@
         <button class="fixed-header__btn fixed-header__btn--search" aria-label="Search">
           <cdx-icon :icon="cdxIconSearch" size="medium" />
         </button>
-        <span class="fixed-header__title fixed-header__title--left">{{ selectedArticle === 'regents-park' ? "Regent's Park" : 'Audre Lorde' }}</span>
+        <span class="fixed-header__title fixed-header__title--left">Audre Lorde</span>
         <div class="fixed-header__actions">
           <button class="fixed-header__btn" aria-label="View history">
             <cdx-icon :icon="cdxIconHistory" size="medium" />
@@ -839,7 +839,7 @@
                   <button class="toc-toggle-btn" aria-label="Toggle table of contents">
                     <cdx-icon :icon="cdxIconListBullet" size="medium" />
                   </button>
-                  <h1 class="article-title">{{ selectedArticle === 'regents-park' ? "Regent's Park" : 'Audre Lorde' }}</h1>
+                  <h1 class="article-title">Audre Lorde</h1>
                   <button class="language-button">
                     <cdx-icon :icon="cdxIconLanguage" size="medium" class="language-icon" />
                     <span class="language-text">95 Languages</span>
@@ -890,7 +890,7 @@
 
             <div v-else-if="!isEditMode" class="minerva-title-toolbar">
               <div class="minerva-title-row">
-                <h1 class="minerva-article-title">{{ selectedArticle === 'regents-park' ? "Regent's Park" : 'Audre Lorde' }}</h1>
+                <h1 class="minerva-article-title">Audre Lorde</h1>
                 <button class="minerva-language-button" aria-label="Language options">
                   <cdx-icon :icon="cdxIconLanguage" size="medium" />
                 </button>
@@ -2975,6 +2975,21 @@
               <cdx-progress-bar aria-label="Loading edit mode" />
             </div>
 
+            <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
+            <div v-if="showVEEntrySheet && isMinervaSkin" class="ve-entry-sheet-overlay">
+              <div class="ve-entry-sheet">
+                <cdx-icon :icon="cdxIconLightbulb" class="ve-entry-sheet__icon" />
+                <h3 class="ve-entry-sheet__title">Would you like to see suggested edits?</h3>
+                <p class="ve-entry-sheet__subtitle">Start with a few guided tasks to improve this article. You can skip any of them.</p>
+                <cdx-button weight="primary" action="progressive" class="ve-entry-sheet__btn-primary" @click="handleVEEntryViewSuggestions">
+                  View suggestions
+                </cdx-button>
+                <cdx-button weight="normal" class="ve-entry-sheet__btn-secondary" @click="showVEEntrySheet = false">
+                  Edit on my own
+                </cdx-button>
+              </div>
+            </div>
+
             <!-- Article Content Edit -->
             <div
               class="article-content-edit"
@@ -3030,7 +3045,7 @@
                   ref="articleFirstSectionRef"
                 >
                   <div class="article-text-block">
-                    <div v-if="selectedArticle === 'audre-lorde'" contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
+                    <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                       <p>
                         <strong>Audre Lorde</strong> (<a href="https://en.wikipedia.org/wiki/Help:IPA/English" target="_blank" rel="noopener">/ˈɔːdri ˈlɔːrd/</a>; born <strong>Audrey Geraldine Lorde</strong>; February 18, 1934 – November 17, 1992) was an American writer, <a href="https://en.wikipedia.org/wiki/Professor" target="_blank" rel="noopener">professor</a>, <a href="https://en.wikipedia.org/wiki/Philosopher" target="_blank" rel="noopener">philosopher</a>, <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional feminist</a>, <a href="https://en.wikipedia.org/wiki/Poet" target="_blank" rel="noopener">poet</a>, and <a href="https://en.wikipedia.org/wiki/Civil_rights_movement" target="_blank" rel="noopener">civil rights</a> activist.<sup class="citation-marker">[1]</sup> She described herself as a “Black, lesbian, feminist, socialist, mother, warrior, poet” and framed her work as a response to injustice and oppression in multiple forms.<sup class="citation-marker">[2]</sup>
                       </p>
@@ -3041,17 +3056,9 @@
                         She also received national and international recognition and helped found <a href="https://en.wikipedia.org/wiki/Kitchen_Table:_Women_of_Color_Press" target="_blank" rel="noopener">Kitchen Table: Women of Color Press</a>.<sup class="citation-marker">[5]</sup> As a <a href="https://en.wikipedia.org/wiki/Spoken_word" target="_blank" rel="noopener">spoken word</a> artist, her delivery has been described by the <a href="https://www.poetryfoundation.org/" target="_blank" rel="noopener">Poetry Foundation</a> as powerful, melodic, and intense, while her poetry and prose frequently address civil rights, feminism, lesbian identity, illness, disability, and Black womanhood.<sup class="citation-marker">[6]</sup><sup class="citation-marker">[7]</sup><sup class="citation-marker">[8]</sup>
                       </p>
                     </div>
-                    <div v-else class="article-text-editable">
-                      <p>
-                        <strong>Regent's Park</strong> is one of the Royal Parks of London. It covers 410 acres (166 ha) in the north-west of Inner London, with an outer ring road, the Outer Circle, and an inner road, the Inner Circle.<sup class="citation-marker">[1]</sup> The park contains Primrose Hill, which lies to the north and is sometimes considered a separate park.<sup class="citation-marker">[2]</sup>
-                      </p>
-                      <p>
-                        The park was created in the early 19th century by John Nash, one of the leading architects of the Regency period, at the request of the Prince Regent (later George IV). It is managed by The Royal Parks, an executive agency of the Department for Culture, Media and Sport.<sup class="citation-marker">[3]</sup>
-                      </p>
-                    </div>
                   </div>
 
-                  <aside v-if="selectedArticle === 'audre-lorde'" class="infobox">
+                  <aside class="infobox">
                     <div class="infobox-title">Audre Lorde</div>
                     
                     <div class="infobox-image-section">
@@ -3104,35 +3111,6 @@
                       </div>
                     </div>
                   </aside>
-                  <aside v-else class="infobox">
-                    <div class="infobox-title">Regent's Park</div>
-                    <div class="infobox-image-section">
-                      <div class="infobox-image">
-                        <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/e9/Regents_Park_from_BT_Tower_-_Oct_2008.jpg/280px-Regents_Park_from_BT_Tower_-_Oct_2008.jpg" alt="Regent's Park aerial view" />
-                      </div>
-                      <div class="infobox-caption">Regent's Park from the BT Tower</div>
-                    </div>
-                    <div class="infobox-row">
-                      <div class="infobox-label">Location</div>
-                      <div class="infobox-value"><a href="#">City of Westminster</a>, <a href="#">London</a></div>
-                    </div>
-                    <div class="infobox-row">
-                      <div class="infobox-label">Area</div>
-                      <div class="infobox-value">166 ha (410 acres)</div>
-                    </div>
-                    <div class="infobox-row">
-                      <div class="infobox-label">Created</div>
-                      <div class="infobox-value">1835</div>
-                    </div>
-                    <div class="infobox-row">
-                      <div class="infobox-label">Operated by</div>
-                      <div class="infobox-value"><a href="#">The Royal Parks</a></div>
-                    </div>
-                    <div class="infobox-row">
-                      <div class="infobox-label">Visitors</div>
-                      <div class="infobox-value">10.2 million (2019)</div>
-                    </div>
-                  </aside>
                 </div>
 
                 <!-- Intro-only mode: expand to full page button (same pattern as edit-full-page-btn) -->
@@ -3156,7 +3134,7 @@
                   </span></cdx-button>
                 </div>
 
-                <template v-if="selectedArticle === 'audre-lorde' && !isIntroOnlyMode">
+                <template v-if="!isIntroOnlyMode">
                 <!-- Early Life Section -->
                 <div v-if="shouldRenderSection('early-life')" class="minerva-edit-section" data-section="early-life">
                 <div class="edit-full-page-btn-wrapper">
@@ -4501,559 +4479,6 @@
                     </p>
                   </div>
                 </div>
-                </template>
-                <template v-else-if="!isIntroOnlyMode">
-                <!-- Regent's Park Sections -->
-
-                <!-- Description -->
-                <div class="minerva-edit-section" data-section="rp-description">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Description</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion1Pending || isSuccessHighlightActive(1))"
-                      ref="highlightedTextRef"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion1Pending && isHovered && showSuggestions && !isCardExpanded,
-                        'highlighted-text-wrapper--selected': isSuggestion1Pending && showSuggestions && (isCardExpanded || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 1) || isScrollPreviewingId(1)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(1),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion1Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 1,
-                        'highlighted-text-wrapper--rail-active': isRailActive(1)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered = true"
-                      @mouseleave="isTextHovered = false"
-                      @click="isSuggestion1Pending ? (isMinervaSkin ? openMinervaSuggestion(1) : (isCardExpanded = true)) : null"
-                    >
-                      <span v-if="isSuggestion1Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        Regent's Park covers 410 acres (166 ha) with an outer ring road, the <a href="#">Outer Circle</a>, of 4.45 kilometres (2.77 mi), and an inner road, the Inner Circle, of approximately 1 kilometre (0.62 mi). It is located in the north-west of <a href="#">Inner London</a>.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span>
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion1Pending && !isSuccessHighlightActive(1)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(1) }" :style="getRailStyle(1)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion1Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="1" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(1)" @click.stop="openMinervaSuggestion(1)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(1)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      Regent's Park covers 410 acres (166 ha) with an outer ring road, the <a href="#">Outer Circle</a>, of 4.45 kilometres (2.77 mi), and an inner road, the Inner Circle, of approximately 1 kilometre (0.62 mi). It is located in the north-west of <a href="#">Inner London</a>.
-                    </p>
-                    <p>
-                      The park contains <a href="#">Queen Mary's Gardens</a>, a lake with a heronry, several sports pitches, children's playgrounds, <a href="#">London Zoo</a>, and <a href="#">Winfield House</a>, the residence of the <a href="#">United States Ambassador to the United Kingdom</a>.<sup class="citation-marker">[4]</sup> The park was used as a hunting ground from the time of <a href="#">Henry VIII</a> and became a public park in 1835.<sup class="citation-marker">[5]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion2Pending || isSuccessHighlightActive(2))"
-                      ref="highlightedTextRef2"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion2Pending && isHovered2 && showSuggestions && !isCardExpanded2,
-                        'highlighted-text-wrapper--selected': isSuggestion2Pending && showSuggestions && (isCardExpanded2 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 2) || isScrollPreviewingId(2)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(2),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion2Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 2,
-                        'highlighted-text-wrapper--rail-active': isRailActive(2)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered2 = true"
-                      @mouseleave="isTextHovered2 = false"
-                      @click="isSuggestion2Pending ? (isMinervaSkin ? openMinervaSuggestion(2) : (isCardExpanded2 = true)) : null"
-                    >
-                      <span v-if="isSuggestion2Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        <a href="#">Regent's University London</a> is situated south of the Inner Circle.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span> <a href="#">Regent's Canal</a> runs along the northern edge of the park. The park is bounded to the south by <a href="#">Marylebone Road</a> and to the north by Outer Circle.
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion2Pending && !isSuccessHighlightActive(2)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(2) }" :style="getRailStyle(2)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion2Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="2" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(2)" @click.stop="openMinervaSuggestion(2)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(2)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      <a href="#">Regent's University London</a> is situated south of the Inner Circle. <a href="#">Regent's Canal</a> runs along the northern edge of the park. The park is bounded to the south by <a href="#">Marylebone Road</a> and to the north by Outer Circle.
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Management -->
-                <div class="minerva-edit-section" data-section="rp-management">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Management</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <p>
-                      Regent's Park is managed by <a href="#">The Royal Parks</a>, a charity that manages eight of the <a href="#">Royal Parks of London</a>. The Crown Estate owns the freehold of the park and the surrounding terraces. Day-to-day management is carried out by The Royal Parks under an agreement with the Crown Estate.<sup class="citation-marker">[6]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion7Pending || isSuccessHighlightActive(7))"
-                      ref="highlightedTextRef7"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion7Pending && isHovered7 && showSuggestions && !isCardExpanded7,
-                        'highlighted-text-wrapper--selected': isSuggestion7Pending && showSuggestions && (isCardExpanded7 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 7) || isScrollPreviewingId(7)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(7),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion7Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 7,
-                        'highlighted-text-wrapper--rail-active': isRailActive(7)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered7 = true"
-                      @mouseleave="isTextHovered7 = false"
-                      @click="isSuggestion7Pending ? (isMinervaSkin ? openMinervaSuggestion(7) : (isCardExpanded7 = true)) : null"
-                    >
-                      <span v-if="isSuggestion7Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        The <a href="#">Crown Estate Paving Commission</a> is responsible for the maintenance of the roads, footways and lighting in the outer parts of the park. For more information, see <span class="highlighted-text-annotation"><a href="https://www.royalparks.org.uk/parks/the-regents-park">https://www.royalparks.org.uk</a></span>.
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion7Pending && !isSuccessHighlightActive(7)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(7) }" :style="getRailStyle(7)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion7Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="7" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(7)" @click.stop="openMinervaSuggestion(7)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(7)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      The <a href="#">Crown Estate Paving Commission</a> is responsible for the maintenance of the roads, footways and lighting in the outer parts of the park. For more information, see <a href="https://www.royalparks.org.uk/parks/the-regents-park">https://www.royalparks.org.uk</a>.
-                    </p>
-                  </div>
-                </div>
-
-                <!-- History -->
-                <div class="minerva-edit-section" data-section="rp-history">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">History</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <h3 class="subsection-title">Development by John Nash, James Burton, and Decimus Burton</h3>
-                    <p>
-                      The land was originally part of the medieval <a href="#">manor of Tyburn</a>, owned by <a href="#">Barking Abbey</a>. After the <a href="#">Dissolution of the Monasteries</a>, <a href="#">Henry VIII</a> took it and converted it into a royal hunting ground known as <a href="#">Marylebone Park</a>.<sup class="citation-marker">[7]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion8Pending || isSuccessHighlightActive(8))"
-                      ref="highlightedTextRef8"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion8Pending && isHovered8 && showSuggestions && !isCardExpanded8,
-                        'highlighted-text-wrapper--selected': isSuggestion8Pending && showSuggestions && (isCardExpanded8 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 8) || isScrollPreviewingId(8)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(8),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion8Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 8,
-                        'highlighted-text-wrapper--rail-active': isRailActive(8)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered8 = true"
-                      @mouseleave="isTextHovered8 = false"
-                      @click="isSuggestion8Pending ? (isMinervaSkin ? openMinervaSuggestion(8) : (isCardExpanded8 = true)) : null"
-                    >
-                      <span v-if="isSuggestion8Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        <h4 class="subsection-title">Nash's Plan</h4>
-                        In 1811, <a href="#">John Nash</a> was commissioned to lay out the land as a residential park. His plan envisaged 56 villas set among informal gardens, a new pleasure palace for the <a href="#">Prince Regent</a>, a canal, barracks, and a double circus. The plan was never fully realised, but the park and the terraces that ring it were largely completed by the 1830s.
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(8) }" :style="getRailStyle(8)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion8Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="8" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(8)" @click.stop="openMinervaSuggestion(8)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(8)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      <strong>Nash's Plan</strong>: In 1811, <a href="#">John Nash</a> was commissioned to lay out the land as a residential park. His plan envisaged 56 villas set among informal gardens, a new pleasure palace for the <a href="#">Prince Regent</a>, a canal, barracks, and a double circus. The plan was never fully realised, but the park and the terraces that ring it were largely completed by the 1830s.
-                    </p>
-                    <p>
-                      <a href="#">James Burton</a>, a speculative builder, was largely responsible for financing and constructing the terraces. His son <a href="#">Decimus Burton</a> provided much of the architectural design. The park first opened to the public in 1835, initially two days a week. It is considered one of the earliest examples of a <a href="#">garden suburb</a>.<sup class="citation-marker">[8]</sup>
-                    </p>
-                    <figure class="article-figure article-figure--right">
-                      <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/Regent%27s_Park_c1833.jpg/220px-Regent%27s_Park_c1833.jpg" alt="Map of Regent's Park circa 1833" style="max-width:220px;width:100%;" />
-                      <figcaption>Map of Regent's Park, c.&nbsp;1833</figcaption>
-                    </figure>
-                    <h3 class="subsection-title">Subsequent history</h3>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion3Pending || isSuccessHighlightActive(3))"
-                      ref="highlightedTextRef3"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion3Pending && isHovered3 && showSuggestions && !isCardExpanded3,
-                        'highlighted-text-wrapper--selected': isSuggestion3Pending && showSuggestions && (isCardExpanded3 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 3) || isScrollPreviewingId(3)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(3),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion3Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 3,
-                        'highlighted-text-wrapper--rail-active': isRailActive(3)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered3 = true"
-                      @mouseleave="isTextHovered3 = false"
-                      @click="isSuggestion3Pending ? (isMinervaSkin ? openMinervaSuggestion(3) : (isCardExpanded3 = true)) : null"
-                    >
-                      <span v-if="isSuggestion3Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        On 15 January 1867, forty people drowned when the ice on the boating lake broke under a large crowd.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span> The lake was subsequently drained and made shallower.
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion3Pending && !isSuccessHighlightActive(3)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(3) }" :style="getRailStyle(3)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion3Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="3" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(3)" @click.stop="openMinervaSuggestion(3)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(3)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      On 15 January 1867, forty people drowned when the ice on the boating lake broke under a large crowd. The lake was subsequently drained and made shallower.
-                    </p>
-                    <p>
-                      <a href="#">Queen Mary's Gardens</a> were created in the 1930s from a former plant nursery leased to the <a href="#">Royal Botanic Society</a>. The gardens now contain over 12,000 roses of more than 85 varieties.<sup class="citation-marker">[9]</sup> On 20 July 1982, an <a href="#">IRA</a> bomb exploded at the bandstand during a <a href="#">Royal Green Jackets</a> concert, killing seven soldiers and injuring many more.
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Sport -->
-                <div class="minerva-edit-section" data-section="rp-sport">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Sport</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion9Pending || isSuccessHighlightActive(9))"
-                      ref="highlightedTextRef9"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion9Pending && isHovered9 && showSuggestions && !isCardExpanded9,
-                        'highlighted-text-wrapper--selected': isSuggestion9Pending && showSuggestions && (isCardExpanded9 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 9) || isScrollPreviewingId(9)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(9),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion9Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 9,
-                        'highlighted-text-wrapper--rail-active': isRailActive(9)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered9 = true"
-                      @mouseleave="isTextHovered9 = false"
-                      @click="isSuggestion9Pending ? (isMinervaSkin ? openMinervaSuggestion(9) : (isCardExpanded9 = true)) : null"
-                    >
-                      <span v-if="isSuggestion9Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        The Hub sports pavilion, designed by <a href="#">David Morley Architects</a>, was opened in 2005 by <a href="#">Queen Elizabeth II</a> and won an <a href="#">IStructE</a> Award.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span> It provides changing facilities and supports a wide range of sports in the park.
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion9Pending && !isSuccessHighlightActive(9)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(9) }" :style="getRailStyle(9)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion9Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="9" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(9)" @click.stop="openMinervaSuggestion(9)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(9)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      The Hub sports pavilion, designed by <a href="#">David Morley Architects</a>, was opened in 2005 by <a href="#">Queen Elizabeth II</a> and won an <a href="#">IStructE</a> Award. It provides changing facilities and supports a wide range of sports in the park.
-                    </p>
-                    <p>
-                      The park hosts cycling, tennis, cricket, football, hockey, and rugby, among other sports. The <a href="#">Outer Circle</a> road is popular with cyclists and runners; by January 2018 around 22,000 Strava users had logged 1.6 million laps of the circuit.<sup class="citation-marker">[10]</sup>
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Terraces -->
-                <div class="minerva-edit-section" data-section="rp-terraces">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Terraces</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion10Pending || isSuccessHighlightActive(10))"
-                      ref="highlightedTextRef10"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion10Pending && isHovered10 && showSuggestions && !isCardExpanded10,
-                        'highlighted-text-wrapper--selected': isSuggestion10Pending && showSuggestions && (isCardExpanded10 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 10) || isScrollPreviewingId(10)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(10),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion10Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 10,
-                        'highlighted-text-wrapper--rail-active': isRailActive(10)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered10 = true"
-                      @mouseleave="isTextHovered10 = false"
-                      @click="isSuggestion10Pending ? (isMinervaSkin ? openMinervaSuggestion(10) : (isCardExpanded10 = true)) : null"
-                    >
-                      <span v-if="isSuggestion10Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        The park is ringed by neoclassical <a href="#">Nash</a>-era terraces. <a href="#">Cumberland Terrace</a> (1826), the most ornate, was built by James Burton to a design by Nash with a large central arch crowned by sculptured figures.<span class="highlighted-text-annotation"><sup class="citation-marker">[?]</sup></span>
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion10Pending && !isSuccessHighlightActive(10)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(10) }" :style="getRailStyle(10)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion10Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="10" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(10)" @click.stop="openMinervaSuggestion(10)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(10)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      The park is ringed by neoclassical <a href="#">Nash</a>-era terraces. <a href="#">Cumberland Terrace</a> (1826), the most ornate, was built by James Burton to a design by Nash with a large central arch crowned by sculptured figures.
-                    </p>
-                    <p>
-                      Going clockwise from the north, the terraces are: <a href="#">Gloucester Gate</a> (1827), <a href="#">Cumberland Terrace</a> (1826), <a href="#">Chester Terrace</a> (1825, the longest), <a href="#">Cambridge Terrace</a> (1825), <a href="#">York Terrace</a> East and West (1822), <a href="#">Cornwall Terrace</a> (19 houses, 1821), <a href="#">Clarence Terrace</a> (the smallest), <a href="#">Sussex Place</a> (rebuilt in the 1960s for <a href="#">London Business School</a>), <a href="#">Hanover Terrace</a> (1822), and <a href="#">Kent Terrace</a> (1827). <a href="#">Park Square</a> and <a href="#">Park Crescent</a> lie immediately south of the park.<sup class="citation-marker">[11]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion6Pending || isSuccessHighlightActive(6))"
-                      ref="highlightedTextRef6"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion6Pending && isHovered6 && showSuggestions && !isCardExpanded6,
-                        'highlighted-text-wrapper--selected': isSuggestion6Pending && showSuggestions && (isCardExpanded6 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 6) || isScrollPreviewingId(6)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(6),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion6Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 6,
-                        'highlighted-text-wrapper--rail-active': isRailActive(6)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered6 = true"
-                      @mouseleave="isTextHovered6 = false"
-                      @click="isSuggestion6Pending ? (isMinervaSkin ? openMinervaSuggestion(6) : (isCardExpanded6 = true)) : null"
-                    >
-                      <span v-if="isSuggestion6Pending" class="highlighted-text-rail"></span>
-                      <span class="highlighted-text-content">
-                        <a href="#">Park Crescent</a>, which faces the park at its southern tip, retains Nash's original stucco facades, although the interiors were rebuilt as offices in the 1960s. See also <span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Nash_terraces">Nash terraces</a></span> for the full list of London Nash terraces.
-                      </span>
-                      <span v-if="isMinervaSkin && isSuggestion6Pending && !isSuccessHighlightActive(6)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--visible': isRailActive(6) }" :style="getRailStyle(6)"></span>
-                      <button v-if="isMinervaSkin && isSuggestion6Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="6" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(6)" @click.stop="openMinervaSuggestion(6)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(6)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true">
-                        <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                      </span>
-                    </p>
-                    <p v-else>
-                      <a href="#">Park Crescent</a>, which faces the park at its southern tip, retains Nash's original stucco facades, although the interiors were rebuilt as offices in the 1960s. See also <a href="https://en.wikipedia.org/wiki/Nash_terraces">Nash terraces</a> for the full list of London Nash terraces.
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Villas -->
-                <div class="minerva-edit-section" data-section="rp-villas">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Villas</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <h3 class="subsection-title">Close to the western and northern edges</h3>
-                    <p>
-                      Nine villas were originally planned for the western and northern parts of the park. <a href="#">Hertford Villa</a> was rebuilt in the 1950s as <a href="#">Winfield House</a>, now the residence of the <a href="#">United States Ambassador to the United Kingdom</a>. <a href="#">Nuffield Lodge</a> is occupied by the <a href="#">Omani</a> royal family. <a href="#">Holford House</a> was destroyed in <a href="#">World War II</a>. The <a href="#">London Central Mosque</a> now stands on the site of <a href="#">Albany Cottage</a>.<sup class="citation-marker">[12]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion20Pending || isSuccessHighlightActive(20))"
-                      ref="highlightedTextRef20"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion20Pending && showSuggestions,
-                        'highlighted-text-wrapper--selected': isSuggestion20Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 20) || isScrollPreviewingId(20)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(20),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion20Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 20,
-                        'highlighted-text-wrapper--rail-active': isRailActive(20)
-                      }"
-                      class="suggestion-target"
-                      @click="isSuggestion20Pending ? openMinervaSuggestion(20) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          Six new classical villas were built between 1988 and 2004 by architect <a href="#">Quinlan Terry</a>: the Veneto, Doric, Corinthian, Ionic, Gothick, and Regency villas.
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion20Pending && !isSuccessHighlightActive(20)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--visible': isRailActive(20) }"
-                        :style="getRailStyle(20)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion20Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="20" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(20)" @click.stop="openMinervaSuggestion(20)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(20)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      Six new classical villas were built between 1988 and 2004 by architect <a href="#">Quinlan Terry</a>: the Veneto, Doric, Corinthian, Ionic, Gothick, and Regency villas.
-                    </p>
-
-                    <h3 class="subsection-title">Around the Inner Circle</h3>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion21Pending || isSuccessHighlightActive(21))"
-                      ref="highlightedTextRef21"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion21Pending && showSuggestions,
-                        'highlighted-text-wrapper--selected': isSuggestion21Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 21) || isScrollPreviewingId(21)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(21),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion21Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 21,
-                        'highlighted-text-wrapper--rail-active': isRailActive(21)
-                      }"
-                      class="suggestion-target"
-                      @click="isSuggestion21Pending ? openMinervaSuggestion(21) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          <a href="#">St John's Lodge</a>, built in 1817–1819 to designs by <a href="#">John Raffield</a>, was the first villa to be built in the park. It is now occupied by the <a href="#">Brunei</a> royal family; part of its garden is open to the public. <a href="#">The Holme</a>, described as "one of the most desirable private homes in London", is now the residence of the <a href="#">Saudi Arabian</a> royal family. The site of the former South Villa is now occupied by <a href="#">Regent's University London</a>.<sup class="citation-marker">[13]</sup>
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion21Pending && !isSuccessHighlightActive(21)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--visible': isRailActive(21) }"
-                        :style="getRailStyle(21)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion21Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="21" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(21)" @click.stop="openMinervaSuggestion(21)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(21)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      <a href="#">St John's Lodge</a>, built in 1817–1819 to designs by <a href="#">John Raffield</a>, was the first villa to be built in the park. It is now occupied by the <a href="#">Brunei</a> royal family; part of its garden is open to the public. <a href="#">The Holme</a>, described as "one of the most desirable private homes in London", is now the residence of the <a href="#">Saudi Arabian</a> royal family. The site of the former South Villa is now occupied by <a href="#">Regent's University London</a>.<sup class="citation-marker">[13]</sup>
-                    </p>
-                    <h3 class="subsection-title">Close to the eastern edge</h3>
-                    <p>
-                      <a href="#">The Diorama</a> at 18 <a href="#">Park Square East</a>, built in 1823, was an early form of cinema created by <a href="#">Louis Daguerre</a> and <a href="#">Charles Marie Bouton</a>. It operated until 1852 and is now a community arts venue. <a href="#">Park Crescent</a> at the southern boundary includes the <a href="#">International Students House</a>.<sup class="citation-marker">[14]</sup>
-                    </p>
-                  </div>
-                </div>
-
-                <!-- More Attractions -->
-                <div class="minerva-edit-section" data-section="rp-attractions">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">More attractions</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <p>
-                      The <a href="#">Broad Walk</a> is a tree-lined avenue that bisects the park from north to south. The <a href="#">Cowasji Jehangir Readymoney Fountain</a> stands on the Broadwalk and was donated to the people of London by Indian philanthropist <a href="#">Cowasji Jehangir Readymoney</a> in 1869.<sup class="citation-marker">[15]</sup>
-                    </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion22Pending || isSuccessHighlightActive(22))"
-                      ref="highlightedTextRef22"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion22Pending && showSuggestions,
-                        'highlighted-text-wrapper--selected': isSuggestion22Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 22) || isScrollPreviewingId(22)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(22),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion22Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 22,
-                        'highlighted-text-wrapper--rail-active': isRailActive(22)
-                      }"
-                      class="suggestion-target"
-                      @click="isSuggestion22Pending ? openMinervaSuggestion(22) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          The <a href="#">Open Air Theatre</a> in the park has staged performances every summer since 1932. The <a href="#">Boating Lake</a> offers rowing boats and pedalos for hire. The annual <a href="#">Frieze Art Fair</a> is held in the park each October. <a href="#">London Zoo</a>, located at the northern end of the park, is one of the world's oldest scientific zoos, founded in 1828.<sup class="citation-marker">[16]</sup>
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion22Pending && !isSuccessHighlightActive(22)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--visible': isRailActive(22) }"
-                        :style="getRailStyle(22)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion22Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="22" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(22)" @click.stop="openMinervaSuggestion(22)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(22)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      The <a href="#">Open Air Theatre</a> in the park has staged performances every summer since 1932. The <a href="#">Boating Lake</a> offers rowing boats and pedalos for hire. The annual <a href="#">Frieze Art Fair</a> is held in the park each October. <a href="#">London Zoo</a>, located at the northern end of the park, is one of the world's oldest scientific zoos, founded in 1828.<sup class="citation-marker">[16]</sup>
-                    </p>
-
-                  </div>
-                </div>
-
-                <!-- Transport -->
-                <div class="minerva-edit-section" data-section="rp-transport">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Transport</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <h3 class="subsection-title">Nearest tube stations</h3>
-                    <p>
-                      <a href="#">Regent's Park</a> (<a href="#">Bakerloo line</a>), <a href="#">Baker Street</a> (<a href="#">Bakerloo</a>, <a href="#">Circle</a>, <a href="#">Hammersmith &amp; City</a>, <a href="#">Jubilee</a> and <a href="#">Metropolitan lines</a>), <a href="#">Great Portland Street</a> (<a href="#">Circle</a>, <a href="#">Hammersmith &amp; City</a> and <a href="#">Metropolitan lines</a>), <a href="#">Warren Street</a> (<a href="#">Northern</a> and <a href="#">Victoria lines</a>).
-                    </p>
-                    <h3 class="subsection-title">Nearest railway stations</h3>
-                    <p>
-                      <a href="#">Camden Road</a> (served by <a href="#">London Overground</a>), <a href="#">Marylebone</a> (served by <a href="#">Chiltern Railways</a>).
-                    </p>
-                  </div>
-                </div>
-
-                <!-- Cultural references -->
-                <div class="minerva-edit-section" data-section="rp-culture">
-                  <div class="section-heading-edit">
-                    <h2 class="heading-text-edit">Cultural references</h2>
-                    <div class="heading-divider"></div>
-                  </div>
-                  <div contenteditable="true" @input="markArticleEdited" class="article-text-editable">
-                    <h3 class="subsection-title">In film and television</h3>
-                    <p>
-                      The park has featured in numerous films and television productions, including <i><a href="#">28 Weeks Later</a></i> (2007), <i><a href="#">Withnail and I</a></i> (1987, the closing scene), <i><a href="#">Cruella</a></i> (2021), and <i><a href="#">Slow Horses</a></i> (2022, depicting the MI5 headquarters). <i><a href="#">One Hundred and One Dalmatians</a></i> (1961) also features the park prominently.<sup class="citation-marker">[17]</sup>
-                    </p>
-                    <h3 class="subsection-title">In literature</h3>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion23Pending || isSuccessHighlightActive(23))"
-                      ref="highlightedTextRef23"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion23Pending && showSuggestions,
-                        'highlighted-text-wrapper--selected': isSuggestion23Pending && showSuggestions && ((showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 23) || isScrollPreviewingId(23)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(23),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion23Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 23,
-                        'highlighted-text-wrapper--rail-active': isRailActive(23)
-                      }"
-                      class="suggestion-target"
-                      @click="isSuggestion23Pending ? openMinervaSuggestion(23) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          Regent's Park has been referenced in works by <a href="#">Elizabeth Bowen</a> (<i>The Heat of the Day</i>), <a href="#">Agatha Christie</a>, <a href="#">Ian Fleming</a> (who placed <a href="#">MI6</a> headquarters "near Regent's Park" in his <a href="#">James Bond</a> novels), <a href="#">J.K. Rowling</a> (<i>Harry Potter</i>), <a href="#">Virginia Woolf</a> (<i>Mrs Dalloway</i>), and <a href="#">Mick Herron</a> (<i>Slough House</i> series).<sup class="citation-marker">[18]</sup>
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion23Pending && !isSuccessHighlightActive(23)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--visible': isRailActive(23) }"
-                        :style="getRailStyle(23)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion23Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="23" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(23)" @click.stop="openMinervaSuggestion(23)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(23)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      Regent's Park has been referenced in works by <a href="#">Elizabeth Bowen</a> (<i>The Heat of the Day</i>), <a href="#">Agatha Christie</a>, <a href="#">Ian Fleming</a> (who placed <a href="#">MI6</a> headquarters "near Regent's Park" in his <a href="#">James Bond</a> novels), <a href="#">J.K. Rowling</a> (<i>Harry Potter</i>), <a href="#">Virginia Woolf</a> (<i>Mrs Dalloway</i>), and <a href="#">Mick Herron</a> (<i>Slough House</i> series).<sup class="citation-marker">[18]</sup>
-                    </p>
-                  </div>
-                </div>
-
                 </template>
 
             </div>
@@ -7612,15 +7037,6 @@
         >
           <div class="prototype-dialog-content">
             <div class="prototype-dialog-options">
-              <cdx-field>
-                <template #label>Article</template>
-                <cdx-radio v-model="selectedArticle" name="article-select" input-value="audre-lorde">
-                  Audre Lorde
-                </cdx-radio>
-                <cdx-radio v-model="selectedArticle" name="article-select" input-value="regents-park">
-                  Regent's Park
-                </cdx-radio>
-              </cdx-field>
               <cdx-field v-if="isMinervaSkin">
                 <template #label>
                   Mobile ToggleButton (<a href="https://phabricator.wikimedia.org/T415589" target="_blank" rel="noopener">T415589</a>)
@@ -7688,7 +7104,10 @@
                   Show rail when reaching suggestions
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="showEditMenuOnMobile">
-                  Menu to choose what to edit
+                  Bottom sheet in read mode
+                </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="bottomSheetInVE">
+                  Bottom sheet in VE
                 </cdx-checkbox>
                 <cdx-checkbox v-model="expandFirstSuggestionOnReach">
                   Expand the first suggestion on first reach
@@ -8770,7 +8189,7 @@ const scrollPreviewSuggestionId = ref(null);
 let scrollPreviewScrollStopTimer = null;
 
 // Edit menu ("What do you want to edit?" bottom sheet)
-const showEditMenuOnMobile = ref(true);
+const showEditMenuOnMobile = ref(false);
 const isEditMenuSheetOpen = ref(false);
 const editMenuRememberChoice = ref(false);
 const EDIT_MENU_REMEMBER_KEY = 'wikiEditMenuRememberedChoice';
@@ -8790,7 +8209,9 @@ const revealedRailIds = ref(new Set());
 const firstPendingSuggestionInView = ref(false);
 const autoExpandAnimatingId = ref(null);
 
-const expandFirstSuggestionOnReach = ref(true);
+const expandFirstSuggestionOnReach = ref(false);
+const bottomSheetInVE = ref(true);
+const showVEEntrySheet = ref(false);
 const firstSuggestionAutoExpanded = ref(false);
 
 function getSuggestionRefs() {
@@ -9329,10 +8750,6 @@ const availableSuggestionCount = computed(() => (
   (isSuggestion15Pending.value ? 1 : 0) +
   (isSuggestion16Pending.value ? 1 : 0) +
   (isSuggestion17Pending.value ? 1 : 0) +
-  (isSuggestion20Pending.value ? 1 : 0) +
-  (isSuggestion21Pending.value ? 1 : 0) +
-  (isSuggestion22Pending.value ? 1 : 0) +
-  (isSuggestion23Pending.value ? 1 : 0) +
   (isSuggestion18Pending.value ? 1 : 0) +
   (isSuggestion19Pending.value ? 1 : 0) +
   (isSuggestion24Pending.value ? 1 : 0)
@@ -10905,14 +10322,6 @@ function getPostPublishSuggestionIds() {
 }
 
 function getMinervaSuggestionCardTitle(suggestionId) {
-  if (selectedArticle.value === 'regents-park') {
-    const rpTitles = {
-      1: 'Add a citation', 2: 'Add a citation', 3: 'Add a citation',
-      6: 'Link to final page', 7: 'Remove external link', 8: 'Adjust heading level',
-      9: 'Add a citation', 10: 'Add a citation',
-    };
-    return rpTitles[suggestionId] || 'Review suggestion';
-  }
   const titles = {
     1: 'Add a citation',
     2: 'Add a citation',
@@ -10929,13 +10338,6 @@ function getMinervaSuggestionCardTitle(suggestionId) {
 }
 
 function getMinervaSuggestionPrimaryActionLabel(suggestionId) {
-  if (selectedArticle.value === 'regents-park') {
-    if ([1, 2, 3, 9, 10].includes(suggestionId)) return 'Add citation';
-    if (suggestionId === 6) return 'Update link';
-    if (suggestionId === 7) return 'Remove link';
-    if (suggestionId === 8) return 'Adjust heading';
-    return 'Review';
-  }
   if ([1, 2, 3].includes(suggestionId)) return 'Add citation';
   if (suggestionId === 4) return 'Remove link';
   if (suggestionId === 5 || suggestionId === 'tone') return 'Improve tone';
@@ -10944,19 +10346,6 @@ function getMinervaSuggestionPrimaryActionLabel(suggestionId) {
 }
 
 function getMinervaSuggestionCardDescription(suggestionId) {
-  if (selectedArticle.value === 'regents-park') {
-    const rpDesc = {
-      1: 'This information has no source. Help readers understand where this information is coming from by adding a citation.',
-      2: 'This paragraph lacks a reference. Adding a citation helps verify the accuracy of the content.',
-      3: 'This statement needs a source. Please add a citation to support this claim.',
-      6: 'This link points to a redirect page. Consider linking directly to the final destination page.',
-      7: 'This article contains an external link that should be converted to a wikilink or removed per guidelines.',
-      8: 'The heading level may not be consistent with the article\'s structure. Consider adjusting it.',
-      9: 'This section contains unsourced statements. A citation would help readers verify this information.',
-      10: 'This claim would benefit from a citation to a reliable source.',
-    };
-    return rpDesc[suggestionId] || '';
-  }
   const descriptions = {
     1: 'This information has no source. Help readers understand where this information is coming from by adding a citation.',
     2: 'This information has no source. Help readers understand where this information is coming from by adding a citation.',
@@ -12658,9 +12047,7 @@ function getPersistentPaginationAllTargets() {
   return targets.sort((a, b) => a.top - b.top);
 }
 
-const ADD_CITATION_IDS = computed(() =>
-  selectedArticle.value === 'regents-park' ? [1, 2, 3, 9, 10, 20] : [1, 2, 3, 11, 12]
-);
+const ADD_CITATION_IDS = computed(() => [1, 2, 3, 11, 12]);
 
 function getPublishPromptNextId(currentId = null) {
   const pending = getPendingSuggestionIdsForContext().filter((id) => !publishPromptEnabled.value || !ADD_CITATION_IDS.value.includes(id));
@@ -13256,6 +12643,14 @@ function handleBannerKeydown(event) {
   }
 }
 
+function handleVEEntryViewSuggestions() {
+  showVEEntrySheet.value = false;
+  showSuggestions.value = true;
+  nextTick(() => {
+    openFirstPendingSuggestionForContext({ openMinervaAfterScroll: isMinervaSkin.value && isPaginationMode.value });
+  });
+}
+
 function openFirstPendingSuggestionForContext({ openMinervaAfterScroll = false } = {}) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
@@ -13303,24 +12698,6 @@ function getSuggestionIdsForCurrentContext() {
 }
 
 function getPendingSuggestionIdsForContext() {
-  if (selectedArticle.value === 'regents-park') {
-    const rpOrder = [1, 2, 9, 3, 20, 6, 10, 7, 21, 8, 22, 23];
-    return rpOrder.filter(id => {
-      if (id === 1) return !publishPromptEnabled.value && isSuggestion1Pending.value;
-      if (id === 2) return !publishPromptEnabled.value && isSuggestion2Pending.value;
-      if (id === 3) return !publishPromptEnabled.value && isSuggestion3Pending.value;
-      if (id === 6) return isSuggestion6Pending.value;
-      if (id === 7) return isSuggestion7Pending.value;
-      if (id === 8) return isSuggestion8Pending.value;
-      if (id === 9) return isSuggestion9Pending.value;
-      if (id === 10) return isSuggestion10Pending.value;
-      if (id === 20) return isSuggestion20Pending.value;
-      if (id === 21) return isSuggestion21Pending.value;
-      if (id === 22) return isSuggestion22Pending.value;
-      if (id === 23) return isSuggestion23Pending.value;
-      return false;
-    });
-  }
   const ids = [];
   if (isMinervaSkin.value && minervaEditSectionOnly.value) {
     if (minervaEditSectionOnly.value === 'career' && isSuggestion1Pending.value) ids.push(1);
@@ -14657,26 +14034,6 @@ watch(isCardExpanded7, (newValue) => {
   }
 });
 
-watch(selectedArticle, () => {
-  citationNumber1.value = null; citationNumber2.value = null; citationNumber3.value = null;
-  isSuggestionDeclined1.value = false; isSuggestionDeclined2.value = false;
-  isSuggestionDeclined3.value = false; isSuggestionDeclined4.value = false;
-  isSuggestionResolved4.value = false; isSuggestionDeclined5.value = false;
-  isSuggestionResolved5.value = false; isSuggestionDeclined6.value = false;
-  isSuggestionResolved6.value = false; isSuggestionDeclined7.value = false;
-  isSuggestionResolved7.value = false; isSuggestionDeclined8.value = false;
-  isSuggestionResolved8.value = false; isSuggestionDeclined9.value = false;
-  isSuggestionResolved9.value = false; isSuggestionDeclined10.value = false;
-  isSuggestionResolved10.value = false;
-  successHighlightSuggestionIds.value = [];
-  isCardExpanded.value = false; isCardExpanded2.value = false; isCardExpanded3.value = false;
-  isCardExpanded4.value = false; isCardExpanded5.value = false; isCardExpanded6.value = false;
-  isCardExpanded7.value = false; isCardExpanded8.value = false;
-  isCardExpanded9.value = false; isCardExpanded10.value = false;
-  if (isMinervaSheetOpen.value) closeMinervaSuggestion();
-  publishPromptShown.value = false; publishPromptSuggestionId.value = null;
-  nextTick(() => { alignBothSuggestions(); updateSuggestionVisibility(); });
-});
 
 watch(isCardExpanded8, (newValue) => {
   if (newValue) {
@@ -16472,14 +15829,18 @@ function enterEditMode() {
   isBannerClosing.value = false;
   isBannerOpening.value = false;
   
-  // Hide loading overlay after 2 seconds
+  // Hide loading overlay after 2 seconds, then show VE entry sheet if enabled
   setTimeout(() => {
     isLoading.value = false;
+    if (isMinervaSkin.value && bottomSheetInVE.value && availableSuggestionCount.value > 0) {
+      showVEEntrySheet.value = true;
+    }
   }, 2000);
 }
 
 function exitEditMode() {
   // Returning to read mode: no loading
+  showVEEntrySheet.value = false;
   const targetSectionId = readModeReturnSectionId.value;
   restoreEditSnapshot();
   hasUnsavedChangesManual.value = false;
@@ -19690,6 +19051,53 @@ function markArticleEdited() {
   z-index: 101; /* Above overlay */
   width: 512px;
   max-width: calc(100% - 64px); /* Responsive with 32px padding on each side */
+}
+
+/* VE Entry Sheet */
+.ve-entry-sheet-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
+  z-index: 99;
+  display: flex;
+  align-items: flex-end;
+}
+
+.ve-entry-sheet {
+  width: 100%;
+  background: var(--background-color-base, #fff);
+  border-radius: 12px 12px 0 0;
+  padding: 24px 16px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 8px;
+  box-shadow: 0 -2px 16px rgba(0, 0, 0, 0.12);
+}
+
+.ve-entry-sheet__icon {
+  color: var(--color-progressive, #3366cc);
+  font-size: 24px;
+  margin-bottom: 4px;
+}
+
+.ve-entry-sheet__title {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-base, #202122);
+}
+
+.ve-entry-sheet__subtitle {
+  font-size: 0.9375rem;
+  color: var(--color-base, #202122);
+  margin: 0 0 8px;
+}
+
+.ve-entry-sheet__btn-primary,
+.ve-entry-sheet__btn-secondary {
+  width: 100%;
+  justify-content: center;
 }
 
 /* Edit Header */
