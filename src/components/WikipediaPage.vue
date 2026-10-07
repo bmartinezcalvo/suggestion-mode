@@ -985,7 +985,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion18Pending && !isSuccessHighlightActive(18)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18), 'minerva-highlight-rail--animate': animateRailIds.has(18) }"
                         :style="getRailStyle(18)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion18Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="18" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(18)" @click.stop="openMinervaSuggestion(18)">
@@ -1022,7 +1022,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion19Pending && !isSuccessHighlightActive(19)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19), 'minerva-highlight-rail--animate': animateRailIds.has(19) }"
                         :style="getRailStyle(19)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion19Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="19" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(19)" @click.stop="openMinervaSuggestion(19)">
@@ -1059,7 +1059,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion24Pending && !isSuccessHighlightActive(24)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24), 'minerva-highlight-rail--animate': animateRailIds.has(24) }"
                         :style="getRailStyle(24)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion24Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="24" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(24)" @click.stop="openMinervaSuggestion(24)">
@@ -1510,7 +1510,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion18Pending && !isSuccessHighlightActive(18)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18), 'minerva-highlight-rail--animate': animateRailIds.has(18) }"
                         :style="getRailStyle(18)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion18Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="18" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(18)" @click.stop="openMinervaSuggestion(18)">
@@ -1547,7 +1547,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion19Pending && !isSuccessHighlightActive(19)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19), 'minerva-highlight-rail--animate': animateRailIds.has(19) }"
                         :style="getRailStyle(19)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion19Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="19" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(19)" @click.stop="openMinervaSuggestion(19)">
@@ -1584,7 +1584,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion24Pending && !isSuccessHighlightActive(24)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24), 'minerva-highlight-rail--animate': animateRailIds.has(24) }"
                         :style="getRailStyle(24)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion24Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="24" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(24)" @click.stop="openMinervaSuggestion(24)">
@@ -3204,7 +3204,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion18Pending && !isSuccessHighlightActive(18)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(18), 'minerva-highlight-rail--visible': isRailActive(18), 'minerva-highlight-rail--animate': animateRailIds.has(18) }"
                         :style="getRailStyle(18)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion18Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="18" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(18)" @click.stop="openMinervaSuggestion(18)">
@@ -3303,7 +3303,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion1Pending && !isSuccessHighlightActive(1)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(1), 'minerva-highlight-rail--visible': isRailActive(1) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(1), 'minerva-highlight-rail--visible': isRailActive(1), 'minerva-highlight-rail--animate': animateRailIds.has(1) }"
                     :style="getRailStyle(1)"
                     ></span>
                     <button
@@ -3397,7 +3397,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion19Pending && !isSuccessHighlightActive(19)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(19), 'minerva-highlight-rail--visible': isRailActive(19), 'minerva-highlight-rail--animate': animateRailIds.has(19) }"
                       :style="getRailStyle(19)"
                     ></span>
                     <button v-if="isMinervaSkin && isSuggestion19Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="19" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(19)" @click.stop="openMinervaSuggestion(19)">
@@ -3434,7 +3434,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion24Pending && !isSuccessHighlightActive(24)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(24), 'minerva-highlight-rail--visible': isRailActive(24), 'minerva-highlight-rail--animate': animateRailIds.has(24) }"
                       :style="getRailStyle(24)"
                     ></span>
                     <button v-if="isMinervaSkin && isSuggestion24Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="24" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(24)" @click.stop="openMinervaSuggestion(24)">
@@ -3518,59 +3518,25 @@
                                     <p>
                     Lorde's poetry was published very regularly during the 1960s - in Langston Hughes' 1962 New Negro Poets, USA; in several foreign anthologies; and in black literary magazines. During this time, she was also politically active in civil rights, anti-war, and feminist movements.
                   </p>
-                                    <p
-                    v-if="showSuggestionsDisplay && (isSuggestion8Pending || isSuccessHighlightActive(8))"
-                    ref="highlightedTextRef8"
-                    :class="{
-                      'highlighted-text-wrapper': showSuggestions,
-                      [nonSelectedHighlightClass]: showSuggestions,
-                      'highlighted-text-wrapper--hover': isSuggestion8Pending && isHovered8 && showSuggestions && !isCardExpanded8,
-                      'highlighted-text-wrapper--selected': isSuggestion8Pending && showSuggestions && (isCardExpanded8 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 8) || isScrollPreviewingId(8)),
-                      'highlighted-text-wrapper--success': isSuccessHighlightActive(8),
-                      'minerva-suggestion-target': isMinervaSkin && isSuggestion8Pending,
-                      'suggestion-dismiss-right': dismissedSuggestionId === 8,
-                      'highlighted-text-wrapper--rail-active': isRailActive(8)
-                    }"
-                    class="suggestion-target"
-                    @mouseenter="isTextHovered8 = true"
-                    @mouseleave="isTextHovered8 = false"
-                    @click="isSuggestion8Pending ? (isMinervaSkin ? openMinervaSuggestion(8) : (isCardExpanded8 = true)) : null"
-                  >
-                    <span v-if="isSuggestion8Pending" class="highlighted-text-rail"></span>
-                    <span class="highlighted-text-content">
-                      In 1968, Lorde published <span class="highlighted-text-annotation"><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></span>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
-                    </span>
-                    <span
-                      v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)"
-                      class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(8), 'minerva-highlight-rail--visible': isRailActive(8) }"
-                    :style="getRailStyle(8)"
-                    ></span>
-                    <button
-                      v-if="isMinervaSkin && isSuggestion8Pending"
-                      type="button"
-                      class="minerva-suggestion-trigger"
-                      data-preview-suggestion-id="8"
-                      aria-label="Show suggestion"
-                      @mousedown.prevent
-                      @touchstart.stop.prevent="openMinervaSuggestion(8)"
-                      @click.stop="openMinervaSuggestion(8)"
-                    >
-                      <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                    </button>
-                    <span
-                      v-else-if="isMinervaSkin && showSuccessHighlightUI(8)"
-                      class="minerva-suggestion-trigger minerva-suggestion-trigger--success"
-                      aria-hidden="true"
-                    >
-                      <svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
-                        <path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" />
-                        <path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
-                      </svg>
-                    </span>
-                  </p>
-                                    <p v-else>
-                    In 1968, Lorde published <a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
+                                    <p>
+                    In 1968, Lorde published <span
+                      v-if="showSuggestionsDisplay && (isSuggestion8Pending || isSuccessHighlightActive(8))"
+                      ref="highlightedTextRef8"
+                      class="suggestion-target suggestion-target--inline"
+                      :class="{
+                        'highlighted-text-wrapper': showSuggestions,
+                        [nonSelectedHighlightClass]: showSuggestions,
+                        'highlighted-text-wrapper--hover': isSuggestion8Pending && isHovered8 && showSuggestions && !isCardExpanded8,
+                        'highlighted-text-wrapper--selected': isSuggestion8Pending && showSuggestions && (isCardExpanded8 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 8) || isScrollPreviewingId(8)),
+                        'highlighted-text-wrapper--success': isSuccessHighlightActive(8),
+                        'minerva-suggestion-target': isMinervaSkin && isSuggestion8Pending,
+                        'suggestion-dismiss-right': dismissedSuggestionId === 8,
+                        'highlighted-text-wrapper--rail-active': isRailActive(8)
+                      }"
+                      @mouseenter.stop="isTextHovered8 = true"
+                      @mouseleave.stop="isTextHovered8 = false"
+                      @click.stop="isSuggestion8Pending ? (isMinervaSkin ? openMinervaSuggestion(8) : (isCardExpanded8 = true)) : null"
+                    ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></span></span><span v-if="isMinervaSkin && isSuggestion8Pending && !isSuccessHighlightActive(8)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(8), 'minerva-highlight-rail--visible': isRailActive(8), 'minerva-highlight-rail--animate': animateRailIds.has(8) }" :style="getRailStyle(8)"></span><button v-if="isMinervaSkin && isSuggestion8Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="8" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(8)" @click.stop="openMinervaSuggestion(8)"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></button><span v-else-if="isMinervaSkin && showSuccessHighlightUI(8)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span></span><template v-else><a href="https://example.org/the-first-cities" target="_blank" rel="noopener">The First Cities</a></template>, her first volume of poems. It was edited by Diane di Prima, a former classmate and friend from Hunter College High School. The First Cities has been described as a "quiet, introspective book", and Dudley Randall, a poet and critic, asserted in his review of the book that Lorde "does not wave a black flag, but her Blackness is there, implicit, in the bone".
                   </p>
                                     <p>
                     Her second volume, Cables to Rage (1970), which was mainly written during her tenure as poet-in-residence at Tougaloo College in Mississippi, addressed themes of love, betrayal, childbirth, and the complexities of raising children. It is particularly noteworthy for the poem "Martha", in which Lorde openly confirms her homosexuality for the first time in her writing: "[W]e shall love each other here if ever at all".
@@ -3606,7 +3572,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion6Pending && !isSuccessHighlightActive(6)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(6), 'minerva-highlight-rail--visible': isRailActive(6) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(6), 'minerva-highlight-rail--visible': isRailActive(6), 'minerva-highlight-rail--animate': animateRailIds.has(6) }"
                     :style="getRailStyle(6)"
                     ></span>
                     <button
@@ -3685,7 +3651,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion2Pending && !isSuccessHighlightActive(2)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(2), 'minerva-highlight-rail--visible': isRailActive(2) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(2), 'minerva-highlight-rail--visible': isRailActive(2), 'minerva-highlight-rail--animate': animateRailIds.has(2) }"
                     :style="getRailStyle(2)"
                     ></span>
                     <button
@@ -3746,7 +3712,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion4Pending && !isSuccessHighlightActive(4)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(4), 'minerva-highlight-rail--visible': isRailActive(4) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(4), 'minerva-highlight-rail--visible': isRailActive(4), 'minerva-highlight-rail--animate': animateRailIds.has(4) }"
                     :style="getRailStyle(4)"
                     ></span>
                     <button
@@ -3886,7 +3852,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion7Pending && !isSuccessHighlightActive(7)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(7), 'minerva-highlight-rail--visible': isRailActive(7) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(7), 'minerva-highlight-rail--visible': isRailActive(7), 'minerva-highlight-rail--animate': animateRailIds.has(7) }"
                     :style="getRailStyle(7)"
                     ></span>
                     <button
@@ -3964,7 +3930,7 @@
                     <span
                       v-if="isMinervaSkin && isSuggestion3Pending && !isSuccessHighlightActive(3)"
                       class="minerva-highlight-rail"
-                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(3), 'minerva-highlight-rail--visible': isRailActive(3) }"
+                      :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(3), 'minerva-highlight-rail--visible': isRailActive(3), 'minerva-highlight-rail--animate': animateRailIds.has(3) }"
                     :style="getRailStyle(3)"
                     ></span>
                     <button
@@ -4107,7 +4073,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion11Pending && !isSuccessHighlightActive(11)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(11), 'minerva-highlight-rail--visible': isRailActive(11) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(11), 'minerva-highlight-rail--visible': isRailActive(11), 'minerva-highlight-rail--animate': animateRailIds.has(11) }"
                         :style="getRailStyle(11)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion11Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="11" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(11)" @click.stop="openMinervaSuggestion(11)">
@@ -4146,7 +4112,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion13Pending && !isSuccessHighlightActive(13)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--visible': isRailActive(13) }"
+                        :class="{ 'minerva-highlight-rail--visible': isRailActive(13), 'minerva-highlight-rail--animate': animateRailIds.has(13) }"
                         :style="getRailStyle(13)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion13Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="13" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(13)" @click.stop="openMinervaSuggestion(13)">
@@ -4183,7 +4149,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion12Pending && !isSuccessHighlightActive(12)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(12), 'minerva-highlight-rail--visible': isRailActive(12) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(12), 'minerva-highlight-rail--visible': isRailActive(12), 'minerva-highlight-rail--animate': animateRailIds.has(12) }"
                         :style="getRailStyle(12)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion12Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="12" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(12)" @click.stop="openMinervaSuggestion(12)">
@@ -4223,7 +4189,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion16Pending && !isSuccessHighlightActive(16)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(16), 'minerva-highlight-rail--visible': isRailActive(16) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(16), 'minerva-highlight-rail--visible': isRailActive(16), 'minerva-highlight-rail--animate': animateRailIds.has(16) }"
                         :style="getRailStyle(16)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion16Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="16" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(16)" @click.stop="openMinervaSuggestion(16)">
@@ -4263,7 +4229,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion17Pending && !isSuccessHighlightActive(17)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(17), 'minerva-highlight-rail--visible': isRailActive(17) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(17), 'minerva-highlight-rail--visible': isRailActive(17), 'minerva-highlight-rail--animate': animateRailIds.has(17) }"
                         :style="getRailStyle(17)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion17Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="17" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(17)" @click.stop="openMinervaSuggestion(17)">
@@ -4307,42 +4273,25 @@
                     <p>
                       Her writings are based on the "theory of difference", the idea that the binary opposition between men and women is overly simplistic; although feminists have found it necessary to present the illusion of a solid, unified whole, the category of women itself is full of subdivisions.<sup class="citation-marker">[61]</sup>
                     </p>
-                    <p
-                      v-if="showSuggestionsDisplay && (isSuggestion14Pending || isSuccessHighlightActive(14))"
-                      ref="highlightedTextRef14"
-                      :class="{
-                        'highlighted-text-wrapper': showSuggestions,
-                        [nonSelectedHighlightClass]: showSuggestions,
-                        'highlighted-text-wrapper--hover': isSuggestion14Pending && isHovered14 && showSuggestions && !isCardExpanded14,
-                        'highlighted-text-wrapper--selected': isSuggestion14Pending && showSuggestions && (isCardExpanded14 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 14) || isScrollPreviewingId(14)),
-                        'highlighted-text-wrapper--success': isSuccessHighlightActive(14),
-                        'minerva-suggestion-target': isMinervaSkin && isSuggestion14Pending,
-                        'suggestion-dismiss-right': dismissedSuggestionId === 14,
-                        'highlighted-text-wrapper--rail-active': isRailActive(14)
-                      }"
-                      class="suggestion-target"
-                      @mouseenter="isTextHovered14 = true"
-                      @mouseleave="isTextHovered14 = false"
-                      @click="isSuggestion14Pending ? (isMinervaSkin ? openMinervaSuggestion(14) : (isCardExpanded14 = true)) : null"
-                    >
-                      <span class="highlighted-text-content">
-                        <span class="highlighted-text-annotation">
-                          Lorde's work in Berlin not only documented racial identity struggles but also influenced the development of <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a> feminist theory across Europe, particularly in Germany and the Netherlands.<sup class="citation-marker">[54]</sup>
-                        </span>
-                      </span>
-                      <span
-                        v-if="isMinervaSkin && isSuggestion14Pending && !isSuccessHighlightActive(14)"
-                        class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(14), 'minerva-highlight-rail--visible': isRailActive(14) }"
-                        :style="getRailStyle(14)"
-                      ></span>
-                      <button v-if="isMinervaSkin && isSuggestion14Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="14" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(14)" @click.stop="openMinervaSuggestion(14)">
-                        <cdx-icon :icon="cdxIconLightbulb" size="medium" />
-                      </button>
-                      <span v-else-if="isMinervaSkin && showSuccessHighlightUI(14)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span>
-                    </p>
-                    <p v-else>
-                      Lorde's work in Berlin not only documented racial identity struggles but also influenced the development of <a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a> feminist theory across Europe, particularly in Germany and the Netherlands.<sup class="citation-marker">[54]</sup>
+                    <p>
+                      Lorde's work in Berlin not only documented racial identity struggles but also influenced the development of <span
+                        v-if="showSuggestionsDisplay && (isSuggestion14Pending || isSuccessHighlightActive(14))"
+                        ref="highlightedTextRef14"
+                        class="suggestion-target suggestion-target--inline"
+                        :class="{
+                          'highlighted-text-wrapper': showSuggestions,
+                          [nonSelectedHighlightClass]: showSuggestions,
+                          'highlighted-text-wrapper--hover': isSuggestion14Pending && isHovered14 && showSuggestions && !isCardExpanded14,
+                          'highlighted-text-wrapper--selected': isSuggestion14Pending && showSuggestions && (isCardExpanded14 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 14) || isScrollPreviewingId(14)),
+                          'highlighted-text-wrapper--success': isSuccessHighlightActive(14),
+                          'minerva-suggestion-target': isMinervaSkin && isSuggestion14Pending,
+                          'suggestion-dismiss-right': dismissedSuggestionId === 14,
+                          'highlighted-text-wrapper--rail-active': isRailActive(14)
+                        }"
+                        @mouseenter.stop="isTextHovered14 = true"
+                        @mouseleave.stop="isTextHovered14 = false"
+                        @click.stop="isSuggestion14Pending ? (isMinervaSkin ? openMinervaSuggestion(14) : (isCardExpanded14 = true)) : null"
+                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a></span></span><span v-if="isMinervaSkin && isSuggestion14Pending && !isSuccessHighlightActive(14)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(14), 'minerva-highlight-rail--visible': isRailActive(14), 'minerva-highlight-rail--animate': animateRailIds.has(14) }" :style="getRailStyle(14)"></span><button v-if="isMinervaSkin && isSuggestion14Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="14" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(14)" @click.stop="openMinervaSuggestion(14)"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></button><span v-else-if="isMinervaSkin && showSuccessHighlightUI(14)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Intersectionality" target="_blank" rel="noopener">intersectional</a></template> feminist theory across Europe, particularly in Germany and the Netherlands.<sup class="citation-marker">[54]</sup>
                     </p>
                     <p
                       v-if="showSuggestionsDisplay && (isSuggestion15Pending || isSuccessHighlightActive(15))"
@@ -4370,7 +4319,7 @@
                       <span
                         v-if="isMinervaSkin && isSuggestion15Pending && !isSuccessHighlightActive(15)"
                         class="minerva-highlight-rail"
-                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(15), 'minerva-highlight-rail--visible': isRailActive(15) }"
+                        :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(15), 'minerva-highlight-rail--visible': isRailActive(15), 'minerva-highlight-rail--animate': animateRailIds.has(15) }"
                         :style="getRailStyle(15)"
                       ></span>
                       <button v-if="isMinervaSkin && isSuggestion15Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="15" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(15)" @click.stop="openMinervaSuggestion(15)">
@@ -6897,6 +6846,12 @@
             v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode && feedbackAfterActionMode !== 'card') && !isPublishPromptMode && !isMinervaDismissFirstTimeState"
             class="minerva-sheet-pagination"
           >
+            <div
+              class="minerva-pagination-count"
+              :class="{ 'minerva-pagination-count--loading': isMinervaSuggestionSuccessState }"
+            >
+              {{ minervaPaginationLabel }}
+            </div>
             <div v-if="showMinervaPaginationArrows" class="minerva-pagination-actions">
               <cdx-button
                 class="minerva-pagination-btn"
@@ -6920,12 +6875,6 @@
               >
                 <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
               </cdx-button>
-            </div>
-            <div
-              class="minerva-pagination-count"
-              :class="{ 'minerva-pagination-count--loading': isMinervaSuggestionSuccessState }"
-            >
-              {{ minervaPaginationLabel }}
             </div>
           </div>
         </div>
@@ -8227,6 +8176,7 @@ let railRafId = null;
 let railScrollTimer = null;
 const isActivelyScrolling = ref(false);
 const revealedRailIds = ref(new Set());
+const animateRailIds = ref(new Set()); // IDs to animate — only first scroll reveal
 const firstPendingSuggestionInView = ref(false);
 const autoExpandAnimatingId = ref(null);
 
@@ -8308,6 +8258,7 @@ function updateActiveRail() {
       visible.push(id);
       if (!revealedRailIds.value.has(id)) {
         revealedRailIds.value.add(id);
+        animateRailIds.value = new Set([...animateRailIds.value, id]);
         changed = true;
       }
     }
@@ -9807,6 +9758,7 @@ const showMinervaPagination = computed(() => {
 function resetSuggestionState() {
   firstPendingSuggestionInView.value = false;
   revealedRailIds.value = new Set();
+  animateRailIds.value = new Set();
   veEntrySheetShown.value = false;
   clearMinervaNoMoreSuggestionsState();
   clearMinervaSuggestionSuccessState();
@@ -10354,6 +10306,16 @@ function getMinervaSuggestionCardTitle(suggestionId) {
     6: 'Adjust heading level',
     7: 'Fix year link',
     8: 'Redirect link',
+    11: 'Add a citation',
+    12: 'Add a citation',
+    13: 'Restructure section',
+    14: 'Redirect link',
+    15: 'Add a citation',
+    16: 'Add a citation',
+    17: 'Add a citation',
+    18: 'Add a citation',
+    19: 'Add a citation',
+    24: 'Add a citation',
     'tone': 'Revise tone',
     'paste': 'Pasted content',
   };
@@ -10361,23 +10323,40 @@ function getMinervaSuggestionCardTitle(suggestionId) {
 }
 
 function getMinervaSuggestionPrimaryActionLabel(suggestionId) {
-  if ([1, 2, 3].includes(suggestionId)) return 'Add citation';
+  if ([1, 2, 3, 11, 12, 15, 16, 17, 18, 19, 24].includes(suggestionId)) return 'Add citation';
   if (suggestionId === 4) return 'Remove link';
-  if (suggestionId === 5 || suggestionId === 'tone') return 'Improve tone';
+  if (suggestionId === 5) return 'Link specifically';
+  if (suggestionId === 6) return 'Adjust heading';
+  if (suggestionId === 7) return 'Fix year link';
+  if (suggestionId === 8 || suggestionId === 14) return 'Update link';
+  if (suggestionId === 13) return 'Restructure';
+  if (suggestionId === 'tone') return 'Revise';
   if (suggestionId === 'paste') return 'Review content';
-  return 'Remove link';
+  return 'Update link';
 }
 
 function getMinervaSuggestionCardDescription(suggestionId) {
+  const citationDesc = 'This information has no source. Help readers understand where this information is coming from by adding a citation.';
+  const redirectDesc = 'This link points to a redirect. Help readers get to the right destination by linking directly to the target page.';
   const descriptions = {
-    1: 'This information has no source. Help readers understand where this information is coming from by adding a citation.',
-    2: 'This information has no source. Help readers understand where this information is coming from by adding a citation.',
-    3: 'This information has no source. Help readers understand where this information is coming from by adding a citation.',
+    1: citationDesc,
+    2: citationDesc,
+    3: citationDesc,
     4: 'This link points to an external website. Help readers stay focused on the content by removing this link, moving it to the External links section, or converting it into a citation if appropriate.',
     5: 'This link points to a disambiguation page. Help readers reach the intended topic by linking to a more specific page.',
     6: 'This heading level may not fit the surrounding structure. Help readers navigate the article by adjusting this heading level.',
     7: 'This year is linked unnecessarily. Help readers stay focused on the article by fixing this year link.',
-    8: 'This link points to a redirect. Help readers get to the right destination by linking directly to the target page.',
+    8: redirectDesc,
+    11: citationDesc,
+    12: citationDesc,
+    13: 'This section may benefit from restructuring. Help readers follow the article by organizing this content more clearly.',
+    14: redirectDesc,
+    15: citationDesc,
+    16: citationDesc,
+    17: citationDesc,
+    18: citationDesc,
+    19: citationDesc,
+    24: citationDesc,
     'tone': 'Other editors often revise this kind of wording to have a more balanced tone.',
     'paste': 'Please avoid copying text from other sources, even if rephrased or cited. This could be considered copyright violation or plagiarism and may result in your content being removed or your account being blocked.',
   };
@@ -11864,6 +11843,10 @@ function openPaginationItem(id) {
   } else {
     const targetRef = getSuggestionRefById(id);
     if (targetRef) {
+      // Mark as revealed (no animation) when opened via pagination
+      if (!revealedRailIds.value.has(id)) {
+        revealedRailIds.value = new Set([...revealedRailIds.value, id]);
+      }
       suppressMinervaReturnDirectionDuringPaginationScroll();
       openSuggestionAtTarget(id, targetRef, true);
     }
@@ -12690,6 +12673,13 @@ function handleVEEntryEditOnMyOwn() {
   firstPendingSuggestionInView.value = true;
 }
 
+// Permanently suppress banner whenever the VE entry sheet closes (any reason)
+watch(showVEEntrySheet, (newVal, oldVal) => {
+  if (oldVal === true && !newVal) {
+    firstPendingSuggestionInView.value = true;
+  }
+});
+
 function openFirstPendingSuggestionForContext({ openMinervaAfterScroll = false } = {}) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
@@ -12704,6 +12694,15 @@ function openFirstPendingSuggestionForContext({ openMinervaAfterScroll = false }
     const targetRef = getSuggestionRefById(suggestionId);
     if (suggestionId && targetRef && targetRef.value) {
       openSuggestionAtTarget(suggestionId, targetRef, true, { openMinervaAfterScroll });
+      return;
+    }
+  }
+
+  const ids = getPendingSuggestionIdsForContext();
+  for (const id of ids) {
+    const targetRef = getSuggestionRefById(id);
+    if (targetRef) {
+      openSuggestionAtTarget(id, targetRef, true, { openMinervaAfterScroll });
       return;
     }
   }
@@ -21503,7 +21502,7 @@ function markArticleEdited() {
 .minerva-sheet-pagination {
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   gap: 8px;
   padding: 0;
   min-height: 38px;
@@ -21516,7 +21515,7 @@ function markArticleEdited() {
 }
 
 .minerva-pagination-count {
-  text-align: right;
+  text-align: left;
   font-size: 16px;
   line-height: 24px;
   color: var(--color-subtle, #54595d);
@@ -23952,13 +23951,18 @@ function markArticleEdited() {
   transform: scaleY(0);
   transform-origin: top;
   opacity: 0;
-  transition: opacity 150ms ease;
+  transition: none;
 }
 
-/* Visible rail: grow from top */
+/* Visible rail: instant show (no animation unless --animate is present) */
 .rail-on-reach .minerva-highlight-rail--visible {
   transform: scaleY(1);
   opacity: 1;
+  transition: none;
+}
+
+/* Animate the reveal only on first scroll reach */
+.rail-on-reach .minerva-highlight-rail--visible.minerva-highlight-rail--animate {
   transition: transform 300ms ease-out;
 }
 
@@ -23976,10 +23980,7 @@ function markArticleEdited() {
 
 /* Reduced motion: no animation */
 @media (prefers-reduced-motion: reduce) {
-  .rail-on-reach .minerva-highlight-rail {
-    transition: none;
-  }
-  .rail-on-reach .minerva-highlight-rail--visible {
+  .rail-on-reach .minerva-highlight-rail--visible.minerva-highlight-rail--animate {
     transition: none;
   }
 }
