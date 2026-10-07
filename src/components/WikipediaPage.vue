@@ -6897,12 +6897,6 @@
             v-if="(showMinervaPagination || isPersistentPaginationSuccessMode) && !showMinervaNoMoreSuggestionsState && !isMinervaDismissNextPromptVisible && !(isMinervaSuggestionSuccessState && isPaginationManualMode && feedbackAfterActionMode !== 'card') && !isPublishPromptMode && !isMinervaDismissFirstTimeState"
             class="minerva-sheet-pagination"
           >
-            <div
-              class="minerva-pagination-count"
-              :class="{ 'minerva-pagination-count--loading': isMinervaSuggestionSuccessState }"
-            >
-              {{ minervaPaginationLabel }}
-            </div>
             <div v-if="showMinervaPaginationArrows" class="minerva-pagination-actions">
               <cdx-button
                 class="minerva-pagination-btn"
@@ -6926,6 +6920,12 @@
               >
                 <cdx-icon :icon="cdxIconExpand" size="medium" class="minerva-pagination-icon" />
               </cdx-button>
+            </div>
+            <div
+              class="minerva-pagination-count"
+              :class="{ 'minerva-pagination-count--loading': isMinervaSuggestionSuccessState }"
+            >
+              {{ minervaPaginationLabel }}
             </div>
           </div>
         </div>
@@ -9741,10 +9741,7 @@ const minervaPaginationLabel = computed(() => {
   if (isPersistentPaginationSuccessMode.value) {
     return persistentPaginationSuccessLabel.value;
   }
-  if (isPersistentPaginationMode.value) {
-    return `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value}`;
-  }
-  return `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value} ${isEditCheckSheet.value ? 'checks' : 'suggestions'}`;
+  return `${minervaPaginationIndex.value + 1} of ${minervaPaginationTotal.value}`;
 });
 const minervaSuggestionHeaderIndicatorLabel = computed(() => {
   const ids = getPendingSuggestionIdsForContext();
@@ -9964,7 +9961,9 @@ function showSuccessHighlightInCard(suggestionId) {
 }
 
 function isScrollPreviewingId(id) {
-  return isMinervaSkin.value && suggestionPreviewWhileScrollingEnabled.value && scrollPreviewSuggestionId.value === id;
+  if (isMinervaSkin.value && suggestionPreviewWhileScrollingEnabled.value && scrollPreviewSuggestionId.value === id) return true;
+  if (isMinervaSkin.value && isMinervaSheetOpen.value && activeMinervaSuggestion.value === id) return true;
+  return false;
 }
 
 function activateSuccessHighlight(suggestionId, duration = 4000) {
@@ -19832,8 +19831,7 @@ function markArticleEdited() {
   background-color: transparent !important;
 }
 
-.minerva-skin .feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation,
-.minerva-skin .feedback-underlined-unselected.highlighted-text-wrapper--hover .highlighted-text-annotation {
+.minerva-skin.minerva-sheet-open .feedback-underlined-unselected.highlighted-text-wrapper--selected .highlighted-text-annotation {
   background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff)) !important;
 }
 
@@ -19879,8 +19877,17 @@ function markArticleEdited() {
   -webkit-box-decoration-break: clone;
 }
 
-.minerva-skin .highlighted-text-wrapper--hover .highlighted-text-annotation,
+/* Minerva: no blue on hover — keep default gray */
+.minerva-skin .highlighted-text-wrapper--hover .highlighted-text-annotation {
+  background-color: rgba(234, 236, 240, 0.65);
+}
+
+/* Minerva: blue only when selected AND sheet is open */
 .minerva-skin .highlighted-text-wrapper--selected .highlighted-text-annotation {
+  background-color: rgba(234, 236, 240, 0.65);
+}
+
+.minerva-skin.minerva-sheet-open .highlighted-text-wrapper--selected .highlighted-text-annotation {
   background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff));
 }
 
@@ -21496,8 +21503,8 @@ function markArticleEdited() {
 .minerva-sheet-pagination {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 12px;
+  justify-content: flex-end;
+  gap: 8px;
   padding: 0;
   min-height: 38px;
   height: 38px;
@@ -21509,11 +21516,10 @@ function markArticleEdited() {
 }
 
 .minerva-pagination-count {
-  text-align: left;
-  flex: 1;
+  text-align: right;
   font-size: 16px;
   line-height: 24px;
-  color: var(--color-base, #202122);
+  color: var(--color-subtle, #54595d);
 }
 
 .minerva-pagination-count--loading {
