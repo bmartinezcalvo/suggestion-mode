@@ -2979,7 +2979,9 @@
             <cdx-popover
               v-if="isMinervaSkin"
               v-model:open="showVEEntrySheet"
-              title="Suggested edits available"
+              title="Would you like to see suggested edits?"
+              :icon="cdxIconLightbulb"
+              class="ve-entry-popover"
               use-bottom-sheet
             >
               <div class="ve-entry-sheet-content">
@@ -12659,7 +12661,10 @@ function handleBannerKeydown(event) {
   }
 }
 
+let veEntryClosedViaViewSuggestions = false;
+
 function handleVEEntryViewSuggestions() {
+  veEntryClosedViaViewSuggestions = true;
   showVEEntrySheet.value = false;
   showSuggestions.value = true;
   nextTick(() => {
@@ -12673,10 +12678,13 @@ function handleVEEntryEditOnMyOwn() {
   firstPendingSuggestionInView.value = true;
 }
 
-// Permanently suppress banner whenever the VE entry sheet closes (any reason)
+// Permanently suppress banner when VE entry sheet closes without "View suggestions"
 watch(showVEEntrySheet, (newVal, oldVal) => {
   if (oldVal === true && !newVal) {
-    firstPendingSuggestionInView.value = true;
+    if (!veEntryClosedViaViewSuggestions) {
+      firstPendingSuggestionInView.value = true;
+    }
+    veEntryClosedViaViewSuggestions = false;
   }
 });
 
@@ -19095,6 +19103,18 @@ function markArticleEdited() {
 }
 
 /* VE Entry Sheet (inside cdx-popover bottom sheet) */
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__header {
+  padding: 16px 16px 0;
+}
+
+.ve-entry-popover .cdx-popover__header__icon {
+  color: var(--color-progressive, #36c);
+}
+
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body {
+  padding: 8px 16px 16px;
+}
+
 .ve-entry-sheet-content {
   display: flex;
   flex-direction: column;
@@ -19104,7 +19124,7 @@ function markArticleEdited() {
 .ve-entry-sheet__subtitle {
   font-size: 0.9375rem;
   color: var(--color-base, #202122);
-  margin: 0 0 8px;
+  margin: 0;
 }
 
 .ve-entry-sheet__btn-primary,
@@ -23973,8 +23993,8 @@ function markArticleEdited() {
   transition: none;
 }
 
-/* Blue highlighted text only while actively scrolling past that suggestion */
-.rail-on-reach.rail-is-scrolling .highlighted-text-wrapper--rail-active .highlighted-text-annotation {
+/* Blue highlighted text when rail is active (revealed) */
+.rail-on-reach .highlighted-text-wrapper--rail-active .highlighted-text-annotation {
   background-color: var(--suggestion-color-subtle, var(--background-color-progressive-subtle, #e8eeff)) !important;
 }
 
