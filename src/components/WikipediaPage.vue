@@ -19103,18 +19103,6 @@ function markArticleEdited() {
 }
 
 /* VE Entry Sheet (inside cdx-popover bottom sheet) */
-.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__header {
-  padding: 16px 16px 0;
-}
-
-.ve-entry-popover .cdx-popover__header__icon {
-  color: var(--color-progressive, #36c);
-}
-
-.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body {
-  padding: 8px 16px 16px;
-}
-
 .ve-entry-sheet-content {
   display: flex;
   flex-direction: column;
@@ -24232,4 +24220,23 @@ function markArticleEdited() {
 
 
 
+</style>
+
+<style>
+/* Unscoped: targets teleported cdx-popover elements for VE entry sheet */
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__header {
+  padding: 16px 16px 0;
+}
+
+.ve-entry-popover .cdx-popover__header__icon {
+  color: var(--color-icon-progressive, #36c);
+}
+
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body {
+  padding: 8px 16px 16px;
+}
+
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body--no-footer {
+  padding-bottom: 16px;
+}
 </style>
