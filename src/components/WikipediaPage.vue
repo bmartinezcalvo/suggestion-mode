@@ -1833,22 +1833,24 @@
                     </p>
                     <p>
                       In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <span
-                        v-if="isSuggestion5Pending || isSuccessHighlightActive(5)"
+                        v-if="showSuggestionsDisplay && (isSuggestion5Pending || isSuccessHighlightActive(5))"
                         ref="highlightedTextRef5"
                         class="suggestion-target suggestion-target--inline"
                         data-preview-suggestion-id="5"
                         :class="{
+                          'highlighted-text-wrapper': showSuggestions,
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
                           'highlighted-text-wrapper--selected': isSuggestion5Pending && showSuggestions && (isCardExpanded5 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 5) || isScrollPreviewingId(5)),
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
+                          'minerva-suggestion-target': isMinervaSkin && isSuggestion5Pending,
                           'suggestion-dismiss-right': dismissedSuggestionId === 5,
                           'highlighted-text-wrapper--rail-active': isRailActive(5)
                         }"
                         @mouseenter.stop="isTextHovered5 = true"
                         @mouseleave.stop="isTextHovered5 = false"
                         @click.stop="isSuggestion5Pending ? (isMinervaSkin ? openMinervaSuggestion(5) : (isCardExpanded5 = true)) : null"
-                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></span></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></template>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></span></span><span v-if="isMinervaSkin && isSuggestion5Pending && !isSuccessHighlightActive(5)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(5), 'minerva-highlight-rail--visible': isRailActive(5), 'minerva-highlight-rail--animate': animateRailIds.has(5) }" :style="getRailStyle(5)"></span><button v-if="isMinervaSkin && isSuggestion5Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="5" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(5)" @click.stop="openMinervaSuggestion(5)"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></button><span v-else-if="isMinervaSkin && showSuccessHighlightUI(5)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></template>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
                     </p>
                     <p>
                       Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
@@ -1998,14 +2000,19 @@
                       v-if="veLoadingPhase === 3"
                       :icon="cdxIconLightbulb"
                       size="medium"
-                      :class="veLoadingFoundCount > 0 ? 've-loading-bulb-active' : 've-loading-bulb-empty'"
+                      :style="{ color: veLoadingFoundCount > 0 ? 'var(--color-progressive, #36c)' : 'var(--color-placeholder-base, #c8ccd1)' }"
                     />
                     <span v-else class="ve-loading-spinner" />
                   </transition>
                 </div>
                 <div class="ve-loading-text-slot">
                   <transition name="ve-msg">
-                    <span :key="veLoadingPhase" class="ve-loading-message">{{ veLoadingMessage }}</span>
+                    <span :key="veLoadingPhase" class="ve-loading-message">
+                      <template v-if="veLoadingPhase === 3 && veLoadingFoundCount > 0">
+                        <strong class="ve-loading-count">{{ veLoadingFoundCount }}</strong>{{ veLoadingFoundCount === 1 ? ' suggestion found' : ' suggestions found' }}
+                      </template>
+                      <template v-else>{{ veLoadingMessage }}</template>
+                    </span>
                   </transition>
                 </div>
               </div>
@@ -2116,15 +2123,14 @@
                 </div>
                 <cdx-toggle-button
                   v-if="minervaToolbarToggleEnabled && !isPersistentPaginationMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
-                  v-show="veLoadingPhase === 0"
-                  v-model="showSuggestions"
+                  v-model="showSuggestionsToggleView"
                   quiet
                   aria-label="Toggle suggestions"
                   class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-toggle minerva-toolbar-fill"
-                  :class="{ 'minerva-toolbar-toggle--active': showSuggestions }"
+                  :class="{ 'minerva-toolbar-toggle--active': showSuggestions && veLoadingPhase === 0 }"
                 >
                   <span class="lightbulb-icon-wrapper">
-                    <span v-if="showSuggestions" class="bulb-rays">
+                    <span v-if="showSuggestions && veLoadingPhase === 0" class="bulb-rays">
                       <span class="ray ray-1"></span>
                       <span class="ray ray-2"></span>
                       <span class="ray ray-3"></span>
@@ -2133,7 +2139,7 @@
                     </span>
                     <cdx-icon :icon="cdxIconLightbulb" size="medium" />
                     <span
-                      v-if="showToggleBadge"
+                      v-if="showToggleBadge && veLoadingPhase === 0"
                       class="suggestions-badge"
                       :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse, 'suggestions-badge--loading-bounce': veLoadingBadgeBounce }"
                     >
@@ -2537,14 +2543,19 @@
                       v-if="veLoadingPhase === 3"
                       :icon="cdxIconLightbulb"
                       size="medium"
-                      :class="veLoadingFoundCount > 0 ? 've-loading-bulb-active' : 've-loading-bulb-empty'"
+                      :style="{ color: veLoadingFoundCount > 0 ? 'var(--color-progressive, #36c)' : 'var(--color-placeholder-base, #c8ccd1)' }"
                     />
                     <span v-else class="ve-loading-spinner" />
                   </transition>
                 </div>
                 <div class="ve-loading-text-slot">
                   <transition name="ve-msg">
-                    <span :key="veLoadingPhase" class="ve-loading-message">{{ veLoadingMessage }}</span>
+                    <span :key="veLoadingPhase" class="ve-loading-message">
+                      <template v-if="veLoadingPhase === 3 && veLoadingFoundCount > 0">
+                        <strong class="ve-loading-count">{{ veLoadingFoundCount }}</strong>{{ veLoadingFoundCount === 1 ? ' suggestion found' : ' suggestions found' }}
+                      </template>
+                      <template v-else>{{ veLoadingMessage }}</template>
+                    </span>
                   </transition>
                 </div>
               </div>
@@ -4458,22 +4469,24 @@
                     </p>
                     <p>
                       In Lorde's "Age, Race, Class, and Sex: Women Redefining Difference", she writes: "Certainly there are very real differences between us of race, age, and sex. But it is not those differences between us that are separating us. It is rather our refusal to recognize those differences, and to examine the distortions which result from our misnaming them and their effects upon human behavior and expectation." More specifically she states: "As White women ignore their built-in privilege of Whiteness and define woman in terms of their own experience alone, then women of color become 'other'."<sup class="citation-marker">[75]</sup> Self-identified as "a forty-nine-year-old Black lesbian feminist socialist mother of two,<sup class="citation-marker">[75]</sup> Lorde is considered as "other, deviant, inferior, or just plain wrong"<sup class="citation-marker">[75]</sup> in the eyes of the normative "White male heterosexual capitalist" social hierarchy. "We speak not of human difference, but of human deviance,"<sup class="citation-marker">[75]</sup> she writes. In this respect, her ideology coincides with <span
-                        v-if="isSuggestion5Pending || isSuccessHighlightActive(5)"
+                        v-if="showSuggestionsDisplay && (isSuggestion5Pending || isSuccessHighlightActive(5))"
                         ref="highlightedTextRef5"
                         class="suggestion-target suggestion-target--inline"
                         data-preview-suggestion-id="5"
                         :class="{
+                          'highlighted-text-wrapper': showSuggestions,
                           [nonSelectedHighlightClass]: showSuggestions,
                           'highlighted-text-wrapper--hover': isSuggestion5Pending && isHovered5 && showSuggestions && !isCardExpanded5,
                           'highlighted-text-wrapper--selected': isSuggestion5Pending && showSuggestions && (isCardExpanded5 || (showMinervaSuggestionCarousel && !minervaCarouselCollapsed && activeMinervaSuggestion === 5) || isScrollPreviewingId(5)),
                           'highlighted-text-wrapper--success': isSuccessHighlightActive(5),
+                          'minerva-suggestion-target': isMinervaSkin && isSuggestion5Pending,
                           'suggestion-dismiss-right': dismissedSuggestionId === 5,
                           'highlighted-text-wrapper--rail-active': isRailActive(5)
                         }"
                         @mouseenter.stop="isTextHovered5 = true"
                         @mouseleave.stop="isTextHovered5 = false"
                         @click.stop="isSuggestion5Pending ? (isMinervaSkin ? openMinervaSuggestion(5) : (isCardExpanded5 = true)) : null"
-                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></span></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></template>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
+                      ><span class="highlighted-text-content"><span class="highlighted-text-annotation"><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></span></span><span v-if="isMinervaSkin && isSuggestion5Pending && !isSuccessHighlightActive(5)" class="minerva-highlight-rail" :class="{ 'minerva-highlight-rail--success': isSuccessHighlightActive(5), 'minerva-highlight-rail--visible': isRailActive(5), 'minerva-highlight-rail--animate': animateRailIds.has(5) }" :style="getRailStyle(5)"></span><button v-if="isMinervaSkin && isSuggestion5Pending" type="button" class="minerva-suggestion-trigger" data-preview-suggestion-id="5" aria-label="Show suggestion" @mousedown.prevent @touchstart.stop.prevent="openMinervaSuggestion(5)" @click.stop="openMinervaSuggestion(5)"><cdx-icon :icon="cdxIconLightbulb" size="medium" /></button><span v-else-if="isMinervaSkin && showSuccessHighlightUI(5)" class="minerva-suggestion-trigger minerva-suggestion-trigger--success" aria-hidden="true"><svg width="20" height="20" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><path d="M10 1a9 9 0 110 18 9 9 0 010-18" fill="var(--color-success, #14866d)" /><path class="minerva-success-check" d="M5.5 11.2 L8.5 13.5 L14.5 6.5" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" /></svg></span></span><template v-else><a href="https://en.wikipedia.org/wiki/Womanism" target="_blank" rel="noopener">womanism</a></template>, which "allows Black women to affirm and celebrate their color and culture in a way that feminism does not."
                     </p>
                     <p>
                       Lorde defines racism, sexism, ageism, heterosexism, elitism and classism altogether and explains that an "ism" is an idea that what is being privileged is superior and has the right to govern anything else.<sup class="citation-marker">[76]</sup> Lorde argues that a mythical norm is what all bodies should be. According to Lorde, the mythical norm of US culture is White, thin, male, young, heterosexual, Christian, financially secure.<sup class="citation-marker">[75]</sup>
@@ -7662,6 +7675,11 @@ const veRailTrackVisible = ref(false);
 const veLoadingPhase = ref(0); // 0=off, 1=Loading editor, 2=Looking for suggestions, 3=N found, 4=fading out
 const veLoadingFoundCount = ref(0);
 const veLoadingBadgeBounce = ref(false);
+// Toggle button modelValue: shows as OFF (false) during loading, syncs to showSuggestions otherwise
+const showSuggestionsToggleView = computed({
+  get: () => veLoadingPhase.value > 0 ? false : showSuggestions.value,
+  set: (v) => { showSuggestions.value = v; }
+});
 const veLoadingMessage = computed(() => {
   if (veLoadingPhase.value === 1) return 'Loading editor…';
   if (veLoadingPhase.value === 2) return 'Looking for suggestions…';
@@ -16215,7 +16233,7 @@ function handleVECloseEditor() {
   }
   veDialogShownThisSession = true;
   const hasSuggestions = getPendingSuggestionIdsForContext().length > 0;
-  if (hasSuggestions && !hasUnsavedChanges.value) {
+  if (hasSuggestions && !hasUnsavedChanges.value && isFirstVESession.value) {
     showBeforeYouGoDialog.value = true;
   } else {
     showDiscardChangesDialog.value = true;

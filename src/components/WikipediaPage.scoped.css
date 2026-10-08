@@ -1778,14 +1778,20 @@
   to   { opacity: 0; }
 }
 
+/* Loading count: bold + progressive color */
+.ve-loading-count {
+  color: var(--color-progressive, #36c);
+  font-weight: 700;
+}
+
 /* Badge bounce after loading completes */
 .suggestions-badge--loading-bounce {
-  animation: badge-loading-bounce 450ms ease both;
+  animation: badge-loading-bounce 400ms ease both;
 }
 
 @keyframes badge-loading-bounce {
   0%   { transform: translate(50%, 50%) scale(1); }
-  50%  { transform: translate(50%, 50%) scale(1.45); }
+  50%  { transform: translate(50%, 50%) scale(1.2); }
   100% { transform: translate(50%, 50%) scale(1); }
 }
 
