@@ -758,7 +758,8 @@
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
                 'suggestions-banner--opening': isBannerOpening,
-                'suggestions-banner--scrolled': isEditToolbarScrolled
+                'suggestions-banner--scrolled': isEditToolbarScrolled,
+                'suggestions-banner--bounce': veViewSuggestionsBounce
               }"
               :role="showSuggestions ? 'button' : undefined"
               :tabindex="showSuggestions ? 0 : undefined"
@@ -785,7 +786,6 @@
                     <cdx-button
                       v-if="isFirstSuggestionNavigationMode && !isAutoScrollActive"
                       class="suggestions-banner-arrow-btn"
-                      :class="{ 'suggestions-banner-arrow-buttons--bounce': veViewSuggestionsBounce }"
                       action="progressive"
                       weight="quiet"
                       :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
@@ -799,8 +799,7 @@
                       :icon="cdxIconArrowDown"
                       size="medium"
                       :class="{
-                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp,
-                        'suggestions-banner-icon-only--bounce': veViewSuggestionsBounce
+                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp
                       }"
                     />
                     <span>View suggestions</span>
@@ -964,7 +963,7 @@
 
                   <div class="body-text">
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion18Pending || isSuccessHighlightActive(18))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion18Pending || isSuccessHighlightActive(18))"
                       ref="highlightedTextRef18"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -1001,7 +1000,7 @@
                       Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
                     </p>
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion19Pending || isSuccessHighlightActive(19))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion19Pending || isSuccessHighlightActive(19))"
                       ref="highlightedTextRef19"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -1038,7 +1037,7 @@
                       The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion24Pending || isSuccessHighlightActive(24))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion24Pending || isSuccessHighlightActive(24))"
                       ref="highlightedTextRef24"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -1489,7 +1488,7 @@
                 <div v-if="isMinervaSectionOpen('early-life')" class="minerva-accordion-panel">
                   <div class="body-text">
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion18Pending || isSuccessHighlightActive(18))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion18Pending || isSuccessHighlightActive(18))"
                       ref="highlightedTextRef18"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -1526,7 +1525,7 @@
                       Lorde was born on February 18, 1934, in <a href="https://en.wikipedia.org/wiki/New_York_City" target="_blank" rel="noopener">New York City</a> to Caribbean immigrants Frederick Byron Lorde and Linda Gertrude Belmar Lorde.<sup class="citation-marker">[7]</sup> Her father was born in <a href="https://en.wikipedia.org/wiki/Barbados" target="_blank" rel="noopener">Barbados</a>, and her mother was born on <a href="https://en.wikipedia.org/wiki/Carriacou" target="_blank" rel="noopener">Carriacou</a>, in <a href="https://en.wikipedia.org/wiki/Grenada" target="_blank" rel="noopener">Grenada</a>.<sup class="citation-marker">[8]</sup> Her mother sometimes passed as Spanish for work, while her father's darker skin was a source of tension with the Belmar family.<sup class="citation-marker">[9]</sup>
                     </p>
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion19Pending || isSuccessHighlightActive(19))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion19Pending || isSuccessHighlightActive(19))"
                       ref="highlightedTextRef19"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -1563,7 +1562,7 @@
                       The family settled in <a href="https://en.wikipedia.org/wiki/Harlem" target="_blank" rel="noopener">Harlem</a>, where Lorde grew up as the youngest of three daughters and was <a href="https://en.wikipedia.org/wiki/Myopia" target="_blank" rel="noopener">nearsighted</a> to the point of being legally blind.<sup class="citation-marker">[10]</sup> At age four she learned to read as she was learning to speak, with help from librarian <a href="https://en.wikipedia.org/wiki/Augusta_Braxton_Baker" target="_blank" rel="noopener">Augusta Braxton Baker</a> at the 135th Street branch of the <a href="https://en.wikipedia.org/wiki/New_York_Public_Library" target="_blank" rel="noopener">New York Public Library</a>, and her mother taught her to write soon after.<sup class="citation-marker">[11]</sup>
                     </p>
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion24Pending || isSuccessHighlightActive(24))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion24Pending || isSuccessHighlightActive(24))"
                       ref="highlightedTextRef24"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -2982,11 +2981,6 @@
             <!-- Loading Overlay (only covers content below toolbar) -->
             <div v-if="isLoading" class="loading-overlay"></div>
 
-            <!-- ProgressBar (centered, 32px below toolbar) -->
-            <div v-if="isLoading" class="loading-progress">
-              <cdx-progress-bar aria-label="Loading edit mode" />
-            </div>
-
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
             <cdx-popover
               v-if="isMinervaSkin"
@@ -3025,12 +3019,12 @@
               v-model:open="showBeforeYouGoDialog"
               title="Before you go"
               close-button-label="Close"
-              :primary-action="{ label: 'View suggestions', actionType: 'progressive' }"
-              :default-action="{ label: 'Leave the editor', actionType: 'default' }"
-              @primary="handleBeforeYouGoViewSuggestions"
-              @default="handleBeforeYouGoLeaveEditor"
             >
               There are some guided tasks to improve this article. Do you want to try them?
+              <template #footer>
+                <cdx-button action="progressive" weight="normal" size="large" @click="handleBeforeYouGoViewSuggestions">View suggestions</cdx-button>
+                <cdx-button action="default" weight="normal" size="large" @click="handleBeforeYouGoLeaveEditor">Leave the editor</cdx-button>
+              </template>
             </cdx-dialog>
 
             <!-- "Are you sure?" dialog: shown when closing editor with changes or no suggestions -->
@@ -3039,12 +3033,12 @@
               v-model:open="showDiscardChangesDialog"
               title="Are you sure?"
               close-button-label="Close"
-              :primary-action="{ label: 'Discard edits', actionType: 'destructive' }"
-              :default-action="{ label: 'Continue editing', actionType: 'default' }"
-              @primary="handleDiscardEditsConfirm"
-              @default="handleContinueEditing"
             >
               Are you sure you want to leave editing mode without publishing first?
+              <template #footer>
+                <cdx-button action="destructive" weight="normal" size="large" @click="handleDiscardEditsConfirm">Discard edits</cdx-button>
+                <cdx-button action="default" weight="normal" size="large" @click="handleContinueEditing">Continue editing</cdx-button>
+              </template>
             </cdx-dialog>
 
             <!-- Article Content Edit -->
@@ -3221,7 +3215,7 @@
                   
                   <div contenteditable="true" @input="markArticleEdited" @keydown="handleToneCheckKeydown" @paste="handlePaste" class="article-text-editable">
                     <p
-                      v-if="showSuggestionsDisplay && (isSuggestion18Pending || isSuccessHighlightActive(18))"
+                      v-if="showSuggestionsDisplay && isEditMode && (isSuggestion18Pending || isSuccessHighlightActive(18))"
                       ref="highlightedTextRef18"
                       :class="{
                         'highlighted-text-wrapper': showSuggestions,
@@ -3414,7 +3408,7 @@
                     <sup v-if="citationNumber1" class="citation-marker">[{{ citationNumber1 }}]</sup>
                   </p>
                   <p
-                    v-if="showSuggestionsDisplay && (isSuggestion19Pending || isSuccessHighlightActive(19))"
+                    v-if="showSuggestionsDisplay && isEditMode && (isSuggestion19Pending || isSuccessHighlightActive(19))"
                     ref="highlightedTextRef19"
                     :class="{
                       'highlighted-text-wrapper': showSuggestions,
@@ -3451,7 +3445,7 @@
                     From 1972 to 1987, Lorde resided on <a href="#">Staten Island</a>. During that time, in addition to writing and teaching she co-founded <a href="#">Kitchen Table: Women of Color Press</a>.
                   </p>
                   <p
-                    v-if="showSuggestionsDisplay && (isSuggestion24Pending || isSuccessHighlightActive(24))"
+                    v-if="showSuggestionsDisplay && isEditMode && (isSuggestion24Pending || isSuccessHighlightActive(24))"
                     ref="highlightedTextRef24"
                     :class="{
                       'highlighted-text-wrapper': showSuggestions,
@@ -7131,6 +7125,9 @@
               <cdx-field>
                 <template #label>Other features</template>
                 <!-- success state is always enabled, no longer a toggle -->
+                <cdx-checkbox v-if="isMinervaSkin" v-model="explainDismissedFirstTime">
+                  Explain dismissed suggestion the 1st time
+                </cdx-checkbox>
                 <cdx-checkbox v-model="noMoreSuggestionsEmptyStateEnabled">
                   Enable Empty State when completing/declining all suggestions (<a href="https://phabricator.wikimedia.org/T426062" target="_blank" rel="noopener">T426062</a>)
                 </cdx-checkbox>
@@ -7594,6 +7591,8 @@ const showDiscardChangesDialog = ref(false);
 const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
 let veInactivityTimerHandle = null;
+let veDialogShownThisSession = false;
+const explainDismissedFirstTime = ref(false);
 const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
 const forceEntryBannerSection = ref(null);
@@ -9419,6 +9418,7 @@ const isMinervaDismissNextPromptVisible = computed(() => (
 ));
 const isMinervaDismissFirstTimeState = computed(() => (
   isMinervaSkin.value &&
+  explainDismissedFirstTime.value &&
   dismissFirstTimeCardId.value !== null &&
   isMinervaSheetOpen.value
 ));
@@ -10104,6 +10104,7 @@ function closeVectorNoMoreSuggestionsDialog() {
 
 function openMinervaNoMoreSuggestionsStateSheet(mode) {
   if (!noMoreSuggestionsEmptyStateEnabled.value || !isMinervaSkin.value) return false;
+  if (getPendingSuggestionIdsForContext().length > 0) return false;
   clearMinervaSuggestionSuccessState();
   if (minervaNoMoreSuggestionsOpenTimer) {
     clearTimeout(minervaNoMoreSuggestionsOpenTimer);
@@ -15955,7 +15956,7 @@ function enterEditMode() {
         veEntrySheetShown.value = true;
       }
     }, 1000);
-  }, 2000);
+  }, 4000);
 }
 
 function exitEditMode() {
@@ -16033,6 +16034,15 @@ function handleVECloseEditor() {
     toggleEditMode();
     return;
   }
+  if (veDialogShownThisSession) {
+    isFirstVESession.value = false;
+    clearVEInactivityTimer();
+    veTriggerPulseId.value = null;
+    veViewSuggestionsBounce.value = false;
+    exitEditMode();
+    return;
+  }
+  veDialogShownThisSession = true;
   const hasSuggestions = getPendingSuggestionIdsForContext().length > 0;
   if (hasSuggestions && !hasUnsavedChanges.value) {
     showBeforeYouGoDialog.value = true;
@@ -18087,12 +18097,12 @@ function markArticleEdited() {
 }
 
 .ve-loading-label {
-  position: absolute;
+  position: fixed;
   left: 44px;
   top: 0;
   right: 0;
-  bottom: 0;
-  z-index: 10;
+  height: 42px;
+  z-index: 102;
   background: var(--background-color-base, #fff);
   display: flex;
   align-items: center;
@@ -22785,13 +22795,7 @@ function markArticleEdited() {
   color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
-.suggestions-banner-arrow-buttons--bounce :deep(.cdx-icon),
-.suggestions-banner-arrow-buttons--bounce :deep(svg) {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
-}
-
-.suggestions-banner-icon-only--bounce :deep(.cdx-icon),
-.suggestions-banner-icon-only--bounce :deep(svg) {
+.suggestions-banner--bounce {
   animation: arrow-bounce 8s ease-in-out 0s infinite;
 }
 
@@ -22968,10 +22972,7 @@ function markArticleEdited() {
   fill: var(--color-disabled, #a2a9b1);
 }
 
-.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-buttons--bounce :deep(.cdx-icon),
-.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-arrow-buttons--bounce :deep(svg),
-.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-icon-only--bounce :deep(.cdx-icon),
-.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner-icon-only--bounce :deep(svg) {
+.minerva-skin .minerva-suggestions-bar--arrow-only .suggestions-banner--bounce {
   animation: none;
 }
 
@@ -24430,10 +24431,10 @@ function markArticleEdited() {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 32px;
-  height: 32px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
-  background-color: rgba(51, 102, 204, 0.15);
+  background-color: rgba(51, 102, 204, 0.2);
   transform: translate(-50%, -50%);
   animation: ve-trigger-pulse 1.5s ease-out infinite;
   pointer-events: none;
@@ -24446,8 +24447,8 @@ function markArticleEdited() {
 }
 
 @keyframes ve-trigger-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.5); }
-  70%  { box-shadow: 0 0 0 8px rgba(51, 102, 204, 0); }
+  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4); }
+  70%  { box-shadow: 0 0 0 13px rgba(51, 102, 204, 0); }
   100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
 }
 
