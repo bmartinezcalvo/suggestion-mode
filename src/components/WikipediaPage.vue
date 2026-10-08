@@ -759,7 +759,7 @@
                 'suggestions-banner--closing': isBannerClosing,
                 'suggestions-banner--opening': isBannerOpening,
                 'suggestions-banner--scrolled': isEditToolbarScrolled,
-                'suggestions-banner--bounce': veViewSuggestionsBounce
+                'suggestions-banner--bounce': veViewSuggestionsBounce && !veIsScrolling
               }"
               :role="showSuggestions ? 'button' : undefined"
               :tabindex="showSuggestions ? 0 : undefined"
@@ -1952,7 +1952,7 @@
             <div
               v-if="isMinervaSkin && editToolbarImprovementsEnabled"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-improved"
-              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE }"
               @mousedown="handleToolbarMouseDown"
               @touchstart="handleToolbarMouseDown"
               @click="handleToolbarClick"
@@ -2238,7 +2238,7 @@
             <div
               v-else-if="isMinervaSkin && (activePrototype === 'option-1' || isArrowOnceMode)"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-spaced"
-              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE }"
               @mousedown="handleToolbarMouseDown"
               @touchstart="handleToolbarMouseDown"
               @click="handleToolbarClick"
@@ -2471,7 +2471,7 @@
             <div
               v-else-if="isMinervaSkin"
               class="editor-toolbar editor-toolbar--minerva"
-              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled }"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE }"
               @mousedown="handleToolbarMouseDown"
               @touchstart="handleToolbarMouseDown"
               @click="handleToolbarClick"
@@ -7590,7 +7590,9 @@ const showBeforeYouGoDialog = ref(false);
 const showDiscardChangesDialog = ref(false);
 const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
+const veIsScrolling = ref(false);
 let veInactivityTimerHandle = null;
+let veScrollDebounceTimer = null;
 let veDialogShownThisSession = false;
 const explainDismissedFirstTime = ref(false);
 const isBannerClosing = ref(false);
@@ -12741,6 +12743,17 @@ watch(showVEEntrySheet, (newVal, oldVal) => {
   }
 });
 
+watch(isEditMode, (isEdit) => {
+  if (!isEdit) {
+    showSuggestionsDisplay.value = false;
+    window.removeEventListener('scroll', onVEScroll);
+    if (veScrollDebounceTimer) { clearTimeout(veScrollDebounceTimer); veScrollDebounceTimer = null; }
+    veIsScrolling.value = false;
+  } else if (showSuggestions.value) {
+    showSuggestionsDisplay.value = true;
+  }
+});
+
 watch(veTriggerPulseId, (newId, oldId) => {
   if (oldId !== null) {
     const oldEl = document.querySelector(`[data-preview-suggestion-id="${oldId}"].minerva-suggestion-trigger`);
@@ -15936,6 +15949,8 @@ function enterEditMode() {
   hasUnsavedChangesManual.value = false;
   veTriggerPulseId.value = null;
   veViewSuggestionsBounce.value = false;
+  veIsScrolling.value = false;
+  minervaNoMoreSuggestionsState.value = null;
   clearVEInactivityTimer();
   nextTick(() => {
     captureEditSnapshot();
@@ -15993,7 +16008,7 @@ function findFirstVisibleSuggestionId(ids) {
     const el = document.querySelector(`[data-preview-suggestion-id="${id}"].minerva-suggestion-trigger`);
     if (el) {
       const rect = el.getBoundingClientRect();
-      if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+      if (rect.top >= 44 && rect.bottom <= window.innerHeight) {
         return id;
       }
     }
@@ -16001,9 +16016,25 @@ function findFirstVisibleSuggestionId(ids) {
   return null;
 }
 
+function onVEScroll() {
+  if (!pulsatingFirstTimeVE.value || !isFirstVESession.value || !isEditMode.value) return;
+  veIsScrolling.value = true;
+  const pendingIds = getPendingSuggestionIdsForContext();
+  const firstVisibleId = findFirstVisibleSuggestionId(pendingIds);
+  veTriggerPulseId.value = firstVisibleId;
+  if (veScrollDebounceTimer) clearTimeout(veScrollDebounceTimer);
+  veScrollDebounceTimer = setTimeout(() => {
+    veIsScrolling.value = false;
+    veScrollDebounceTimer = null;
+    veViewSuggestionsBounce.value = veTriggerPulseId.value === null && pendingIds.length > 0;
+  }, 300);
+}
+
 function handleVELoadComplete() {
   const pendingIds = getPendingSuggestionIdsForContext();
   if (pendingIds.length === 0) return;
+
+  window.addEventListener('scroll', onVEScroll, { passive: true });
 
   if (isFirstVESession.value) {
     const firstVisibleId = findFirstVisibleSuggestionId(pendingIds);
@@ -18096,13 +18127,17 @@ function markArticleEdited() {
   position: relative;
 }
 
+.editor-toolbar--ve-loading {
+  z-index: 200;
+}
+
 .ve-loading-label {
-  position: fixed;
+  position: absolute;
   left: 44px;
   top: 0;
   right: 0;
-  height: 42px;
-  z-index: 102;
+  bottom: 0;
+  z-index: 1;
   background: var(--background-color-base, #fff);
   display: flex;
   align-items: center;
@@ -22796,7 +22831,26 @@ function markArticleEdited() {
 }
 
 .suggestions-banner--bounce {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
+  animation: banner-bounce 8s ease-in-out 0s infinite;
+}
+
+@keyframes banner-bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  12.5% {
+    transform: translateY(-6px);
+  }
+  15% {
+    transform: translateY(0);
+  }
+  17.5% {
+    transform: translateY(-6px);
+  }
+  20% {
+    transform: translateY(0);
+  }
 }
 
 @keyframes arrow-bounce {
@@ -24467,5 +24521,18 @@ function markArticleEdited() {
 
 .ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body--no-footer {
   padding-bottom: 16px;
+}
+
+/* Dialog footer: full-width stacked buttons with vertical gap */
+.cdx-dialog__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 16px;
+}
+
+.cdx-dialog__footer .cdx-button {
+  width: 100%;
+  justify-content: center;
 }
 </style>
