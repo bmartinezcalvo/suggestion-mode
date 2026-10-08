@@ -782,7 +782,7 @@
                 'suggestions-banner--closing': isBannerClosing,
                 'suggestions-banner--opening': isBannerOpening,
                 'suggestions-banner--scrolled': isEditToolbarScrolled,
-                'suggestions-banner--bounce': veViewSuggestionsBounce && !veIsScrolling
+                'suggestions-banner--bounce': false
               }"
               :role="showSuggestions ? 'button' : undefined"
               :tabindex="showSuggestions ? 0 : undefined"
@@ -822,7 +822,8 @@
                       :icon="cdxIconArrowDown"
                       size="medium"
                       :class="{
-                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp
+                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp,
+                        'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling
                       }"
                     />
                     <span>View suggestions</span>
@@ -6026,7 +6027,10 @@
                         v-else
                         :icon="cdxIconArrowDown"
                         size="medium"
-                        :class="{ 'suggestions-banner-icon--up': showBannerPrimaryArrowUp }"
+                        :class="{
+                          'suggestions-banner-icon--up': showBannerPrimaryArrowUp,
+                          'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling
+                        }"
                       />
                       <span>View suggestions</span>
                     </template>
@@ -9868,7 +9872,6 @@ function resetSuggestionState() {
   isSuggestionResolved7.value = false;
   isSuggestionDeclined8.value = false;
   isSuggestionResolved8.value = false;
-  publishPromptShown.value = false;
   publishPromptSuggestionId.value = null;
   showFixedBottomPublishPrompt.value = false;
   isCardExpanded.value = false;
@@ -10234,11 +10237,17 @@ function maybeShowMinervaNoMoreSuggestionsState() {
     return false;
   }
 
+  const hasUserActed = completedSuggestionCount.value > 0 ||
+    isSuggestionDeclined1.value || isSuggestionDeclined2.value || isSuggestionDeclined3.value ||
+    isSuggestionDeclined4.value || isSuggestionDeclined5.value || isSuggestionDeclined6.value ||
+    isSuggestionDeclined7.value || isSuggestionDeclined8.value;
+
   if (minervaEditSectionOnly.value && sectionSuggestionCount.value === 0 && otherSuggestionCount.value > 0) {
+    if (!hasUserActed) return false;
     return openMinervaNoMoreSuggestionsStateSheet('section');
   }
 
-  if (!minervaEditSectionOnly.value && availableSuggestionCount.value === 0 && completedSuggestionCount.value > 0) {
+  if (!minervaEditSectionOnly.value && availableSuggestionCount.value === 0 && hasUserActed) {
     return openMinervaNoMoreSuggestionsStateSheet('article');
   }
 
@@ -12717,6 +12726,10 @@ function handleBannerClick() {
   }
   if (activePrototype.value === 'option-3' && isMinervaSkin.value) {
     hasUsedOption4Button.value = true;
+  }
+  if (pulsatingFirstTimeVE.value && isFirstVESession.value) {
+    veTriggerPulseId.value = null;
+    veViewSuggestionsBounce.value = false;
   }
   nextTick(() => {
     openFirstPendingSuggestionForContext({
@@ -16128,6 +16141,10 @@ function handleVECloseEditor() {
 
 function handleBeforeYouGoViewSuggestions() {
   showBeforeYouGoDialog.value = false;
+  if (pulsatingFirstTimeVE.value && isFirstVESession.value) {
+    veTriggerPulseId.value = null;
+    veViewSuggestionsBounce.value = false;
+  }
   openFirstPendingSuggestionForContext({ openMinervaAfterScroll: isMinervaSkin.value && isPaginationMode.value });
 }
 

@@ -8000,6 +8000,22 @@
 
 
 /* Gray rail track: visible in pulsating VE mode after loading completes */
+
+/* Article narrows and gray track slides in (mirrors minerva-suggestions-on--rail layout) */
+.ve-rail-track .main-content-area {
+  padding-right: 0;
+}
+
+.ve-rail-track .article-content-edit {
+  --minerva-suggestion-gutter: 44px;
+  padding-right: calc(var(--minerva-suggestion-gutter) + 16px);
+  position: relative;
+}
+
+.ve-rail-track .minerva-suggestion-target {
+  padding-right: 0;
+}
+
 .ve-rail-track .minerva-suggestion-target::after,
 .ve-rail-track :deep(.minerva-suggestion-target)::after {
   content: '';
@@ -8012,4 +8028,25 @@
   border-radius: 2px;
   z-index: 3;
   pointer-events: none;
+  animation: ve-rail-track-in 300ms ease-out both;
+}
+
+@keyframes ve-rail-track-in {
+  from { opacity: 0; transform: translateX(12px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+/* Fix inline suggestion target positioning: use paragraph as containing block
+   so rail/trigger align with the gray rail track in the page margin */
+.ve-rail-track p:has(.suggestion-target--inline.minerva-suggestion-target) {
+  position: relative;
+}
+
+.ve-rail-track .suggestion-target--inline.minerva-suggestion-target {
+  position: static;
+}
+
+/* Banner bounce on arrow icon only (not the whole banner button) */
+.suggestions-banner-icon--bounce {
+  animation: banner-bounce 8s ease-in-out 0s infinite;
 }
