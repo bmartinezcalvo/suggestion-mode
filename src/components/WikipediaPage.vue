@@ -12882,24 +12882,24 @@ function getPendingSuggestionIdsForContext() {
     if (minervaEditSectionOnly.value === 'theory' && isSuggestion5Pending.value) ids.push(5);
     return ids;
   }
-  if (!publishPromptEnabled.value && isSuggestion1Pending.value) ids.push(1);
-  if (isSuggestion8Pending.value) ids.push(8);
   if (isSuggestion18Pending.value) ids.push(18);
+  if (!publishPromptEnabled.value && isSuggestion1Pending.value) ids.push(1);
+  if (isSuggestion19Pending.value) ids.push(19);
+  if (isSuggestion24Pending.value) ids.push(24);
+  if (isSuggestion8Pending.value) ids.push(8);
   if (isSuggestion6Pending.value) ids.push(6);
   if (!publishPromptEnabled.value && isSuggestion2Pending.value) ids.push(2);
   if (isSuggestion4Pending.value) ids.push(4);
   if (isSuggestion7Pending.value) ids.push(7);
   if (!publishPromptEnabled.value && isSuggestion3Pending.value) ids.push(3);
-  if (isSuggestion5Pending.value) ids.push(5);
-  if (isSuggestion14Pending.value) ids.push(14);
-  if (isSuggestion15Pending.value) ids.push(15);
-  if (isSuggestion19Pending.value) ids.push(19);
-  if (isSuggestion24Pending.value) ids.push(24);
   if (isSuggestion11Pending.value) ids.push(11);
-  if (isSuggestion12Pending.value) ids.push(12);
   if (isSuggestion13Pending.value) ids.push(13);
+  if (isSuggestion12Pending.value) ids.push(12);
   if (isSuggestion16Pending.value) ids.push(16);
   if (isSuggestion17Pending.value) ids.push(17);
+  if (isSuggestion14Pending.value) ids.push(14);
+  if (isSuggestion15Pending.value) ids.push(15);
+  if (isSuggestion5Pending.value) ids.push(5);
   return ids;
 }
 
