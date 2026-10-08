@@ -11,7 +11,8 @@
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailMode ? 'minerva-expandable-rail-mode' : '',
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailOpen ? 'minerva-expandable-rail-open' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
-      isMinervaSkin && isEditMode && showRailOnReach ? 'rail-on-reach' : '',
+      isMinervaSkin && isEditMode && showRailOnReach && !pulsatingFirstTimeVE ? 'rail-on-reach' : '',
+      isMinervaSkin && isEditMode && pulsatingFirstTimeVE && !isLoading ? 've-rail-track' : '',
       isActivelyScrolling ? 'rail-is-scrolling' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -378,6 +379,28 @@
                 <!-- Suggestion 8 -->
                 <cdx-button v-if="item.id === 8" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(8)">Update link</cdx-button>
                 <cdx-button v-if="item.id === 8" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(8)">Dismiss</cdx-button>
+                <!-- Suggestions 11–17 -->
+                <cdx-button v-if="item.id === 11" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(11)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 11" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(11)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 12" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(12)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 12" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(12)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 13" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(13)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 13" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(13)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 14" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(14)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 14" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(14)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 15" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(15)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 15" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(15)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 16" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(16)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 16" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(16)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 17" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(17)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 17" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(17)">Dismiss</cdx-button>
+                <!-- Suggestions 18, 19, 24 -->
+                <cdx-button v-if="item.id === 18" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(18)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 18" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(18)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 19" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(19)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 19" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(19)">Dismiss</cdx-button>
+                <cdx-button v-if="item.id === 24" class="minerva-sheet-btn minerva-sheet-btn-primary" action="progressive" weight="normal" @click="handleResolveGenericSuggestion(24)">Add citation</cdx-button>
+                <cdx-button v-if="item.id === 24" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleDeclineGenericSuggestion(24)">Dismiss</cdx-button>
                 <!-- Edit check: tone -->
                 <cdx-button v-if="item.id === 'tone'" class="minerva-sheet-btn minerva-sheet-btn-primary minerva-sheet-btn--warning-confirm" action="default" weight="normal" @click="handleToneCheckRevise">Revise</cdx-button>
                 <cdx-button v-if="item.id === 'tone'" class="minerva-sheet-btn minerva-sheet-btn-secondary" action="default" weight="normal" @click="handleToneCheckDecline">Decline</cdx-button>
@@ -2072,6 +2095,7 @@
                 </div>
                 <cdx-toggle-button
                   v-if="minervaToolbarToggleEnabled && !isPersistentPaginationMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
+                  v-show="!(isLoading && pulsatingFirstTimeVE)"
                   v-model="showSuggestions"
                   quiet
                   aria-label="Toggle suggestions"
@@ -2979,7 +3003,7 @@
             </div>
 
             <!-- Loading Overlay (only covers content below toolbar) -->
-            <div v-if="isLoading" class="loading-overlay"></div>
+            <div v-if="isLoading && pulsatingFirstTimeVE" class="loading-overlay"></div>
 
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
             <cdx-popover
@@ -8874,6 +8898,7 @@ const toggleBadgeCount = computed(() => (
 ));
 const badgePulse = ref(false);
 const showToggleBadge = computed(() => {
+  if (isLoading.value && pulsatingFirstTimeVE.value) return false;
   if (activePrototype.value === 'option-1') {
     return toggleBadgeCount.value > 0;
   }
@@ -12481,7 +12506,9 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           dismissedSuggestionIdForUndo.value = currentId;
           if (isMinervaSkin.value) {
             closeMinervaSuggestion();
-            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+            if (explainDismissedFirstTime.value) {
+              window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+            }
           } else {
             dismissFirstTimeCardId.value = currentId;
           }
@@ -12535,7 +12562,9 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
           dismissedSuggestionIdForUndo.value = currentId;
           if (isMinervaSkin.value) {
             closeMinervaSuggestion();
-            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+            if (explainDismissedFirstTime.value) {
+              window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+            }
           } else {
             dismissFirstTimeCardId.value = currentId;
           }
@@ -12560,7 +12589,9 @@ function handleMinervaSuggestionResolutionAfterAction(currentId, wasCompleted = 
         dismissedSuggestionIdForUndo.value = currentId;
         if (isMinervaSkin.value) {
           closeMinervaSuggestion();
-          window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+          if (explainDismissedFirstTime.value) {
+            window.setTimeout(() => openMinervaDismissCardSheet(currentId), 200);
+          }
         } else {
           dismissFirstTimeCardId.value = currentId;
         }
@@ -13879,6 +13910,12 @@ function handleResolveGenericSuggestion(suggestionId) {
   } else if (suggestionId === 17) {
     isSuggestionResolved17.value = true;
     isCardExpanded17.value = false;
+  } else if (suggestionId === 18) {
+    isSuggestionResolved18.value = true;
+  } else if (suggestionId === 19) {
+    isSuggestionResolved19.value = true;
+  } else if (suggestionId === 24) {
+    isSuggestionResolved24.value = true;
   } else if (suggestionId === 20) {
     isSuggestionResolved20.value = true;
   } else if (suggestionId === 21) {
@@ -13961,6 +13998,12 @@ function handleDeclineGenericSuggestion(suggestionId) {
   } else if (suggestionId === 17) {
     isSuggestionDeclined17.value = true;
     isCardExpanded17.value = false;
+  } else if (suggestionId === 18) {
+    isSuggestionDeclined18.value = true;
+  } else if (suggestionId === 19) {
+    isSuggestionDeclined19.value = true;
+  } else if (suggestionId === 24) {
+    isSuggestionDeclined24.value = true;
   } else if (suggestionId === 20) {
     isSuggestionDeclined20.value = true;
   } else if (suggestionId === 21) {
@@ -16042,6 +16085,7 @@ function handleVELoadComplete() {
       veTriggerPulseId.value = firstVisibleId;
     } else {
       veViewSuggestionsBounce.value = true;
+      isBannerDelayReady.value = true;
     }
   } else {
     startVEInactivityTimer(pendingIds);
@@ -16129,6 +16173,10 @@ function openMinervaSuggestion(suggestionId, options = {}) {
   if (isMinervaSheetOpen.value && activeMinervaSuggestion.value === suggestionId) {
     closeMinervaSuggestion();
     return;
+  }
+  if (pulsatingFirstTimeVE.value && isFirstVESession.value) {
+    veTriggerPulseId.value = null;
+    veViewSuggestionsBounce.value = false;
   }
   if (publishPromptSuggestionId.value !== null) {
     publishPromptSuggestionId.value = null;

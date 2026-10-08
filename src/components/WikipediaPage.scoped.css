@@ -2846,17 +2846,17 @@
   margin-left: 2px;
 }
 
-/* Loading Overlay - covers entire page */
+/* Loading Overlay - covers content below toolbar (48px) */
 .loading-overlay {
   position: fixed;
-  top: 0;
+  top: 48px;
   left: 0;
   right: 0;
   bottom: 0;
   width: 100vw;
-  height: 100vh;
+  height: calc(100vh - 48px);
   background-color: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
-  z-index: 100; /* Higher z-index to cover suggestion card */
+  z-index: 100;
 }
 
 /* ProgressBar - centered on page */
@@ -7998,3 +7998,18 @@
 
 
 
+
+/* Gray rail track: visible in pulsating VE mode after loading completes */
+.ve-rail-track .minerva-suggestion-target::after,
+.ve-rail-track :deep(.minerva-suggestion-target)::after {
+  content: '';
+  position: absolute;
+  right: calc(var(--minerva-suggestion-gutter, 44px) - 61px);
+  top: 0;
+  bottom: 0;
+  width: 2px;
+  background-color: var(--color-placeholder-base, #c8ccd1);
+  border-radius: 2px;
+  z-index: 3;
+  pointer-events: none;
+}

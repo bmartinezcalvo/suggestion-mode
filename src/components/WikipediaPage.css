@@ -27,7 +27,7 @@
 
 @keyframes ve-trigger-pulse {
   0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4); }
-  70%  { box-shadow: 0 0 0 13px rgba(51, 102, 204, 0); }
+  70%  { box-shadow: 0 0 0 17px rgba(51, 102, 204, 0); }
   100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
 }
 
