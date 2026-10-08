@@ -809,6 +809,7 @@
                     <cdx-button
                       v-if="isFirstSuggestionNavigationMode && !isAutoScrollActive"
                       class="suggestions-banner-arrow-btn"
+                      :class="{ 'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling }"
                       action="progressive"
                       weight="quiet"
                       :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
@@ -6015,6 +6016,7 @@
                       <cdx-button
                         v-if="isFirstSuggestionNavigationMode && !isAutoScrollActive"
                         class="suggestions-banner-arrow-btn"
+                        :class="{ 'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling }"
                         action="progressive"
                         weight="quiet"
                         :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
@@ -16021,11 +16023,11 @@ function enterEditMode() {
   setTimeout(() => {
     isLoading.value = false;
     if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
-      // Short delay: let browser render full-width article first, then slide in the rail track
+      // Delay: show full-width article briefly, then slide in the rail track from the right
       setTimeout(() => {
         veRailTrackVisible.value = true;
         nextTick(() => handleVELoadComplete());
-      }, 80);
+      }, 400);
     }
     setTimeout(() => {
       if (isMinervaSkin.value && bottomSheetInVE.value && !pulsatingFirstTimeVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
