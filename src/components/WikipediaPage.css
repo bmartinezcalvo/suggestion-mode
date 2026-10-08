@@ -1,0 +1,62 @@
+/* Unscoped: targets teleported cdx-popover elements for VE entry sheet, and DOM-injected classes */
+
+/* VE trigger pulsating effect (1st time, 32px circle) */
+.minerva-suggestion-trigger--ve-pulse {
+  position: relative;
+}
+
+.minerva-suggestion-trigger--ve-pulse::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: rgba(51, 102, 204, 0.2);
+  transform: translate(-50%, -50%);
+  animation: ve-trigger-pulse 1.5s ease-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.minerva-suggestion-trigger--ve-pulse .cdx-icon {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes ve-trigger-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.4); }
+  70%  { box-shadow: 0 0 0 13px rgba(51, 102, 204, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
+}
+
+/* Unscoped: targets teleported cdx-popover elements for VE entry sheet */
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__header {
+  padding: 16px 16px 0;
+}
+
+.ve-entry-popover .cdx-popover__header__icon {
+  color: var(--color-icon-progressive, #36c);
+}
+
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body {
+  padding: 8px 16px 16px;
+}
+
+.ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__body--no-footer {
+  padding-bottom: 16px;
+}
+
+/* Dialog footer: full-width stacked buttons with vertical gap */
+.cdx-dialog__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 0 16px 16px;
+}
+
+.cdx-dialog__footer .cdx-button {
+  width: 100%;
+  justify-content: center;
+}
