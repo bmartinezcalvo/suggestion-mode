@@ -1659,6 +1659,7 @@
   z-index: 200;
 }
 
+/* Loading bar: positioned over toolbar buttons, left of X button */
 .ve-loading-label {
   position: absolute;
   left: 44px;
@@ -1675,21 +1676,135 @@
   color: var(--color-base, #202122);
   white-space: nowrap;
   overflow: hidden;
+  transition: opacity var(--transition-duration-medium, 300ms) ease;
 }
 
+.ve-loading-label--fading {
+  opacity: 0;
+}
+
+/* Icon slot: fixed 20px so spinner and lightbulb don't shift layout */
+.ve-loading-icon-slot {
+  position: relative;
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.ve-loading-icon-slot .cdx-icon,
+.ve-loading-icon-slot .ve-loading-spinner {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+/* Spinner */
 .ve-loading-spinner {
   width: 20px;
   height: 20px;
-  min-width: 20px;
   border: 2px solid var(--border-color-subtle, #c8ccd1);
   border-top-color: var(--color-progressive, #36c);
   border-radius: 50%;
   animation: ve-spinner-rotate 0.8s linear infinite;
-  flex-shrink: 0;
+  display: block;
 }
 
 @keyframes ve-spinner-rotate {
   to { transform: rotate(360deg); }
+}
+
+/* Lightbulb icon colors */
+.ve-loading-bulb-active {
+  color: var(--color-progressive, #36c);
+}
+
+.ve-loading-bulb-empty {
+  color: var(--color-placeholder-base, #c8ccd1);
+}
+
+/* Text slot: clipping container for slide animations */
+.ve-loading-text-slot {
+  position: relative;
+  overflow: hidden;
+  flex: 1;
+  height: 1.4em;
+}
+
+.ve-loading-message {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  white-space: nowrap;
+}
+
+/* Text enter: slides up from below */
+.ve-msg-enter-active {
+  animation: ve-msg-in 300ms ease-out both;
+}
+
+/* Text leave: slides up and fades out */
+.ve-msg-leave-active {
+  animation: ve-msg-out 250ms ease-in both;
+}
+
+@keyframes ve-msg-in {
+  from { opacity: 0; transform: translateY(calc(-50% + 12px)); }
+  to   { opacity: 1; transform: translateY(-50%); }
+}
+
+@keyframes ve-msg-out {
+  from { opacity: 1; transform: translateY(-50%); }
+  to   { opacity: 0; transform: translateY(calc(-50% - 12px)); }
+}
+
+/* Icon enter: lightbulb bounces in */
+.ve-icon-enter-active {
+  animation: ve-icon-bounce-in 400ms cubic-bezier(0.3, 1.6, 0.5, 1) both;
+}
+
+/* Icon leave: spinner fades out */
+.ve-icon-leave-active {
+  animation: ve-icon-fade-out 250ms ease-in both;
+}
+
+@keyframes ve-icon-bounce-in {
+  from { transform: scale(0); opacity: 0; }
+  to   { transform: scale(1); opacity: 1; }
+}
+
+@keyframes ve-icon-fade-out {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/* Badge bounce after loading completes */
+.suggestions-badge--loading-bounce {
+  animation: badge-loading-bounce 450ms ease both;
+}
+
+@keyframes badge-loading-bounce {
+  0%   { transform: translate(50%, 50%) scale(1); }
+  50%  { transform: translate(50%, 50%) scale(1.45); }
+  100% { transform: translate(50%, 50%) scale(1); }
+}
+
+/* prefers-reduced-motion: remove all animations, use instant transitions */
+@media (prefers-reduced-motion: reduce) {
+  .ve-msg-enter-active,
+  .ve-msg-leave-active,
+  .ve-icon-enter-active,
+  .ve-icon-leave-active {
+    animation: none;
+  }
+
+  .ve-loading-label {
+    transition: none;
+  }
+
+  .suggestions-badge--loading-bounce {
+    animation: none;
+  }
 }
 
 .editor-toolbar--minerva-spaced {

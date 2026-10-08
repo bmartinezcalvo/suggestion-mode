@@ -1986,10 +1986,29 @@
               <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="handleVECloseEditor">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
-              <span v-if="isLoading && pulsatingFirstTimeVE" class="ve-loading-label">
-                <span class="ve-loading-spinner"></span>
-                Looking for suggestions...
-              </span>
+              <div
+                v-if="veLoadingPhase > 0"
+                class="ve-loading-label"
+                :class="{ 've-loading-label--fading': veLoadingPhase === 4 }"
+                aria-live="polite"
+              >
+                <div class="ve-loading-icon-slot">
+                  <transition name="ve-icon">
+                    <cdx-icon
+                      v-if="veLoadingPhase === 3"
+                      :icon="cdxIconLightbulb"
+                      size="medium"
+                      :class="veLoadingFoundCount > 0 ? 've-loading-bulb-active' : 've-loading-bulb-empty'"
+                    />
+                    <span v-else class="ve-loading-spinner" />
+                  </transition>
+                </div>
+                <div class="ve-loading-text-slot">
+                  <transition name="ve-msg">
+                    <span :key="veLoadingPhase" class="ve-loading-message">{{ veLoadingMessage }}</span>
+                  </transition>
+                </div>
+              </div>
               <div
                 ref="minervaToolbarScrollAreaRef"
                 class="minerva-toolbar-scroll-area"
@@ -2097,7 +2116,7 @@
                 </div>
                 <cdx-toggle-button
                   v-if="minervaToolbarToggleEnabled && !isPersistentPaginationMode && (showSuggestionToggle || (!showSuggestionToggle && !showSuggestions))"
-                  v-show="!(isLoading && pulsatingFirstTimeVE)"
+                  v-show="veLoadingPhase === 0"
                   v-model="showSuggestions"
                   quiet
                   aria-label="Toggle suggestions"
@@ -2116,7 +2135,7 @@
                     <span
                       v-if="showToggleBadge"
                       class="suggestions-badge"
-                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse }"
+                      :class="{ 'suggestions-badge--zero': showToggleBadgeZero, 'suggestions-badge--pulse': badgePulse, 'suggestions-badge--loading-bounce': veLoadingBadgeBounce }"
                     >
                       {{ toggleBadgeCount }}
                     </span>
@@ -2506,10 +2525,29 @@
               <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="handleVECloseEditor">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
-              <span v-if="isLoading && pulsatingFirstTimeVE" class="ve-loading-label">
-                <span class="ve-loading-spinner"></span>
-                Looking for suggestions...
-              </span>
+              <div
+                v-if="veLoadingPhase > 0"
+                class="ve-loading-label"
+                :class="{ 've-loading-label--fading': veLoadingPhase === 4 }"
+                aria-live="polite"
+              >
+                <div class="ve-loading-icon-slot">
+                  <transition name="ve-icon">
+                    <cdx-icon
+                      v-if="veLoadingPhase === 3"
+                      :icon="cdxIconLightbulb"
+                      size="medium"
+                      :class="veLoadingFoundCount > 0 ? 've-loading-bulb-active' : 've-loading-bulb-empty'"
+                    />
+                    <span v-else class="ve-loading-spinner" />
+                  </transition>
+                </div>
+                <div class="ve-loading-text-slot">
+                  <transition name="ve-msg">
+                    <span :key="veLoadingPhase" class="ve-loading-message">{{ veLoadingMessage }}</span>
+                  </transition>
+                </div>
+              </div>
               <button
                 class="toolbar-btn toolbar-btn-icon-only"
                 :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
@@ -7621,6 +7659,18 @@ const showDiscardChangesDialog = ref(false);
 const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
 const veRailTrackVisible = ref(false);
+const veLoadingPhase = ref(0); // 0=off, 1=Loading editor, 2=Looking for suggestions, 3=N found, 4=fading out
+const veLoadingFoundCount = ref(0);
+const veLoadingBadgeBounce = ref(false);
+const veLoadingMessage = computed(() => {
+  if (veLoadingPhase.value === 1) return 'Loading editor…';
+  if (veLoadingPhase.value === 2) return 'Looking for suggestions…';
+  if (veLoadingPhase.value === 3) {
+    const n = veLoadingFoundCount.value;
+    return n === 0 ? 'No suggestions found' : `${n} suggestion${n === 1 ? '' : 's'} found`;
+  }
+  return '';
+});
 const veIsScrolling = ref(false);
 let veInactivityTimerHandle = null;
 let veScrollDebounceTimer = null;
@@ -10334,6 +10384,8 @@ function clearEditModeUiState() {
   isIntroOnlyMode.value = false;
   isEditMenuSheetOpen.value = false;
   persistentPaginationHasOpenedSheet.value = false;
+  veLoadingPhase.value = 0;
+  veLoadingBadgeBounce.value = false;
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
@@ -16011,7 +16063,12 @@ function enterEditMode() {
   veRailTrackVisible.value = false;
   veIsScrolling.value = false;
   minervaNoMoreSuggestionsState.value = null;
+  veLoadingBadgeBounce.value = false;
   clearVEInactivityTimer();
+  if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
+    veLoadingPhase.value = 1;
+    setTimeout(() => { veLoadingPhase.value = 2; }, 1500);
+  }
   nextTick(() => {
     captureEditSnapshot();
   });
@@ -16026,7 +16083,25 @@ function enterEditMode() {
       // Delay: show full-width article briefly, then slide in the rail track from the right
       setTimeout(() => {
         veRailTrackVisible.value = true;
-        nextTick(() => handleVELoadComplete());
+        nextTick(() => {
+          handleVELoadComplete();
+          // Step 3: show suggestion count in loading bar
+          veLoadingFoundCount.value = getPendingSuggestionIdsForContext().length;
+          veLoadingPhase.value = 3;
+          // After 1.3s, fade out loading bar and bounce badge
+          setTimeout(() => {
+            veLoadingPhase.value = 4;
+            setTimeout(() => {
+              veLoadingPhase.value = 0;
+              if (veLoadingFoundCount.value > 0) {
+                setTimeout(() => {
+                  veLoadingBadgeBounce.value = true;
+                  setTimeout(() => { veLoadingBadgeBounce.value = false; }, 500);
+                }, 200);
+              }
+            }, 300);
+          }, 1300);
+        });
       }, 400);
     }
     setTimeout(() => {
