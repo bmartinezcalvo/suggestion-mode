@@ -785,6 +785,7 @@
                     <cdx-button
                       v-if="isFirstSuggestionNavigationMode && !isAutoScrollActive"
                       class="suggestions-banner-arrow-btn"
+                      :class="{ 'suggestions-banner-arrow-buttons--bounce': veViewSuggestionsBounce }"
                       action="progressive"
                       weight="quiet"
                       :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
@@ -797,7 +798,10 @@
                       v-else
                       :icon="cdxIconArrowDown"
                       size="medium"
-                      :class="{ 'suggestions-banner-icon--up': showBannerPrimaryArrowUp }"
+                      :class="{
+                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp,
+                        'suggestions-banner-icon-only--bounce': veViewSuggestionsBounce
+                      }"
                     />
                     <span>View suggestions</span>
                   </template>
@@ -1955,9 +1959,13 @@
               @click="handleToolbarClick"
               @touchend="handleToolbarClick"
             >
-              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="toggleEditMode">
+              <button class="toolbar-btn toolbar-btn-icon-only minerva-toolbar-fixed" aria-label="Close" @click="handleVECloseEditor">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
+              <span v-if="isLoading && pulsatingFirstTimeVE" class="ve-loading-label">
+                <span class="ve-loading-spinner"></span>
+                Looking for suggestions...
+              </span>
               <div
                 ref="minervaToolbarScrollAreaRef"
                 class="minerva-toolbar-scroll-area"
@@ -2470,9 +2478,13 @@
               @click="handleToolbarClick"
               @touchend="handleToolbarClick"
             >
-              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="toggleEditMode">
+              <button class="toolbar-btn toolbar-btn-icon-only" aria-label="Close" @click="handleVECloseEditor">
                 <cdx-icon :icon="cdxIconClose" size="medium" />
               </button>
+              <span v-if="isLoading && pulsatingFirstTimeVE" class="ve-loading-label">
+                <span class="ve-loading-spinner"></span>
+                Looking for suggestions...
+              </span>
               <button
                 class="toolbar-btn toolbar-btn-icon-only"
                 :class="{ 'toolbar-btn-disabled': !hasUnsavedChanges }"
@@ -3006,6 +3018,34 @@
                 </cdx-button>
               </div>
             </cdx-popover>
+
+            <!-- "Before you go" dialog: shown when closing editor with pending suggestions and no changes -->
+            <cdx-dialog
+              v-if="pulsatingFirstTimeVE && isMinervaSkin"
+              v-model:open="showBeforeYouGoDialog"
+              title="Before you go"
+              close-button-label="Close"
+              :primary-action="{ label: 'View suggestions', actionType: 'progressive' }"
+              :default-action="{ label: 'Leave the editor', actionType: 'default' }"
+              @primary="handleBeforeYouGoViewSuggestions"
+              @default="handleBeforeYouGoLeaveEditor"
+            >
+              There are some guided tasks to improve this article. Do you want to try them?
+            </cdx-dialog>
+
+            <!-- "Are you sure?" dialog: shown when closing editor with changes or no suggestions -->
+            <cdx-dialog
+              v-if="pulsatingFirstTimeVE && isMinervaSkin"
+              v-model:open="showDiscardChangesDialog"
+              title="Are you sure?"
+              close-button-label="Close"
+              :primary-action="{ label: 'Discard edits', actionType: 'destructive' }"
+              :default-action="{ label: 'Continue editing', actionType: 'default' }"
+              @primary="handleDiscardEditsConfirm"
+              @default="handleContinueEditing"
+            >
+              Are you sure you want to leave editing mode without publishing first?
+            </cdx-dialog>
 
             <!-- Article Content Edit -->
             <div
@@ -7069,19 +7109,22 @@
               </cdx-field>
               <cdx-field>
                 <template #label>Ensure people see suggestions</template>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="suggestionPreviewWhileScrollingEnabled">
+                <cdx-checkbox v-if="isMinervaSkin" v-model="pulsatingFirstTimeVE">
+                  Pulsating effect the 1st time entering VE
+                </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="suggestionPreviewWhileScrollingEnabled" :disabled="pulsatingFirstTimeVE">
                   Suggestion preview while scrolling
                 </cdx-checkbox>
-                <cdx-checkbox v-model="showRailOnReach">
+                <cdx-checkbox v-model="showRailOnReach" :disabled="pulsatingFirstTimeVE && isMinervaSkin">
                   Show rail when reaching suggestions
                 </cdx-checkbox>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="showEditMenuOnMobile">
+                <cdx-checkbox v-if="isMinervaSkin" v-model="showEditMenuOnMobile" :disabled="pulsatingFirstTimeVE">
                   Bottom sheet in read mode
                 </cdx-checkbox>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="bottomSheetInVE">
+                <cdx-checkbox v-if="isMinervaSkin" v-model="bottomSheetInVE" :disabled="pulsatingFirstTimeVE">
                   Bottom sheet in VE
                 </cdx-checkbox>
-                <cdx-checkbox v-model="expandFirstSuggestionOnReach">
+                <cdx-checkbox v-model="expandFirstSuggestionOnReach" :disabled="pulsatingFirstTimeVE && isMinervaSkin">
                   Expand the first suggestion on first reach
                 </cdx-checkbox>
               </cdx-field>
@@ -7542,6 +7585,15 @@ const showSuggestionNotification = ref(false);
 const showSuggestionToggle = ref(true);
 const isBannerDismissed = ref(false);
 const isBannerDelayReady = ref(false);
+
+// Pulsating first-time VE feature
+const pulsatingFirstTimeVE = ref(true);
+const isFirstVESession = ref(true);
+const showBeforeYouGoDialog = ref(false);
+const showDiscardChangesDialog = ref(false);
+const veTriggerPulseId = ref(null);
+const veViewSuggestionsBounce = ref(false);
+let veInactivityTimerHandle = null;
 const isBannerClosing = ref(false);
 const isBannerOpening = ref(false);
 const forceEntryBannerSection = ref(null);
@@ -12688,6 +12740,19 @@ watch(showVEEntrySheet, (newVal, oldVal) => {
   }
 });
 
+watch(veTriggerPulseId, (newId, oldId) => {
+  if (oldId !== null) {
+    const oldEl = document.querySelector(`[data-preview-suggestion-id="${oldId}"].minerva-suggestion-trigger`);
+    oldEl?.classList.remove('minerva-suggestion-trigger--ve-pulse');
+  }
+  if (newId !== null) {
+    nextTick(() => {
+      const el = document.querySelector(`[data-preview-suggestion-id="${newId}"].minerva-suggestion-trigger`);
+      el?.classList.add('minerva-suggestion-trigger--ve-pulse');
+    });
+  }
+});
+
 function openFirstPendingSuggestionForContext({ openMinervaAfterScroll = false } = {}) {
   if (!isEditMode.value || !showSuggestions.value) return;
 
@@ -15868,18 +15933,24 @@ function enterEditMode() {
   isSkinMenuOpen.value = false;
   isLoading.value = true;
   hasUnsavedChangesManual.value = false;
+  veTriggerPulseId.value = null;
+  veViewSuggestionsBounce.value = false;
+  clearVEInactivityTimer();
   nextTick(() => {
     captureEditSnapshot();
   });
   isBannerDelayReady.value = false;
   isBannerClosing.value = false;
   isBannerOpening.value = false;
-  
+
   // Hide loading overlay after 2 seconds, then show VE entry sheet if enabled (first time only)
   setTimeout(() => {
     isLoading.value = false;
+    if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
+      nextTick(() => handleVELoadComplete());
+    }
     setTimeout(() => {
-      if (isMinervaSkin.value && bottomSheetInVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
+      if (isMinervaSkin.value && bottomSheetInVE.value && !pulsatingFirstTimeVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
         showVEEntrySheet.value = true;
         veEntrySheetShown.value = true;
       }
@@ -15905,6 +15976,96 @@ function toggleEditMode() {
     return;
   }
   exitEditMode();
+}
+
+// --- Pulsating first-time VE feature ---
+
+function clearVEInactivityTimer() {
+  if (veInactivityTimerHandle !== null) {
+    clearTimeout(veInactivityTimerHandle);
+    veInactivityTimerHandle = null;
+  }
+}
+
+function findFirstVisibleSuggestionId(ids) {
+  for (const id of ids) {
+    const el = document.querySelector(`[data-preview-suggestion-id="${id}"].minerva-suggestion-trigger`);
+    if (el) {
+      const rect = el.getBoundingClientRect();
+      if (rect.top >= 0 && rect.bottom <= window.innerHeight) {
+        return id;
+      }
+    }
+  }
+  return null;
+}
+
+function handleVELoadComplete() {
+  const pendingIds = getPendingSuggestionIdsForContext();
+  if (pendingIds.length === 0) return;
+
+  if (isFirstVESession.value) {
+    const firstVisibleId = findFirstVisibleSuggestionId(pendingIds);
+    if (firstVisibleId !== null) {
+      veTriggerPulseId.value = firstVisibleId;
+    } else {
+      veViewSuggestionsBounce.value = true;
+    }
+  } else {
+    startVEInactivityTimer(pendingIds);
+  }
+}
+
+function startVEInactivityTimer(pendingIds) {
+  clearVEInactivityTimer();
+  veInactivityTimerHandle = setTimeout(() => {
+    const firstVisibleId = findFirstVisibleSuggestionId(pendingIds);
+    if (firstVisibleId !== null) {
+      firstSuggestionBounceActiveId.value = firstVisibleId;
+    } else {
+      veViewSuggestionsBounce.value = true;
+    }
+  }, 3000);
+}
+
+function handleVECloseEditor() {
+  if (!pulsatingFirstTimeVE.value || !isMinervaSkin.value) {
+    toggleEditMode();
+    return;
+  }
+  const hasSuggestions = getPendingSuggestionIdsForContext().length > 0;
+  if (hasSuggestions && !hasUnsavedChanges.value) {
+    showBeforeYouGoDialog.value = true;
+  } else {
+    showDiscardChangesDialog.value = true;
+  }
+}
+
+function handleBeforeYouGoViewSuggestions() {
+  showBeforeYouGoDialog.value = false;
+  openFirstPendingSuggestionForContext({ openMinervaAfterScroll: isMinervaSkin.value && isPaginationMode.value });
+}
+
+function handleBeforeYouGoLeaveEditor() {
+  showBeforeYouGoDialog.value = false;
+  isFirstVESession.value = false;
+  clearVEInactivityTimer();
+  veTriggerPulseId.value = null;
+  veViewSuggestionsBounce.value = false;
+  exitEditMode();
+}
+
+function handleDiscardEditsConfirm() {
+  showDiscardChangesDialog.value = false;
+  isFirstVESession.value = false;
+  clearVEInactivityTimer();
+  veTriggerPulseId.value = null;
+  veViewSuggestionsBounce.value = false;
+  exitEditMode();
+}
+
+function handleContinueEditing() {
+  showDiscardChangesDialog.value = false;
 }
 
 function toggleSkinMenu() {
@@ -17922,6 +18083,40 @@ function markArticleEdited() {
 .editor-toolbar--minerva {
   justify-content: space-between;
   gap: 0;
+  position: relative;
+}
+
+.ve-loading-label {
+  position: absolute;
+  left: 44px;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 10;
+  background: var(--background-color-base, #fff);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 12px;
+  font-size: 14px;
+  color: var(--color-base, #202122);
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.ve-loading-spinner {
+  width: 20px;
+  height: 20px;
+  min-width: 20px;
+  border: 2px solid var(--border-color-subtle, #c8ccd1);
+  border-top-color: var(--color-progressive, #36c);
+  border-radius: 50%;
+  animation: ve-spinner-rotate 0.8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes ve-spinner-rotate {
+  to { transform: rotate(360deg); }
 }
 
 .editor-toolbar--minerva-spaced {
@@ -24223,6 +24418,39 @@ function markArticleEdited() {
 </style>
 
 <style>
+/* Unscoped: targets teleported cdx-popover elements for VE entry sheet, and DOM-injected classes */
+
+/* VE trigger pulsating effect (1st time, 32px circle) */
+.minerva-suggestion-trigger--ve-pulse {
+  position: relative;
+}
+
+.minerva-suggestion-trigger--ve-pulse::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: rgba(51, 102, 204, 0.15);
+  transform: translate(-50%, -50%);
+  animation: ve-trigger-pulse 1.5s ease-out infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.minerva-suggestion-trigger--ve-pulse .cdx-icon {
+  position: relative;
+  z-index: 1;
+}
+
+@keyframes ve-trigger-pulse {
+  0%   { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0.5); }
+  70%  { box-shadow: 0 0 0 8px rgba(51, 102, 204, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(51, 102, 204, 0); }
+}
+
 /* Unscoped: targets teleported cdx-popover elements for VE entry sheet */
 .ve-entry-popover.cdx-popover--bottom-sheet .cdx-popover__header {
   padding: 16px 16px 0;
