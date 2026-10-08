@@ -8048,5 +8048,6 @@
 
 /* Banner bounce on arrow icon only (not the whole banner button) */
 .suggestions-banner-icon--bounce {
-  animation: banner-bounce 8s ease-in-out 0s infinite;
+  display: inline-block;
+  animation: arrow-bounce 8s ease-in-out 0s infinite;
 }

@@ -12,7 +12,7 @@
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailOpen ? 'minerva-expandable-rail-open' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
       isMinervaSkin && isEditMode && showRailOnReach && !pulsatingFirstTimeVE ? 'rail-on-reach' : '',
-      isMinervaSkin && isEditMode && pulsatingFirstTimeVE && !isLoading ? 've-rail-track' : '',
+      isMinervaSkin && isEditMode && pulsatingFirstTimeVE && veRailTrackVisible ? 've-rail-track' : '',
       isActivelyScrolling ? 'rail-is-scrolling' : '',
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
@@ -7618,6 +7618,7 @@ const showBeforeYouGoDialog = ref(false);
 const showDiscardChangesDialog = ref(false);
 const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
+const veRailTrackVisible = ref(false);
 const veIsScrolling = ref(false);
 let veInactivityTimerHandle = null;
 let veScrollDebounceTimer = null;
@@ -16005,6 +16006,7 @@ function enterEditMode() {
   hasUnsavedChangesManual.value = false;
   veTriggerPulseId.value = null;
   veViewSuggestionsBounce.value = false;
+  veRailTrackVisible.value = false;
   veIsScrolling.value = false;
   minervaNoMoreSuggestionsState.value = null;
   clearVEInactivityTimer();
@@ -16019,7 +16021,11 @@ function enterEditMode() {
   setTimeout(() => {
     isLoading.value = false;
     if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
-      nextTick(() => handleVELoadComplete());
+      // Short delay: let browser render full-width article first, then slide in the rail track
+      setTimeout(() => {
+        veRailTrackVisible.value = true;
+        nextTick(() => handleVELoadComplete());
+      }, 80);
     }
     setTimeout(() => {
       if (isMinervaSkin.value && bottomSheetInVE.value && !pulsatingFirstTimeVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
@@ -16194,6 +16200,7 @@ function openMinervaSuggestion(suggestionId, options = {}) {
   if (pulsatingFirstTimeVE.value && isFirstVESession.value) {
     veTriggerPulseId.value = null;
     veViewSuggestionsBounce.value = false;
+    isFirstVESession.value = false;
   }
   if (publishPromptSuggestionId.value !== null) {
     publishPromptSuggestionId.value = null;
