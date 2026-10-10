@@ -6345,6 +6345,12 @@
   align-items: center;
   justify-content: flex-end;
   gap: 16px;
+  animation: bar-slide-up 500ms cubic-bezier(0, 0, 0.2, 1) both;
+}
+
+@keyframes bar-slide-up {
+  from { transform: translateY(100%); opacity: 0; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 .minerva-suggestions-banner {
@@ -8163,7 +8169,7 @@
 
 /* Banner bounce on arrow icon/button (not the whole banner) */
 .suggestions-banner-icon--bounce {
-  animation: arrow-bounce 2s ease-in-out 0s infinite;
+  animation: arrow-bounce 3s ease-in-out 2s both infinite;
 }
 
 span.suggestions-banner-icon--bounce {
