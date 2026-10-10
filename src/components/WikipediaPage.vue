@@ -16112,8 +16112,8 @@ function enterEditMode() {
               setTimeout(() => { veLoadingBadgeBounce.value = false; }, 500);
             }, 200);
           }
-          // Show suggestions bar + start bounce arrow after rail enters
-          setTimeout(() => { handleVELoadComplete(); }, 600);
+          // Show suggestions bar + start bounce arrow after rail enters (1s delay)
+          setTimeout(() => { handleVELoadComplete(); }, 1000);
         }, 300);
       }, 1300);
     }, 2500);
