@@ -8127,11 +8127,14 @@
   padding-right: 0;
 }
 
+.minerva-skin.edit-mode .article-content-edit {
+  transition: padding-right 300ms ease;
+}
+
 .ve-rail-track .article-content-edit {
   --minerva-suggestion-gutter: 44px;
   padding-right: calc(var(--minerva-suggestion-gutter) + 16px);
   position: relative;
-  transition: padding-right 300ms ease;
 }
 
 .ve-rail-track .minerva-suggestion-target {
