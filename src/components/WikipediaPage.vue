@@ -6,8 +6,8 @@
       isMinervaSkin ? 'minerva-skin' : 'vector-skin',
       isMinervaSkin && editFullPageImprovedEnabled ? 'minerva-edit-full-page-improved' : '',
       isMinervaSkin && editToolbarImprovementsEnabled ? 'minerva-edit-toolbar-improved' : '',
-      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRail ? 'minerva-suggestions-on' : '',
-      isMinervaSkin && isEditMode && showSuggestions && showMinervaRail ? 'minerva-suggestions-on--rail' : '',
+      isMinervaSkin && isEditMode && showSuggestions && bannerSuggestionCount > 0 && !showMinervaRail && (!pulsatingFirstTimeVE || veLoadingPhase === 0) ? 'minerva-suggestions-on' : '',
+      isMinervaSkin && isEditMode && showSuggestions && showMinervaRail && (!pulsatingFirstTimeVE || veLoadingPhase === 0) ? 'minerva-suggestions-on--rail' : '',
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailMode ? 'minerva-expandable-rail-mode' : '',
       isMinervaSkin && isEditMode && isMinervaFullPageExpandableRailOpen ? 'minerva-expandable-rail-open' : '',
       isMinervaSheetOpen ? 'minerva-sheet-open' : '',
@@ -16083,10 +16083,6 @@ function enterEditMode() {
   minervaNoMoreSuggestionsState.value = null;
   veLoadingBadgeBounce.value = false;
   clearVEInactivityTimer();
-  if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
-    veLoadingPhase.value = 1;
-    setTimeout(() => { veLoadingPhase.value = 2; }, 1500);
-  }
   nextTick(() => {
     captureEditSnapshot();
   });
@@ -16094,41 +16090,45 @@ function enterEditMode() {
   isBannerClosing.value = false;
   isBannerOpening.value = false;
 
-  // Hide loading overlay after 2 seconds, then show VE entry sheet if enabled (first time only)
-  setTimeout(() => {
-    isLoading.value = false;
-    if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
-      // Delay: show full-width article briefly, then slide in the rail track from the right
-      setTimeout(() => {
-        veRailTrackVisible.value = true;
-        nextTick(() => {
-          handleVELoadComplete();
-          // Step 3: show suggestion count in loading bar
-          veLoadingFoundCount.value = getPendingSuggestionIdsForContext().length;
-          veLoadingPhase.value = 3;
-          // After 1.3s, fade out loading bar and bounce badge
-          setTimeout(() => {
-            veLoadingPhase.value = 4;
-            setTimeout(() => {
-              veLoadingPhase.value = 0;
-              if (veLoadingFoundCount.value > 0) {
-                setTimeout(() => {
-                  veLoadingBadgeBounce.value = true;
-                  setTimeout(() => { veLoadingBadgeBounce.value = false; }, 500);
-                }, 200);
-              }
-            }, 300);
-          }, 1300);
-        });
-      }, 400);
-    }
+  if (pulsatingFirstTimeVE.value && isMinervaSkin.value) {
+    // Pulsating first-time VE sequence:
+    // Overlay stays through all loading phases; rail and suggestions bar appear only after overlay is gone.
+    veLoadingPhase.value = 1;
+    setTimeout(() => { veLoadingPhase.value = 2; }, 1500);
     setTimeout(() => {
-      if (isMinervaSkin.value && bottomSheetInVE.value && !pulsatingFirstTimeVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
-        showVEEntrySheet.value = true;
-        veEntrySheetShown.value = true;
-      }
-    }, 1000);
-  }, 4000);
+      // Phase 3: "N suggestions found" — overlay still on, article still full-width
+      veLoadingFoundCount.value = getPendingSuggestionIdsForContext().length;
+      veLoadingPhase.value = 3;
+      setTimeout(() => {
+        veLoadingPhase.value = 4;
+        setTimeout(() => {
+          // Reveal: remove overlay + slide in rail track simultaneously
+          veLoadingPhase.value = 0;
+          isLoading.value = false;
+          veRailTrackVisible.value = true;
+          if (veLoadingFoundCount.value > 0) {
+            setTimeout(() => {
+              veLoadingBadgeBounce.value = true;
+              setTimeout(() => { veLoadingBadgeBounce.value = false; }, 500);
+            }, 200);
+          }
+          // Show suggestions bar + start bounce arrow after rail enters
+          setTimeout(() => { handleVELoadComplete(); }, 600);
+        }, 300);
+      }, 1300);
+    }, 2500);
+  } else {
+    // Non-pulsating: hide loading overlay after 4 seconds
+    setTimeout(() => {
+      isLoading.value = false;
+      setTimeout(() => {
+        if (isMinervaSkin.value && bottomSheetInVE.value && availableSuggestionCount.value > 0 && !veEntrySheetShown.value) {
+          showVEEntrySheet.value = true;
+          veEntrySheetShown.value = true;
+        }
+      }, 1000);
+    }, 4000);
+  }
 }
 
 function exitEditMode() {

@@ -8173,7 +8173,7 @@
 
 /* Banner bounce on arrow icon/button (not the whole banner) */
 .suggestions-banner-icon--bounce {
-  animation: arrow-bounce 8s ease-in-out 0s infinite;
+  animation: arrow-bounce 2s ease-in-out 0s infinite;
 }
 
 span.suggestions-banner-icon--bounce {
