@@ -896,7 +896,7 @@
                     </div>
                     <div class="tab tab--edit" :class="{ 'tab-selected': isEditMode }" @click="toggleEditMode">
                       <span class="tab-text" :class="{ 'tab-link': !isEditMode }">
-                        Edit<span v-if="showPulsatingLightbulb" class="pulsating-lightbulb-wrapper pulsating-lightbulb-wrapper--tab"><img :src="iconLightbulbBlueIndicator" width="10" height="10" alt="" aria-hidden="true" class="lightbulb-indicator-badge lightbulb-indicator-badge--tab" /><span class="lightbulb-indicator-pulse lightbulb-indicator-pulse--tab"></span></span>
+                        Edit<span v-if="false" class="pulsating-lightbulb-wrapper pulsating-lightbulb-wrapper--tab"><img :src="iconLightbulbBlueIndicator" width="10" height="10" alt="" aria-hidden="true" class="lightbulb-indicator-badge lightbulb-indicator-badge--tab" /><span class="lightbulb-indicator-pulse lightbulb-indicator-pulse--tab"></span></span>
                       </span>
                       <div v-if="isEditMode" class="tab-indicator"></div>
                     </div>
@@ -1979,7 +1979,7 @@
             <div
               v-if="isMinervaSkin && editToolbarImprovementsEnabled"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-improved"
-              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE }"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE && isMinervaSkin }"
               @mousedown="handleToolbarMouseDown"
               @touchstart="handleToolbarMouseDown"
               @click="handleToolbarClick"
@@ -2289,7 +2289,7 @@
             <div
               v-else-if="isMinervaSkin && (activePrototype === 'option-1' || isArrowOnceMode)"
               class="editor-toolbar editor-toolbar--minerva editor-toolbar--minerva-spaced"
-              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE }"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE && isMinervaSkin }"
               @mousedown="handleToolbarMouseDown"
               @touchstart="handleToolbarMouseDown"
               @click="handleToolbarClick"
@@ -2522,7 +2522,7 @@
             <div
               v-else-if="isMinervaSkin"
               class="editor-toolbar editor-toolbar--minerva"
-              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE }"
+              :class="{ 'editor-toolbar--scrolled': isEditToolbarScrolled, 'editor-toolbar--ve-loading': isLoading && pulsatingFirstTimeVE && isMinervaSkin }"
               @mousedown="handleToolbarMouseDown"
               @touchstart="handleToolbarMouseDown"
               @click="handleToolbarClick"
@@ -3054,7 +3054,7 @@
             </div>
 
             <!-- Loading Overlay (only covers content below toolbar) -->
-            <div v-if="isLoading && pulsatingFirstTimeVE" class="loading-overlay"></div>
+            <div v-if="isLoading && pulsatingFirstTimeVE && isMinervaSkin" class="loading-overlay"></div>
 
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
             <cdx-popover
@@ -3090,7 +3090,7 @@
 
             <!-- "Before you go" dialog: shown when closing editor with pending suggestions and no changes -->
             <cdx-dialog
-              v-if="pulsatingFirstTimeVE && isMinervaSkin"
+              v-if="pulsatingFirstTimeVE"
               v-model:open="showBeforeYouGoDialog"
               title="Before you go"
               close-button-label="Close"
@@ -3104,7 +3104,7 @@
 
             <!-- "Are you sure?" dialog: shown when closing editor with changes or no suggestions -->
             <cdx-dialog
-              v-if="pulsatingFirstTimeVE && isMinervaSkin"
+              v-if="pulsatingFirstTimeVE"
               v-model:open="showDiscardChangesDialog"
               title="Are you sure?"
               close-button-label="Close"
@@ -4678,7 +4678,7 @@
           </div>
           <!-- First Add Citation Suggestion Card -->
           <div 
-            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1"
+            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage1 && citationNumber1 === null && !isSuggestionDeclined1 && isMinervaSkin"
             ref="suggestionsSidebarRef"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded,
@@ -7184,8 +7184,8 @@
               </cdx-field>
               <cdx-field>
                 <template #label>Ensure people see suggestions</template>
-                <cdx-checkbox v-if="isMinervaSkin" v-model="pulsatingFirstTimeVE">
-                  Pulsating effect the 1st time entering VE
+                <cdx-checkbox v-model="pulsatingFirstTimeVE">
+                  Dialog before leaving editor and pulsating effect
                 </cdx-checkbox>
                 <cdx-checkbox v-if="isMinervaSkin" v-model="suggestionPreviewWhileScrollingEnabled" :disabled="pulsatingFirstTimeVE">
                   Suggestion preview while scrolling
@@ -13831,7 +13831,7 @@ function handleReadModeScroll() {
 function handleReadClick() {
   closePrototypeDialog();
   if (isEditMode.value) {
-    exitEditMode();
+    handleVECloseEditor();
   }
 }
 
@@ -16117,6 +16117,10 @@ function enterEditMode() {
         }, 300);
       }, 1300);
     }, 2500);
+  } else if (!isMinervaSkin.value && pulsatingFirstTimeVE.value) {
+    // Vector22 pulsating: no overlay, trigger suggestions-banner bounce after page settles
+    isLoading.value = false;
+    setTimeout(() => { handleVELoadComplete(); }, 1500);
   } else {
     // Non-pulsating: hide loading overlay after 4 seconds
     setTimeout(() => {
@@ -16219,7 +16223,7 @@ function startVEInactivityTimer(pendingIds) {
 }
 
 function handleVECloseEditor() {
-  if (!pulsatingFirstTimeVE.value || !isMinervaSkin.value) {
+  if (!pulsatingFirstTimeVE.value) {
     toggleEditMode();
     return;
   }
