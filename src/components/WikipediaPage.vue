@@ -5861,7 +5861,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved19 && !isSuggestionDeclined19 || publishPromptSuggestionId === 19 || (!isMinervaSkin && showSuccessHighlightInCard(19)) || dismissFirstTimeCardId === 19 || scaleOutCardId === 19)"
+            v-if="false"
             ref="suggestionsSidebarRef19"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded19 && publishPromptSuggestionId !== 19 && !(!isMinervaSkin && showSuccessHighlightInCard(19)) && dismissFirstTimeCardId !== 19,
@@ -5930,7 +5930,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved24 && !isSuggestionDeclined24 || publishPromptSuggestionId === 24 || (!isMinervaSkin && showSuccessHighlightInCard(24)) || dismissFirstTimeCardId === 24 || scaleOutCardId === 24)"
+            v-if="false"
             ref="suggestionsSidebarRef24"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded24 && publishPromptSuggestionId !== 24 && !(!isMinervaSkin && showSuccessHighlightInCard(24)) && dismissFirstTimeCardId !== 24,
@@ -8432,7 +8432,7 @@ function handleRailScroll() {
 }
 
 function updateFirstPendingSuggestionInView() {
-  if (firstPendingSuggestionInView.value || !isEditMode.value) return;
+  if (!isMinervaSkin.value || firstPendingSuggestionInView.value || !isEditMode.value) return;
   const pendingRefs = getSuggestionRefs().filter(r => r.pending);
   const vh = window.innerHeight;
   if (pendingRefs.some(({ ref }) => {
