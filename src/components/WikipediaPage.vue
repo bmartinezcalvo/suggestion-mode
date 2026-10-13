@@ -5309,7 +5309,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved11 && !isSuggestionDeclined11 || publishPromptSuggestionId === 11 || (!isMinervaSkin && showSuccessHighlightInCard(11)) || dismissFirstTimeCardId === 11 || scaleOutCardId === 11)"
+            v-if="false"
             ref="suggestionsSidebarRef11"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded11 && publishPromptSuggestionId !== 11 && !(!isMinervaSkin && showSuccessHighlightInCard(11)) && dismissFirstTimeCardId !== 11,
@@ -5378,7 +5378,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved12 && !isSuggestionDeclined12 || publishPromptSuggestionId === 12 || (!isMinervaSkin && showSuccessHighlightInCard(12)) || dismissFirstTimeCardId === 12 || scaleOutCardId === 12)"
+            v-if="false"
             ref="suggestionsSidebarRef12"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded12 && publishPromptSuggestionId !== 12 && !(!isMinervaSkin && showSuccessHighlightInCard(12)) && dismissFirstTimeCardId !== 12,
