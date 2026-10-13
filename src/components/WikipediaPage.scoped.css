@@ -1822,16 +1822,32 @@
   justify-content: space-between;
 }
 
+.editor-toolbar--minerva {
+  flex-wrap: nowrap;
+}
+
 .editor-toolbar--minerva .toolbar-btn-primary {
   margin-left: 0;
+  flex: 0 0 44px;
   width: 44px;
   height: 44px;
   padding: 0;
   border-radius: 0;
 }
 
+/* Close button: fixed size with separator */
 .editor-toolbar--minerva .toolbar-btn-icon-only:first-child {
+  flex: 0 0 44px;
+  width: 44px;
   border-right: 1px solid var(--border-color-muted, #c8ccd1);
+}
+
+/* Middle buttons: flex to fill space, min 40px tap target */
+.editor-toolbar--minerva .toolbar-btn-icon-only:not(:first-child) {
+  flex: 1 1 40px;
+  min-width: 40px;
+  width: auto;
+  max-width: 52px;
 }
 
 .editor-toolbar--minerva-improved {
