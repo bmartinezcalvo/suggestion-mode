@@ -3095,8 +3095,8 @@
             >
               There are some guided tasks to improve this article. Do you want to try them?
               <template #footer>
-                <cdx-button action="progressive" weight="normal" size="large" @click="handleBeforeYouGoViewSuggestions">View suggestions</cdx-button>
-                <cdx-button action="default" weight="normal" size="large" @click="handleBeforeYouGoLeaveEditor">Leave the editor</cdx-button>
+                <cdx-button action="default" weight="normal" size="medium" @click="handleBeforeYouGoLeaveEditor">Leave the editor</cdx-button>
+                <cdx-button action="progressive" weight="normal" size="medium" @click="handleBeforeYouGoViewSuggestions">View suggestions</cdx-button>
               </template>
             </cdx-dialog>
 
@@ -3109,8 +3109,8 @@
             >
               Are you sure you want to leave editing mode without publishing first?
               <template #footer>
-                <cdx-button action="destructive" weight="normal" size="large" @click="handleDiscardEditsConfirm">Discard edits</cdx-button>
-                <cdx-button action="default" weight="normal" size="large" @click="handleContinueEditing">Continue editing</cdx-button>
+                <cdx-button action="default" weight="normal" size="medium" @click="handleContinueEditing">Continue editing</cdx-button>
+                <cdx-button action="destructive" weight="normal" size="medium" @click="handleDiscardEditsConfirm">Discard edits</cdx-button>
               </template>
             </cdx-dialog>
 
@@ -5447,7 +5447,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved13 && !isSuggestionDeclined13 || publishPromptSuggestionId === 13 || (!isMinervaSkin && showSuccessHighlightInCard(13)) || dismissFirstTimeCardId === 13 || scaleOutCardId === 13)"
+            v-if="false"
             ref="suggestionsSidebarRef13"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded13 && publishPromptSuggestionId !== 13 && !(!isMinervaSkin && showSuccessHighlightInCard(13)) && dismissFirstTimeCardId !== 13,
@@ -5516,7 +5516,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved14 && !isSuggestionDeclined14 || publishPromptSuggestionId === 14 || (!isMinervaSkin && showSuccessHighlightInCard(14)) || dismissFirstTimeCardId === 14 || scaleOutCardId === 14)"
+            v-if="false"
             ref="suggestionsSidebarRef14"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded14 && publishPromptSuggestionId !== 14 && !(!isMinervaSkin && showSuccessHighlightInCard(14)) && dismissFirstTimeCardId !== 14,
@@ -5585,7 +5585,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved15 && !isSuggestionDeclined15 || publishPromptSuggestionId === 15 || (!isMinervaSkin && showSuccessHighlightInCard(15)) || dismissFirstTimeCardId === 15 || scaleOutCardId === 15)"
+            v-if="false"
             ref="suggestionsSidebarRef15"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded15 && publishPromptSuggestionId !== 15 && !(!isMinervaSkin && showSuccessHighlightInCard(15)) && dismissFirstTimeCardId !== 15,
@@ -5654,7 +5654,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved16 && !isSuggestionDeclined16 || publishPromptSuggestionId === 16 || (!isMinervaSkin && showSuccessHighlightInCard(16)) || dismissFirstTimeCardId === 16 || scaleOutCardId === 16)"
+            v-if="false"
             ref="suggestionsSidebarRef16"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded16 && publishPromptSuggestionId !== 16 && !(!isMinervaSkin && showSuccessHighlightInCard(16)) && dismissFirstTimeCardId !== 16,
@@ -5723,7 +5723,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved17 && !isSuggestionDeclined17 || publishPromptSuggestionId === 17 || (!isMinervaSkin && showSuccessHighlightInCard(17)) || dismissFirstTimeCardId === 17 || scaleOutCardId === 17)"
+            v-if="false"
             ref="suggestionsSidebarRef17"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded17 && publishPromptSuggestionId !== 17 && !(!isMinervaSkin && showSuccessHighlightInCard(17)) && dismissFirstTimeCardId !== 17,
@@ -5792,7 +5792,7 @@
           </div>
 
           <div
-            v-if="showSuggestionsDisplay && (!isSuggestionResolved18 && !isSuggestionDeclined18 || publishPromptSuggestionId === 18 || (!isMinervaSkin && showSuccessHighlightInCard(18)) || dismissFirstTimeCardId === 18 || scaleOutCardId === 18)"
+            v-if="false"
             ref="suggestionsSidebarRef18"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded18 && publishPromptSuggestionId !== 18 && !(!isMinervaSkin && showSuccessHighlightInCard(18)) && dismissFirstTimeCardId !== 18,
@@ -16193,6 +16193,12 @@ function handleVELoadComplete() {
   if (pendingIds.length === 0) return;
 
   window.addEventListener('scroll', onVEScroll, { passive: true });
+
+  if (!isMinervaSkin.value) {
+    veViewSuggestionsBounce.value = true;
+    isBannerDelayReady.value = true;
+    return;
+  }
 
   if (isFirstVESession.value) {
     const firstVisibleId = findFirstVisibleSuggestionId(pendingIds);

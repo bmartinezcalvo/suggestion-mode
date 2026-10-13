@@ -6515,28 +6515,6 @@
   color: var(--suggestion-color, var(--color-progressive, #36c));
 }
 
-.suggestions-banner--bounce {
-  animation: banner-bounce 8s ease-in-out 0s infinite;
-}
-
-@keyframes banner-bounce {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  12.5% {
-    transform: translateY(-6px);
-  }
-  15% {
-    transform: translateY(0);
-  }
-  17.5% {
-    transform: translateY(-6px);
-  }
-  20% {
-    transform: translateY(0);
-  }
-}
 
 @keyframes arrow-bounce {
   0%   { transform: translateY(0);    animation-timing-function: cubic-bezier(0.4, 0, 1, 1); }
@@ -7322,6 +7300,13 @@
 
 .vector-skin :deep(.cdx-dialog__body) {
   font-size: 14px;
+}
+
+:deep(.cdx-dialog__footer) {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  gap: 8px;
 }
 
 .minerva-skin :deep(.cdx-dialog__body) {
