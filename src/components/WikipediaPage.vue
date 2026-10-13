@@ -4744,8 +4744,8 @@
           </div>
 
           <!-- Second Add Citation Suggestion Card -->
-          <div 
-            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage2 && citationNumber2 === null && !isSuggestionDeclined2"
+          <div
+            v-if="false"
             ref="suggestionsSidebarRef2"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded2,
@@ -4813,8 +4813,8 @@
           </div>
 
           <!-- Third Add Citation Suggestion Card -->
-          <div 
-            v-if="showSuggestionsDisplay && !publishPromptEnabled && !showSuccessMessage3 && citationNumber3 === null && !isSuggestionDeclined3"
+          <div
+            v-if="false"
             ref="suggestionsSidebarRef3"
             :class="{
               'suggestion-card--collapsed': !isCardExpanded3,
@@ -6038,7 +6038,8 @@
                 'suggestions-banner--clickable': showSuggestions,
                 'suggestions-banner--closing': isBannerClosing,
                 'suggestions-banner--opening': isBannerOpening,
-                  'suggestions-banner--scrolled': isEditToolbarScrolled
+                  'suggestions-banner--scrolled': isEditToolbarScrolled,
+                  'suggestions-banner--bounce': veViewSuggestionsBounce && !veIsScrolling
                 }"
                 :role="showSuggestions ? 'button' : undefined"
                 :tabindex="showSuggestions ? 0 : undefined"
