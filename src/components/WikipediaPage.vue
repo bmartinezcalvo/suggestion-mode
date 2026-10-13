@@ -809,7 +809,6 @@
                     <cdx-button
                       v-if="isFirstSuggestionNavigationMode && !isAutoScrollActive"
                       class="suggestions-banner-arrow-btn"
-                      :class="{ 'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling }"
                       action="progressive"
                       weight="quiet"
                       :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
@@ -823,8 +822,7 @@
                       :icon="cdxIconArrowDown"
                       size="medium"
                       :class="{
-                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp,
-                        'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling
+                        'suggestions-banner-icon--up': showBannerPrimaryArrowUp
                       }"
                     />
                     <span>View suggestions</span>
@@ -6067,7 +6065,6 @@
                       <cdx-button
                         v-if="isFirstSuggestionNavigationMode && !isAutoScrollActive"
                         class="suggestions-banner-arrow-btn"
-                        :class="{ 'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling }"
                         action="progressive"
                         weight="quiet"
                         :aria-label="showBannerPrimaryArrowUp ? 'View previous suggestions' : 'View next suggestions'"
@@ -6081,8 +6078,7 @@
                         :icon="cdxIconArrowDown"
                         size="medium"
                         :class="{
-                          'suggestions-banner-icon--up': showBannerPrimaryArrowUp,
-                          'suggestions-banner-icon--bounce': veViewSuggestionsBounce && !veIsScrolling
+                          'suggestions-banner-icon--up': showBannerPrimaryArrowUp
                         }"
                       />
                       <span>View suggestions</span>
