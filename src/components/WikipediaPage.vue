@@ -9549,6 +9549,7 @@ const shouldShowToasts = computed(() => (
 ));
 const shouldShowBanner = computed(() => {
   if (!showSuggestionNotification.value) return false;
+  if (!isMinervaSkin.value) return true;
   if (
     isArrowOnceMode.value &&
     isMinervaSkin.value &&
