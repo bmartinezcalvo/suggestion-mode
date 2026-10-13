@@ -1645,6 +1645,11 @@
   z-index: 10; /* Ensure toolbar is above content */
 }
 
+/* In Vector22 edit mode with suggestions sidebar, extend toolbar to cover gap + sidebar columns */
+.vector-skin.edit-mode .main-content-area.has-suggestions .editor-toolbar {
+  width: calc(100% + 24px + 325px); /* 24px grid gap + 325px sidebar width */
+}
+
 .editor-toolbar--scrolled {
   box-shadow: 0 4px 4px 0 rgba( 0, 0, 0, 0.06 ), 0 0 8px 0 rgba( 0, 0, 0, 0.06 );
 }
