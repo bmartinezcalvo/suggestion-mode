@@ -8209,11 +8209,11 @@ span.suggestions-banner-icon--bounce {
 
 /* ---- Make-more-evident: Change interactions mode ---- */
 
-/* Suggestion trigger as Quiet Large Progressive ToggleButton */
+/* Suggestion trigger as Quiet Medium Progressive Button 32px */
 .make-evident-interactions .minerva-suggestion-trigger:not(.minerva-suggestion-trigger--success) {
-  width: 44px;
-  height: 44px;
-  right: -60px;
+  width: 32px;
+  height: 32px;
+  right: -52px;
   border-radius: 2px;
   background: transparent;
   border: none;
@@ -8227,10 +8227,10 @@ span.suggestions-banner-icon--bounce {
   background: var(--background-color-progressive-subtle, #eaf3ff);
 }
 
-/* Edit check trigger as Quiet Large Neutral ToggleButton */
+/* Edit check trigger as Quiet Medium Neutral Button 32px */
 .make-evident-interactions .edit-check-trigger {
-  width: 44px;
-  height: 44px;
+  width: 32px;
+  height: 32px;
   border-radius: 2px;
   background: transparent;
   border: none;
@@ -8249,7 +8249,8 @@ span.suggestions-banner-icon--bounce {
   background: var(--background-color-warning-subtle, #fef6e7);
 }
 
-/* Highlighted text: transparent background when suggestion not active */
+/* Highlighted text: transparent background when suggestion not active,
+   progressive-subtle (same as color-header mode) when active */
 .make-evident-interactions .highlighted-text-wrapper {
   background-color: var(--background-color-transparent, transparent) !important;
   border-color: transparent !important;
@@ -8257,24 +8258,7 @@ span.suggestions-banner-icon--bounce {
 
 .make-evident-interactions .highlighted-text-wrapper.make-evident-active {
   background-color: var(--background-color-progressive-subtle, #eaf3ff) !important;
-}
-
-/* Article dim overlay */
-.article-dim-overlay {
-  position: fixed;
-  left: 0;
-  right: 0;
-  background: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
-  z-index: 5;
-  pointer-events: none;
-}
-
-.article-dim-overlay--above {
-  top: 48px;
-}
-
-.article-dim-overlay--below {
-  bottom: 0;
+  border-color: var(--color-progressive, #36c) !important;
 }
 
 /* Sub-radios indentation */

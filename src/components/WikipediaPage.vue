@@ -3054,17 +3054,6 @@
 
             <!-- Loading Overlay (only covers content below toolbar) -->
             <div v-if="isLoading && pulsatingFirstTimeVE && isMinervaSkin" class="loading-overlay"></div>
-            <!-- Article dim overlay for "Change interactions" mode -->
-            <div
-              v-if="isMinervaSkin && isEditMode && makeMoreEvidentRelation && makeMoreEvidentMode === 'change-interactions' && isMinervaSheetOpen"
-              class="article-dim-overlay article-dim-overlay--above"
-              :style="{ height: Math.max(0, articleOverlayParaTop - 48) + 'px' }"
-            ></div>
-            <div
-              v-if="isMinervaSkin && isEditMode && makeMoreEvidentRelation && makeMoreEvidentMode === 'change-interactions' && isMinervaSheetOpen"
-              class="article-dim-overlay article-dim-overlay--below"
-              :style="{ top: articleOverlayParaBottom + 'px' }"
-            ></div>
 
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
             <cdx-popover
@@ -7703,8 +7692,6 @@ const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
 const makeMoreEvidentRelation = ref(false);
 const makeMoreEvidentMode = ref('color-header');
-const articleOverlayParaTop = ref(0);
-const articleOverlayParaBottom = ref(0);
 const veRailTrackVisible = ref(false);
 const veLoadingPhase = ref(0); // 0=off, 1=Loading editor, 2=Looking for suggestions, 3=N found, 4=fading out
 const veLoadingFoundCount = ref(0);
@@ -16681,25 +16668,6 @@ function markArticleEdited() {
 }
 
 // ---- Make-more-evident: Change interactions mode ----
-function updateMakeEvidentOverlayRect() {
-  if (!makeMoreEvidentRelation.value || makeMoreEvidentMode.value !== 'change-interactions' || !isMinervaSheetOpen.value) return;
-  let el = null;
-  if (isEditCheckSheet.value) {
-    const marker = document.querySelector('.edit-check-minerva-marker');
-    el = marker?.closest('p, li, dd, blockquote') || marker?.parentElement;
-  } else {
-    el = getSuggestionRefById(activeMinervaSuggestion.value)?.value;
-  }
-  if (el) {
-    const rect = el.getBoundingClientRect();
-    articleOverlayParaTop.value = rect.top;
-    articleOverlayParaBottom.value = rect.bottom;
-  } else {
-    articleOverlayParaTop.value = window.innerHeight / 2;
-    articleOverlayParaBottom.value = window.innerHeight / 2;
-  }
-}
-
 function updateMakeEvidentActiveStates() {
   document.querySelectorAll('.make-evident-active').forEach((el) => el.classList.remove('make-evident-active'));
   if (!makeMoreEvidentRelation.value || makeMoreEvidentMode.value !== 'change-interactions' || !isMinervaSheetOpen.value) return;
@@ -16712,26 +16680,11 @@ function updateMakeEvidentActiveStates() {
   }
 }
 
-let makeEvidentOverlayRaf = null;
-function onMakeEvidentScroll() {
-  if (makeEvidentOverlayRaf) return;
-  makeEvidentOverlayRaf = requestAnimationFrame(() => {
-    updateMakeEvidentOverlayRect();
-    makeEvidentOverlayRaf = null;
-  });
-}
-
 watch(
   [isMinervaSheetOpen, activeMinervaSuggestion, isEditCheckSheet, makeMoreEvidentRelation, makeMoreEvidentMode],
-  async ([open]) => {
+  async () => {
     await nextTick();
-    updateMakeEvidentOverlayRect();
     updateMakeEvidentActiveStates();
-    if (open && makeMoreEvidentRelation.value && makeMoreEvidentMode.value === 'change-interactions') {
-      window.addEventListener('scroll', onMakeEvidentScroll, { passive: true });
-    } else {
-      window.removeEventListener('scroll', onMakeEvidentScroll);
-    }
   }
 );
 </script>
