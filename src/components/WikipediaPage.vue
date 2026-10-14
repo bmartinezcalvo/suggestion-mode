@@ -17,7 +17,8 @@
       isSuggestionLightFlash ? 'suggestion-light-flash' : '',
       isSuggestionMarkersVisible ? 'suggestion-markers-visible' : '',
       isSuggestionsFadingOut ? 'suggestion-markers-hiding' : '',
-      isSuggestionGlowActive ? 'suggestion-glow-active' : ''
+      isSuggestionGlowActive ? 'suggestion-glow-active' : '',
+      isMinervaSkin && makeMoreEvidentRelation && makeMoreEvidentMode === 'change-interactions' ? 'make-evident-interactions' : ''
     ]"
     :style="suggestionColorStyles"
   >
@@ -3053,6 +3054,17 @@
 
             <!-- Loading Overlay (only covers content below toolbar) -->
             <div v-if="isLoading && pulsatingFirstTimeVE && isMinervaSkin" class="loading-overlay"></div>
+            <!-- Article dim overlay for "Change interactions" mode -->
+            <div
+              v-if="isMinervaSkin && isEditMode && makeMoreEvidentRelation && makeMoreEvidentMode === 'change-interactions' && isMinervaSheetOpen"
+              class="article-dim-overlay article-dim-overlay--above"
+              :style="{ height: Math.max(0, articleOverlayParaTop - 48) + 'px' }"
+            ></div>
+            <div
+              v-if="isMinervaSkin && isEditMode && makeMoreEvidentRelation && makeMoreEvidentMode === 'change-interactions' && isMinervaSheetOpen"
+              class="article-dim-overlay article-dim-overlay--below"
+              :style="{ top: articleOverlayParaBottom + 'px' }"
+            ></div>
 
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
             <cdx-popover
@@ -6441,7 +6453,9 @@
                 'minerva-sheet-header--empty': shouldShowEmptyState && !showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
                 'minerva-sheet-header--no-more': showMinervaNoMoreSuggestionsState && !isEditCheckSheet,
                 'minerva-sheet-header--success': (isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet,
-                'minerva-sheet-header--pp-success': (isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet
+                'minerva-sheet-header--pp-success': (isPersistentPaginationSuccessMode || isPublishPromptMode) && !isEditCheckSheet,
+                'minerva-sheet-header--color-evident': makeMoreEvidentRelation && makeMoreEvidentMode === 'color-header' && !isEditCheckSheet,
+                'minerva-sheet-header--color-evident-warning': makeMoreEvidentRelation && makeMoreEvidentMode === 'color-header' && isEditCheckSheet
               }"
             >
               <cdx-icon :icon="isEditCheckSheet ? cdxIconAlert : (isMinervaDismissFirstTimeState ? cdxIconClear : ((isMinervaSuggestionSuccessState || isPersistentPaginationSuccessMode || isPublishPromptMode) ? cdxIconSuccess : cdxIconLightbulb))" :class="{ 'minerva-sheet-icon--dismissed': isMinervaDismissFirstTimeState }" size="medium" />
@@ -7196,6 +7210,25 @@
                 <cdx-checkbox v-if="isMinervaSkin" v-model="bottomSheetInVE" :disabled="pulsatingFirstTimeVE">
                   Bottom sheet in VE
                 </cdx-checkbox>
+                <cdx-checkbox v-if="isMinervaSkin" v-model="makeMoreEvidentRelation">
+                  Make more evident the relation between highlighted text and card on mobile (<a href="https://phabricator.wikimedia.org/T440950" target="_blank" rel="noopener">T440950</a>)
+                </cdx-checkbox>
+                <div v-if="isMinervaSkin && makeMoreEvidentRelation" class="cdx-radio-group make-more-evident-radios" role="radiogroup">
+                  <cdx-radio
+                    v-model="makeMoreEvidentMode"
+                    name="make-more-evident-mode"
+                    input-value="color-header"
+                  >
+                    Include color in bottom sheet's head
+                  </cdx-radio>
+                  <cdx-radio
+                    v-model="makeMoreEvidentMode"
+                    name="make-more-evident-mode"
+                    input-value="change-interactions"
+                  >
+                    Change interactions
+                  </cdx-radio>
+                </div>
                 <cdx-checkbox v-model="expandFirstSuggestionOnReach" :disabled="pulsatingFirstTimeVE && isMinervaSkin">
                   Expand the first suggestion on first reach
                 </cdx-checkbox>
@@ -7668,6 +7701,10 @@ const showBeforeYouGoDialog = ref(false);
 const showDiscardChangesDialog = ref(false);
 const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
+const makeMoreEvidentRelation = ref(false);
+const makeMoreEvidentMode = ref('color-header');
+const articleOverlayParaTop = ref(0);
+const articleOverlayParaBottom = ref(0);
 const veRailTrackVisible = ref(false);
 const veLoadingPhase = ref(0); // 0=off, 1=Loading editor, 2=Looking for suggestions, 3=N found, 4=fading out
 const veLoadingFoundCount = ref(0);
@@ -16642,6 +16679,61 @@ function markArticleEdited() {
   syncMinervaRedoButtonVisibility();
   updateToneCheckFromContent();
 }
+
+// ---- Make-more-evident: Change interactions mode ----
+function updateMakeEvidentOverlayRect() {
+  if (!makeMoreEvidentRelation.value || makeMoreEvidentMode.value !== 'change-interactions' || !isMinervaSheetOpen.value) return;
+  let el = null;
+  if (isEditCheckSheet.value) {
+    const marker = document.querySelector('.edit-check-minerva-marker');
+    el = marker?.closest('p, li, dd, blockquote') || marker?.parentElement;
+  } else {
+    el = getSuggestionRefById(activeMinervaSuggestion.value)?.value;
+  }
+  if (el) {
+    const rect = el.getBoundingClientRect();
+    articleOverlayParaTop.value = rect.top;
+    articleOverlayParaBottom.value = rect.bottom;
+  } else {
+    articleOverlayParaTop.value = window.innerHeight / 2;
+    articleOverlayParaBottom.value = window.innerHeight / 2;
+  }
+}
+
+function updateMakeEvidentActiveStates() {
+  document.querySelectorAll('.make-evident-active').forEach((el) => el.classList.remove('make-evident-active'));
+  if (!makeMoreEvidentRelation.value || makeMoreEvidentMode.value !== 'change-interactions' || !isMinervaSheetOpen.value) return;
+  if (isEditCheckSheet.value) {
+    document.querySelectorAll('.edit-check-trigger').forEach((el) => el.classList.add('make-evident-active'));
+  } else {
+    const id = activeMinervaSuggestion.value;
+    document.querySelectorAll(`[data-preview-suggestion-id="${id}"].minerva-suggestion-trigger`).forEach((el) => el.classList.add('make-evident-active'));
+    getSuggestionRefById(id)?.value?.classList.add('make-evident-active');
+  }
+}
+
+let makeEvidentOverlayRaf = null;
+function onMakeEvidentScroll() {
+  if (makeEvidentOverlayRaf) return;
+  makeEvidentOverlayRaf = requestAnimationFrame(() => {
+    updateMakeEvidentOverlayRect();
+    makeEvidentOverlayRaf = null;
+  });
+}
+
+watch(
+  [isMinervaSheetOpen, activeMinervaSuggestion, isEditCheckSheet, makeMoreEvidentRelation, makeMoreEvidentMode],
+  async ([open]) => {
+    await nextTick();
+    updateMakeEvidentOverlayRect();
+    updateMakeEvidentActiveStates();
+    if (open && makeMoreEvidentRelation.value && makeMoreEvidentMode.value === 'change-interactions') {
+      window.addEventListener('scroll', onMakeEvidentScroll, { passive: true });
+    } else {
+      window.removeEventListener('scroll', onMakeEvidentScroll);
+    }
+  }
+);
 </script>
 
 

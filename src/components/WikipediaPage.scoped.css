@@ -1845,6 +1845,14 @@
   max-width: 52px;
 }
 
+/* Primary (Publish) button: always fixed 44px, overrides flex rule above */
+.editor-toolbar--minerva .toolbar-btn-icon-only.toolbar-btn-primary {
+  flex: 0 0 44px;
+  width: 44px;
+  min-width: 44px;
+  max-width: 44px;
+}
+
 .editor-toolbar--minerva-improved {
   flex-wrap: nowrap;
   min-height: 48px;
@@ -5180,6 +5188,14 @@
   padding: 0 16px;
 }
 
+.minerva-sheet-header--color-evident {
+  background-color: var(--background-color-progressive-subtle, #eaf3ff);
+}
+
+.minerva-sheet-header--color-evident-warning {
+  background-color: var(--background-color-warning-subtle, #fef6e7);
+}
+
 .minerva-sheet-header--success {
   min-height: 40px;
   height: 40px;
@@ -8189,4 +8205,80 @@
 
 span.suggestions-banner-icon--bounce {
   display: inline-block;
+}
+
+/* ---- Make-more-evident: Change interactions mode ---- */
+
+/* Suggestion trigger as Quiet Large Progressive ToggleButton */
+.make-evident-interactions .minerva-suggestion-trigger:not(.minerva-suggestion-trigger--success) {
+  width: 44px;
+  height: 44px;
+  right: -60px;
+  border-radius: 2px;
+  background: transparent;
+  border: none;
+}
+
+.make-evident-interactions .minerva-suggestion-trigger:not(.minerva-suggestion-trigger--success):hover {
+  background: var(--background-color-interactive-subtle, #f8f9fa);
+}
+
+.make-evident-interactions .minerva-suggestion-trigger.make-evident-active:not(.minerva-suggestion-trigger--success) {
+  background: var(--background-color-progressive-subtle, #eaf3ff);
+}
+
+/* Edit check trigger as Quiet Large Neutral ToggleButton */
+.make-evident-interactions .edit-check-trigger {
+  width: 44px;
+  height: 44px;
+  border-radius: 2px;
+  background: transparent;
+  border: none;
+}
+
+.make-evident-interactions .edit-check-trigger:hover {
+  background: var(--background-color-interactive-subtle, #f8f9fa);
+}
+
+.make-evident-interactions .edit-check-trigger svg {
+  color: var(--color-warning, #ac6600) !important;
+  fill: var(--color-warning, #ac6600) !important;
+}
+
+.make-evident-interactions .edit-check-trigger.make-evident-active {
+  background: var(--background-color-warning-subtle, #fef6e7);
+}
+
+/* Highlighted text: transparent background when suggestion not active */
+.make-evident-interactions .highlighted-text-wrapper {
+  background-color: var(--background-color-transparent, transparent) !important;
+  border-color: transparent !important;
+}
+
+.make-evident-interactions .highlighted-text-wrapper.make-evident-active {
+  background-color: var(--background-color-progressive-subtle, #eaf3ff) !important;
+}
+
+/* Article dim overlay */
+.article-dim-overlay {
+  position: fixed;
+  left: 0;
+  right: 0;
+  background: var(--background-color-backdrop-light, rgba(255, 255, 255, 0.65));
+  z-index: 5;
+  pointer-events: none;
+}
+
+.article-dim-overlay--above {
+  top: 48px;
+}
+
+.article-dim-overlay--below {
+  bottom: 0;
+}
+
+/* Sub-radios indentation */
+.make-more-evident-radios {
+  padding-left: 24px;
+  margin-top: 4px;
 }
