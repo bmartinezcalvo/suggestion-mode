@@ -3055,6 +3055,10 @@
             <!-- Loading Overlay (only covers content below toolbar) -->
             <div v-if="isLoading && pulsatingFirstTimeVE && isMinervaSkin" class="loading-overlay"></div>
 
+            <!-- Make-evident overlays: dim article above/below active paragraph -->
+            <div ref="articleOverlayParaTop" class="make-evident-overlay" style="display: none;"></div>
+            <div ref="articleOverlayParaBottom" class="make-evident-overlay" style="display: none;"></div>
+
             <!-- VE Entry Sheet: appears after loading when bottomSheetInVE is enabled -->
             <cdx-popover
               v-if="isMinervaSkin"
@@ -7692,6 +7696,8 @@ const veTriggerPulseId = ref(null);
 const veViewSuggestionsBounce = ref(false);
 const makeMoreEvidentRelation = ref(false);
 const makeMoreEvidentMode = ref('color-header');
+const articleOverlayParaTop = ref(null);
+const articleOverlayParaBottom = ref(null);
 const veRailTrackVisible = ref(false);
 const veLoadingPhase = ref(0); // 0=off, 1=Loading editor, 2=Looking for suggestions, 3=N found, 4=fading out
 const veLoadingFoundCount = ref(0);
@@ -16680,11 +16686,55 @@ function updateMakeEvidentActiveStates() {
   }
 }
 
+function updateMakeEvidentOverlayRect() {
+  const topEl = articleOverlayParaTop.value;
+  const bottomEl = articleOverlayParaBottom.value;
+  if (!topEl || !bottomEl) return;
+  const shouldShow = makeMoreEvidentRelation.value && makeMoreEvidentMode.value === 'change-interactions' && isMinervaSheetOpen.value;
+  if (!shouldShow) {
+    topEl.style.display = 'none';
+    bottomEl.style.display = 'none';
+    return;
+  }
+  let activePara = null;
+  if (isEditCheckSheet.value) {
+    activePara = document.querySelector('.edit-check-trigger')?.closest('.minerva-suggestion-target');
+  } else {
+    const id = activeMinervaSuggestion.value;
+    activePara = getSuggestionRefById(id)?.value;
+  }
+  if (!activePara) {
+    topEl.style.display = 'none';
+    bottomEl.style.display = 'none';
+    return;
+  }
+  const rect = activePara.getBoundingClientRect();
+  topEl.style.display = 'block';
+  topEl.style.top = '0';
+  topEl.style.height = `${Math.max(0, rect.top)}px`;
+  bottomEl.style.display = 'block';
+  bottomEl.style.top = `${rect.bottom}px`;
+  bottomEl.style.height = `${Math.max(0, window.innerHeight - rect.bottom)}px`;
+}
+
+let makeEvidentScrollRaf = null;
+function onMakeEvidentScroll() {
+  if (makeEvidentScrollRaf) cancelAnimationFrame(makeEvidentScrollRaf);
+  makeEvidentScrollRaf = requestAnimationFrame(() => updateMakeEvidentOverlayRect());
+}
+
 watch(
   [isMinervaSheetOpen, activeMinervaSuggestion, isEditCheckSheet, makeMoreEvidentRelation, makeMoreEvidentMode],
   async () => {
     await nextTick();
     updateMakeEvidentActiveStates();
+    updateMakeEvidentOverlayRect();
+    const active = makeMoreEvidentRelation.value && makeMoreEvidentMode.value === 'change-interactions' && isMinervaSheetOpen.value;
+    if (active) {
+      window.addEventListener('scroll', onMakeEvidentScroll, { passive: true });
+    } else {
+      window.removeEventListener('scroll', onMakeEvidentScroll);
+    }
   }
 );
 </script>

@@ -5431,8 +5431,8 @@
 .minerva-sheet-pagination {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 8px;
+  justify-content: flex-end;
+  gap: 16px;
   padding: 0;
   min-height: 38px;
   height: 38px;
@@ -8213,7 +8213,7 @@ span.suggestions-banner-icon--bounce {
 .make-evident-interactions .minerva-suggestion-trigger:not(.minerva-suggestion-trigger--success) {
   width: 32px;
   height: 32px;
-  right: -52px;
+  right: -54px;
   border-radius: 2px;
   background: transparent;
   border: none;
@@ -8241,6 +8241,8 @@ span.suggestions-banner-icon--bounce {
 }
 
 .make-evident-interactions .edit-check-trigger svg {
+  width: 20px;
+  height: 20px;
   color: var(--color-warning, #ac6600) !important;
   fill: var(--color-warning, #ac6600) !important;
 }
@@ -8259,6 +8261,21 @@ span.suggestions-banner-icon--bounce {
 .make-evident-interactions .highlighted-text-wrapper.make-evident-active {
   background-color: var(--background-color-progressive-subtle, #eaf3ff) !important;
   border-color: var(--color-progressive, #36c) !important;
+}
+
+/* Hide per-line annotation background; rely on wrapper for highlight */
+.make-evident-interactions .highlighted-text-annotation {
+  background-color: transparent !important;
+}
+
+/* White overlay: dims article above/below active paragraph, leaves right gutter uncovered */
+.make-evident-overlay {
+  position: fixed;
+  left: 0;
+  right: 44px;
+  background-color: rgba(255, 255, 255, 0.85);
+  pointer-events: none;
+  z-index: 4;
 }
 
 /* Sub-radios indentation */
