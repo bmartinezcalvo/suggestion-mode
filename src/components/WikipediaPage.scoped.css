@@ -8207,6 +8207,23 @@ span.suggestions-banner-icon--bounce {
   display: inline-block;
 }
 
+/* ---- Roll animation ---- */
+
+.roll-window {
+  position: relative;
+  overflow: hidden;
+}
+
+/* Outgoing overlay: absolute on top of incoming, populated during animation */
+.roll-outgoing-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+  opacity: 0;
+}
+
 /* ---- Make-more-evident: Change interactions mode ---- */
 
 /* Suggestion trigger as Quiet Medium Progressive Button 32px */

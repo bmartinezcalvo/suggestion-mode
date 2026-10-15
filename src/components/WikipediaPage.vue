@@ -6486,6 +6486,12 @@
                 </button>
               </div>
             </div>
+            <!-- Roll window: clips to one card at a time, animates height on navigation -->
+            <div class="roll-window" ref="rollWindowRef">
+              <!-- Outgoing card overlay (populated with a DOM clone during animation) -->
+              <div ref="rollOutgoingRef" class="roll-outgoing-overlay"></div>
+              <!-- Incoming card body (real reactive content) -->
+              <div ref="rollCardBodyRef">
           <p v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-description">
             Other editors often revise this kind of wording to have a more balanced tone. Learn more
           </p>
@@ -6961,6 +6967,8 @@
               <cdx-icon :icon="cdxIconEllipsis" size="small" />
             </cdx-button>
           </div>
+              </div><!-- end roll-card-body -->
+            </div><!-- end roll-window -->
             </template><!-- end v-else (non-dismiss-prompt content) -->
           </div>
           <div
@@ -7698,6 +7706,12 @@ const makeMoreEvidentRelation = ref(false);
 const makeMoreEvidentMode = ref('color-header');
 const articleOverlayParaTop = ref(null);
 const articleOverlayParaBottom = ref(null);
+
+// ---- Roll animation ----
+const rollWindowRef = ref(null);
+const rollOutgoingRef = ref(null);
+const rollCardBodyRef = ref(null);
+let rollAnimating = false;
 const veRailTrackVisible = ref(false);
 const veLoadingPhase = ref(0); // 0=off, 1=Loading editor, 2=Looking for suggestions, 3=N found, 4=fading out
 const veLoadingFoundCount = ref(0);
@@ -12045,8 +12059,9 @@ function openPaginationItem(id) {
   }
 }
 
-function handleMinervaPaginationPrev() {
+async function handleMinervaPaginationPrev() {
   if (isMinervaPaginationPrevDisabled.value) return;
+  const animPromise = executeRollAnimation('prev');
   if (isPersistentPaginationSuccessMode.value) {
     const prevIndex = persistentPaginationSuccessIndex.value - 1;
     if (prevIndex < 0) return;
@@ -12060,10 +12075,12 @@ function handleMinervaPaginationPrev() {
   if (nextIndex < 0) return;
   const nextId = minervaPaginationItems.value[nextIndex];
   openPaginationItem(nextId);
+  await animPromise;
 }
 
-function handleMinervaPaginationNext() {
+async function handleMinervaPaginationNext() {
   if (isMinervaPaginationNextDisabled.value) return;
+  const animPromise = executeRollAnimation('next');
   if (isPersistentPaginationSuccessMode.value) {
     const nextIndex = persistentPaginationSuccessIndex.value + 1;
     if (nextIndex >= persistentPaginationSuccessItems.value.length) return;
@@ -12077,6 +12094,7 @@ function handleMinervaPaginationNext() {
   if (nextIndex >= minervaPaginationItems.value.length) return;
   const nextId = minervaPaginationItems.value[nextIndex];
   openPaginationItem(nextId);
+  await animPromise;
 }
 
 function getEditCheckTargetByType(type) {
@@ -16671,6 +16689,72 @@ function markArticleEdited() {
   hasUnsavedChangesManual.value = editUndoStack.value.length > 1;
   syncMinervaRedoButtonVisibility();
   updateToneCheckFromContent();
+}
+
+// ---- Roll animation ----
+async function executeRollAnimation(direction) {
+  const cardBodyEl = rollCardBodyRef.value;
+  const windowEl = rollWindowRef.value;
+  const outgoingEl = rollOutgoingRef.value;
+  if (!cardBodyEl || !windowEl || !outgoingEl || rollAnimating) return;
+
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (prefersReducedMotion) {
+    cardBodyEl.style.cssText = 'opacity:0;transition:none';
+    await nextTick();
+    cardBodyEl.style.cssText = 'opacity:0;transition:opacity 150ms ease-out';
+    cardBodyEl.offsetHeight;
+    cardBodyEl.style.opacity = '1';
+    setTimeout(() => { cardBodyEl.style.cssText = ''; }, 160);
+    return;
+  }
+
+  rollAnimating = true;
+
+  // Capture outgoing (DOM still shows old content at this point)
+  const outgoingHeight = cardBodyEl.offsetHeight;
+  const clone = cardBodyEl.cloneNode(true);
+
+  // Place clone in outgoing overlay
+  outgoingEl.innerHTML = '';
+  outgoingEl.appendChild(clone);
+  outgoingEl.style.cssText = 'opacity:1;transform:translateY(0);transition:none';
+
+  // Pin window height
+  windowEl.style.cssText = `height:${outgoingHeight}px;transition:none`;
+
+  // Hide incoming (content not yet updated)
+  const enterFrom = direction === 'next' ? 'translateY(8px)' : 'translateY(-8px)';
+  cardBodyEl.style.cssText = `opacity:0;transform:${enterFrom};transition:none`;
+
+  // Let Vue update the DOM with new card content
+  await nextTick();
+
+  // Measure incoming height (temporarily auto to read natural height)
+  windowEl.style.height = 'auto';
+  const incomingHeight = cardBodyEl.offsetHeight;
+  windowEl.style.cssText = `height:${outgoingHeight}px;transition:none`;
+
+  // Force reflow before enabling transitions
+  windowEl.offsetHeight; // eslint-disable-line no-unused-expressions
+
+  // Animate
+  const easing = 'cubic-bezier(.23,1,.32,1)';
+  windowEl.style.cssText = `height:${incomingHeight}px;transition:height 280ms ${easing}`;
+
+  const exitTo = direction === 'next' ? 'translateY(-8px)' : 'translateY(8px)';
+  outgoingEl.style.cssText = `opacity:0;transform:${exitTo};transition:opacity 200ms ease-out,transform 200ms ease-out`;
+
+  cardBodyEl.style.cssText = 'opacity:1;transform:translateY(0);transition:opacity 200ms ease-out,transform 200ms ease-out';
+
+  setTimeout(() => {
+    outgoingEl.innerHTML = '';
+    outgoingEl.style.cssText = '';
+    windowEl.style.cssText = '';
+    cardBodyEl.style.cssText = '';
+    rollAnimating = false;
+  }, 300);
 }
 
 // ---- Make-more-evident: Change interactions mode ----
