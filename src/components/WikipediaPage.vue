@@ -6440,6 +6440,10 @@
               </div>
             </template>
             <template v-else>
+            <!-- Roll window: wraps entire card (icon + title + description + buttons) -->
+            <div class="roll-window" ref="rollWindowRef">
+              <div ref="rollOutgoingRef" class="roll-outgoing-overlay"></div>
+              <div ref="rollCardBodyRef">
             <div
               class="minerva-sheet-header"
               :class="{
@@ -6486,12 +6490,6 @@
                 </button>
               </div>
             </div>
-            <!-- Roll window: clips to one card at a time, animates height on navigation -->
-            <div class="roll-window" ref="rollWindowRef">
-              <!-- Outgoing card overlay (populated with a DOM clone during animation) -->
-              <div ref="rollOutgoingRef" class="roll-outgoing-overlay"></div>
-              <!-- Incoming card body (real reactive content) -->
-              <div ref="rollCardBodyRef">
           <p v-if="isEditCheckSheet && activeEditCheckType === 'tone'" class="minerva-sheet-description">
             Other editors often revise this kind of wording to have a more balanced tone. Learn more
           </p>
