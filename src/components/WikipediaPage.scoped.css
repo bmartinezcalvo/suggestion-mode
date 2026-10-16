@@ -8210,18 +8210,12 @@ span.suggestions-banner-icon--bounce {
 /* ---- Roll animation ---- */
 
 .roll-window {
-  position: relative;
   overflow: hidden;
 }
 
-/* Outgoing overlay: absolute on top of incoming, populated during animation */
-.roll-outgoing-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  pointer-events: none;
-  opacity: 0;
+.roll-stack {
+  display: flex;
+  flex-direction: column;
 }
 
 /* ---- Make-more-evident: Change interactions mode ---- */

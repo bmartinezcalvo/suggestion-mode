@@ -6440,9 +6440,9 @@
               </div>
             </template>
             <template v-else>
-            <!-- Roll window: wraps entire card (icon + title + description + buttons) -->
+            <!-- Roll window: fixed viewport, roll-stack scrolls vertically like a paper roll -->
             <div class="roll-window" ref="rollWindowRef">
-              <div ref="rollOutgoingRef" class="roll-outgoing-overlay"></div>
+              <div class="roll-stack" ref="rollStackRef">
               <div ref="rollCardBodyRef">
             <div
               class="minerva-sheet-header"
@@ -6966,6 +6966,7 @@
             </cdx-button>
           </div>
               </div><!-- end roll-card-body -->
+              </div><!-- end roll-stack -->
             </div><!-- end roll-window -->
             </template><!-- end v-else (non-dismiss-prompt content) -->
           </div>
@@ -7707,7 +7708,7 @@ const articleOverlayParaBottom = ref(null);
 
 // ---- Roll animation ----
 const rollWindowRef = ref(null);
-const rollOutgoingRef = ref(null);
+const rollStackRef = ref(null);
 const rollCardBodyRef = ref(null);
 let rollAnimating = false;
 const veRailTrackVisible = ref(false);
@@ -16693,8 +16694,8 @@ function markArticleEdited() {
 async function executeRollAnimation(direction) {
   const cardBodyEl = rollCardBodyRef.value;
   const windowEl = rollWindowRef.value;
-  const outgoingEl = rollOutgoingRef.value;
-  if (!cardBodyEl || !windowEl || !outgoingEl || rollAnimating) return;
+  const stackEl = rollStackRef.value;
+  if (!cardBodyEl || !windowEl || !stackEl || rollAnimating) return;
 
   const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -16702,7 +16703,7 @@ async function executeRollAnimation(direction) {
     cardBodyEl.style.cssText = 'opacity:0;transition:none';
     await nextTick();
     cardBodyEl.style.cssText = 'opacity:0;transition:opacity 150ms ease-out';
-    cardBodyEl.offsetHeight;
+    cardBodyEl.offsetHeight; // eslint-disable-line no-unused-expressions
     cardBodyEl.style.opacity = '1';
     setTimeout(() => { cardBodyEl.style.cssText = ''; }, 160);
     return;
@@ -16710,49 +16711,58 @@ async function executeRollAnimation(direction) {
 
   rollAnimating = true;
 
-  // Capture outgoing (DOM still shows old content at this point)
+  // Snapshot outgoing card while DOM still shows old content
   const outgoingHeight = cardBodyEl.offsetHeight;
   const clone = cardBodyEl.cloneNode(true);
 
-  // Place clone in outgoing overlay
-  outgoingEl.innerHTML = '';
-  outgoingEl.appendChild(clone);
-  outgoingEl.style.cssText = 'opacity:1;transform:translateY(0);transition:none';
+  // Build the two-card stack: for NEXT the clone goes above (card scrolls down/away),
+  // for PREV the clone goes below (card scrolls up/away)
+  if (direction === 'next') {
+    stackEl.insertBefore(clone, cardBodyEl);
+  } else {
+    stackEl.appendChild(clone);
+  }
 
-  // Pin window height
-  windowEl.style.cssText = `height:${outgoingHeight}px;transition:none`;
+  // Pin window height so the sheet doesn't jump yet
+  windowEl.style.cssText = `height:${outgoingHeight}px;overflow:hidden;transition:none`;
 
-  // Hide incoming (content not yet updated)
-  const enterFrom = direction === 'next' ? 'translateY(8px)' : 'translateY(-8px)';
-  cardBodyEl.style.cssText = `opacity:0;transform:${enterFrom};transition:none`;
+  // NEXT: stack starts at 0, we'll scroll DOWN (translateY negative = up = outgoing goes off top)
+  // PREV: stack starts offset up by outgoingHeight (clone below is hidden), scroll UP
+  if (direction === 'next') {
+    stackEl.style.cssText = 'transform:translateY(0);transition:none';
+  } else {
+    stackEl.style.cssText = `transform:translateY(-${outgoingHeight}px);transition:none`;
+  }
 
   // Let Vue update the DOM with new card content
   await nextTick();
 
-  // Measure incoming height (temporarily auto to read natural height)
-  windowEl.style.height = 'auto';
+  // Measure incoming height
   const incomingHeight = cardBodyEl.offsetHeight;
-  windowEl.style.cssText = `height:${outgoingHeight}px;transition:none`;
 
   // Force reflow before enabling transitions
   windowEl.offsetHeight; // eslint-disable-line no-unused-expressions
 
-  // Animate
   const easing = 'cubic-bezier(.23,1,.32,1)';
-  windowEl.style.cssText = `height:${incomingHeight}px;transition:height 280ms ${easing}`;
+  const dur = 280;
 
-  const exitTo = direction === 'next' ? 'translateY(-8px)' : 'translateY(8px)';
-  outgoingEl.style.cssText = `opacity:0;transform:${exitTo};transition:opacity 200ms ease-out,transform 200ms ease-out`;
+  // Animate window height from outgoing to incoming
+  windowEl.style.cssText = `height:${incomingHeight}px;overflow:hidden;transition:height ${dur}ms ${easing}`;
 
-  cardBodyEl.style.cssText = 'opacity:1;transform:translateY(0);transition:opacity 200ms ease-out,transform 200ms ease-out';
+  // Scroll the stack: NEXT slides stack up by outgoingHeight (clone scrolls off top, incoming scrolls in)
+  // PREV slides stack down to 0 (clone scrolls off bottom, incoming scrolls in)
+  if (direction === 'next') {
+    stackEl.style.cssText = `transform:translateY(-${outgoingHeight}px);transition:transform ${dur}ms ${easing}`;
+  } else {
+    stackEl.style.cssText = `transform:translateY(0);transition:transform ${dur}ms ${easing}`;
+  }
 
   setTimeout(() => {
-    outgoingEl.innerHTML = '';
-    outgoingEl.style.cssText = '';
+    clone.remove();
+    stackEl.style.cssText = '';
     windowEl.style.cssText = '';
-    cardBodyEl.style.cssText = '';
     rollAnimating = false;
-  }, 300);
+  }, dur + 20);
 }
 
 // ---- Make-more-evident: Change interactions mode ----
